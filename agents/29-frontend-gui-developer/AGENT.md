@@ -52,4 +52,4 @@ Definition of Done:
 Commands it may need:
 - `scripts/agents/run-agent.sh 29-frontend-gui-developer`
 
-Last-Updated: 2026-08-11T06:11:50.241862Z
+Last-Updated: 2026-08-11T06:12:20.331616Z
