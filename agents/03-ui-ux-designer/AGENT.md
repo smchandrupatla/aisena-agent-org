@@ -70,3 +70,5 @@ Expected interaction with other agents:
 - Upstream: Implementation Manager, Business Analyst, Solution Architect.
 - Downstream: Frontend Engineer.
 - Provide UX acceptance criteria and behaviour guidance for implementation.
+
+Last-Updated: 2026-08-11T06:09:38.965113Z
