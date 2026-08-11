@@ -202,6 +202,46 @@ Product Owner, Solution Architect, QA Engineer
 ### Notes
 This task has been prepared in documentation and artifact form. Execution remains blocked until Copilot runtime model access is restored.
 
+## TASK-0009 — Stage 0 architecture validation and backend implementation planning
+
+Status: Planned
+Priority: High
+Owner: Backend Engineer
+Requested By: Product Owner
+Created: 2026-08-11
+Dependencies: TASK-0002, TASK-0004, TASK-0005, TASK-0008
+
+### Objective
+Validate the Stage 0 architecture and produce the implementation plan and scaffolding for the ingestion, Kafka, screening, and OpenSearch result flow.
+
+### Context
+Stage 0 now has a defined story and architecture. The next step is to prepare the backend implementation plan so the proof can be executed once runtime is available.
+
+### Acceptance Criteria
+- A Solution Architect handoff exists for the Stage 0 architecture.
+- The Backend Engineer has an implementation plan for the toy ingestion and screening path.
+- The Stage 0 story and architecture are referenced in the implementation plan.
+- QA validation criteria are identified for the OpenSearch screening result.
+
+### Files / Components
+- `/project/requirements/REQ-0004-hsfs-stage0-sanctions-screening-story.md`
+- `/project/architecture/HSFS-Stage0-Architecture.md`
+- `/project/architecture/HSFS-Stage0-Orchestration.md`
+- `/project/handoffs/TASK-0009-solution-architect-to-backend-engineer.md`
+
+### Required Reviewers
+- Solution Architect
+- QA Engineer
+
+### Output
+A backend implementation plan and handoff for Stage 0 proof execution.
+
+### Handoff To
+Backend Engineer, QA Engineer
+
+### Notes
+This task prepares the implementation plan while runtime validation remains blocked.
+
 ## TASK-0003 — Resolve Copilot CLI model availability
 
 Status: BLOCKED

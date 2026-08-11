@@ -12,6 +12,7 @@ Stage 1 — Definition roles established
 - Preparing engineering role validation and handoff readiness.
 - Documenting the engineering role validation plan and readiness report.
 - Defining HSFS Stage 0 proof artifacts, product owner role, and handoff plan.
+- Preparing the Stage 0 backend implementation plan and architecture handoff.
 
 ## Blockers
 - Repository contains no application source.

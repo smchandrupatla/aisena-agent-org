@@ -12,6 +12,7 @@
 ## Active Tasks
 - TASK-0003 — Resolve Copilot CLI model availability (Implementation Manager)
 - TASK-0007 — Diagnose and remediate Copilot runtime (Implementation Manager)
+- TASK-0009 — Stage 0 architecture validation and backend implementation planning (Backend Engineer)
 
 ## Recently Completed Tasks
 - Repository discovery and environment inspection.

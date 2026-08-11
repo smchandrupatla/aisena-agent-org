@@ -1,0 +1,9 @@
+{
+  "transactionId": "TX-0001",
+  "customerName": "Acme Global Industries",
+  "customerCountry": "US",
+  "amount": 12500.00,
+  "currency": "USD",
+  "purpose": "International supplier payment",
+  "referenceId": "REF-12345"
+}
