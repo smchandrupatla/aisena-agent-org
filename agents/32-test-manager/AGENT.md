@@ -51,4 +51,4 @@ Definition of Done:
 Commands it may need:
 - `scripts/agents/run-agent.sh 32-test-manager`
 
-Last-Updated: 2026-08-11T06:45:25.171407Z
+Last-Updated: 2026-08-11T06:45:55.432530Z
