@@ -6,6 +6,11 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
+  - job_name: 'agent_manager'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['agent-manager:9500']
+
   - job_name: 'grafana'
     static_configs:
       - targets: ['grafana:3000']

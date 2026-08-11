@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tasks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Execution Board</div>
+        <h1>Tasks Menu</h1>
+        <p class="lede">Track planned work, ownership, dependencies, and status checkpoints.</p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-12 fade-up">
+          <h2>Current Task List</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Next Checkpoint</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>TASK-0010 Governance Activation</td>
+                <td>Implementation Manager</td>
+                <td>In Progress</td>
+                <td>High</td>
+                <td>Artifact review and signoff</td>
+              </tr>
+              <tr>
+                <td>TASK-0011 Metrics and Critic Cadence</td>
+                <td>Release Manager</td>
+                <td>Planned</td>
+                <td>High</td>
+                <td>Define metric checklist</td>
+              </tr>
+              <tr>
+                <td>TASK-0009 Stage 0 Backend Plan</td>
+                <td>Backend Engineer</td>
+                <td>Planned</td>
+                <td>High</td>
+                <td>Implementation scaffold review</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <h3>Quick Actions</h3>
+          <div class="pill-list">
+            <span class="pill">Add task in backlog</span>
+            <span class="pill">Assign owner</span>
+            <span class="pill">Set dependency</span>
+            <span class="pill">Log handoff</span>
+          </div>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <div class="notice ok">Use this menu as the navigation hub for task planning and execution reviews.</div>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

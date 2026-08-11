@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agents and Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Agent Console</div>
+        <h1>Interact with each agent role from one page.</h1>
+        <p class="lede">Select any agent, ask a question, and keep role-specific conversation history in your browser session.</p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-4 fade-up">
+          <h3>Agent Directory</h3>
+          <p>Click an agent to load context and start a focused chat.</p>
+          <div id="agentList" class="agent-list"></div>
+        </article>
+
+        <article class="card span-8 fade-up">
+          <div class="chat-header">
+            <h3 id="chatAgentName">Choose an agent</h3>
+            <div id="chatAgentGroup" class="agent-group"></div>
+          </div>
+          <p id="chatAgentFocus" class="chat-focus">Select an agent from the left to begin.</p>
+
+          <div class="runner-meta">
+            <div><strong>Run Command:</strong> <code id="chatRunCommand">N/A</code></div>
+            <div><strong>Agent File:</strong> <code id="chatAgentFile">N/A</code></div>
+            <button id="copyRunCommand" type="button" class="ghost">Copy Command</button>
+          </div>
+
+          <div id="chatMessages" class="chat-messages">
+            <div class="msg system">This chat provision runs in-browser and stores role threads locally on your machine.</div>
+          </div>
+
+          <div class="chat-controls">
+            <textarea id="chatInput" rows="3" placeholder="Type your request for the selected agent..."></textarea>
+            <div class="chat-actions">
+              <button id="sendChat" type="button">Send</button>
+              <button id="clearChat" type="button" class="ghost">Clear Agent Chat</button>
+            </div>
+          </div>
+          <div class="notice" style="margin-top: 12px;">
+            Provision note: this UI is ready for interaction now and can be wired to real agent backends later.
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="agents-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

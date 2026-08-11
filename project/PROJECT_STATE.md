@@ -35,3 +35,23 @@
 - Create and validate Business Analyst, Solution Architect, and UI/UX Designer roles.
 - Clarify project purpose and architecture.
 - Establish agent execution scripts and Codespaces readiness documentation.
+
+## Update 2026-08-11 — Autonomous Shop Activation
+
+### New Direction
+- Product Owner / Client mandate adopted: self-organizing AI development shop with autonomous technical decision ownership and strict governance guardrails.
+
+### New Artifacts
+- REQ-0005 created to formalize autonomous operating requirements.
+- ADR-0002 accepted to codify approvals, arbitration, metrics, and rollback rules.
+- Append-only operations wiki and change log created under `/docs`.
+
+### Active Governance Tasks
+- TASK-0010 IN_PROGRESS: activate governance baseline in project workflow.
+- TASK-0011 PLANNED: implement critic cadence, metrics capture, and cost/resource tracking loop.
+
+### Human Sign-Off Boundaries
+- Required only for production-impacting, cost-incurring, user-data, pricing, or legal-exposure changes.
+
+### Current Constraint
+- Runtime model availability for prompt execution remains a blocker for full multi-agent runtime smoke execution.

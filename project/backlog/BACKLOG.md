@@ -318,6 +318,92 @@ Frontend Engineer, Backend Engineer, Database Engineer, Integration Engineer
 ### Notes
 This task can proceed with documentation even as AI runtime resolution continues.
 
+## TASK-0010 — Activate autonomous AI shop governance
+
+Status: IN_PROGRESS
+Priority: High
+Owner: Implementation Manager
+Requested By: Product Owner / Client
+Created: 2026-08-11
+Dependencies: TASK-0001
+
+### Objective
+Operationalize the Product Owner autonomous-shop mandate into repo-native requirements, decisions, and append-only operating artifacts.
+
+### Context
+The Product Owner has issued an explicit activation requiring self-organizing delivery, continuous learning, strict guardrails, and append-only documentation.
+
+### Acceptance Criteria
+- A formal requirement captures the autonomous operating charter.
+- A governance ADR records arbitration, approval gates, metrics, and rollback policy.
+- Shared append-only docs are established under `/docs`.
+- Project state and implementation status include activation and next checkpoints.
+
+### Files / Components
+- `/project/requirements/REQ-0005-autonomous-ai-shop-operating-charter.md`
+- `/project/decisions/ADR-0002-autonomous-agent-shop-governance.md`
+- `/docs/AGENT_OPERATIONS_WIKI.md`
+- `/docs/AGENT_CHANGE_LOG.md`
+- `/project/backlog/BACKLOG.md`
+- `/project/PROJECT_STATE.md`
+- `/project/reports/IMPLEMENTATION_STATUS.md`
+- `/project/risks/RISK_REGISTER.md`
+
+### Required Reviewers
+- Product Owner
+- Solution Architect
+- Release Manager
+
+### Output
+Active autonomous-governance baseline with auditable execution artifacts.
+
+### Handoff To
+Solution Architect, Product Owner, Release Manager
+
+### Notes
+This task is governance and process activation, not production-system modification.
+
+## TASK-0011 — Implement governance metrics and critic cadence
+
+Status: PLANNED
+Priority: High
+Owner: Release Manager
+Requested By: Implementation Manager
+Created: 2026-08-11
+Dependencies: TASK-0010
+
+### Objective
+Implement recurring metric collection, rotating critic reviews, and cost/resource tracking checkpoints for each implementation increment.
+
+### Context
+The governance protocol requires measurable feedback loops and periodic assumption-challenge reviews.
+
+### Acceptance Criteria
+- A metric collection checklist is used in release reports.
+- Rotating critic assignments are recorded per increment.
+- Resource and tool usage anomalies are tracked and flagged.
+- Findings are documented in append-only format.
+
+### Files / Components
+- `/docs/AGENT_OPERATIONS_WIKI.md`
+- `/docs/AGENT_CHANGE_LOG.md`
+- `/project/reports/IMPLEMENTATION_STATUS.md`
+- `/project/reports/HSFS-Stage0-Implementation-Readiness.md`
+
+### Required Reviewers
+- Release Manager
+- QA Engineer
+- Security and Compliance Engineer
+
+### Output
+A measurable governance loop that validates delivery claims.
+
+### Handoff To
+Release Manager, QA Engineer, Security and Compliance Engineer
+
+### Notes
+Initial implementation can begin with manual checklists before automation.
+
 ## TASK-0005 — Bootstrap UI/UX Designer role
 
 Status: DONE

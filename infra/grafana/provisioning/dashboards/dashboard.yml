@@ -1,0 +1,10 @@
+apiVersion: 1
+providers:
+  - name: Agent Metrics
+    orgId: 1
+    folder: Agent Management
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: /etc/grafana/provisioning/dashboards

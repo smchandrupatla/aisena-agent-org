@@ -41,3 +41,26 @@ Stage 1 — Definition roles established
 | Performance Engineer | Pending | N/A | Prompt and workflow creation planned |
 | Documentation Engineer | Pending | N/A | Prompt and workflow creation planned |
 | Release Manager | Pending | N/A | Prompt and workflow creation planned |
+
+## Update 2026-08-11 — Autonomous Governance Activation
+
+### Summary
+- Autonomous AI shop mandate has been translated into formal project requirement and ADR controls.
+- Append-only governance docs have been initialized in the shared docs area.
+- New backlog tasks created to operationalize metrics, critic cadence, and resource tracking.
+
+### New/Updated Artifacts
+- `/project/requirements/REQ-0005-autonomous-ai-shop-operating-charter.md`
+- `/project/decisions/ADR-0002-autonomous-agent-shop-governance.md`
+- `/docs/AGENT_OPERATIONS_WIKI.md`
+- `/docs/AGENT_CHANGE_LOG.md`
+- `/project/backlog/BACKLOG.md` (TASK-0010, TASK-0011)
+
+### Status Impact
+- Governance baseline: ACTIVE
+- Runtime smoke execution capability: BLOCKED (unchanged)
+
+### Next Measurable Checkpoints
+- Complete TASK-0010 artifact review.
+- Begin TASK-0011 with critic assignment and metric capture checklist.
+- Link first implementation increment to rollback and approval metadata.

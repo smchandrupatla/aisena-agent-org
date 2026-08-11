@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation Templates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Documentation System</div>
+        <h1>Industry-standard templates with one shared brand.</h1>
+        <p class="lede">These templates are organized by SDLC category and standardized with HSFS branding metadata for consistency and auditability.</p>
+      </section>
+
+      <section class="grid" id="documentationGrid"></section>
+
+      <section class="grid">
+        <article class="card span-12 fade-up">
+          <h2>Word Template Downloads</h2>
+          <p>Download editable Word templates for each documentation type.</p>
+          <div id="wordTemplateGrid" class="grid" style="margin-top: 8px;"></div>
+        </article>
+      </section>
+
+      <section class="grid">
+        <article class="card span-12 fade-up">
+          <h2>Common Branding Applied to All Templates</h2>
+          <div class="pill-list">
+            <span class="pill">Brand: HSFS</span>
+            <span class="pill">Program: Autonomous Delivery Shop</span>
+            <span class="pill">Version/Owner/Status metadata</span>
+            <span class="pill">Classification and review cycle</span>
+            <span class="pill">Controlled document footer</span>
+          </div>
+          <p style="margin-top: 10px;">Template files are located under the root <strong>documentation</strong> folder.</p>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="documentation-catalog.js"></script>
+  <script src="word-template-catalog.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

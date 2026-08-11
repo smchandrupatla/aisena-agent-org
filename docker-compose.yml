@@ -1,0 +1,123 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: hsfs
+      POSTGRES_PASSWORD: hsfs_pw
+      POSTGRES_DB: hsfs
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+
+  opensearch:
+    image: opensearchproject/opensearch:2.9.0
+    environment:
+      - discovery.type=single-node
+      - plugins.security.disabled=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+
+  grafana:
+    image: grafana/grafana-oss:10.0.0
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - ./infra/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./infra/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+      - loki
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    depends_on:
+      - agent-manager
+
+  agent-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent-manager
+    environment:
+      - AGENT_AUTO_PUSH=true
+      - AGENT_METRICS_PORT=9500
+      - AGENT_METRICS_PATH=/metrics
+      - OPENSEARCH_URL=http://opensearch:9200
+      - POSTGRES_DSN=host=postgres dbname=hsfs user=hsfs password=hsfs_pw
+    ports:
+      - "9500:9500"
+    volumes:
+      - .:/workspace:cached
+    depends_on:
+      - postgres
+      - kafka
+      - opensearch
+
+  loki:
+    image: grafana/loki:2.8.1
+    ports:
+      - "3100:3100"
+
+  redmine:
+    image: redmine:5.0
+    depends_on:
+      - postgres
+    environment:
+      REDMINE_DB_POSTGRES: postgres
+      REDMINE_DB_DATABASE: hsfs
+      REDMINE_DB_USERNAME: hsfs
+      REDMINE_DB_PASSWORD: hsfs_pw
+    ports:
+      - "3001:3000"
+
+  apicurio-registry:
+    image: apicurio/apicurio-registry-mem:2.1.3.Final
+    ports:
+      - "8080:8080"
+
+  vault:
+    image: vault:1.13.3
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: root
+    command: server -dev -dev-root-token-id=root
+    ports:
+      - "8200:8200"
+
+volumes:
+  pgdata:
+  opensearch-data:

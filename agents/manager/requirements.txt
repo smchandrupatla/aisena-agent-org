@@ -1,0 +1,4 @@
+requests==2.31.0
+psycopg2-binary==2.9.11
+scikit-learn==1.6.3
+joblib==1.4.1

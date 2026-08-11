@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Issues</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Risk and Blockers</div>
+        <h1>Issues Menu</h1>
+        <p class="lede">Capture blockers, defects, and risks with clear severity and resolution ownership.</p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-12 fade-up">
+          <h2>Open Issues</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Issue</th>
+                <th>Severity</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Mitigation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Copilot runtime model unavailable</td>
+                <td>High</td>
+                <td>Implementation Manager</td>
+                <td>Open</td>
+                <td>Runtime diagnostics and fallback path</td>
+              </tr>
+              <tr>
+                <td>No CI baseline configured</td>
+                <td>Medium</td>
+                <td>DevOps Engineer</td>
+                <td>Open</td>
+                <td>Bootstrap minimal pipeline</td>
+              </tr>
+              <tr>
+                <td>Task-to-goal traceability drift risk</td>
+                <td>Medium</td>
+                <td>Product Owner</td>
+                <td>Monitoring</td>
+                <td>Periodic alignment checkpoints</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <h3>Issue Lifecycle</h3>
+          <ol class="timeline">
+            <li><div class="step">Step 1</div><strong>Report</strong>Log issue with impact and evidence.</li>
+            <li><div class="step">Step 2</div><strong>Triage</strong>Set severity and assign owner.</li>
+            <li><div class="step">Step 3</div><strong>Mitigate</strong>Apply fix with rollback plan.</li>
+            <li><div class="step">Step 4</div><strong>Verify</strong>Confirm closure with tests or checks.</li>
+          </ol>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <div class="notice warn">Escalate immediately when issue impacts production, legal exposure, pricing, or user data handling.</div>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

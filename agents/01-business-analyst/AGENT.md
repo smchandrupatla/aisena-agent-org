@@ -69,7 +69,7 @@ Constraints:
 
 Commands it may need:
 - `scripts/agents/run-agent.sh 01-business-analyst`
-- `gh issue list` if external issue tracking is available (not expected yet)
+- `gh issue list` if external work-item references are available (not expected yet)
 
 Expected interaction with other agents:
 - Upstream: Implementation Manager provides task context and backlog priorities.

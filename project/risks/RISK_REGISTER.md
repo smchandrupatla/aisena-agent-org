@@ -32,3 +32,36 @@ New developers and agents may take extra effort to become productive.
 
 Mitigation:
 Bootstrap minimal environment documentation and later add Codespaces/devcontainer support.
+
+## RISK-0004 — Autonomous decision drift from business intent
+
+Description:
+Autonomous technical decisions may drift from the Product Owner's business objective if goals and acceptance criteria are not continuously validated.
+
+Impact:
+Rework, delayed delivery, and potential misalignment with sponsor priorities.
+
+Mitigation:
+Require explicit requirement traceability from each task to Product Owner goal statements and enforce periodic Product Owner checkpoint reviews for business alignment.
+
+## RISK-0005 — Governance overhead reduces delivery throughput
+
+Description:
+Mandatory append-only documentation and guardrail evidence can become excessive and slow delivery if not standardized.
+
+Impact:
+Lower implementation velocity and increased operational friction.
+
+Mitigation:
+Use concise templates, role-specific checklists, and release-cycle batching of governance evidence while preserving traceability.
+
+## RISK-0006 — Unbounded research and tool usage cost
+
+Description:
+Continuous learning and iterative research can generate excessive model/tool usage without proportional milestone progress.
+
+Impact:
+Increased compute/API cost and schedule unpredictability.
+
+Mitigation:
+Define usage thresholds, flag repeated low-signal loops, and require escalation when spend rises without measurable quality or delivery gains.

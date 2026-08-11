@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hybrid Sanctions & Fraud Monitoring — Architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg: #0A0F1A;
+    --panel: #10182A;
+    --panel-2: #141F36;
+    --border: #223055;
+    --border-soft: #1A2540;
+    --text: #E8ECF4;
+    --muted: #8A96B2;
+    --sanctions: #E8A33D;
+    --fraud: #4DA8FF;
+    --shared: #35D0A6;
+    --gov: #B78CE8;
+    --danger: #E85D5D;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:'IBM Plex Sans',sans-serif; -webkit-font-smoothing:antialiased;}
+
+  .wrap{display:flex; min-height:100vh;}
+
+  .main{flex:1; padding:28px 28px 60px; min-width:0;}
+
+  .header{margin-bottom:22px;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); margin-bottom:6px;}
+  h1{font-size:21px; margin:0 0 4px; font-weight:700; letter-spacing:-.01em;}
+  .sub{color:var(--muted); font-size:13px; max-width:620px; line-height:1.5;}
+
+  .legend{display:flex; gap:14px; flex-wrap:wrap; margin-top:14px;}
+  .legend-item{display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px; color:var(--muted);}
+  .dot{width:8px; height:8px; border-radius:2px;}
+
+  .layer{margin-top:26px;}
+  .layer-label{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.1em;
+    color:var(--muted); text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:8px;}
+  .layer-label .num{color:var(--text); font-weight:600;}
+  .layer-label::after{content:""; flex:1; height:1px; background:var(--border-soft);}
+
+  .row{display:flex; gap:10px; flex-wrap:wrap;}
+
+  .node{
+    background: var(--panel);
+    border:1px solid var(--border);
+    border-left:3px solid var(--accent, var(--border));
+    border-radius:6px;
+    padding:11px 13px;
+    min-width:150px;
+    flex:1 1 150px;
+    cursor:pointer;
+    transition:transform .12s ease, border-color .12s ease, background .12s ease;
+    position:relative;
+  }
+  .node:hover{ transform:translateY(-2px); background:var(--panel-2); border-color:var(--border); }
+  .node.active{ background:var(--panel-2); box-shadow:0 0 0 1px var(--accent); }
+  .node-title{font-size:13px; font-weight:600; margin-bottom:3px; line-height:1.3;}
+  .node-sub{font-size:11px; color:var(--muted); line-height:1.3;}
+
+  .connector{display:flex; justify-content:center; margin:2px 0;}
+  .connector svg{opacity:.5;}
+
+  .cross-note{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--muted);
+    text-align:center; margin-top:6px; letter-spacing:.02em;
+  }
+
+  .panel{
+    width:380px; flex-shrink:0; background:var(--panel);
+    border-left:1px solid var(--border);
+    padding:26px 24px;
+    position:sticky; top:0; height:100vh; overflow-y:auto;
+  }
+  .panel-empty{color:var(--muted); font-size:13px; line-height:1.6; margin-top:60px; text-align:center;}
+  .panel-empty .big{font-size:28px; display:block; margin-bottom:10px; opacity:.5;}
+
+  .panel-eyebrow{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.12em;
+    text-transform:uppercase; margin-bottom:8px; padding:3px 8px; border-radius:3px; display:inline-block;}
+  .panel-title{font-size:19px; font-weight:700; margin:6px 0 4px; letter-spacing:-.01em;}
+  .panel-sub{color:var(--muted); font-size:12.5px; margin-bottom:16px;}
+  .panel-desc{font-size:13px; line-height:1.65; color:#D3D9E8; margin-bottom:18px;}
+
+  .panel-section-title{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--muted); margin:18px 0 8px;}
+  .panel ul{margin:0; padding-left:16px;}
+  .panel li{font-size:12.5px; line-height:1.6; color:#C7CEDE; margin-bottom:6px;}
+
+  .tech-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;}
+  .tag{font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:3px 8px;
+    border:1px solid var(--border); border-radius:3px; color:var(--muted);}
+
+  .close-btn{
+    background:none; border:1px solid var(--border); color:var(--muted);
+    border-radius:4px; padding:4px 9px; font-size:11px; cursor:pointer;
+    font-family:'IBM Plex Mono',monospace; float:right;
+  }
+  .close-btn:hover{color:var(--text); border-color:var(--muted);}
+
+  @media (max-width: 880px){
+    .wrap{flex-direction:column;}
+    .panel{width:100%; height:auto; position:relative; border-left:none; border-top:1px solid var(--border);}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="main">
+    <div class="header">
+      <div class="eyebrow">Skeleton Architecture — v0.2</div>
+      <h1>Hybrid Sanctions & Fraud Monitoring System</h1>
+      <div class="sub">Click any component below to see its purpose, key logic, and typical tech choices. Sanctions and fraud detection stay as separate engines with different tuning and regulatory regimes, converging on shared entity resolution and risk scoring.</div>
+      <div class="legend">
+        <div class="legend-item"><span class="dot" style="background:var(--sanctions)"></span>Sanctions path</div>
+        <div class="legend-item"><span class="dot" style="background:var(--fraud)"></span>Fraud path</div>
+        <div class="legend-item"><span class="dot" style="background:var(--shared)"></span>Shared / convergence</div>
+        <div class="legend-item"><span class="dot" style="background:var(--gov)"></span>Governance</div>
+      </div>
+    </div>
+
+    <div id="diagram"></div>
+  </div>
+
+  <div class="panel" id="panel">
+    <div class="panel-empty" id="panelEmpty">
+      <span class="big">◆</span>
+      Select a component to see the detail here — purpose, key logic, and typical technology choices.
+    </div>
+    <div id="panelContent" style="display:none;"></div>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  {
+    layer: "1 — Source Systems",
+    nodes: [
+      {id:"s1", title:"Core Banking / Payments", sub:"Transaction feed", accent:"shared",
+        desc:"System of record for every payment, transfer, and account event. This is the primary trigger stream for both fraud and (for real-time payment screening) sanctions checks.",
+        bullets:["Emits transaction events: amount, parties, channel, timestamp, geo","Needs low-latency hooks if you want pre-transaction (interdiction) screening, not just post-hoc","Often the hardest integration — legacy cores may only support batch extracts"],
+        tags:["ISO 20022","SWIFT MT/MX","Kafka Connect","CDC (Debezium)"]},
+      {id:"s2", title:"Customer / KYC Data", sub:"Identity & onboarding", accent:"shared",
+        desc:"Static and semi-static customer attributes captured at onboarding and periodic refresh: identity documents, beneficial ownership, business type, geography.",
+        bullets:["Feeds entity resolution and static risk scoring","Beneficial ownership data is critical for sanctions — screening must reach through corporate structures","Refresh cadence should be risk-tiered (higher-risk customers refreshed more often)"],
+        tags:["KYC/KYB platform","LEI registry","Corporate registries"]},
+      {id:"s3", title:"Sanctions Lists", sub:"OFAC, UN, EU, HMT, local", accent:"sanctions",
+        desc:"Authoritative denied-party and restricted-party lists published by regulators. These are the reference data the sanctions engine matches against — not transactional data.",
+        bullets:["Lists update frequently and unpredictably — ingestion must be near-real-time, not weekly batch","Version every list snapshot for audit purposes (regulators ask 'which list version flagged this?')","Include sectoral sanctions and secondary designations, not just SDN-style name lists"],
+        tags:["OFAC SDN/CONS","UN 1267","EU CFSP","Dow Jones/Refinitiv feeds"]},
+      {id:"s4", title:"PEP / Adverse Media", sub:"Reputational risk feeds", accent:"sanctions",
+        desc:"Politically exposed person registries and negative news feeds used to enrich risk scoring, particularly for sanctions-adjacent and AML risk, rather than hard-block matching.",
+        bullets:["Typically feeds a risk score, not a binary match like sanctions lists","High false-positive surface — needs its own tuning, separate from sanctions list matching","Useful for ongoing monitoring, not just onboarding"],
+        tags:["World-Check","Dow Jones Risk & Compliance","LexisNexis"]},
+      {id:"s5", title:"External Risk Data", sub:"Device, geo, bureau", accent:"fraud",
+        desc:"Third-party signals that add context fraud rules and models can't derive from internal data alone: device fingerprint, IP/geo reputation, credit bureau, consortium fraud data.",
+        bullets:["Device and behavioral biometrics are increasingly the highest-signal fraud features","Consortium data (shared fraud signals across institutions) catches first-party and mule accounts internal data misses","Latency matters — these calls sit in the real-time scoring path"],
+        tags:["Device fingerprinting","IP intelligence","Consortium fraud networks"]}
+    ]
+  },
+  {
+    layer: "2 — Ingestion",
+    nodes: [
+      {id:"i1", title:"Real-time Stream", sub:"Kafka / event bus", accent:"fraud",
+        desc:"Handles transaction and behavioral events that need sub-second to few-second processing for pre-transaction fraud scoring and real-time sanctions interdiction.",
+        bullets:["Design for at-least-once delivery with idempotent downstream consumers","This is the latency-critical path — everything hanging off it inherits its SLA","Separate topics per data domain (payments, logins, device events) rather than one firehose"],
+        tags:["Kafka","Pulsar","AWS Kinesis","Flink for stream processing"]},
+      {id:"i2", title:"Batch ETL / List Sync", sub:"Reference & bulk data", accent:"sanctions",
+        desc:"Scheduled and event-triggered synchronization of reference data — sanctions lists, PEP data, customer master updates — that doesn't need sub-second freshness but does need reliability and versioning.",
+        bullets:["Sanctions list sync should still be near-real-time (hours, not days) given how fast lists change","Every load should be checksummed and versioned for audit trail","Failed loads must alert immediately — screening against a stale list is a regulatory finding waiting to happen"],
+        tags:["Airflow","dbt","AWS Glue","Informatica"]}
+    ]
+  },
+  {
+    layer: "3 — Data & Entity Layer",
+    nodes: [
+      {id:"d1", title:"Data Lake / Warehouse", sub:"Unified storage", accent:"shared",
+        desc:"Central store for raw and curated data across both domains — transactions, screening history, alerts, case outcomes. Also the source for model training and regulatory reporting.",
+        bullets:["Retain raw + processed layers separately — investigators and regulators may need to see original data","Design retention to match regulatory requirements (often 5-7 years depending on jurisdiction)","Consider a lakehouse pattern to support both analytics and low-latency lookups"],
+        tags:["Snowflake","Databricks","S3 + Iceberg/Delta"]},
+      {id:"d2", title:"Entity Resolution", sub:"Customer / party 360", accent:"shared",
+        desc:"Resolves the same real-world person or entity across accounts, aliases, transliterations, and typos into a single graph node. This is the single most important shared capability — both engines depend on it.",
+        bullets:["Fuzzy/phonetic matching (Soundex, Levenshtein, transliteration handling) is essential — sanctioned parties actively evade with name variants","Build as a graph, not flat tables — fraud rings and sanctioned-party networks both show up as relationship patterns","Weak entity resolution is the most common root cause of both missed sanctions hits and missed fraud rings"],
+        tags:["Graph DB (Neo4j)","Senzing","Master data management"]},
+      {id:"d3", title:"Reference Data Mgmt", sub:"Watchlist versioning", accent:"sanctions",
+        desc:"Governs how sanctions/PEP list versions are stored, versioned, and made available to the screening engine, with full lineage of which version was active for any historical match.",
+        bullets:["Immutable versioning — never overwrite a list in place","Track effective dates precisely; a name added to a list today shouldn't retroactively flag yesterday's cleared transaction as an error","Support rollback if a bad list load needs be reversed"],
+        tags:["List management platforms","Data version control"]}
+    ]
+  },
+  {
+    layer: "4 — Detection Engines",
+    nodes: [
+      {id:"e1", title:"Sanctions Screening Engine", sub:"Fuzzy / phonetic name matching", accent:"sanctions",
+        desc:"Matches customer and counterparty names (and increasingly addresses, vessels, goods descriptions) against sanctions/watchlist reference data using fuzzy, phonetic, and transliteration-aware matching.",
+        bullets:["Tune match thresholds deliberately — too loose drowns analysts in false positives, too tight risks missed hits (the worse regulatory outcome)","Should screen at multiple points: onboarding, ongoing/batch rescreening on list updates, and real-time transaction screening","Explainability matters here specifically because regulators audit match logic directly"],
+        tags:["Fircosoft","Actimize WLF","Elastic fuzzy search","Custom Levenshtein/Jaro-Winkler"]},
+      {id:"e2", title:"Fraud Detection Engine", sub:"Rules + ML models", accent:"fraud",
+        desc:"Combines deterministic rules (velocity limits, known bad patterns) with ML models (anomaly detection, supervised classifiers on labeled fraud) to score transactions and behaviors for fraud risk.",
+        bullets:["Hybrid rules+ML is deliberate: rules give immediate coverage and explainability for known patterns, ML catches novel/evolving fraud","Model drift monitoring is essential — fraud patterns shift faster than most ML use cases","Keep a feedback loop from confirmed fraud/false-positive case outcomes back into model retraining"],
+        tags:["XGBoost/gradient boosting","Graph neural nets for rings","Drools/rules engines","Feature store"]},
+      {id:"e3", title:"Shared Risk Scoring", sub:"Feature store & convergence", accent:"shared",
+        desc:"The convergence point: combines sanctions match confidence, fraud score, and customer risk profile into a unified risk view per entity/transaction, so downstream triage sees one picture instead of two disconnected alerts.",
+        bullets:["This is where 'hybrid' actually happens architecturally — not by merging the engines, but by merging their outputs","A shared feature store avoids each engine recomputing the same customer/behavioral features independently","Design the scoring model to be explainable — analysts and regulators both need to know why a score is what it is"],
+        tags:["Feature store (Feast, Tecton)","Composite risk scoring models"]}
+    ]
+  },
+  {
+    layer: "5 — Alert Management",
+    nodes: [
+      {id:"a1", title:"Alert Aggregation & Dedup", sub:"Cross-engine correlation", accent:"shared",
+        desc:"Collapses multiple alerts about the same entity or transaction (from sanctions, fraud, and any other detection source) into a single working alert, and correlates related alerts across time.",
+        bullets:["Without this, analysts see duplicate/fragmented alerts for the same underlying event across engines","Correlation window and logic should differ for sanctions (party-based) vs fraud (behavior/pattern-based)"],
+        tags:["Alert correlation engine","Stream joins"]},
+      {id:"a2", title:"Prioritization / Triage", sub:"Risk-based queueing", accent:"shared",
+        desc:"Ranks and routes alerts to the right queue and analyst based on severity, risk score, and regulatory urgency (sanctions hits often carry stricter SLAs than fraud alerts).",
+        bullets:["Sanctions true/potential matches typically require same-day review by regulation — routing should reflect that urgency distinctly from fraud queues","Auto-clear low-risk, high-confidence false positives only with strong governance and audit logging"],
+        tags:["Workflow/queueing engine","SLA-based routing"]}
+    ]
+  },
+  {
+    layer: "6 — Case Management & Investigation",
+    nodes: [
+      {id:"c1", title:"Case Management System", sub:"Central investigation record", accent:"gov",
+        desc:"System of record for investigations — links alerts, evidence, analyst notes, decisions, and outcomes into an auditable case file.",
+        bullets:["Every action needs a timestamped, immutable audit entry — this is what regulators examine during exams","Support both sanctions case types (block/reject/report) and fraud case types (confirm/dispute/recover) with their distinct workflows"],
+        tags:["Actimize","NICE Actimize Case Manager","ServiceNow (custom)","Custom case platform"]},
+      {id:"c2", title:"Analyst Workbench / UI", sub:"Investigation interface", accent:"gov",
+        desc:"The interface analysts actually work in: alert detail, entity 360 view, match/score explanation, decision actions, and links to related cases.",
+        bullets:["Surface the 'why' behind a score or match directly in the UI — analysts shouldn't have to go digging in logs","Design for throughput: good triage UX materially affects false-positive review cost, which is often the largest ongoing operating cost of these systems"],
+        tags:["Custom React UI","Vendor case UIs"]},
+      {id:"c3", title:"SAR / STR Filing Module", sub:"Regulatory filing", accent:"gov",
+        desc:"Generates and submits Suspicious Activity/Transaction Reports to the relevant financial intelligence unit once an investigation concludes a filing is warranted.",
+        bullets:["Filing formats and deadlines are jurisdiction-specific (e.g., FinCEN SAR in the US, goAML in many other jurisdictions)","Maintain filing evidence and confirmation receipts as part of the permanent case record"],
+        tags:["goAML","FinCEN e-filing","Jurisdiction-specific FIU APIs"]}
+    ]
+  },
+  {
+    layer: "7 — Governance & Reporting",
+    nodes: [
+      {id:"g1", title:"Audit Trail & Logging", sub:"Immutable history", accent:"gov",
+        desc:"Captures every decision, list version, model version, and analyst action across the entire pipeline in an immutable, queryable log.",
+        bullets:["This is what makes the system defensible in a regulatory exam — 'show me why this transaction cleared' needs a real answer","Log at the data layer, not just the application layer, so nothing is missed"],
+        tags:["Immutable log store","WORM storage"]},
+      {id:"g2", title:"Model Risk Mgmt", sub:"Explainability & validation", accent:"gov",
+        desc:"Independent validation, monitoring, and documentation of every model and matching algorithm used in scoring — required under most model risk management regulatory frameworks (e.g., SR 11-7 in the US).",
+        bullets:["Track model versions, training data lineage, and performance drift over time","Explainability (SHAP, feature attribution) isn't optional here — both sanctions match logic and fraud model decisions need to be human-explainable"],
+        tags:["MLflow","SHAP/LIME","Model validation frameworks"]},
+      {id:"g3", title:"Regulatory Reporting", sub:"Filings, MI, exam support", accent:"gov",
+        desc:"Aggregates case outcomes, SLA performance, and filing statistics into management information and regulator-facing reporting.",
+        bullets:["Boards and regulators both want trend data: alert volumes, false-positive rates, filing rates, SLA adherence","Design reporting to be regenerable from the audit trail, not maintained as a separate parallel record"],
+        tags:["BI dashboards","Regulatory MI packs"]}
+    ]
+  }
+];
+
+const diagramEl = document.getElementById('diagram');
+const arrowSVG = `<svg width="16" height="20" viewBox="0 0 16 20"><path d="M8 0 V14 M2 10 L8 16 L14 10" stroke="#3A4870" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+DATA.forEach((layer, li) => {
+  const layerDiv = document.createElement('div');
+  layerDiv.className = 'layer';
+  layerDiv.innerHTML = `<div class="layer-label"><span class="num">${layer.layer.split(' — ')[0]}</span> ${layer.layer.split(' — ')[1]}</div>`;
+  const row = document.createElement('div');
+  row.className = 'row';
+  layer.nodes.forEach(n => {
+    const el = document.createElement('div');
+    el.className = 'node';
+    el.style.setProperty('--accent', `var(--${n.accent}`);
+    el.dataset.id = n.id;
+    el.innerHTML = `<div class="node-title">${n.title}</div><div class="node-sub">${n.sub}</div>`;
+    el.addEventListener('click', () => selectNode(n, el));
+    row.appendChild(el);
+  });
+  layerDiv.appendChild(row);
+  diagramEl.appendChild(layerDiv);
+  if (li < DATA.length - 1) {
+    const conn = document.createElement('div');
+    conn.className = 'connector';
+    conn.innerHTML = arrowSVG;
+    diagramEl.appendChild(conn);
+  }
+});
+
+const panelEmpty = document.getElementById('panelEmpty');
+const panelContent = document.getElementById('panelContent');
+
+function selectNode(n, el) {
+  document.querySelectorAll('.node').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+  panelEmpty.style.display = 'none';
+  panelContent.style.display = 'block';
+  const accentVar = `var(--${n.accent})`;
+  panelContent.innerHTML = `
+    <button class="close-btn" id="closeBtn">✕ close</button>
+    <div style="clear:both;"></div>
+    <div class="panel-eyebrow" style="color:${accentVar}; border:1px solid ${accentVar}; background:${accentVar}18;">${n.accent}</div>
+    <div class="panel-title">${n.title}</div>
+    <div class="panel-sub">${n.sub}</div>
+    <div class="panel-desc">${n.desc}</div>
+    <div class="panel-section-title">Key considerations</div>
+    <ul>${n.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+    <div class="panel-section-title">Typical technology</div>
+    <div class="tech-tags">${n.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+  `;
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    panelContent.style.display = 'none';
+    panelEmpty.style.display = 'block';
+    document.querySelectorAll('.node').forEach(x => x.classList.remove('active'));
+  });
+}
+</script>
+</body>
+</html>

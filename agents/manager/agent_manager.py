@@ -21,7 +21,6 @@ from pathlib import Path
 import json
 import datetime
 import shutil
-from pathlib import Path
 try:
     import joblib
 except Exception:
@@ -54,11 +53,13 @@ METRICS_FILE = ROOT / 'memories' / 'repo' / 'agent_metrics.json'
 if not METRICS_FILE.exists():
     METRICS_FILE.write_text('{}')
 
-OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL', 'http://localhost:9200')
-POSTGRES_DSN = os.environ.get('POSTGRES_DSN', 'host=localhost dbname=hsfs user=hsfs password=hsfs_pw')
+OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL', 'http://opensearch:9200')
+POSTGRES_DSN = os.environ.get('POSTGRES_DSN', 'host=postgres dbname=hsfs user=hsfs password=hsfs_pw')
 
 SLEEP_INTERVAL = int(os.environ.get('AGENT_LEARN_INTERVAL', '30'))
-AUTO_PUSH = os.environ.get('AGENT_AUTO_PUSH', 'false').lower() in ('1','true','yes')
+AUTO_PUSH = os.environ.get('AGENT_AUTO_PUSH', 'true').lower() in ('1','true','yes')
+METRICS_PORT = int(os.environ.get('AGENT_METRICS_PORT', '9500'))
+METRICS_PATH = os.environ.get('AGENT_METRICS_PATH', '/metrics')
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 
@@ -185,6 +186,8 @@ def get_agent_config(agent_path):
 def update_agent_memory(agent_id, summary):
     mem_file = MEMORIES_DIR / f'agent-{agent_id}.md'
     txt = f"- {summary['learned_at']}: learned {summary['count']} items\n"
+    if 'accuracy' in summary:
+        txt += f"  - accuracy: {summary['accuracy']}\n"
     txt += "  - examples: " + json.dumps(summary['examples'], default=str) + "\n\n"
     with open(mem_file, 'a') as f:
         f.write(txt)
@@ -213,6 +216,22 @@ def touch_agent_manifest(agent_path):
         with open(ag_md, 'a') as f:
             f.write(f'\nLast-Updated: {now}\n')
     return ag_md
+
+
+def emit_metrics(agent_id, summary):
+    metrics = {}
+    if METRICS_FILE.exists():
+        try:
+            metrics = json.loads(METRICS_FILE.read_text())
+        except Exception:
+            logging.exception('Failed to load metrics file')
+    metrics[agent_id] = {
+        'learned_at': summary['learned_at'],
+        'count': summary['count'],
+        'accuracy': summary.get('accuracy'),
+        'model': summary.get('model')
+    }
+    METRICS_FILE.write_text(json.dumps(metrics, indent=2))
 
 
 def git_commit(files, message):
@@ -254,12 +273,48 @@ def agent_loop(agent_path: Path):
             summary = learn_from_batch(agent_path, batch)
             mem_file = update_agent_memory(agent_id, summary)
             ag_md = touch_agent_manifest(agent_path)
-            git_commit([mem_file, ag_md], f'agent({agent_id}): self-learning update {summary["learned_at"]}')
+            emit_metrics(agent_id, summary)
+            git_commit([mem_file, ag_md, METRICS_FILE], f'agent({agent_id}): self-learning update {summary["learned_at"]}')
             logging.info('Agent %s learned %d items', agent_id, summary['count'])
         else:
             logging.info('Agent %s: no data to learn from', agent_id)
 
         time.sleep(SLEEP_INTERVAL)
+
+
+def start_metrics_server():
+    from http.server import HTTPServer, BaseHTTPRequestHandler
+
+    class MetricsHandler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            if self.path == METRICS_PATH:
+                output = []
+                if METRICS_FILE.exists():
+                    try:
+                        metrics = json.loads(METRICS_FILE.read_text())
+                    except Exception:
+                        metrics = {}
+                else:
+                    metrics = {}
+                for agent_id, values in metrics.items():
+                    learned_at = values.get('learned_at', '0')
+                    output.append(f'agent_last_learn_timestamp{{agent="{agent_id}"}} {int(datetime.datetime.fromisoformat(learned_at.replace("Z","+00:00")).timestamp()) if learned_at != "0" else 0}')
+                    output.append(f'agent_learn_count{{agent="{agent_id}"}} {values.get("count", 0)}')
+                    if values.get('accuracy') is not None:
+                        output.append(f'agent_accuracy{{agent="{agent_id}"}} {values.get("accuracy")}')
+                body = '\n'.join(output).encode('utf-8')
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/plain; version=0.0.4')
+                self.send_header('Content-Length', str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+            else:
+                self.send_response(404)
+                self.end_headers()
+
+    httpd = HTTPServer(('0.0.0.0', METRICS_PORT), MetricsHandler)
+    logging.info('Starting metrics server on http://0.0.0.0:%d%s', METRICS_PORT, METRICS_PATH)
+    httpd.serve_forever()
 
 
 def main():
@@ -272,6 +327,9 @@ def main():
         t = threading.Thread(target=agent_loop, args=(a,), daemon=True)
         t.start()
         threads.append(t)
+
+    metrics_thread = threading.Thread(target=start_metrics_server, daemon=True)
+    metrics_thread.start()
 
     # Keep main thread alive
     try:

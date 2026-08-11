@@ -178,7 +178,7 @@ Sponsor requirement → SME authoring → Product Owner backlog grooming → Sol
 | Database | PostgreSQL | relational and metadata storage |
 | Data lake | Apache Iceberg + MinIO + Trino | analytical storage and queries |
 | Observability | Grafana + Loki or OpenSearch Dashboards | logs and telemetry |
-| Ticketing | Redmine / GLPI | case tracking |
+| Work management | Redmine / GLPI | case and workflow tracking |
 | Test automation | JUnit + REST Assured + Karate + k6 | functional and performance testing |
 | Secrets | OpenBao | secrets management |
 | Schema registry | Apicurio Registry | message contract registry |

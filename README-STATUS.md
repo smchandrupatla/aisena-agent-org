@@ -30,7 +30,7 @@ Planned services (docker-compose):
 - Loki
   - Port: `3100`
 
-- Redmine (ticketing / case management)
+- Redmine (work management / case management)
   - Port: `3001` (Rails app served on 3000 inside container)
   - DB: uses the PostgreSQL service above
 
