@@ -67,3 +67,5 @@ Expected interaction with other agents:
 - Upstream: Implementation Manager and other relevant definition roles.
 - Downstream: Dependent implementation and assurance agents.
 - Provide explicit outputs and handoffs for the next role.
+
+Last-Updated: 2026-08-11T06:08:01.483205Z
