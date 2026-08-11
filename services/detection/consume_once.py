@@ -25,32 +25,26 @@ CREATE TABLE IF NOT EXISTS hsfs_screening_results (
 
 
 def write_result_to_db(event, flagged, reason):
-    try:
-        conn = psycopg2.connect(POSTGRES_DSN)
-        cur = conn.cursor()
-        cur.execute(CREATE_TABLE_SQL)
-        cur.execute(
-            "INSERT INTO hsfs_screening_results (event, flagged, reason) VALUES (%s, %s, %s) RETURNING id",
-            (json.dumps(event), flagged, reason)
-        )
-        id = cur.fetchone()[0]
-        conn.commit()
-        cur.close()
-        conn.close()
-        return id
-    except Exception as e:
-        logging.exception('DB write failed')
-        raise
+    conn = psycopg2.connect(POSTGRES_DSN)
+    cur = conn.cursor()
+    cur.execute(CREATE_TABLE_SQL)
+    cur.execute(
+        "INSERT INTO hsfs_screening_results (event, flagged, reason) VALUES (%s, %s, %s) RETURNING id",
+        (json.dumps(event), flagged, reason)
+    )
+    id = cur.fetchone()[0]
+    conn.commit()
+    cur.close()
+    conn.close()
+    return id
 
 
 def index_to_opensearch(doc):
     idx = 'hsfs-stage0-screening-results'
-    # Ensure index exists
     idx_url = f"{OPENSEARCH_URL}/{idx}"
     try:
         r = requests.get(idx_url)
         if r.status_code == 404:
-            # create a simple index with dynamic mapping
             logging.info('Index %s not found, creating', idx)
             create_r = requests.put(idx_url, json={
                 'settings': {'number_of_shards': 1},
@@ -68,7 +62,6 @@ def index_to_opensearch(doc):
 
 
 def simple_rule(event):
-    # simple stub rule: if any numeric 'amount' > 1000 => flag
     amount = None
     if isinstance(event, dict):
         amount = event.get('amount') or event.get('transaction_amount')
@@ -85,10 +78,12 @@ def main():
     consumer = KafkaConsumer(TOPIC, bootstrap_servers=BOOTSTRAP,
                              value_deserializer=lambda m: json.loads(m.decode('utf-8')),
                              auto_offset_reset='earliest', enable_auto_commit=True)
-    logging.info('Consumer listening on %s', TOPIC)
+    logging.info('One-shot consumer listening on %s', TOPIC)
+    start = time.time()
+    timeout = 10
     for msg in consumer:
         event = msg.value
-        logging.info('Received event: %s', event)
+        print('Received event:', event)
         flagged, reason = simple_rule(event)
         db_id = write_result_to_db(event, flagged, reason)
         doc = {
@@ -103,6 +98,8 @@ def main():
             logging.info('Indexed to OpenSearch: %s', res)
         except Exception as e:
             logging.exception('Failed to index to OpenSearch')
+        break
+    consumer.close()
 
 if __name__ == '__main__':
     main()

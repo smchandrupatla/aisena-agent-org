@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import json
 import time
+import os
 from kafka import KafkaProducer
 
-SAMPLE_EVENT_PATH = '../../project/implementation/data/sample-event.json'
+BASE_DIR = os.path.dirname(__file__)
+SAMPLE_EVENT_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', '..', 'project', 'implementation', 'data', 'sample-event.json'))
 TOPIC = 'hsfs-stage0-events'
 BOOTSTRAP = 'localhost:9092'
 
