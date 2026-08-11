@@ -77,4 +77,4 @@ Expected interaction with other agents:
 - Downstream: Frontend Engineer, Backend Engineer, Database Engineer, Integration Engineer.
 - Provide architecture decisions and ADRs to guide implementation.
 
-Last-Updated: 2026-08-11T06:33:54.618539Z
+Last-Updated: 2026-08-11T06:34:24.725985Z
