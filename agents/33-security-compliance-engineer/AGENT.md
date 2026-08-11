@@ -51,4 +51,4 @@ Definition of Done:
 Commands it may need:
 - `scripts/agents/run-agent.sh 33-security-compliance-engineer`
 
-Last-Updated: 2026-08-11T06:18:21.555409Z
+Last-Updated: 2026-08-11T06:18:51.620582Z
