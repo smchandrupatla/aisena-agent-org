@@ -48,4 +48,4 @@ Definition of Done:
 - A handoff document is created for the implementation team.
 - The story can be executed as a minimal part of the Stage 0 proof.
 
-Last-Updated: 2026-08-11T06:51:27.833449Z
+Last-Updated: 2026-08-11T06:51:57.912542Z
