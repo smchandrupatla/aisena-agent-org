@@ -52,4 +52,4 @@ Definition of Done:
 Commands it may need:
 - `scripts/agents/run-agent.sh 34-technical-writer`
 
-Last-Updated: 2026-08-11T06:43:55.715891Z
+Last-Updated: 2026-08-11T06:44:25.803752Z
