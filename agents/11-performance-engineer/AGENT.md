@@ -68,4 +68,4 @@ Expected interaction with other agents:
 - Downstream: Dependent implementation and assurance agents.
 - Provide explicit outputs and handoffs for the next role.
 
-Last-Updated: 2026-08-11T06:43:55.321983Z
+Last-Updated: 2026-08-11T06:44:25.451002Z
