@@ -51,4 +51,4 @@ Definition of Done:
 Commands it may need:
 - `scripts/agents/run-agent.sh 27-backend-detection-services`
 
-Last-Updated: 2026-08-11T06:33:25.037022Z
+Last-Updated: 2026-08-11T06:33:55.106083Z
