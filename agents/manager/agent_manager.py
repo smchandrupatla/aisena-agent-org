@@ -20,6 +20,19 @@ import subprocess
 from pathlib import Path
 import json
 import datetime
+import shutil
+from pathlib import Path
+try:
+    import joblib
+except Exception:
+    joblib = None
+try:
+    from sklearn.linear_model import SGDClassifier
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.pipeline import make_pipeline
+    SKLEARN_AVAILABLE = True
+except Exception:
+    SKLEARN_AVAILABLE = False
 
 try:
     import requests
@@ -35,11 +48,17 @@ ROOT = Path(__file__).resolve().parents[2]
 AGENTS_DIR = ROOT / 'agents'
 MEMORIES_DIR = ROOT / 'memories' / 'repo'
 MEMORIES_DIR.mkdir(parents=True, exist_ok=True)
+MODELS_DIR = ROOT / 'models'
+MODELS_DIR.mkdir(parents=True, exist_ok=True)
+METRICS_FILE = ROOT / 'memories' / 'repo' / 'agent_metrics.json'
+if not METRICS_FILE.exists():
+    METRICS_FILE.write_text('{}')
 
 OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL', 'http://localhost:9200')
 POSTGRES_DSN = os.environ.get('POSTGRES_DSN', 'host=localhost dbname=hsfs user=hsfs password=hsfs_pw')
 
 SLEEP_INTERVAL = int(os.environ.get('AGENT_LEARN_INTERVAL', '30'))
+AUTO_PUSH = os.environ.get('AGENT_AUTO_PUSH', 'false').lower() in ('1','true','yes')
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 
@@ -87,17 +106,80 @@ def fetch_recent_results_from_postgres(limit=20):
 
 
 def learn_from_batch(agent_path, batch):
-    """Placeholder learning function. Replace with real model updates.
-    For now it summarizes the batch and returns a short note.
+    """Train a simple model using available features in the batch.
+
+    If scikit-learn is available we train a small classifier on 'amount' -> flagged.
+    Otherwise we compute a threshold (median of flagged amounts) and store JSON.
+    Returns a summary dict with model path and simple accuracy on the batch.
     """
     n = len(batch)
     ts = datetime.datetime.utcnow().isoformat() + 'Z'
-    summary = {
-        'learned_at': ts,
-        'count': n,
-        'examples': batch[:3]
-    }
-    return summary
+    # Extract features: use amount if present
+    X = []
+    y = []
+    for e in batch:
+        amt = None
+        if isinstance(e, dict):
+            amt = e.get('amount') or e.get('transaction_amount')
+        if amt is None:
+            continue
+        try:
+            X.append([float(amt)])
+            y.append(1 if e.get('flagged') else 0)
+        except Exception:
+            continue
+
+    model_info = {'learned_at': ts, 'count': n, 'examples': batch[:3]}
+
+    if not X:
+        model_info['model'] = None
+        model_info['accuracy'] = None
+        return model_info
+
+    # Read agent config
+    cfg = get_agent_config(agent_path)
+
+    if SKLEARN_AVAILABLE:
+        try:
+            clf = make_pipeline(StandardScaler(), SGDClassifier(max_iter=1000, tol=1e-3, alpha=float(cfg.get('alpha', 0.0001))))
+            clf.fit(X, y)
+            preds = clf.predict(X)
+            acc = sum(1 for a,b in zip(preds,y) if a==b)/len(y)
+            model_path = MODELS_DIR / f'agent-{agent_path.name}-model.joblib'
+            joblib.dump(clf, model_path)
+            model_info['model'] = str(model_path)
+            model_info['accuracy'] = acc
+            return model_info
+        except Exception:
+            logging.exception('sklearn training failed; falling back to threshold')
+
+    # Fallback: compute threshold
+    flagged_amounts = [float(e.get('amount')) for e in batch if e.get('flagged') and e.get('amount')]
+    if flagged_amounts:
+        thresh = float(sorted(flagged_amounts)[max(0, len(flagged_amounts)//2)])
+    else:
+        thresh = sum(float(e.get('amount')) for e in batch if e.get('amount'))/len(batch)
+
+    model_path = MODELS_DIR / f'agent-{agent_path.name}-model.json'
+    model_data = {'type': 'threshold', 'threshold': thresh, 'created_at': ts}
+    model_path.write_text(json.dumps(model_data))
+    preds = [(1 if float(e.get('amount',0))>thresh else 0) for e in batch]
+    ys = [1 if e.get('flagged') else 0 for e in batch]
+    acc = sum(1 for a,b in zip(preds,ys) if a==b)/len(ys) if ys else None
+    model_info['model'] = str(model_path)
+    model_info['accuracy'] = acc
+    return model_info
+
+
+def get_agent_config(agent_path):
+    cfg_file = agent_path / 'config.json'
+    defaults = {'alpha': 0.0001, 'data_window': 50}
+    try:
+        if cfg_file.exists():
+            return {**defaults, **json.loads(cfg_file.read_text())}
+    except Exception:
+        logging.exception('Failed to read config for %s', agent_path)
+    return defaults
 
 
 def update_agent_memory(agent_id, summary):
@@ -149,6 +231,12 @@ def git_commit(files, message):
         cmd = ['git', 'add'] + [str(f) for f in files]
         subprocess.run(cmd, cwd=str(ROOT), check=False)
         subprocess.run(['git', 'commit', '-m', message], cwd=str(ROOT), check=False)
+        if AUTO_PUSH:
+            try:
+                subprocess.run(['git', 'push', 'origin', 'main'], cwd=str(ROOT), check=False)
+                logging.info('Auto-pushed commits to origin/main')
+            except Exception:
+                logging.exception('Auto-push failed')
     except Exception:
         logging.exception('Git commit failed')
 
