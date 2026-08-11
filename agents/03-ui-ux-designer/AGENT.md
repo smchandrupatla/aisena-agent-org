@@ -71,4 +71,4 @@ Expected interaction with other agents:
 - Downstream: Frontend Engineer.
 - Provide UX acceptance criteria and behaviour guidance for implementation.
 
-Last-Updated: 2026-08-11T06:29:24.355248Z
+Last-Updated: 2026-08-11T06:29:54.500881Z
