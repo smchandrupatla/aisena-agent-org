@@ -24,3 +24,20 @@ The Implementation Manager will bootstrap the first HSFS delivery chain with the
 
 - The Implementation Manager uses this file to seed the HSFS-specific agent definitions and Stage 0 plan.
 - This file is a durable, reviewable statement of the initial HSFS agent roster and should be updated as Stage 0 is refined.
+
+## Tier 1 SME Agent Roles
+
+The following Subject Matter Experts are available to provide domain stories, implementation guidance, and acceptance criteria for HSFS:
+
+- **Sanctions Screening SME** — OFAC SDN, 31 CFR, list ingestion cadence, signature/fuzzy matching rules.
+- **Fraud Detection SME** — transaction fraud typologies, scoring thresholds, model risk and feature guidance.
+- **Payments & Messaging SME (ISO 20022)** — payment formats, message parsing, mapping, and rail-specific SLA guidance.
+- **Regulatory & Compliance SME** — BSA/AML, FFIEC, Wolfsberg, SR 11-7 controls, audit trail, and governance stories.
+- **Data Architecture & Database SME** — schema design, Iceberg/Parquet modeling, normalization, retention, and partitioning guidance.
+- **Search & OpenSearch SME** — index mappings, relevance tuning, fuzzy matching, and latency targets.
+- **Streaming & Messaging Infra SME (Kafka/Flink)** — topic design, exactly-once processing, partitioning, and backpressure handling.
+- **Cloud & AWS SME** — environment provisioning, scaling policy, cost guardrails, and AWS service recommendations.
+- **Security & Identity SME** — auth flows, secrets management, mTLS, Keycloak/OpenBao, and zero-trust patterns.
+- **Case Management & UX SME** — analyst workflows, alert triage UX, case lifecycle, and disposition tracking stories.
+
+These SMEs support the Product Owner and delivery team by turning domain knowledge into actionable backlog items.
