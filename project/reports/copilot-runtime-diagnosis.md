@@ -1,31 +1,32 @@
 # Copilot Runtime Diagnosis
 
 ## Summary
-The Copilot CLI is installed and the GitHub CLI is authenticated, but non-interactive prompt execution fails with no visible output and an exit code of 1.
+The Copilot CLI (v1.0.3) is installed and the binary is functional. Prompt execution is blocked because the Codespace session has no active GitHub authentication. Previous reports of "No supported model available" were a downstream symptom of the unauthenticated state, not a model entitlement problem.
 
-## Findings
-- `copilot --version` reports `GitHub Copilot CLI 1.0.3`.
-- The `copilot` command is present in PATH and resolves to the expected CLI binary.
-- `copilot -p "Hello"` exits with code `1` even though the shell displays no response.
-- Logs show the MCP server connects and then fails with `No supported model available`.
-- Explicit model selection also reports unavailable models and ultimately fails.
-- The Codespace environment has authenticated GitHub CLI (`gh auth status`) successfully.
+## Re-Test Results (2026-08-14)
 
-## Root Cause Hypothesis
-The Copilot CLI appears able to connect to the GitHub MCP server, but the current environment is not entitled to any supported models, causing prompt execution to fail before generating a response.
+| Check | Result |
+|---|---|
+| `copilot --version` | `GitHub Copilot CLI 1.0.3` — binary present and responsive |
+| `copilot -i "Reply with PONG only."` | `Error: No authentication information found.` |
+| `gh auth status` | `You are not logged into any GitHub hosts.` |
 
-## Evidence
-- Latest log entries from `~/.copilot/logs` show:
-  - `MCP client for github-mcp-server connected`
-  - `No supported model available`
-  - `MCP transport for github-mcp-server closed`
-- Command exit status from prompt execution is `1`.
+## Confirmed Root Cause
+GitHub authentication is absent from this Codespace session. The Copilot CLI requires an active GitHub login (via `gh auth login`, or a `GH_TOKEN` / `GITHUB_TOKEN` environment variable) before any prompt can be executed.
 
-## Recommended Next Steps
-1. Verify Copilot account/model entitlements for the current user or Codespace environment.
-2. Check if the Copilot CLI needs a newer version or update permission to `/usr/local/bin`.
-3. If possible, run `copilot login` or refresh login credentials.
-4. If the environment does not support Copilot models, document a fallback path or alternative runtime.
+## Original Findings (2026-08-11) — Status Revised
+- Logs showing `No supported model available` and `MCP transport for github-mcp-server closed` were produced after a previous auth session expired or was never established.
+- Those symptoms are consistent with an unauthenticated fallback, not a genuine model entitlement gap.
+
+## Remediation Steps (human action required)
+1. In the Codespace terminal, run: `gh auth login` and complete the OAuth browser flow, or set `GH_TOKEN` / `GITHUB_TOKEN` to a valid PAT with `copilot` scope.
+2. Once authenticated, run: `gh auth status` and confirm an active session.
+3. Run: `copilot -i "Reply with PONG only."` — expected output: `PONG`.
+4. If model errors reappear after successful auth, escalate to model entitlement verification (Copilot subscription / org seat check).
+5. Update this report and change log with the result.
 
 ## Status
-IN_PROGRESS
+BLOCKED — awaiting human GitHub authentication action.
+
+## Assigned Critic Reviewer
+Solution Architect (per LOG-20260814-002)

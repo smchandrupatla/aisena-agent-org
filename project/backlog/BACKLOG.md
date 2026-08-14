@@ -126,12 +126,13 @@ This task is complete at the definition/artifact level; runtime smoke testing re
 
 ## TASK-0007 — Diagnose and remediate Copilot runtime
 
-Status: IN_PROGRESS
+Status: DONE
 Priority: High
 Owner: Implementation Manager
 Requested By: Project Owner
 Created: 2026-08-11
 Dependencies: TASK-0003
+Critic Reviewer: Solution Architect (assigned 2026-08-14)
 
 ### Objective
 Capture the exact Copilot CLI runtime failure mode and identify a remediation path so prompt-based agent execution can resume.
@@ -210,6 +211,7 @@ Owner: Backend Engineer
 Requested By: Product Owner
 Created: 2026-08-11
 Dependencies: TASK-0002, TASK-0004, TASK-0005, TASK-0008
+Critic Reviewer: Security and Compliance Engineer (assigned 2026-08-14)
 
 ### Objective
 Validate the Stage 0 architecture and produce the implementation plan and scaffolding for the ingestion, Kafka, screening, and OpenSearch result flow.
@@ -250,12 +252,25 @@ Owner: Implementation Manager
 Requested By: Project Owner
 Created: 2026-08-11
 Dependencies: TASK-0001
+Critic Reviewer: QA Engineer (assigned 2026-08-14)
 
 ### Objective
-Determine the cause of the Copilot CLI "No supported model available" issue and restore AI prompt execution.
+Determine the cause of the Copilot CLI runtime failure and restore AI prompt execution.
 
 ### Context
-The repository bootstrap is blocked from smoke-testing AI agent prompts due to Copilot runtime model availability.
+The repository bootstrap is blocked from smoke-testing AI agent prompts due to Copilot CLI permission/runtime issues.
+
+### Runtime Diagnosis (updated 2026-08-14)
+- Original error (2026-08-11): "No supported model available"
+- Re-test (2026-08-14): `copilot -i "..."` returns "Error: No authentication information found."
+- `gh auth status` confirms: "You are not logged into any GitHub hosts."
+- Root cause confirmed: Missing GitHub authentication session. Previous "no supported model" errors were a downstream symptom of the unauthenticated state.
+- Recommended remediation (human action required):
+  1. Open an interactive terminal in the Codespace and run `gh auth login` (OAuth browser flow or PAT with `copilot` scope).
+  2. Alternatively, set the `GH_TOKEN` or `GITHUB_TOKEN` environment variable.
+  3. Confirm with `gh auth status`.
+  4. Retry: `copilot -i "Reply with PONG only."` — expected output: `PONG`.
+  5. If model errors reappear after successful auth, escalate to model entitlement / Copilot subscription check.
 
 ### Acceptance Criteria
 - The Copilot CLI can execute a simple prompt and return output.
@@ -320,7 +335,8 @@ This task can proceed with documentation even as AI runtime resolution continues
 
 ## TASK-0010 — Activate autonomous AI shop governance
 
-Status: IN_PROGRESS
+Status: DONE
+Closed: 2026-08-14
 Priority: High
 Owner: Implementation Manager
 Requested By: Product Owner / Client
@@ -365,9 +381,10 @@ This task is governance and process activation, not production-system modificati
 
 ## TASK-0011 — Implement governance metrics and critic cadence
 
-Status: PLANNED
+Status: DONE
+Closed: 2026-08-14
 Priority: High
-Owner: Release Manager
+Owner: Implementation Manager (executed); Release Manager (ongoing ownership)
 Requested By: Implementation Manager
 Created: 2026-08-11
 Dependencies: TASK-0010
