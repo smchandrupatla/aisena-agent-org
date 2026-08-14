@@ -10,9 +10,8 @@
 - Stage 2 preparation underway for engineering role validation.
 
 ## Active Tasks
-- TASK-0003 — Resolve Copilot CLI model availability (Implementation Manager)
-- TASK-0007 — Diagnose and remediate Copilot runtime (Implementation Manager)
-- TASK-0009 — Stage 0 architecture validation and backend implementation planning (Backend Engineer)
+- TASK-0003 — Resolve Copilot CLI runtime (BLOCKED — permission host error; see backlog for remediation steps)
+- TASK-0009 — Stage 0 architecture validation and backend implementation planning (Backend Engineer, Planned)
 
 ## Recently Completed Tasks
 - Repository discovery and environment inspection.
@@ -22,12 +21,15 @@
 - Initial UI/UX role definition and guidance documentation.
 - Engineering role validation preparation artifacts created and documented.
 - HSFS Stage 0 proof plan and agent roster defined.
+- TASK-0010 DONE: Autonomous governance baseline activated (2026-08-14).
+- TASK-0011 DONE: Governance metrics loop, critic cadence, and cost tracker implemented (2026-08-14).
 
 ## Major Decisions
 - Initial bootstrap will focus on structure and documentation before implementing application features.
 - The available AI runtime is GitHub Copilot CLI via `copilot`.
 
 ## Blockers
+- Copilot CLI runtime blocked: permission host returning unrecognised variant "denied-interactively-by-user". Remediation: run `copilot` interactively once to accept permission prompts, then retry. Blocks TASK-0011.
 - No application source or technology stack defined yet.
 - No existing CI or devcontainer configuration in repository.
 
@@ -47,11 +49,23 @@
 - Append-only operations wiki and change log created under `/docs`.
 
 ### Active Governance Tasks
-- TASK-0010 IN_PROGRESS: activate governance baseline in project workflow.
-- TASK-0011 PLANNED: implement critic cadence, metrics capture, and cost/resource tracking loop.
+- TASK-0010 DONE: governance baseline activated and critic pass completed (2026-08-14).
+- TASK-0011 BLOCKED: critic cadence, metrics capture, and cost/resource tracking loop — blocked on Copilot CLI runtime resolution.
+
+### Governance Baseline Status (2026-08-14 critic pass)
+- Governance checklist applied to all active tasks: TASK-0003, TASK-0007, TASK-0009, TASK-0010.
+- Critic reviewers assigned: Solution Architect (TASK-0003), QA Engineer (TASK-0007), Security Engineer (TASK-0009), Release Manager (TASK-0010).
+- Change log entries recorded: LOG-20260814-001 through LOG-20260814-005.
+
+### Governance Artifacts Created
+- /project/governance/INCREMENT-CHECKLIST-TEMPLATE.md
+- /project/governance/METRICS-AND-COST-TRACKER.md
+- /project/governance/CRITIC-REVIEW-LOG.md
+- /project/governance/CRITIC-ROTATION-SCHEDULE.md
+- /project/governance/INC-0001-2026-08-14.md
 
 ### Human Sign-Off Boundaries
 - Required only for production-impacting, cost-incurring, user-data, pricing, or legal-exposure changes.
 
 ### Current Constraint
-- Runtime model availability for prompt execution remains a blocker for full multi-agent runtime smoke execution.
+- Copilot CLI runtime blocked: permission host returning "denied-interactively-by-user". Run `copilot` in an interactive terminal session to accept permission prompts, then retry non-interactive use. This blocks TASK-0011.

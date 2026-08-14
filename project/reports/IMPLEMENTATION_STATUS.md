@@ -64,3 +64,28 @@ Stage 1 — Definition roles established
 - Complete TASK-0010 artifact review.
 - Begin TASK-0011 with critic assignment and metric capture checklist.
 - Link first implementation increment to rollback and approval metadata.
+
+## Update 2026-08-14 — TASK-0010 and TASK-0011 Completed
+
+### Summary
+- TASK-0010 (governance baseline activation) closed as DONE.
+- TASK-0011 (metrics loop, critic cadence, cost tracker) implemented and closed as DONE.
+- First governed increment (INC-0001) recorded with full checklist, critic review, and metrics capture.
+
+### New Artifacts
+- `/project/governance/INCREMENT-CHECKLIST-TEMPLATE.md` — per-increment gate checklist
+- `/project/governance/METRICS-AND-COST-TRACKER.md` — append-only metrics and cost log
+- `/project/governance/CRITIC-REVIEW-LOG.md` — append-only critic findings log
+- `/project/governance/CRITIC-ROTATION-SCHEDULE.md` — rotation schedule and pool
+- `/project/governance/INC-0001-2026-08-14.md` — completed increment record
+
+### Status Impact
+- Governance baseline: FULLY OPERATIONAL (manual checklist mode)
+- Critic cadence: ACTIVE (first review CRITIC-0001 completed)
+- Metrics tracking: ACTIVE (baseline INC-0001 captured)
+- Runtime smoke execution capability: BLOCKED (unchanged — TASK-0003/0007 ongoing)
+
+### Next Measurable Checkpoints
+- Resolve Copilot CLI model availability (TASK-0003, TASK-0007).
+- Apply INC governance checklist to first engineering increment (INC-0002).
+- Assign next critic from rotation pool when INC-0002 begins.
