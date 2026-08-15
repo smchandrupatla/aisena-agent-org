@@ -526,3 +526,35 @@ No
 
 #### Handoff Target
 04-frontend-engineer — update CHECKLIST.md with WCAG 3.0 Bronze annotation before next UI sprint begins.
+
+### LOG-20260815-019 — Daily Domain Self-Learning: Database Engineer (TASK-0011)
+- **Agent Role:** 06-database-engineer
+- **Task ID:** TASK-0011 (daily domain self-learning)
+- **Date:** 2026-08-15
+
+#### Finding
+PostgreSQL with pgvector + pgvectorscale (StreamingDiskANN) and the pgai Vectorizer now delivers sub-50ms median query latency at 50 million vectors — outperforming dedicated vector databases (Pinecone, Qdrant, MongoDB Atlas) and lakehouses (Databricks) for agentic AI workloads in independent benchmarks (McKnight Consulting Group, July 2026). The pgai Vectorizer additionally automates real-time embedding synchronisation via triggers and background workers, eliminating manual re-embedding pipelines.
+
+#### Why It Matters
+AISENA currently uses PostgreSQL for structured persistence alongside OpenSearch for screening results. These benchmark results validate consolidating vector search into PostgreSQL (removing a separate vector store dependency) for agentic AI retrieval patterns — reducing infrastructure cost, operational complexity, and latency. For AISENA's financial crime detection use case, freshness and latency of screening data are compliance-critical; keeping embeddings co-located with live transaction data eliminates ETL lag. The pgai Vectorizer's trigger-based sync model is directly applicable to automatically re-embed case narrative text, entity profiles, and rule descriptions as they are updated.
+
+#### Evidence
+- EDB PR Newswire announcement (2026-07-29): https://www.prnewswire.com/news-releases/edb-postgres-ai-outperforms-vector-databases-lakehouses-and-document-stores-for-agentic-ai-on-speed-accuracy-and-cost-302837518.html
+- pgvector DBA guide — indexes update (March 2026): https://www.dbi-services.com/blog/pgvector-a-guide-for-dba-part-2-indexes-update-march-2026/
+- pgai Vectorizer (Timescale/TigerData): https://github.com/timescale/pgai
+- pgvector vs Pinecone 28× benchmark: https://byteiota.com/postgresql-pgvector-delivers-28x-better-performance-than-pinecone/
+
+#### Recommended Action
+Add a schema design note to `agents/06-database-engineer/AGENT.md` (and the project architecture docs) documenting that pgvector + pgvectorscale is the preferred vector search path inside the existing PostgreSQL instance. Prototype a pgai Vectorizer declaration for the `aisena-stage0-screening-results` entity so that any entity or rule text change triggers automatic embedding refresh — avoiding a separate Pinecone/Qdrant dependency during Stage 2 build-out.
+
+#### Files Changed
+- docs/AGENT_CHANGE_LOG.md (this entry)
+
+#### Risk Level
+Low (finding recorded; no implementation change yet — prototype is a recommended follow-up)
+
+#### Human Approval Required
+No
+
+#### Handoff Target
+05-backend-engineer, 07-devops-engineer — review pgvector index strategy before Stage 2 schema migration work begins; confirm pgvectorscale extension availability in the target PostgreSQL 15 container.
