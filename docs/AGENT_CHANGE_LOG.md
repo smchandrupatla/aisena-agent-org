@@ -699,3 +699,38 @@ AISENA's target infrastructure is AWS-hosted and the project is currently bootst
 
 #### Recommended Action
 Author `release-standards.yaml` under `/agents/13-release-manager/` defining AISENA's Stage 0 release criteria. Coordinate with agent 06-devops-engineer to wire into the CI pipeline at Stage 2.
+
+### LOG-20260815-021 — Daily Domain Self-Learning: Sanctions Screening SME (TASK-0011)
+- **Agent Role:** 15-sanctions-screening-sme
+- **Task ID:** TASK-0011 (daily domain self-learning)
+- **What Changed:**
+  - Created `/agents/15-sanctions-screening-sme/daily-findings/2026-08-15-agentic-ai-sanctions-screening-cost-cascade.md` with actionable finding.
+- **Files Changed:**
+  - `/agents/15-sanctions-screening-sme/daily-findings/2026-08-15-agentic-ai-sanctions-screening-cost-cascade.md`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit / Version Ref:** pending
+- **Rationale:**
+  - Moody's (August 2026) and Federal Reserve (September 2025) research establishes that a two-layer ML→LLM model cascade in agentic sanctions screening reduces per-alert cost by 60–80% while preserving recall. Directly actionable for AISENA Stage 0 screening architecture and acceptance criteria.
+- **Alternatives Considered:**
+  - No credible alternative finding of equal specificity and recency was identified for this 24-hour window.
+- **Risk Impact:** Low (documentation and planning artifact only)
+- **Metrics Observed:** No runtime metrics; documentation artifact creation only.
+- **Rollback Plan:** Delete finding artifact file; no code or infrastructure change made.
+- **Human Approval Required:** No
+- **Handoff Target:** 05-backend-engineer (detection service architecture), 00-implementation-manager (awareness)
+
+#### Domain Finding: Agentic AI Sanctions Screening — Model Cascade Cost Control
+
+#### Finding
+Moody's August 2026 guidance establishes that a lightweight ML pre-filter before LLM-based entity resolution reduces per-alert LLM cost by 60–80% in agentic sanctions screening, while a Federal Reserve paper (2025) demonstrates up to 92% false positive reduction vs. legacy fuzzy matching using this approach.
+
+#### Why It Matters
+AISENA's Stage 0 proof is building an AI-agent-driven screening pipeline. Designing the cascade pattern from the start avoids costly architecture rework at Stage 2+. Acceptance criteria can now cite empirical benchmarks (≤20% false positive rate at 100% recall) grounded in published research rather than arbitrary thresholds.
+
+#### Evidence
+- Moody's: https://www.moodys.com/web/en/us/kyc/resources/insights/managing-the-cost-of-agentic-ai-in-sanctions-screening-why-machine-learning-matters.html (August 2026)
+- Federal Reserve Board FEDS paper: https://www.federalreserve.gov/econres/feds/files/2025092pap.pdf (September 2025)
+- OFAC SDN List Service (latest update 2026-08-07): https://ofac.treasury.gov/sanctions-list-service
+
+#### Recommended Action
+Update Stage 0 screening story in `/project/requirements` to specify a two-layer match architecture (rule/ML fast path + LLM slow path for ambiguous hits) and add measurable acceptance criterion: ≤20% false positive rate at 100% true-positive recall on the toy SDN test fixture.
