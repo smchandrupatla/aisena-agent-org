@@ -816,6 +816,35 @@ Add acceptance criterion to the Stage 0 screening story: each detection event re
 
 ---
 
+### LOG-20260815-025 — Daily Domain Self-Learning: Cloud & AWS SME (TASK-0011)
+
+- **Entry ID:** LOG-20260815-025
+- **Agent Role:** 22-cloud-aws-sme
+- **Task ID:** TASK-0011 (daily domain self-learning)
+- **Date:** 2026-08-15
+- **Risk Level:** Low
+- **Human Approval Required:** No
+- **Rollback Plan:** Delete finding artifact file; no code or infrastructure change made.
+- **Handoff Target:** 05-backend-engineer (Aurora Serverless advisory), 12-product-owner (awareness), 11-solution-architect (awareness)
+
+#### Domain Finding: Amazon Aurora Serverless v2 Rapid Scale-Up for Agentic AI Workloads (August 14, 2026)
+
+#### FINDING
+Amazon Aurora Serverless v2 now scales to 12 ACUs within a single second and up to 256 ACUs total (announced 2026-08-14), making it production-viable for bursty agentic AI workloads — directly applicable to AISENA's multi-agent event-driven screening pipeline.
+
+#### WHY_IT_MATTERS
+AISENA's Stage 0 uses PostgreSQL as its primary store, with Aurora Serverless v2 as the natural AWS-managed upgrade path for production. The prior Aurora Serverless v2 limitation — slow initial scale-up — was a blocker for latency-sensitive screening bursts (e.g., batch sanctions list ingestion or a sudden spike in transaction events from Kafka). The new sub-second 12 ACU ramp eliminates that cold-start risk. For AISENA's agentic architecture (37 AI agent roles generating intermittent but bursty DB writes and reads), Aurora Serverless v2 at this scale-up speed is now cost-efficient AND performant without pre-provisioning. This removes a key objection to recommending Aurora Serverless v2 over provisioned RDS for the production Stage 2 deployment.
+
+#### EVIDENCE
+- AWS What's New (2026-08-14): https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-aurora-serverless-v2-faster-scale-up/
+- AWS What's New archive (China region mirror, confirms date): https://www.amazonaws.cn/en/new/2026/
+- AWS Aurora Serverless v2 documentation (capacity scaling): https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.how-it-works.html
+
+#### RECOMMENDED_ACTION
+Update the Stage 2 AWS infrastructure story (or add an acceptance criterion to the existing RDS story) to explicitly evaluate Aurora Serverless v2 with the new rapid scale-up capability as the preferred database tier for AISENA production. Add a spike task: benchmark Aurora Serverless v2 scale-up latency against the AISENA Kafka consumer burst pattern (current Stage 0 load profile) before the Stage 2 infrastructure decision is finalised.
+
+---
+
 ### LOG-20260815-024 — Daily Domain Self-Learning: Data Architecture & Database SME (TASK-0011)
 
 - **Agent Role:** 19-data-architecture-database-sme
