@@ -871,3 +871,38 @@ AISENA's data architecture uses PostgreSQL as the primary relational store and l
 
 #### RECOMMENDED_ACTION
 Pin `pgvector>=0.8.6` in the AISENA PostgreSQL environment (Dockerfile / `docker-compose.yml` postgres image or extension install script). Add a migration note to the Stage 0 schema setup that the IVFFlat index must be rebuilt after upgrade. Document this as a non-functional acceptance criterion: "pgvector version MUST be ≥ 0.8.6 before any vector-similarity screening feature is enabled."
+
+---
+
+### LOG-20260815-026
+- **Agent Role:** 23-security-identity-sme
+- **Task ID:** TASK-DAILY-LEARNING-20260815
+- **Date:** 2026-08-15
+- **What Changed:** Daily domain self-learning report appended; no code changed.
+- **Files Changed:** `docs/AGENT_CHANGE_LOG.md`
+- **Commit / Version Ref:** pending
+- **Rationale:** Routine 24-hour domain intelligence cycle for Security & Identity SME.
+- **Alternatives Considered:** None — scheduled learning task.
+- **Risk Impact:** Low
+- **Metrics Observed:** N/A — finding and advisory only.
+- **Human Approval Required:** No
+- **Rollback Plan:** Delete finding entry from change log; no code or infrastructure change made.
+- **Handoff Target:** 05-backend-engineer (dependency advisory), 12-product-owner (awareness), 09-security-engineer
+
+#### Domain Finding: CVE-2026-28802 — Authlib JWT `alg:none` Authentication Bypass (CVSS 9.8 Critical)
+
+#### FINDING
+Authlib ≥1.6.5, <1.6.7 (Python OAuth/OIDC/JWT library) accepts unsigned JWTs with `alg:none`, allowing a remote attacker to forge tokens, bypass authentication, and impersonate any user including admins — patch to ≥1.6.7 immediately if Authlib is used or planned.
+
+#### WHY_IT_MATTERS
+AISENA's Flask REST API (`services/api/app.py`) will require token-based authentication as it matures beyond Stage 0. Authlib is the dominant Python library for OAuth 2.0 and OIDC flows and is very likely to be adopted. A CVSS 9.8 authentication bypass that requires no credentials and no user interaction would completely undermine the API access control layer that the Security & Identity SME is responsible for specifying. In the context of a financial crime screening system, an attacker forging an admin JWT could exfiltrate sanctions watchlists, inject false screening results, or disable alerts — directly violating the FinCEN effectiveness standard and NIST SP 800-63 Rev 4 identity assurance requirements. This finding must inform the acceptance criteria for any API authentication story before Authlib is introduced.
+
+#### EVIDENCE
+- NVD/NIST CVE page (published 2026): https://nvd.nist.gov/vuln/detail/CVE-2026-28802
+- GitHub Security Advisory GHSA-7wc2-qxgw-g8gg: https://github.com/advisories/GHSA-7wc2-qxgw-g8gg
+- Patch commits: https://github.com/authlib/authlib/commit/a61c2acb807496e67f32051b5f1b1d5ccf8f0a75
+- ARMO/Armosec analysis (2026-08): https://www.armosec.io/blog/authlib-cve-2026-28802-jwt-signature-verification-bypass/
+- CVE feed detail: https://cvefeed.io/vuln/detail/CVE-2026-28802
+
+#### RECOMMENDED_ACTION
+Add an explicit acceptance criterion to every API authentication user story: "The implementation MUST pin `authlib>=1.6.7` and MUST explicitly reject JWTs with `alg:none` before token processing." If Authlib is not yet in `requirements.txt`, add a pre-emptive dependency constraint `authlib>=1.6.7` now to prevent accidental adoption of a vulnerable version. Assign a security review gate to 09-security-engineer before any JWT/OAuth library is introduced to the Flask API.
