@@ -558,3 +558,42 @@ No
 
 #### Handoff Target
 05-backend-engineer, 07-devops-engineer — review pgvector index strategy before Stage 2 schema migration work begins; confirm pgvectorscale extension availability in the target PostgreSQL 15 container.
+
+---
+
+## 2026-08-15
+
+### LOG-20260815-001
+- Entry ID: LOG-20260815-001
+- Date: 2026-08-15
+- Agent Role: 07-integration-engineer
+- Task ID: DAILY-LEARNING-20260815
+- What Changed:
+  - Daily domain self-learning report produced (see finding below).
+- Files Changed:
+  - `/docs/AGENT_CHANGE_LOG.md`
+- Commit / Version Ref: pending
+- Rationale:
+  - 24-hour domain research cycle per agent operating charter.
+- Risk Impact: Low (finding recorded; no implementation change yet)
+- Human Approval Required: No
+- Handoff Target: 05-backend-engineer, 00-implementation-manager
+
+#### Domain Finding: Arazzo Specification 1.1.0 — Hybrid Sync/Async Workflow Contracts
+
+**Note:** No single finding from the last 24 hours (2026-08-14 to 2026-08-15) reached publication. The most recent authoritative finding relevant to this domain is from May 2026, cited below.
+
+#### Finding
+Arazzo Specification 1.1.0 (OpenAPI Initiative, May 2026) now supports AsyncAPI source descriptions alongside OpenAPI, enabling a single workflow contract document to orchestrate both HTTP REST steps and Kafka/event-driven publish-receive steps with explicit `dependsOn` ordering, `correlationId`, and `timeout` semantics.
+
+#### Why It Matters
+AISENA's data flow spans a Flask REST API and a Kafka-based ingestion-to-detection pipeline. Today those two integration surfaces have no shared contract document — REST is covered ad hoc and the Kafka flow has no machine-readable spec. Arazzo 1.1.0 lets the integration engineer express end-to-end workflows (e.g., POST /event → produce to `aisena-stage0-events` → consume → persist to OpenSearch) in one testable document, enabling contract-driven integration tests and clearer handoffs between agents 05 (backend), 07 (integration), and 08 (QA).
+
+#### Evidence
+- OpenAPI Initiative announcement (2026-05-19): https://www.openapis.org/blog/2026/05/19/announcing-arazzo-specification-1-1
+- Redocly release summary: https://redocly.com/blog/arazzo-specification-1-1-release
+- OAI/Arazzo-Specification GitHub (source of truth): https://github.com/OAI/Arazzo-Specification
+- Spec site: https://spec.openapis.org/arazzo/latest.html
+
+#### Recommended Action
+Author a minimal Arazzo 1.1.0 workflow document under `/project/architecture/arazzo-stage0-workflow.yaml` that describes the Stage 0 data path: REST ingest call → Kafka produce → Kafka consume → OpenSearch index. Wire it to existing AsyncAPI and OpenAPI fragments. Use it as the basis for Stage 2 contract-driven integration tests (agent 08-qa-engineer). No production change required.
