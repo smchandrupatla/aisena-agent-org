@@ -774,3 +774,42 @@ AISENA's ingestion and detection pipeline should parse structured ISO 20022 addr
 
 #### Recommended Action
 Update the Stage 0 sample event schema in `services/ingestion/produce.py` to use structured debtor/creditor address sub-fields (street_name, town_name, country, post_code) aligned with ISO 20022 PostalAddress22 semantics, and add an acceptance criterion to the Stage 0 screening story: "Transaction events MUST include `town_name` and `country` in structured form; the detection service MUST index these as discrete fields, not as a single address string."
+
+### LOG-20260815-023 — Daily Domain Self-Learning: Regulatory & Compliance SME (TASK-0011)
+
+- **Entry ID:** LOG-20260815-023
+- **Date:** 2026-08-15
+- **Agent Role:** 18-regulatory-compliance-sme
+- **Task ID:** TASK-0011 (autonomous daily domain self-learning)
+- **What Changed:**
+  - Created `/agents/18-regulatory-compliance-sme/daily-findings/2026-08-15-fincen-aml-effectiveness-standard.md` with actionable finding.
+- **Files Changed:**
+  - `/agents/18-regulatory-compliance-sme/daily-findings/2026-08-15-fincen-aml-effectiveness-standard.md`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit / Version Ref:** pending
+- **Rationale:**
+  - FinCEN's April 2026 NPRM (comment period closed June 9, 2026) is the highest-impact near-term U.S. AML regulatory shift: examiners will judge programs by real detection outcomes, not procedural checklists. AISENA, as a financial crime screening platform, must produce structured, SAR-ready alert records to satisfy this effectiveness standard. Designing the alert schema now avoids costly rework when the final rule takes effect (~2027).
+- **Alternatives Considered:**
+  - OFAC SDN list updates and EU AMLA developments are also relevant but less imminently actionable for Stage 0 schema design.
+- **Risk Impact:** Low (documentation and planning artifact only)
+- **Metrics Observed:** No runtime metrics; documentation artifact creation only.
+- **Rollback Plan:** Delete finding artifact file; no code or infrastructure change made.
+- **Human Approval Required:** No
+- **Handoff Target:** 12-product-owner (acceptance criterion addition), 05-backend-engineer (alert_rationale field in detection output), 00-implementation-manager (awareness)
+
+#### Domain Finding: FinCEN Effectiveness-Based AML/CFT Standard NPRM — 2026
+
+#### Finding
+FinCEN's 2026 NPRM shifts U.S. AML/CFT program evaluation from procedural "check-the-box" compliance to an outcomes-based "effectiveness" standard — AISENA's screening outputs must demonstrate real detection value (SAR-ready alert records, scored hits, traceable rationale) not merely that a process ran.
+
+#### Why It Matters
+Under the proposed standard, institutions using AISENA must show examiners that the system produces law-enforcement-useful outputs. AISENA's Stage 0 alert schema should include structured rationale fields (rule triggered, matched field, confidence score) from the outset. The rule also explicitly endorses AI/RegTech adoption, reducing regulatory risk. Final rule is expected ~2027 with a 12-month implementation window.
+
+#### Evidence
+- FinCEN NPRM Fact Sheet (April 2026): https://www.fincen.gov/system/files/2026-04/Program-NPRM-FactSheet.pdf
+- ComplyAdvantage analysis (2026): https://complyadvantage.com/insights/everything-you-need-to-know-about-fincens-2026-proposed-rule/
+- Debevoise NPRM memo (April 2026): https://www.debevoise.com/insights/publications/2026/04/from-check-the-box-to-effectiveness-fincen-propose
+- Gibson Dunn mid-year AML review (2026): https://www.gibsondunn.com/mid-year-developments-in-anti-money-laundering-in-2026/
+
+#### Recommended Action
+Add acceptance criterion to the Stage 0 screening story: each detection event record MUST include a structured `alert_rationale` field (rule triggered, matched field, confidence score) sufficient to populate a SAR narrative. Tag as REQ-REGULATORY-EFFECTIVENESS in `/project/requirements`.
