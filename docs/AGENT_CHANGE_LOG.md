@@ -734,3 +734,43 @@ AISENA's Stage 0 proof is building an AI-agent-driven screening pipeline. Design
 
 #### Recommended Action
 Update Stage 0 screening story in `/project/requirements` to specify a two-layer match architecture (rule/ML fast path + LLM slow path for ambiguous hits) and add measurable acceptance criterion: ≤20% false positive rate at 100% true-positive recall on the toy SDN test fixture.
+
+---
+
+### LOG-20260815-022 — Daily Domain Self-Learning: Payments & Messaging SME (TASK-0011)
+
+- **Entry ID:** LOG-20260815-022
+- **Date:** 2026-08-15
+- **Agent Role:** 17-payments-messaging-sme
+- **Task ID:** TASK-0011 (autonomous daily domain self-learning)
+- **What Changed:**
+  - Created `/agents/17-payments-messaging-sme/daily-findings/2026-08-15-iso20022-structured-address-mandate.md` with actionable finding.
+- **Files Changed:**
+  - `/agents/17-payments-messaging-sme/daily-findings/2026-08-15-iso20022-structured-address-mandate.md`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit / Version Ref:** pending
+- **Rationale:**
+  - SWIFT's confirmed November 14, 2026 mandate removing unstructured address support from CBPR+ cross-border payments is the highest-impact near-term ISO 20022 change. Structured address fields directly improve sanctions screening fidelity. Aligning AISENA's Stage 0 sample event schema to ISO 20022 PostalAddress22 semantics now avoids re-modelling at later stages.
+- **Alternatives Considered:**
+  - No credible alternative finding of equal specificity and recency was identified for this 24-hour window.
+- **Risk Impact:** Low (documentation and planning artifact only)
+- **Metrics Observed:** No runtime metrics; documentation artifact creation only.
+- **Rollback Plan:** Delete finding artifact file; no code or infrastructure change made.
+- **Human Approval Required:** No
+- **Handoff Target:** 05-backend-engineer (ingestion schema update), 15-sanctions-screening-sme (structured address field availability), 00-implementation-manager (awareness)
+
+#### Domain Finding: ISO 20022 Structured Address Mandate — November 14, 2026
+
+#### Finding
+SWIFT confirmed that from November 14, 2026, all CBPR+ payments must include structured or hybrid postal addresses; unstructured free-text addresses will be rejected by the network. MT101 must also migrate to pain.001 by the same date with no translation fallback.
+
+#### Why It Matters
+AISENA's ingestion and detection pipeline should parse structured ISO 20022 address sub-fields (`town_name`, `country`, `street_name`) from Stage 0 onward to enable precise sanctions and fraud screening. Designing the sample event schema to mirror ISO 20022 PostalAddress22 element paths now prevents costly re-modelling and positions AISENA to benefit from richer, machine-readable party data immediately.
+
+#### Evidence
+- SWIFT milestone announcement: https://www.swift.com/news-events/news/iso-20022-milestone-november-2026-unstructured-addresses-be-removed (2026)
+- SWIFT call-to-action bytes: https://www.swift.com/standards/iso-20022/iso-20022-bytes/call-action-november-2026 (2026)
+- Federal Reserve ISO 20022 releases: https://www.frbservices.org/resources/financial-services/wires/iso-20022-implementation-center/iso-20022-2025-releases (2026)
+
+#### Recommended Action
+Update the Stage 0 sample event schema in `services/ingestion/produce.py` to use structured debtor/creditor address sub-fields (street_name, town_name, country, post_code) aligned with ISO 20022 PostalAddress22 semantics, and add an acceptance criterion to the Stage 0 screening story: "Transaction events MUST include `town_name` and `country` in structured form; the detection service MUST index these as discrete fields, not as a single address string."
