@@ -1,3 +1,6 @@
+// Tracks the last-seen snapshot timestamp for change-detection polling.
+let _lastGeneratedAt = null;
+
 function normalizeLearningRows(data) {
   const agents = data?.agents || {};
   return Object.keys(agents)
@@ -137,6 +140,9 @@ async function renderAgentLearning() {
     const payload = await response.json();
     const rows = normalizeLearningRows(payload);
 
+    // Track the snapshot timestamp so the poller knows what's already shown.
+    _lastGeneratedAt = payload.generated_at || null;
+
     generated.textContent = payload.generated_at || "-";
     total.textContent = String(rows.length);
     updateAgentOptions(rows);
@@ -165,3 +171,21 @@ if (triggerButton) {
 }
 
 renderAgentLearning();
+
+// Auto-refresh: poll every 60 seconds and re-render only when generated_at changes.
+async function pollForLearningUpdates() {
+  try {
+    const response = await fetch("agent-self-learning-latest.json", { cache: "no-store" });
+    if (!response.ok) return;
+    const payload = await response.json();
+    const ts = payload?.generated_at || null;
+    if (ts && ts !== _lastGeneratedAt) {
+      _lastGeneratedAt = ts;
+      await renderAgentLearning();
+    }
+  } catch (_) {
+    // silent — network may be unavailable
+  }
+}
+
+setInterval(pollForLearningUpdates, 60_000);
