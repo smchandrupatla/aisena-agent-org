@@ -297,3 +297,29 @@ Critic output format: append a LOG entry to this file with prefix CRITIC-<task>-
 - Rollback Plan: N/A (append-only log; no state changed).
 - Human Approval Required: Yes — PAT creation and Codespace secret injection requires human action.
 - Handoff Target: Repository owner / Codespace user
+
+### LOG-20260815-002 — Copilot Runtime Re-Test #3 (TASK-0003)
+- Agent Role: Implementation Manager
+- Task ID: TASK-0003
+- Test Date: 2026-08-15 00:17 UTC
+- What Changed: Exhaustive token-type investigation; diagnosis report updated with authoritative token requirements from `copilot login --help`.
+- Findings:
+  - `COPILOT_AGENT_SESSION_ID` also rejected as unsupported token type.
+  - `copilot login --help` confirms the exact supported token types:
+      1. Fine-Grained PAT (v2, `github_pat_...`) with "Copilot Requests" permission.
+      2. OAuth token from GitHub Copilot CLI app (via `copilot login` browser flow).
+      3. OAuth token from GitHub CLI (gh) app (via `gh auth login`).
+  - Classic PATs (ghp_...) are explicitly NOT supported.
+  - Env var precedence: COPILOT_GITHUB_TOKEN > GH_TOKEN > GITHUB_TOKEN.
+  - None of the available environment tokens match any supported type.
+- Root Cause (final, confirmed): No supported authentication token is present. Internal Codespace tokens are unsupported by design.
+- Files Changed:
+  - `/project/reports/copilot-runtime-diagnosis.md` — updated with authoritative requirements and corrected remediation options.
+  - `/docs/AGENT_CHANGE_LOG.md`
+- Commit / Version Ref: pending
+- Rationale: Provide precise, actionable remediation steps rather than vague "get a token" guidance.
+- Risk Impact: Low (documentation update only).
+- Metrics Observed: None (still blocked before prompt execution).
+- Rollback Plan: N/A.
+- Human Approval Required: Yes — token creation and/or interactive login requires human action.
+- Handoff Target: Repository owner / Codespace user (smchandrupatla)
