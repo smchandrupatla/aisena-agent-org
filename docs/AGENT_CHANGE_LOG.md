@@ -906,3 +906,40 @@ AISENA's Flask REST API (`services/api/app.py`) will require token-based authent
 
 #### RECOMMENDED_ACTION
 Add an explicit acceptance criterion to every API authentication user story: "The implementation MUST pin `authlib>=1.6.7` and MUST explicitly reject JWTs with `alg:none` before token processing." If Authlib is not yet in `requirements.txt`, add a pre-emptive dependency constraint `authlib>=1.6.7` now to prevent accidental adoption of a vulnerable version. Assign a security review gate to 09-security-engineer before any JWT/OAuth library is introduced to the Flask API.
+
+---
+
+### LOG-20260815-001
+
+- **Entry ID:** LOG-20260815-001
+- **Date:** 2026-08-15T01:41:00Z
+- **Agent Role:** 24-case-management-ux-sme
+- **Task ID:** DOMAIN-FINDING-20260815
+- **What Changed:** Daily domain research finding logged — no code or infrastructure changed.
+- **Files Modified:** `docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** (pending)
+- **Rationale:** Scheduled 24-hour domain self-learning cycle for Case Management & UX SME.
+- **Alternatives Considered:** None — this is a research/advisory output only.
+- **Risk Level:** Low — advisory only; no production or infrastructure change.
+- **Metrics Impact:** None direct; informs future story acceptance criteria.
+- **Rollback Plan:** Delete this finding entry from the change log; no code or infrastructure change was made.
+- **Human Approval Needed:** No — routine domain guidance.
+- **Handoff Target:** 12-product-owner (awareness), 05-backend-engineer (audit trail story AC), 00-implementation-manager
+
+#### Domain Finding: FinCEN 2026 NPRM — Effectiveness-Based AML Requires Explainable, Tamper-Evident Case Audit Trails
+
+#### FINDING
+The FinCEN 2026 AML/CFT NPRM (proposed April 13, 2026) elevates audit trail completeness and decision explainability from best-practice to a formal regulatory requirement: every case action, risk override, and alert disposition must be traceable with documented analyst rationale — including decisions made by AI or automated rules.
+
+#### WHY_IT_MATTERS
+AISENA's screening and case management layer must be designed from Stage 0 with tamper-evident, analyst-attributed audit trails. The shift from process-based to effectiveness-based compliance means examiners will demand "show your work" logs for individual alert and case decisions — not just program-level documentation. The Stage 0 detection service (`services/detection/consume.py`) currently flags transactions and writes to OpenSearch/PostgreSQL with no analyst attribution, no decision rationale field, and no override log. Any case management UX built on top of this data store will inherit a compliance gap. AISENA stories must include: (1) a `case_notes` / `decision_rationale` field on every screening result record, (2) an append-only audit event log with analyst identity and timestamp, and (3) UI affordances that require analysts to document a reason before closing or overriding a case. These are now regulatory floor requirements, not enhancement items.
+
+#### EVIDENCE
+- FinCEN NPRM April 13 2026 — PwC analysis: https://www.pwc.com/us/en/industries/financial-services/library/our-take/fincen-proposes-aml-overhaul-apr-13-2026.html
+- Unit21 NPRM FAQ (2026): https://www.unit21.ai/blog/fincen-proposed-rule-2026-faqs-what-compliance-teams-need-to-know
+- Unit21 — Risk Assessments Now Required (2026): https://www.unit21.ai/blog/fincen-nprm-2026-risk-assessments-are-now-required-heres-how-to-build-one-an-examiner-will-actually-trust
+- ComplyAdvantage — FinCEN 2026 new rule overview: https://complyadvantage.com/insights/everything-you-need-to-know-about-fincens-2026-proposed-rule/
+- MCG Consulting — FinCEN 2026 AML Rule (April 29 2026): https://mcgcomply.com/2026/04/29/fincens-2026-aml-rule-is-coming-heres-what-every-financial-institution-needs-to-know/
+
+#### RECOMMENDED_ACTION
+Add the following acceptance criterion to all Stage 0+ case management and screening result stories: "Every case record MUST include a `decision_rationale` text field and an append-only `audit_events` log (analyst_id, timestamp, action, rationale). The UI MUST enforce a non-empty rationale entry before any case closure or alert override is permitted." Raise a backlog item with the Product Owner to add a `decision_rationale` column to the PostgreSQL `screening_results` table and a separate `case_audit_log` table before any analyst-facing UI is built.
