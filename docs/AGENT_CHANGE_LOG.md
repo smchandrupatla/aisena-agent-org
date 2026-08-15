@@ -269,3 +269,31 @@ Critic output format: append a LOG entry to this file with prefix CRITIC-<task>-
 - Rollback Plan: Revert commit. Remove /project/governance directory. Restore prior BACKLOG.md, PROJECT_STATE.md, IMPLEMENTATION_STATUS.md.
 - Human Approval Required: No (process and documentation changes only)
 - Handoff Target: Release Manager (ongoing governance ownership), Solution Architect (next critic assignment)
+
+## 2026-08-15
+
+### LOG-20260815-001 — Copilot Runtime Re-Test (TASK-0003 / TASK-0007)
+- Agent Role: Implementation Manager
+- Task ID: TASK-0003
+- Test Date: 2026-08-15
+- What Changed: Deeper re-test of Copilot CLI authentication options.
+- Findings:
+  - `GITHUB_CODESPACE_TOKEN` is present in the environment but rejected with "Unsupported token type" by the Copilot CLI.
+  - Setting `GH_TOKEN` or `COPILOT_GITHUB_TOKEN` to the Codespace token value has no effect — the CLI ignores it.
+  - `gh auth status` with the Codespace token returns "The token in GH_TOKEN is invalid."
+  - No OAuth token or Fine-Grained PAT is present in the environment.
+- Root Cause (final): The Copilot CLI requires a GitHub OAuth token or Fine-Grained/Classic PAT with `copilot` scope. The internal `GITHUB_CODESPACE_TOKEN` is not a supported authentication type.
+- Blocker Status: BLOCKED — human must supply a valid PAT (as a Codespace secret) or run `gh auth login` interactively.
+- Files Changed:
+  - `/project/reports/copilot-runtime-diagnosis.md`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- Commit / Version Ref: pending
+- Rationale: Exhausted all token options available in this environment before escalating.
+- Alternatives Considered:
+  - Attempt `copilot` interactive start — requires terminal interaction not available to agent.
+  - Use a different AI runtime — possible fallback but out of scope for this task.
+- Risk Impact: Low (diagnosis and documentation only)
+- Metrics Observed: None (blocked before prompt execution).
+- Rollback Plan: N/A (append-only log; no state changed).
+- Human Approval Required: Yes — PAT creation and Codespace secret injection requires human action.
+- Handoff Target: Repository owner / Codespace user
