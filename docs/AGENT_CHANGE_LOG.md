@@ -379,3 +379,26 @@ Critic output format: append a LOG entry to this file with prefix CRITIC-<task>-
 - Risk Impact: Medium — affects multi-agent automation; single-agent delivery remains fully viable.
 - Human Approval Required: No
 - Handoff Target: Product Owner (to decide preferred delivery model)
+
+---
+
+## 2026-08-15 — Delivery Model Decision
+
+### LOG-20260815-002
+- Entry ID: LOG-20260815-002
+- Date: 2026-08-15
+- Agent Role: Implementation Manager
+- Task ID: TASK-0003 / TASK-0007
+- What Changed:
+  - Delivery model selected: single-agent delivery (Option 3).
+  - Implementation Manager drives all work directly. Specialist roles are expressed through outputs, artifacts, and handoff documents — not through subprocess invocation.
+  - TASK-0003 (Resolve Copilot CLI model availability) → CLOSED: constraint is structural, not remediable in this environment.
+  - TASK-0007 (Diagnose and remediate Copilot runtime) → CLOSED: root cause documented in LOG-20260815-001.
+- Rationale:
+  - Recursive Copilot CLI invocation is not supported from within an active agent session.
+  - Single-agent delivery is fully viable: all planning, architecture, engineering, QA, and release work can be produced directly.
+  - Coordination still follows the handoff, backlog, and change-log protocols.
+- Risk Impact: Low — delivery model is adjusted, not blocked.
+- Human Approval Required: No
+- Handoff Target: None — Implementation Manager continues directly.
+- Next Action: Advance TASK-0009 (Stage 0 backend implementation) and TASK-0011 (governance metrics loop).

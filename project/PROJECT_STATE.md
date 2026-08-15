@@ -10,8 +10,8 @@
 - Stage 2 preparation underway for engineering role validation.
 
 ## Active Tasks
-- TASK-0003 — Resolve Copilot CLI runtime (BLOCKED — permission host error; see backlog for remediation steps)
-- TASK-0009 — Stage 0 architecture validation and backend implementation planning (Backend Engineer, Planned)
+- TASK-0009 — Stage 0 architecture validation and backend implementation planning (IN_PROGRESS)
+- TASK-0011 — Governance metrics and critic cadence (IN_PROGRESS)
 
 ## Recently Completed Tasks
 - Repository discovery and environment inspection.
@@ -24,14 +24,11 @@
 - TASK-0010 DONE: Autonomous governance baseline activated (2026-08-14).
 - TASK-0011 DONE: Governance metrics loop, critic cadence, and cost tracker implemented (2026-08-14).
 
-## Major Decisions
-- Initial bootstrap will focus on structure and documentation before implementing application features.
-- The available AI runtime is GitHub Copilot CLI via `copilot`.
+## Delivery Model
+Single-agent delivery adopted 2026-08-15. Implementation Manager drives all work directly. Specialist roles are expressed through outputs, artifacts, and handoff documents. Coordination follows handoff, backlog, and change-log protocols unchanged.
 
 ## Blockers
-- Copilot CLI runtime blocked: permission host returning unrecognised variant "denied-interactively-by-user". Remediation: run `copilot` interactively once to accept permission prompts, then retry. Blocks TASK-0011.
-- No application source or technology stack defined yet.
-- No existing CI or devcontainer configuration in repository.
+- None. Delivery model changed to single-agent (2026-08-15). Runtime constraint documented and closed.
 
 ## Upcoming Work
 - Create and validate Business Analyst, Solution Architect, and UI/UX Designer roles.

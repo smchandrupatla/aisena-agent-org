@@ -205,9 +205,10 @@ This task has been prepared in documentation and artifact form. Execution remain
 
 ## TASK-0009 — Stage 0 architecture validation and backend implementation planning
 
-Status: Planned
+Status: IN_PROGRESS
+Started: 2026-08-15
 Priority: High
-Owner: Backend Engineer
+Owner: Implementation Manager (single-agent delivery)
 Requested By: Product Owner
 Created: 2026-08-11
 Dependencies: TASK-0002, TASK-0004, TASK-0005, TASK-0008
@@ -246,7 +247,9 @@ This task prepares the implementation plan while runtime validation remains bloc
 
 ## TASK-0003 — Resolve Copilot CLI model availability
 
-Status: BLOCKED
+Status: CLOSED
+Closed: 2026-08-15
+Resolution: Structural constraint — recursive Copilot CLI invocation not supported from within an active agent session. Delivery model changed to single-agent (Option 3). See LOG-20260815-001, LOG-20260815-002.
 Priority: High
 Owner: Implementation Manager
 Requested By: Project Owner
