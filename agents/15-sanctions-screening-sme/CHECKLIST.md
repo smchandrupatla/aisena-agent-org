@@ -1,6 +1,6 @@
 # Sanctions Screening SME Checklist
 
-- [ ] Review the Stage 0 HSFS proof requirement and existing backlog.
+- [ ] Review the Stage 0 AISENA proof requirement and existing backlog.
 - [ ] Define a minimal sanctions screening story for the proof.
 - [ ] Document sample input, expected screening output, and acceptance criteria.
 - [ ] Create a handoff document for the development team.

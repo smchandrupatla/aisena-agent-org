@@ -330,7 +330,7 @@ Critic output format: append a LOG entry to this file with prefix CRITIC-<task>-
 - Test Date: 2026-08-15
 - What Changed:
   - Added a configurable 24-hour scheduler that asks every discovered agent to research current findings in its declared domain.
-  - Required concise findings, HSFS impact, authoritative evidence, and a recommended action in every prompt response.
+  - Required concise findings, AISENA impact, authoritative evidence, and a recommended action in every prompt response.
   - Integrated results with the existing latest-learning registry and append-only history.
   - Added dated Markdown reports under `memories/repo/agent-learning-reports/`.
   - Added isolated tests that do not invoke Copilot or modify live learning data.

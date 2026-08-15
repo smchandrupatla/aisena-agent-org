@@ -7,14 +7,14 @@ from kafka import KafkaConsumer
 import psycopg2
 import requests
 
-TOPIC = 'hsfs-stage0-events'
+TOPIC = 'aisena-stage0-events'
 BOOTSTRAP = 'localhost:9092'
 
-POSTGRES_DSN = "host=localhost dbname=hsfs user=hsfs password=hsfs_pw"
+POSTGRES_DSN = "host=localhost dbname=aisena user=aisena password=aisena_pw"
 OPENSEARCH_URL = 'http://localhost:9200'
 
 CREATE_TABLE_SQL = '''
-CREATE TABLE IF NOT EXISTS hsfs_screening_results (
+CREATE TABLE IF NOT EXISTS aisena_screening_results (
     id SERIAL PRIMARY KEY,
     event JSONB,
     flagged BOOLEAN,
@@ -29,7 +29,7 @@ def write_result_to_db(event, flagged, reason):
     cur = conn.cursor()
     cur.execute(CREATE_TABLE_SQL)
     cur.execute(
-        "INSERT INTO hsfs_screening_results (event, flagged, reason) VALUES (%s, %s, %s) RETURNING id",
+        "INSERT INTO aisena_screening_results (event, flagged, reason) VALUES (%s, %s, %s) RETURNING id",
         (json.dumps(event), flagged, reason)
     )
     id = cur.fetchone()[0]
@@ -40,7 +40,7 @@ def write_result_to_db(event, flagged, reason):
 
 
 def index_to_opensearch(doc):
-    idx = 'hsfs-stage0-screening-results'
+    idx = 'aisena-stage0-screening-results'
     idx_url = f"{OPENSEARCH_URL}/{idx}"
     try:
         r = requests.get(idx_url)

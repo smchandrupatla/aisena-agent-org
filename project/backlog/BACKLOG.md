@@ -164,7 +164,7 @@ Implementation Manager
 ### Notes
 Use the existing Codespace and Copilot logs to determine whether access, account entitlement, or environment configuration is the cause.
 
-## TASK-0008 — HSFS Stage 0 proof task
+## TASK-0008 — AISENA Stage 0 proof task
 
 Status: DONE
 Priority: High
@@ -174,20 +174,20 @@ Created: 2026-08-11
 Dependencies: TASK-0001, TASK-0002, TASK-0004, TASK-0005, TASK-0007
 
 ### Objective
-Create a runnable Stage 0 HSFS proof that validates the agent delivery workflow through a minimal ingest-to-test chain.
+Create a runnable Stage 0 AISENA proof that validates the agent delivery workflow through a minimal ingest-to-test chain.
 
 ### Context
-The HSFS product requires a concrete delivery proof before full domain implementation begins. Stage 0 should prove that the agent orchestration and handoff chain can produce a runnable artifact.
+The AISENA product requires a concrete delivery proof before full domain implementation begins. Stage 0 should prove that the agent orchestration and handoff chain can produce a runnable artifact.
 
 ### Acceptance Criteria
-- A Stage 0 proof requirement is documented under `/project/requirements/REQ-0003-hsfs-stage0-proof.md`.
-- Initial HSFS agent roster artifacts exist under `/agents/00-implementation-manager/HSFS-Agent-Roles.md`.
+- A Stage 0 proof requirement is documented under `/project/requirements/REQ-0003-aisena-stage0-proof.md`.
+- Initial AISENA agent roster artifacts exist under `/agents/00-implementation-manager/AISENA-Agent-Roles.md`.
 - The implementation plan is visible in the backlog and ready for the next handoff.
 - There is a clear walkthrough for how Stage 0 will be executed once prompt runtime is restored.
 
 ### Files / Components
-- `/project/requirements/REQ-0003-hsfs-stage0-proof.md`
-- `/agents/00-implementation-manager/HSFS-Agent-Roles.md`
+- `/project/requirements/REQ-0003-aisena-stage0-proof.md`
+- `/agents/00-implementation-manager/AISENA-Agent-Roles.md`
 - `/project/backlog/BACKLOG.md`
 - `/project/reports/IMPLEMENTATION_STATUS.md`
 
@@ -195,7 +195,7 @@ The HSFS product requires a concrete delivery proof before full domain implement
 - Implementation Manager
 
 ### Output
-A Stage 0 HSFS proof task that bridges the current bootstrap work to HSFS-specific delivery.
+A Stage 0 AISENA proof task that bridges the current bootstrap work to AISENA-specific delivery.
 
 ### Handoff To
 Product Owner, Solution Architect, QA Engineer
@@ -226,9 +226,9 @@ Stage 0 now has a defined story and architecture. The next step is to prepare th
 - QA validation criteria are identified for the OpenSearch screening result.
 
 ### Files / Components
-- `/project/requirements/REQ-0004-hsfs-stage0-sanctions-screening-story.md`
-- `/project/architecture/HSFS-Stage0-Architecture.md`
-- `/project/architecture/HSFS-Stage0-Orchestration.md`
+- `/project/requirements/REQ-0004-aisena-stage0-sanctions-screening-story.md`
+- `/project/architecture/AISENA-Stage0-Architecture.md`
+- `/project/architecture/AISENA-Stage0-Orchestration.md`
 - `/project/handoffs/TASK-0009-solution-architect-to-backend-engineer.md`
 
 ### Required Reviewers
@@ -405,7 +405,7 @@ The governance protocol requires measurable feedback loops and periodic assumpti
 - `/docs/AGENT_OPERATIONS_WIKI.md`
 - `/docs/AGENT_CHANGE_LOG.md`
 - `/project/reports/IMPLEMENTATION_STATUS.md`
-- `/project/reports/HSFS-Stage0-Implementation-Readiness.md`
+- `/project/reports/AISENA-Stage0-Implementation-Readiness.md`
 
 ### Required Reviewers
 - Release Manager

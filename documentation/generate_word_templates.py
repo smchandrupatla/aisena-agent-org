@@ -5,7 +5,7 @@ ROOT = Path(__file__).resolve().parent
 OUT_ROOT = ROOT / "word-templates"
 
 BRANDING_LINES = [
-    "Brand: HSFS (Hybrid Sanctions and Fraud Screening System)",
+    "Brand: AISENA (AISENA)",
     "Program: Autonomous Delivery Shop",
     "Status: Draft",
     "Classification: Internal",
@@ -402,7 +402,7 @@ TEMPLATES = {
 
 
 def add_branding(doc: Document, doc_type: str) -> None:
-    doc.add_heading("HSFS (Hybrid Sanctions and Fraud Screening System)", level=1)
+    doc.add_heading("AISENA (AISENA)", level=1)
     doc.add_paragraph("Autonomous Delivery Shop")
     doc.add_paragraph(f"Document Type: {doc_type}")
     for line in BRANDING_LINES:
@@ -417,7 +417,7 @@ def add_sections(doc: Document, sections: list[str]) -> None:
 
 
 def add_footer(doc: Document) -> None:
-    doc.add_paragraph("HSFS | Controlled Document | Do not distribute without approval")
+    doc.add_paragraph("AISENA | Controlled Document | Do not distribute without approval")
 
 
 def create_template(path: Path, doc_type: str, sections: list[str]) -> None:

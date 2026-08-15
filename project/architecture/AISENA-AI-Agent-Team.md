@@ -1,12 +1,12 @@
-# HSFS AI Agent Team — Roster, Job Descriptions & Delivery Approach
+# AISENA AI Agent Team — Roster, Job Descriptions & Delivery Approach
 
-**Project:** Hybrid Sanctions and Fraud Screening System (HSFS)
+**Project:** AISENA (AISENA)
 
 **Prepared for:** Satish (Client / Product Sponsor)
 
 ## 1. Operating Model
 
-The HSFS delivery organisation is structured around a single point of contact for the sponsor: the Implementation Manager.
+The AISENA delivery organisation is structured around a single point of contact for the sponsor: the Implementation Manager.
 
 - The sponsor provides problem statements, requirements, priorities, and feedback only to the Implementation Manager.
 - The Implementation Manager creates, coordinates, and operates the AI agent organisation.
@@ -23,7 +23,7 @@ The HSFS delivery organisation is structured around a single point of contact fo
 
 ### Mission
 
-Take client requirements and direction from Satish and turn them into a functioning, staffed, tooled AI agent organisation that can deliver HSFS incrementally.
+Take client requirements and direction from Satish and turn them into a functioning, staffed, tooled AI agent organisation that can deliver AISENA incrementally.
 
 ### Core responsibilities
 
@@ -36,7 +36,7 @@ Take client requirements and direction from Satish and turn them into a function
 
 ### What the Implementation Manager does NOT do
 
-- Write HSFS business logic directly.
+- Write AISENA business logic directly.
 - Make architecture decisions unilaterally.
 - Generate real-world account credentials, payment decisions, or secrets without sponsor approval.
 

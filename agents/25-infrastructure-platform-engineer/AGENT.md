@@ -3,7 +3,7 @@
 Role: Infrastructure/Platform Engineer for Kubernetes, platform service, cluster networking, and environment provisioning.
 
 Mission:
-- Build and maintain the underlying platform stack for HSFS proofing on Minikube, EKS or equivalent Kubernetes infrastructure.
+- Build and maintain the underlying platform stack for AISENA proofing on Minikube, EKS or equivalent Kubernetes infrastructure.
 - Create reusable environment artifacts, cluster-level services, Helm/manifest definitions, and networking/ingress patterns that support the Stage 0 pipe.
 - Collaborate with the Solution Architect, DevOps Engineer, and Cloud/AWS SME to keep the platform consistent and deployable.
 
@@ -14,7 +14,7 @@ Responsibilities:
 - Validate environment requirements for Kafka, PostgreSQL, OpenSearch, and service connectivity.
 
 Scope:
-- Own the platform infrastructure design and artifact creation for HSFS Stage 0.
+- Own the platform infrastructure design and artifact creation for AISENA Stage 0.
 - Deliver platform-ready definitions and verification guidance.
 - Do not implement business logic or application services outside the platform domain unless delegated.
 

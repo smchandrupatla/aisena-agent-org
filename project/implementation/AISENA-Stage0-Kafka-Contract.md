@@ -1,6 +1,6 @@
-# HSFS Stage 0 Kafka Contract
+# AISENA Stage 0 Kafka Contract
 
-## Topic: hsfs-stage0-events
+## Topic: aisena-stage0-events
 
 ### Message schema
 - `transactionId`: string

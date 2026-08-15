@@ -1,4 +1,4 @@
-# HSFS Architecture Implementation
+# AISENA Architecture Implementation
 
 This package provides a reference implementation for the Hybrid Sanctions & Fraud Monitoring System architecture.
 
@@ -9,5 +9,5 @@ It includes:
 ## Run the sample pipeline
 
 ```bash
-python3 -c 'from services.hsfs_architecture import run_sample_pipeline; run_sample_pipeline()'
+python3 -c 'from services.aisena_architecture import run_sample_pipeline; run_sample_pipeline()'
 ```

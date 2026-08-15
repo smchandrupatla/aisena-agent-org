@@ -1,6 +1,6 @@
 # Infrastructure/Platform Engineer Checklist
 
-- [ ] Review HSFS Stage 0 environment requirements.
+- [ ] Review AISENA Stage 0 environment requirements.
 - [ ] Define Kubernetes deployment topology for local and cloud execution.
 - [ ] Identify platform dependencies for Kafka, PostgreSQL, OpenSearch, and dashboard services.
 - [ ] Create or propose reusable Helm/chart/manifest artifacts.

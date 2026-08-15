@@ -4,9 +4,9 @@ services:
   postgres:
     image: postgres:15
     environment:
-      POSTGRES_USER: hsfs
-      POSTGRES_PASSWORD: hsfs_pw
-      POSTGRES_DB: hsfs
+      POSTGRES_USER: aisena
+      POSTGRES_PASSWORD: aisena_pw
+      POSTGRES_DB: aisena
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -78,7 +78,7 @@ services:
       - AGENT_METRICS_PORT=9500
       - AGENT_METRICS_PATH=/metrics
       - OPENSEARCH_URL=http://opensearch:9200
-      - POSTGRES_DSN=host=postgres dbname=hsfs user=hsfs password=hsfs_pw
+      - POSTGRES_DSN=host=postgres dbname=aisena user=aisena password=aisena_pw
     ports:
       - "9500:9500"
     volumes:
@@ -99,9 +99,9 @@ services:
       - postgres
     environment:
       REDMINE_DB_POSTGRES: postgres
-      REDMINE_DB_DATABASE: hsfs
-      REDMINE_DB_USERNAME: hsfs
-      REDMINE_DB_PASSWORD: hsfs_pw
+      REDMINE_DB_DATABASE: aisena
+      REDMINE_DB_USERNAME: aisena
+      REDMINE_DB_PASSWORD: aisena_pw
     ports:
       - "3001:3000"
 

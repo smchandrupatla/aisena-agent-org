@@ -1,7 +1,7 @@
-# HSFS Stage 0 Orchestration
+# AISENA Stage 0 Orchestration
 
 ## Purpose
-Describe the Stage 0 orchestration model and how the HSFS proof-of-concept flows through the agent delivery chain.
+Describe the Stage 0 orchestration model and how the AISENA proof-of-concept flows through the agent delivery chain.
 
 ## Stage 0 Goal
 Prove a trivial, runnable data pipeline from a sample input through ingestion, basic sanctions screening, Kafka event streaming, and storage/indexing, with every role producing a concrete output.
@@ -26,9 +26,9 @@ Prove a trivial, runnable data pipeline from a sample input through ingestion, b
 
 ## Files and Shared Context
 - `/project/backlog/BACKLOG.md` — Stage 0 tasks and status.
-- `/project/requirements/REQ-0003-hsfs-stage0-proof.md` — Stage 0 proof requirement.
-- `/project/requirements/REQ-0004-hsfs-stage0-sanctions-screening-story.md` — Stage 0 story and sample data.
-- `/project/architecture/HSFS-Stage0-Orchestration.md` — this orchestration definition.
+- `/project/requirements/REQ-0003-aisena-stage0-proof.md` — Stage 0 proof requirement.
+- `/project/requirements/REQ-0004-aisena-stage0-sanctions-screening-story.md` — Stage 0 story and sample data.
+- `/project/architecture/AISENA-Stage0-Orchestration.md` — this orchestration definition.
 - `/project/handoffs` — handoff artifacts for every role transition.
 - `/project/reports/IMPLEMENTATION_STATUS.md` — progress and status reporting.
 

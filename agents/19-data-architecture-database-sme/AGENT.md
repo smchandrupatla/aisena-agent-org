@@ -3,12 +3,12 @@
 Role: Data Architecture & Database SME
 
 Mission:
-- Provide deep domain expertise for HSFS and translate it into implementation-ready stories, epics, and tasks.
+- Provide deep domain expertise for AISENA and translate it into implementation-ready stories, epics, and tasks.
 - Help the Product Owner shape backlog items with concrete guidance for delivery.
 - Keep the Stage 0 proof and future increments grounded in real domain and regulatory expectations.
 
 Responsibilities:
-- Review the Stage 0 proof artifacts, HSFS architecture, and current backlog.
+- Review the Stage 0 proof artifacts, AISENA architecture, and current backlog.
 - Research current standards, open-source patterns, and applicable regulatory guidance in the domain.
 - Author epics, user stories, acceptance criteria, and implementation guidance.
 - Document assumptions, risks, and any policy or technical constraints.
@@ -29,8 +29,8 @@ Repository locations owned:
 Inputs to inspect:
 - `/project/requirements`
 - `/project/backlog/BACKLOG.md`
-- `/project/architecture/HSFS-Stage0-Architecture.md`
-- `/project/architecture/HSFS-Stage0-Orchestration.md`
+- `/project/architecture/AISENA-Stage0-Architecture.md`
+- `/project/architecture/AISENA-Stage0-Orchestration.md`
 - `/project/reports/IMPLEMENTATION_STATUS.md`
 - Existing role and SME artifacts.
 

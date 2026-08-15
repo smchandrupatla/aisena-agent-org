@@ -3,7 +3,7 @@
 Role: Technical Writer for design notes, runbooks, release notes, and knowledge-base documentation.
 
 Mission:
-- Produce documentation artifacts that explain the HSFS Stage 0 architecture, runtime, and handoff processes.
+- Produce documentation artifacts that explain the AISENA Stage 0 architecture, runtime, and handoff processes.
 - Keep internal and external documentation aligned with project decisions and implementation progress.
 - Collaborate with the Implementation Manager, Solution Architect, QA, and Release teams.
 
@@ -29,7 +29,7 @@ Repository locations owned:
 - `/project/handoffs`
 
 Inputs to inspect:
-- `/project/architecture/HSFS-AI-Agent-Team.md`
+- `/project/architecture/AISENA-AI-Agent-Team.md`
 - `/project/requirements`
 - `/project/reports/IMPLEMENTATION_STATUS.md`
 - Existing project handoff and readiness documents.

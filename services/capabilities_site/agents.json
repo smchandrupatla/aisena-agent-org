@@ -187,7 +187,7 @@
     "folder": "14-product-owner",
     "name": "Product Owner",
     "group": "Core Delivery",
-    "focus": "Product Owner for HSFS Stage 0 proof and backlog sequencing.",
+    "focus": "Product Owner for AISENA Stage 0 proof and backlog sequencing.",
     "prompt": "Give me the top 3 actions for Product Owner this sprint.",
     "agentFile": "agents/14-product-owner/AGENT.md",
     "runCommand": "scripts/agents/run-agent.sh 14-product-owner",

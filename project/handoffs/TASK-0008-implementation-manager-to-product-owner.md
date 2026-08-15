@@ -1,6 +1,6 @@
 # Handoff
 
-Task: TASK-0008 — HSFS Stage 0 proof task
+Task: TASK-0008 — AISENA Stage 0 proof task
 From: Implementation Manager
 To: Product Owner
 Date: 2026-08-11
@@ -9,14 +9,14 @@ Date: 2026-08-11
 Transfer the Stage 0 proof planning work to the Product Owner so the story can be sequenced, prioritized, and handed off to architecture and implementation.
 
 ## Work Completed
-- Defined the HSFS Stage 0 orchestration model.
-- Created the Stage 0 proof plan and the initial HSFS agent roster.
+- Defined the AISENA Stage 0 orchestration model.
+- Created the Stage 0 proof plan and the initial AISENA agent roster.
 - Created the Sanctions Screening SME role and supporting artifact placeholders.
 - Added the Stage 0 story requirement skeleton to `/project/requirements`.
 
 ## Files Changed
-- `/project/architecture/HSFS-Stage0-Orchestration.md`
-- `/project/requirements/REQ-0004-hsfs-stage0-sanctions-screening-story.md`
+- `/project/architecture/AISENA-Stage0-Orchestration.md`
+- `/project/requirements/REQ-0004-aisena-stage0-sanctions-screening-story.md`
 - `/project/handoffs/TASK-0008-stage0-proof-plan.md`
 - `/project/backlog/BACKLOG.md`
 - `/project/reports/IMPLEMENTATION_STATUS.md`

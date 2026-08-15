@@ -1,9 +1,9 @@
-# REQ-0004 — HSFS Stage 0 Sanctions Screening Story
+# REQ-0004 — AISENA Stage 0 Sanctions Screening Story
 
 Status: DRAFT
 
 ## Purpose
-Define a minimal, runnable HSFS Stage 0 story that proves the agent delivery pipeline using a toy sanctions screening flow.
+Define a minimal, runnable AISENA Stage 0 story that proves the agent delivery pipeline using a toy sanctions screening flow.
 
 ## Story
 As a sanctions analyst, I want a single sample transaction event to be ingested, screened against a toy sanctions reference match, and indexed for inspection, so that the delivery team can prove the end-to-end pipeline without building full production rules.
@@ -40,8 +40,8 @@ As a sanctions analyst, I want a single sample transaction event to be ingested,
   "screeningStatus": "FLAGGED",
   "matchReason": "Customer name matches toy blocked party ACME GLOBAL",
   "screeningTimestamp": "<ISO8601>",
-  "sourceTopic": "hsfs-stage0-events",
-  "indexName": "hsfs-stage0-screening-results"
+  "sourceTopic": "aisena-stage0-events",
+  "indexName": "aisena-stage0-screening-results"
 }
 ```
 

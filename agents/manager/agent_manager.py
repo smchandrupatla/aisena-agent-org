@@ -65,7 +65,7 @@ KB_FILE = ROOT / 'docs' / 'AGENTIC_AI_KNOWLEDGE_BASE.md'
 
 
 OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL', 'http://opensearch:9200')
-POSTGRES_DSN = os.environ.get('POSTGRES_DSN', 'host=postgres dbname=hsfs user=hsfs password=hsfs_pw')
+POSTGRES_DSN = os.environ.get('POSTGRES_DSN', 'host=postgres dbname=aisena user=aisena password=aisena_pw')
 
 SLEEP_INTERVAL = int(os.environ.get('AGENT_LEARN_INTERVAL', '30'))
 AUTO_PUSH = os.environ.get('AGENT_AUTO_PUSH', 'true').lower() in ('1','true','yes')
@@ -172,7 +172,7 @@ def list_agents():
 def fetch_recent_results_from_opensearch(limit=20):
     if requests is None:
         return []
-    idx = 'hsfs-stage0-screening-results'
+    idx = 'aisena-stage0-screening-results'
     url = f"{OPENSEARCH_URL}/{idx}/_search?size={limit}&sort=ts:desc"
     try:
         r = requests.get(url, timeout=5)
@@ -191,7 +191,7 @@ def fetch_recent_results_from_postgres(limit=20):
     try:
         conn = psycopg2.connect(POSTGRES_DSN)
         cur = conn.cursor()
-        cur.execute("SELECT event, flagged, reason, created_at FROM hsfs_screening_results ORDER BY created_at DESC LIMIT %s", (limit,))
+        cur.execute("SELECT event, flagged, reason, created_at FROM aisena_screening_results ORDER BY created_at DESC LIMIT %s", (limit,))
         rows = cur.fetchall()
         cur.close()
         conn.close()

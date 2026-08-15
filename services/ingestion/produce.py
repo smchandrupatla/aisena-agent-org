@@ -6,7 +6,7 @@ from kafka import KafkaProducer
 
 BASE_DIR = os.path.dirname(__file__)
 SAMPLE_EVENT_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', '..', 'project', 'implementation', 'data', 'sample-event.json'))
-TOPIC = 'hsfs-stage0-events'
+TOPIC = 'aisena-stage0-events'
 BOOTSTRAP = 'localhost:9092'
 
 def main():

@@ -1,12 +1,12 @@
 # Handoff
 
-Task: TASK-0008 — HSFS Stage 0 proof task
+Task: TASK-0008 — AISENA Stage 0 proof task
 From: Implementation Manager
 To: Sanctions Screening SME
 Date: 2026-08-11
 
 ## Objective
-Ask the Sanctions Screening SME to author the minimal Stage 0 screening story, sample input, expected output, and acceptance criteria for the toy HSFS proof.
+Ask the Sanctions Screening SME to author the minimal Stage 0 screening story, sample input, expected output, and acceptance criteria for the toy AISENA proof.
 
 ## Work Completed
 - Created the Sanctions Screening SME role artifact.
@@ -15,8 +15,8 @@ Ask the Sanctions Screening SME to author the minimal Stage 0 screening story, s
 
 ## Files Changed
 - `/agents/15-sanctions-screening-sme/AGENT.md`
-- `/project/requirements/REQ-0004-hsfs-stage0-sanctions-screening-story.md`
-- `/project/architecture/HSFS-Stage0-Orchestration.md`
+- `/project/requirements/REQ-0004-aisena-stage0-sanctions-screening-story.md`
+- `/project/architecture/AISENA-Stage0-Orchestration.md`
 - `/project/backlog/BACKLOG.md`
 
 ## Decisions Made

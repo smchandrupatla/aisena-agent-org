@@ -2,4 +2,4 @@
 
 This repository is a bootstrap for an AI-assisted software delivery organisation.
 
-See `/project/architecture/HSFS-AI-Agent-Team.md` for the proposed Hybrid Sanctions and Fraud Screening System (HSFS) agent roster, delivery approach, and operating model.
+See `/project/architecture/AISENA-AI-Agent-Team.md` for the proposed AISENA (AISENA) agent roster, delivery approach, and operating model.

@@ -1,11 +1,11 @@
-# HSFS Documentation Center
+# AISENA Documentation Center
 
 ## Common Branding Standard
 All templates in this folder use the same branding header and metadata block:
-- Brand: `HSFS (Hybrid Sanctions and Fraud Screening System)`
+- Brand: `AISENA (AISENA)`
 - Program: `Autonomous Delivery Shop`
 - Header fields: Document Type, Version, Owner, Status, Classification, Last Updated, Review Cycle
-- Footer line: `HSFS | Controlled Document | Do not distribute without approval`
+- Footer line: `AISENA | Controlled Document | Do not distribute without approval`
 
 ## Category Templates
 1. `01-planning-requirements/TEMPLATE-planning-requirements.md`

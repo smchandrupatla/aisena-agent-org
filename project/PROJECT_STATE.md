@@ -20,7 +20,7 @@
 - Initial Solution Architect role definition and architecture overview.
 - Initial UI/UX role definition and guidance documentation.
 - Engineering role validation preparation artifacts created and documented.
-- HSFS Stage 0 proof plan and agent roster defined.
+- AISENA Stage 0 proof plan and agent roster defined.
 - TASK-0010 DONE: Autonomous governance baseline activated (2026-08-14).
 - TASK-0011 DONE: Governance metrics loop, critic cadence, and cost tracker implemented (2026-08-14).
 

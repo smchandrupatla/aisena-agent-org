@@ -4,13 +4,13 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import psycopg2
 from urllib.parse import urlparse
 
-DSN = "host=localhost dbname=hsfs user=hsfs password=hsfs_pw"
+DSN = "host=localhost dbname=aisena user=aisena password=aisena_pw"
 
 
 def fetch_results(limit=50):
     conn = psycopg2.connect(DSN)
     cur = conn.cursor()
-    cur.execute("SELECT id, event, flagged, reason, created_at FROM hsfs_screening_results ORDER BY created_at DESC LIMIT %s", (limit,))
+    cur.execute("SELECT id, event, flagged, reason, created_at FROM aisena_screening_results ORDER BY created_at DESC LIMIT %s", (limit,))
     rows = cur.fetchall()
     cur.close()
     conn.close()

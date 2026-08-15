@@ -1,7 +1,7 @@
-# HSFS Planning and Requirements Templates
+# AISENA Planning and Requirements Templates
 
 ## Branding Header (Use in every document)
-- Brand: HSFS (Hybrid Sanctions and Fraud Screening System)
+- Brand: AISENA (AISENA)
 - Program: Autonomous Delivery Shop
 - Document Type: <Fill>
 - Version: <vX.Y>
@@ -60,4 +60,4 @@
 ### 5. Risks from Stakeholder Misalignment
 
 ---
-HSFS | Controlled Document | Do not distribute without approval
+AISENA | Controlled Document | Do not distribute without approval

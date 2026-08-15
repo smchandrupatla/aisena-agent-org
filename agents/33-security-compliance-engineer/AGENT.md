@@ -28,8 +28,8 @@ Repository locations owned:
 - `/project/handoffs`
 
 Inputs to inspect:
-- `/project/architecture/HSFS-AI-Agent-Team.md`
-- `/project/requirements/REQ-0004-hsfs-stage0-sanctions-screening-story.md`
+- `/project/architecture/AISENA-AI-Agent-Team.md`
+- `/project/requirements/REQ-0004-aisena-stage0-sanctions-screening-story.md`
 - `/project/backlog/BACKLOG.md`
 - Existing security or compliance guidance.
 

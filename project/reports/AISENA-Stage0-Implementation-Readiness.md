@@ -1,4 +1,4 @@
-# HSFS Stage 0 Implementation Readiness
+# AISENA Stage 0 Implementation Readiness
 
 ## Current Readiness
 - Stage 0 story and architecture are documented.

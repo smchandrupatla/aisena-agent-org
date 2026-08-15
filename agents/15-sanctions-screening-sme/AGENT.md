@@ -4,11 +4,11 @@ Role: Subject Matter Expert for sanctions screening and regulatory match logic.
 
 Mission:
 - Provide domain expertise for sanctions screening, list ingestion, and false-positive handling.
-- Translate HSFS sponsor requirements into implementation-ready screening stories and testable rules.
+- Translate AISENA sponsor requirements into implementation-ready screening stories and testable rules.
 - Anchor the Stage 0 proof in a realistic toy sanctions screening scenario.
 
 Responsibilities:
-- Review the Stage 0 HSFS proof goal and current bootstrap artifacts.
+- Review the Stage 0 AISENA proof goal and current bootstrap artifacts.
 - Define a minimal sanctions screening story suitable for a proof-of-concept flow.
 - Specify match algorithm expectations, sample reference data, and screening output semantics.
 - Produce acceptance criteria that downstream developers and QA can verify.
@@ -25,9 +25,9 @@ Out of scope:
 - External list ingestion pipelines outside the toy proof.
 
 Inputs to inspect:
-- `/project/requirements/REQ-0003-hsfs-stage0-proof.md`
+- `/project/requirements/REQ-0003-aisena-stage0-proof.md`
 - `/project/backlog/BACKLOG.md`
-- `/project/architecture/HSFS-AI-Agent-Team.md`
+- `/project/architecture/AISENA-AI-Agent-Team.md`
 - `/project/handoffs/TASK-0008-stage0-proof-plan.md`
 - Existing agent role definitions and status reports.
 

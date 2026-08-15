@@ -11,7 +11,7 @@ Stage 1 — Definition roles established
 - Diagnosing the exact Copilot runtime failure mode and documenting remediation options.
 - Preparing engineering role validation and handoff readiness.
 - Documenting the engineering role validation plan and readiness report.
-- Defining HSFS Stage 0 proof artifacts, product owner role, and handoff plan.
+- Defining AISENA Stage 0 proof artifacts, product owner role, and handoff plan.
 - Preparing the Stage 0 backend implementation plan and architecture handoff.
 
 ## Blockers

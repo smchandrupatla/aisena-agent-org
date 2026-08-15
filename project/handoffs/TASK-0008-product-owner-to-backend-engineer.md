@@ -1,6 +1,6 @@
 # Handoff
 
-Task: TASK-0008 — HSFS Stage 0 proof task
+Task: TASK-0008 — AISENA Stage 0 proof task
 From: Product Owner
 To: Backend Engineer — Ingestion & Streaming
 Date: 2026-08-11
@@ -9,14 +9,14 @@ Date: 2026-08-11
 Pass the Stage 0 story and minimal architecture to the Backend Engineer so they can implement the ingestion, Kafka topic, and screening service path.
 
 ## Work Completed
-- Stage 0 proof story is documented in `/project/requirements/REQ-0004-hsfs-stage0-sanctions-screening-story.md`.
-- Stage 0 orchestration and architecture are documented in `/project/architecture/HSFS-Stage0-Orchestration.md` and `/project/architecture/HSFS-Stage0-Architecture.md`.
+- Stage 0 proof story is documented in `/project/requirements/REQ-0004-aisena-stage0-sanctions-screening-story.md`.
+- Stage 0 orchestration and architecture are documented in `/project/architecture/AISENA-Stage0-Orchestration.md` and `/project/architecture/AISENA-Stage0-Architecture.md`.
 - The toy sanctions screening SME has defined the minimal story and expected output.
 
 ## Files Changed
-- `/project/requirements/REQ-0004-hsfs-stage0-sanctions-screening-story.md`
-- `/project/architecture/HSFS-Stage0-Orchestration.md`
-- `/project/architecture/HSFS-Stage0-Architecture.md`
+- `/project/requirements/REQ-0004-aisena-stage0-sanctions-screening-story.md`
+- `/project/architecture/AISENA-Stage0-Orchestration.md`
+- `/project/architecture/AISENA-Stage0-Architecture.md`
 - `/project/handoffs/TASK-0008-product-owner-to-solution-architect.md`
 
 ## Decisions Made

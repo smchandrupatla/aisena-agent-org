@@ -1,8 +1,8 @@
-# Copilot Instructions — HSFS AI Agent Org
+# Copilot Instructions — AISENA AI Agent Org
 
 ## What This Repo Is
 
-An **AI-driven software delivery organization** that builds the Hybrid Sanctions and Fraud Screening System (HSFS) using 37 specialized AI agent roles. Agents coordinate through explicit handoffs, shared project memory, and an autonomous governance framework. The repo contains both the agent role definitions *and* the system being built.
+An **AI-driven software delivery organization** that builds the AISENA (AISENA) using 37 specialized AI agent roles. Agents coordinate through explicit handoffs, shared project memory, and an autonomous governance framework. The repo contains both the agent role definitions *and* the system being built.
 
 ---
 
@@ -78,7 +78,7 @@ Stage 0 (proof) → Stage 1 (definition) → Stage 2 (engineering) → Stage 3�
 
 ### Data Flow (Stage 0)
 
-Sample JSON → Ingestion (`produce.py`) → Kafka topic `hsfs-stage0-events` → Detection (`consume.py`, flags amount > $1000) → PostgreSQL + OpenSearch index `hsfs-stage0-screening-results`
+Sample JSON → Ingestion (`produce.py`) → Kafka topic `aisena-stage0-events` → Detection (`consume.py`, flags amount > $1000) → PostgreSQL + OpenSearch index `aisena-stage0-screening-results`
 
 ---
 
@@ -144,11 +144,11 @@ When passing work between agents, create `project/handoffs/TASK-NNNN-FROM-role-t
 | `AGENT_DAILY_LEARNING_INTERVAL` | `86400` | Seconds between evidence-backed domain self-learning reports |
 | `AGENT_METRICS_PORT` | `9500` | Prometheus metrics endpoint |
 | `OPENSEARCH_URL` | `http://opensearch:9200` | |
-| `POSTGRES_DSN` | `host=postgres dbname=hsfs user=hsfs password=hsfs_pw` | |
+| `POSTGRES_DSN` | `host=postgres dbname=aisena user=aisena password=aisena_pw` | |
 
 ### Dev Credentials (Local Only)
 
-- PostgreSQL: `hsfs` / `hsfs_pw`, db `hsfs`
+- PostgreSQL: `aisena` / `aisena_pw`, db `aisena`
 - Grafana: `admin` / `admin`
 - Vault: token `root` (dev mode)
 - OpenSearch: security disabled

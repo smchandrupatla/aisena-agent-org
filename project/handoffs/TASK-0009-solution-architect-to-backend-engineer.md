@@ -6,22 +6,22 @@ To: Backend Engineer — Ingestion & Streaming
 Date: 2026-08-11
 
 ## Objective
-Review the HSFS Stage 0 architecture and provide a concrete implementation handoff for the Backend Engineer.
+Review the AISENA Stage 0 architecture and provide a concrete implementation handoff for the Backend Engineer.
 
 ## Work Completed
-- Reviewed the Stage 0 story in `/project/requirements/REQ-0004-hsfs-stage0-sanctions-screening-story.md`.
-- Validated the Stage 0 architecture in `/project/architecture/HSFS-Stage0-Architecture.md`.
+- Reviewed the Stage 0 story in `/project/requirements/REQ-0004-aisena-stage0-sanctions-screening-story.md`.
+- Validated the Stage 0 architecture in `/project/architecture/AISENA-Stage0-Architecture.md`.
 - Confirmed the minimal data flow and interface contracts for Kafka and OpenSearch.
 
 ## Files Changed
-- `/project/architecture/HSFS-Stage0-Architecture.md`
-- `/project/architecture/HSFS-Stage0-Orchestration.md`
-- `/project/requirements/REQ-0004-hsfs-stage0-sanctions-screening-story.md`
+- `/project/architecture/AISENA-Stage0-Architecture.md`
+- `/project/architecture/AISENA-Stage0-Orchestration.md`
+- `/project/requirements/REQ-0004-aisena-stage0-sanctions-screening-story.md`
 - `/project/handoffs/TASK-0008-product-owner-to-solution-architect.md`
 - `/project/reports/IMPLEMENTATION_STATUS.md`
 
 ## Decisions Made
-- The Stage 0 proof will use a simple Kafka topic `hsfs-stage0-events` and OpenSearch index `hsfs-stage0-screening-results`.
+- The Stage 0 proof will use a simple Kafka topic `aisena-stage0-events` and OpenSearch index `aisena-stage0-screening-results`.
 - The implementation should focus on a simple blocked-party name match and indexing the screening result.
 - No frontend UI is required for this stage; QA can validate via the OpenSearch result.
 

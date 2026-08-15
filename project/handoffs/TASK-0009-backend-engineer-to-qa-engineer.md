@@ -14,12 +14,12 @@ Pass the Stage 0 backend implementation plan and validation expectations to QA s
 - Added placeholder scripts for ingestion, screening, and validation.
 
 ## Files Changed
-- `/project/implementation/HSFS-Stage0-Backend-Plan.md`
-- `/project/implementation/HSFS-Stage0-Kafka-Contract.md`
+- `/project/implementation/AISENA-Stage0-Backend-Plan.md`
+- `/project/implementation/AISENA-Stage0-Kafka-Contract.md`
 - `/project/implementation/data/sample-event.json`
-- `/scripts/hsfs-stage0/ingest-event.sh`
-- `/scripts/hsfs-stage0/screening-service.sh`
-- `/scripts/hsfs-stage0/validate-stage0-result.sh`
+- `/scripts/aisena-stage0/ingest-event.sh`
+- `/scripts/aisena-stage0/screening-service.sh`
+- `/scripts/aisena-stage0/validate-stage0-result.sh`
 
 ## Decisions Made
 - QA validation will focus on the OpenSearch indexed screening result.

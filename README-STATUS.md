@@ -1,4 +1,4 @@
-# HSFS — README-STATUS
+# AISENA — README-STATUS
 
 This file describes the local development infra composed via `infra/docker-compose.yml`.
 
@@ -7,7 +7,7 @@ Planned services (docker-compose):
 - PostgreSQL
   - Image: `postgres:15`
   - Port: `5432`
-  - Credentials: `hsfs` / `hsfs_pw` (user/password), DB: `hsfs`
+  - Credentials: `aisena` / `aisena_pw` (user/password), DB: `aisena`
 
 - Apache Kafka (docker-compose via Bitnami Kafka + Zookeeper)
   - Zookeeper port: `2181`

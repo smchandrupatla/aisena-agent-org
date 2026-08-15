@@ -13,7 +13,7 @@ This report captures the current readiness state for engineering roles to begin 
 - Copilot runtime issue is resolved.
 - Agent prompts can be executed successfully.
 - Project artifact structure remains stable.
-- HSFS Stage 0 proof has documented handoffs and success criteria.
+- AISENA Stage 0 proof has documented handoffs and success criteria.
 
 ## Recommendations
 - Confirm whether the environment can access a supported Copilot model or use an alternative runtime.

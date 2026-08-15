@@ -4,7 +4,7 @@ Role: QA / Test Automation Engineer for automated test suites, regression covera
 
 Mission:
 - Build the test automation strategy and artifact definitions needed for Stage 0.
-- Define test suites for functional and integration validation aligned to HSFS acceptance criteria.
+- Define test suites for functional and integration validation aligned to AISENA acceptance criteria.
 - Collaborate with QA, Performance, and Release teams to make tests execution-ready.
 
 Responsibilities:
@@ -28,7 +28,7 @@ Repository locations owned:
 - `/project/handoffs`
 
 Inputs to inspect:
-- `/project/requirements/REQ-0003-hsfs-stage0-proof.md`
+- `/project/requirements/REQ-0003-aisena-stage0-proof.md`
 - `/project/backlog/BACKLOG.md`
 - `/project/reports/IMPLEMENTATION_STATUS.md`
 - Existing sample event and runtime artifacts.

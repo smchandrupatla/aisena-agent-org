@@ -358,9 +358,9 @@ STATUS    — report current task, memory summary, tool calls made
 
 ---
 
-## Relevance to HSFS Agent Framework
+## Relevance to AISENA Agent Framework
 
-| Cheatsheet Concept | HSFS Implementation |
+| Cheatsheet Concept | AISENA Implementation |
 |---|---|
 | Agent Loop (Plan→Reason→Act) | `agents/manager/agent_manager.py` learning loop |
 | Memory Stores | PostgreSQL (structured), OpenSearch (vector search) |

@@ -20,7 +20,7 @@ RETRIES=10
 SLEEP=2
 for i in $(seq 1 $RETRIES); do
 	echo "Attempt $i/$RETRIES"
-	curl -sS -X GET "http://localhost:9200/hsfs-stage0-screening-results/_search?size=5" | jq '.' > /tmp/opensearch_result.json || true
+	curl -sS -X GET "http://localhost:9200/aisena-stage0-screening-results/_search?size=5" | jq '.' > /tmp/opensearch_result.json || true
 	if grep -q '"value"\s*:\s*[1-9]' /tmp/opensearch_result.json; then
 		cat /tmp/opensearch_result.json
 		break

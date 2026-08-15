@@ -1,7 +1,7 @@
-# TASK-0008 — HSFS Stage 0 Proof Plan
+# TASK-0008 — AISENA Stage 0 Proof Plan
 
 ## Purpose
-Provide a minimal, runnable proof of the HSFS agent delivery workflow. The goal is to validate that the Implementation Manager and handoff chain can produce a coherent Stage 0 output even while Copilot prompt execution is still blocked.
+Provide a minimal, runnable proof of the AISENA agent delivery workflow. The goal is to validate that the Implementation Manager and handoff chain can produce a coherent Stage 0 output even while Copilot prompt execution is still blocked.
 
 ## Scope
 - Define the Stage 0 proof goal and success criteria.
@@ -11,14 +11,14 @@ Provide a minimal, runnable proof of the HSFS agent delivery workflow. The goal 
 
 ## Stage 0 Proof Goal
 Deliver a Stage 0 proof that demonstrates:
-- A clearly defined HSFS backlog item suitable for execution.
+- A clearly defined AISENA backlog item suitable for execution.
 - A minimal agent roster with roles and responsibilities.
 - A runnable proof plan that can be executed once AI runtime is restored.
 - Clear acceptance criteria and handoff points.
 
 ## Proof Deliverables
-- `/project/requirements/REQ-0003-hsfs-stage0-proof.md`
-- `/agents/00-implementation-manager/HSFS-Agent-Roles.md`
+- `/project/requirements/REQ-0003-aisena-stage0-proof.md`
+- `/agents/00-implementation-manager/AISENA-Agent-Roles.md`
 - `/agents/14-product-owner/AGENT.md`
 - `/project/backlog/BACKLOG.md`
 - `/project/reports/IMPLEMENTATION_STATUS.md`
