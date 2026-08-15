@@ -48,4 +48,19 @@ Definition of Done:
 - A handoff document is created for the implementation team.
 - The story can be executed as a minimal part of the Stage 0 proof.
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### Agent Skills
+- **Rag**: Retrieval-Augmented Generation (RAG) over documents and knowledge bases
+
+### Databases
+- **Postgresql**: PostgreSQL relational database for structured persistence
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+
 Last-Updated: 2026-08-11T06:54:58.546869Z

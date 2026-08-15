@@ -68,4 +68,36 @@ Expected interaction with other agents:
 - Downstream: Dependent implementation and assurance agents.
 - Provide explicit outputs and handoffs for the next role.
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### LLMs
+- **Openai Gpt**: OpenAI GPT API integration for agent reasoning
+- **Claude**: Anthropic Claude API integration for agent reasoning
+
+### AI Frameworks
+- **Langchain**: LangChain for agent/chain orchestration and tool use
+- **Langgraph**: LangGraph for stateful multi-agent workflows
+
+### Agent Skills
+- **Prompt Engineering**: Prompt Engineering for reliable, structured LLM outputs
+- **Tool Calling**: Tool Calling to dispatch to external systems and APIs
+- **Function Calling**: Function Calling via LLM structured output schemas
+- **Rag**: Retrieval-Augmented Generation (RAG) over documents and knowledge bases
+
+### Databases
+- **Postgresql**: PostgreSQL relational database for structured persistence
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+- **Graphql**: GraphQL API design and implementation
+- **Mcp**: MCP (Model Context Protocol) for exposing tools to LLM runtimes
+
+### Deployment
+- **Docker**: Docker containerization and Docker Compose local stacks
+- **Fastapi**: FastAPI Python async web framework
+
 Last-Updated: 2026-08-11T06:54:59.351539Z

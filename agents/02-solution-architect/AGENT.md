@@ -77,4 +77,46 @@ Expected interaction with other agents:
 - Downstream: Frontend Engineer, Backend Engineer, Database Engineer, Integration Engineer.
 - Provide architecture decisions and ADRs to guide implementation.
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Javascript**: JavaScript for frontend and Node.js agent runtime
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### LLMs
+- **Openai Gpt**: OpenAI GPT API integration for agent reasoning
+- **Claude**: Anthropic Claude API integration for agent reasoning
+- **Gemini**: Google Gemini API integration for agent reasoning
+- **Llama**: Meta Llama local/API integration for self-hosted inference
+
+### AI Frameworks
+- **Langchain**: LangChain for agent/chain orchestration and tool use
+- **Langgraph**: LangGraph for stateful multi-agent workflows
+- **Llamaindex**: LlamaIndex for document indexing and RAG pipelines
+
+### Agent Skills
+- **Prompt Engineering**: Prompt Engineering for reliable, structured LLM outputs
+- **Tool Calling**: Tool Calling to dispatch to external systems and APIs
+- **Function Calling**: Function Calling via LLM structured output schemas
+- **Rag**: Retrieval-Augmented Generation (RAG) over documents and knowledge bases
+- **Memory**: Agent Memory — short-term context and long-term knowledge persistence
+- **Multi Agent Systems**: Multi-Agent Systems design, coordination, and handoff protocols
+
+### Databases
+- **Vector Db Pinecone**: Vector DB (Pinecone) for hosted similarity search
+- **Chromadb**: ChromaDB embedded vector store for local RAG
+- **Faiss**: FAISS in-process vector index for high-performance similarity search
+- **Postgresql**: PostgreSQL relational database for structured persistence
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+- **Graphql**: GraphQL API design and implementation
+- **Mcp**: MCP (Model Context Protocol) for exposing tools to LLM runtimes
+
+### Deployment
+- **Docker**: Docker containerization and Docker Compose local stacks
+- **Fastapi**: FastAPI Python async web framework
+- **Aws**: AWS cloud infrastructure (ECS, RDS, S3, Lambda, etc.)
+
 Last-Updated: 2026-08-11T06:54:58.639154Z

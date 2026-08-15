@@ -1,4 +1,22 @@
 {
   "alpha": 0.0001,
-  "data_window": 50
+  "data_window": 50,
+  "skills": [
+    "foundations.python",
+    "foundations.git",
+    "llms.openai_gpt",
+    "llms.claude",
+    "ai_frameworks.langchain",
+    "ai_frameworks.langgraph",
+    "agent_skills.prompt_engineering",
+    "agent_skills.tool_calling",
+    "agent_skills.function_calling",
+    "agent_skills.rag",
+    "databases.postgresql",
+    "apis.rest_api",
+    "apis.graphql",
+    "apis.mcp",
+    "deployment.docker",
+    "deployment.fastapi"
+  ]
 }

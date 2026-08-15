@@ -1,4 +1,15 @@
 {
   "alpha": 0.0001,
-  "data_window": 50
+  "data_window": 50,
+  "skills": [
+    "foundations.python",
+    "foundations.javascript",
+    "foundations.git",
+    "agent_skills.tool_calling",
+    "agent_skills.function_calling",
+    "apis.rest_api",
+    "apis.graphql",
+    "apis.mcp",
+    "deployment.docker"
+  ]
 }

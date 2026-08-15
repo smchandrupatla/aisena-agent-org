@@ -68,4 +68,19 @@ Expected interaction with other agents:
 - Downstream: Dependent implementation and assurance agents.
 - Provide explicit outputs and handoffs for the next role.
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### Databases
+- **Vector Db Pinecone**: Vector DB (Pinecone) for hosted similarity search
+- **Chromadb**: ChromaDB embedded vector store for local RAG
+- **Faiss**: FAISS in-process vector index for high-performance similarity search
+- **Postgresql**: PostgreSQL relational database for structured persistence
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+
 Last-Updated: 2026-08-11T06:54:57.661260Z

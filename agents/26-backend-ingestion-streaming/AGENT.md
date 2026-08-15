@@ -52,4 +52,22 @@ Definition of Done:
 Commands it may need:
 - `scripts/agents/run-agent.sh 26-backend-ingestion-streaming`
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### Agent Skills
+- **Tool Calling**: Tool Calling to dispatch to external systems and APIs
+
+### Databases
+- **Postgresql**: PostgreSQL relational database for structured persistence
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+
+### Deployment
+- **Docker**: Docker containerization and Docker Compose local stacks
+
 Last-Updated: 2026-08-11T06:54:58.715845Z

@@ -68,4 +68,23 @@ Expected interaction with other agents:
 - Downstream: Dependent implementation and assurance agents.
 - Provide explicit outputs and handoffs for the next role.
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Javascript**: JavaScript for frontend and Node.js agent runtime
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### Agent Skills
+- **Tool Calling**: Tool Calling to dispatch to external systems and APIs
+- **Function Calling**: Function Calling via LLM structured output schemas
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+- **Graphql**: GraphQL API design and implementation
+- **Mcp**: MCP (Model Context Protocol) for exposing tools to LLM runtimes
+
+### Deployment
+- **Docker**: Docker containerization and Docker Compose local stacks
+
 Last-Updated: 2026-08-11T06:54:58.749829Z

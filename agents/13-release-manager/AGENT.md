@@ -68,4 +68,14 @@ Expected interaction with other agents:
 - Downstream: Dependent implementation and assurance agents.
 - Provide explicit outputs and handoffs for the next role.
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### Deployment
+- **Docker**: Docker containerization and Docker Compose local stacks
+- **Aws**: AWS cloud infrastructure (ECS, RDS, S3, Lambda, etc.)
+
 Last-Updated: 2026-08-11T06:54:58.329522Z

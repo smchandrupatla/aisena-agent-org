@@ -54,4 +54,18 @@ Definition of Done:
 Commands it may need:
 - `scripts/agents/run-agent.sh 25-infrastructure-platform-engineer`
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+- **Mcp**: MCP (Model Context Protocol) for exposing tools to LLM runtimes
+
+### Deployment
+- **Docker**: Docker containerization and Docker Compose local stacks
+- **Aws**: AWS cloud infrastructure (ECS, RDS, S3, Lambda, etc.)
+
 Last-Updated: 2026-08-11T06:54:56.329573Z

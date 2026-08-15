@@ -52,4 +52,19 @@ Definition of Done:
 Commands it may need:
 - `scripts/agents/run-agent.sh 34-technical-writer`
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Javascript**: JavaScript for frontend and Node.js agent runtime
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### Agent Skills
+- **Prompt Engineering**: Prompt Engineering for reliable, structured LLM outputs
+- **Rag**: Retrieval-Augmented Generation (RAG) over documents and knowledge bases
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+- **Mcp**: MCP (Model Context Protocol) for exposing tools to LLM runtimes
+
 Last-Updated: 2026-08-11T06:54:57.849130Z

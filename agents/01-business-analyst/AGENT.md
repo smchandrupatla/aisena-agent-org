@@ -76,4 +76,17 @@ Expected interaction with other agents:
 - Downstream: Solution Architect, UI/UX Designer, Frontend Engineer, Backend Engineer.
 - Provide structured requirements and acceptance criteria for design and implementation.
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### Agent Skills
+- **Prompt Engineering**: Prompt Engineering for reliable, structured LLM outputs
+- **Rag**: Retrieval-Augmented Generation (RAG) over documents and knowledge bases
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+
 Last-Updated: 2026-08-11T06:54:59.217433Z

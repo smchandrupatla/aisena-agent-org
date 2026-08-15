@@ -35,4 +35,13 @@ Definition of Done:
 - The handoff from Implementation Manager to Product Owner is documented.
 - The Stage 0 proof plan is ready for execution once Copilot runtime is available.
 
+## Skills
+
+### Foundations
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### Agent Skills
+- **Prompt Engineering**: Prompt Engineering for reliable, structured LLM outputs
+- **Multi Agent Systems**: Multi-Agent Systems design, coordination, and handoff protocols
+
 Last-Updated: 2026-08-11T06:54:58.460771Z

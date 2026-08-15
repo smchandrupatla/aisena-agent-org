@@ -1,4 +1,13 @@
 {
   "alpha": 0.0001,
-  "data_window": 50
+  "data_window": 50,
+  "skills": [
+    "foundations.python",
+    "foundations.git",
+    "agent_skills.rag",
+    "databases.vector_db_pinecone",
+    "databases.chromadb",
+    "databases.faiss",
+    "apis.rest_api"
+  ]
 }

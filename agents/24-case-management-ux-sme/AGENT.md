@@ -68,4 +68,17 @@ Expected interaction with other agents:
 - Upstream: Implementation Manager, Product Owner
 - Downstream: Product Owner, Solution Architect, Backend Engineer, QA Engineer
 
+## Skills
+
+### Foundations
+- **Javascript**: JavaScript for frontend and Node.js agent runtime
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+- **Graphql**: GraphQL API design and implementation
+
+### Deployment
+- **Vercel**: Vercel frontend deployment
+
 Last-Updated: 2026-08-11T06:55:00.129656Z

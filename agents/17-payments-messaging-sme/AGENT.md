@@ -68,4 +68,17 @@ Expected interaction with other agents:
 - Upstream: Implementation Manager, Product Owner
 - Downstream: Product Owner, Solution Architect, Backend Engineer, QA Engineer
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+- **Mcp**: MCP (Model Context Protocol) for exposing tools to LLM runtimes
+
+### Deployment
+- **Docker**: Docker containerization and Docker Compose local stacks
+
 Last-Updated: 2026-08-11T06:54:57.491194Z

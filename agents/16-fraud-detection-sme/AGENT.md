@@ -68,4 +68,25 @@ Expected interaction with other agents:
 - Upstream: Implementation Manager, Product Owner
 - Downstream: Product Owner, Solution Architect, Backend Engineer, QA Engineer
 
+## Skills
+
+### Foundations
+- **Python**: Python programming language for services, agents, and scripting
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### LLMs
+- **Openai Gpt**: OpenAI GPT API integration for agent reasoning
+- **Claude**: Anthropic Claude API integration for agent reasoning
+
+### Agent Skills
+- **Rag**: Retrieval-Augmented Generation (RAG) over documents and knowledge bases
+- **Function Calling**: Function Calling via LLM structured output schemas
+
+### Databases
+- **Vector Db Pinecone**: Vector DB (Pinecone) for hosted similarity search
+- **Postgresql**: PostgreSQL relational database for structured persistence
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+
 Last-Updated: 2026-08-11T06:54:57.592637Z

@@ -1,4 +1,10 @@
 {
   "alpha": 0.0001,
-  "data_window": 50
+  "data_window": 50,
+  "skills": [
+    "foundations.python",
+    "foundations.git",
+    "deployment.docker",
+    "deployment.aws"
+  ]
 }

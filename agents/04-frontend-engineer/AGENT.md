@@ -68,4 +68,17 @@ Expected interaction with other agents:
 - Downstream: Dependent implementation and assurance agents.
 - Provide explicit outputs and handoffs for the next role.
 
+## Skills
+
+### Foundations
+- **Javascript**: JavaScript for frontend and Node.js agent runtime
+- **Git**: Git version control for agent artifacts, handoffs, and change log
+
+### APIs
+- **Rest Api**: REST API design and implementation (Flask/FastAPI)
+- **Graphql**: GraphQL API design and implementation
+
+### Deployment
+- **Vercel**: Vercel frontend deployment
+
 Last-Updated: 2026-08-11T06:54:58.273415Z

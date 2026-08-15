@@ -1,4 +1,11 @@
 {
   "alpha": 0.0001,
-  "data_window": 50
+  "data_window": 50,
+  "skills": [
+    "foundations.javascript",
+    "foundations.git",
+    "apis.rest_api",
+    "apis.graphql",
+    "deployment.vercel"
+  ]
 }
