@@ -559,6 +559,32 @@ No
 #### Handoff Target
 05-backend-engineer, 07-devops-engineer — review pgvector index strategy before Stage 2 schema migration work begins; confirm pgvectorscale extension availability in the target PostgreSQL 15 container.
 
+### LOG-20260815-020 — Free-Only Daily Self-Learning Model (TASK-0011)
+- Agent Role: Implementation Manager
+- Task ID: TASK-0011
+- Test Date: 2026-08-15
+- What Changed:
+  - Pinned all automated daily self-learning requests to `gpt-4.1` with an explicit Copilot CLI `--model` argument.
+  - Added a free-model allowlist and rejected unapproved model overrides before starting Copilot.
+  - Disabled implicit fallback to the account default or a paid model.
+  - Added focused tests for free-model command selection and paid-model rejection.
+- Files Changed:
+  - `/scripts/agents/daily_self_learning.py`
+  - `/scripts/agents/test_daily_self_learning.py`
+  - `/memories/repo/AGENT_SELF_LEARNING.md`
+  - `/.github/copilot-instructions.md`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- Commit / Version Ref: pending
+- Rationale: Unattended learning must not consume a paid or premium AI model through an implicit CLI default.
+- Alternatives Considered:
+  - Use the account default model — rejected because its cost tier can change outside repository control.
+  - Permit arbitrary environment overrides — rejected because a typo or paid model identifier would bypass the free-only requirement.
+- Risk Impact: Low; unavailable free models block that learning attempt and remain visible in the report.
+- Metrics Observed: 5 focused unit tests passed before documentation update.
+- Rollback Plan: Remove the allowlist and explicit `--model` argument to restore CLI default selection.
+- Human Approval Required: No
+- Handoff Target: Implementation Manager (review allowlist when GitHub changes free-model availability)
+
 ---
 
 ## 2026-08-15
@@ -597,3 +623,44 @@ AISENA's data flow spans a Flask REST API and a Kafka-based ingestion-to-detecti
 
 #### Recommended Action
 Author a minimal Arazzo 1.1.0 workflow document under `/project/architecture/arazzo-stage0-workflow.yaml` that describes the Stage 0 data path: REST ingest call → Kafka produce → Kafka consume → OpenSearch index. Wire it to existing AsyncAPI and OpenAPI fragments. Use it as the basis for Stage 2 contract-driven integration tests (agent 08-qa-engineer). No production change required.
+
+---
+
+## 2026-08-15
+
+### LOG-20260815-001
+- **Agent Role:** 09-security-engineer
+- **Task ID:** Daily Domain Finding (2026-08-15)
+- **What Changed:**
+  - Created `/agents/09-security-engineer/daily-findings/2026-08-15-CVE-2026-17106-docker-cp.md` with actionable finding.
+- **Files Changed:**
+  - `/agents/09-security-engineer/daily-findings/2026-08-15-CVE-2026-17106-docker-cp.md`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit / Version Ref:** pending
+- **Rationale:**
+  - CVE-2026-17106 ("CopyEscape") was publicly disclosed August 2026. AISENA runs Docker Engine 29.3.0, which is below the patched version (29.7.2). The vulnerability enables host filesystem overwrite via `docker cp` TOCTOU race + symlink escape, risking secrets and CI/CD integrity.
+- **Alternatives Considered:**
+  - Defer until scheduled patching window — rejected due to active exploit potential and severity.
+- **Risk Impact:** High (pre-patch); Low (post-upgrade)
+- **Metrics Observed:** Docker Engine version 29.3.0 confirmed on host. No exploit attempt detected.
+- **Rollback Plan:** Downgrade Docker Engine to prior pinned version if upgrade causes stack instability; validate with `bash scripts/run-stage0-smoke.sh`.
+- **Human Approval Required:** No (dependency upgrade, no user-data or production change)
+- **Handoff Target:** 00-implementation-manager (schedule Docker Engine upgrade), 06-devops-engineer (execute upgrade and revalidate docker-compose stack)
+
+#### Domain Finding: CVE-2026-17106 "CopyEscape" — Docker `cp` Host Escape
+
+#### Finding
+Upgrade Docker Engine to ≥29.7.2 immediately — CVE-2026-17106 ("CopyEscape") allows a malicious container to overwrite arbitrary host files via `docker cp`, potentially enabling root-level code execution on CI/CD hosts and developer workstations.
+
+#### Why It Matters
+AISENA's local stack runs on Docker Compose and the environment currently has Docker Engine 29.3.0 — below the patched threshold. A TOCTOU race combined with symlink escape in Docker's archive copy pipeline can overwrite host files (SSH keys, Vault tokens, shell configs, the Docker runtime itself) writable by the CLI user. On CI/CD runners or developer machines executing as root, this escalates to full host compromise, threatening the agent-manager auto-push credential and any secrets accessible to the Docker daemon.
+
+#### Evidence
+- GitHub Security Advisory (moby/go-archive, 2026-08-10): https://github.com/moby/go-archive/security/advisories/GHSA-hfg8-hc9c-6c3h
+- Wiz Vulnerability Database: https://www.wiz.io/vulnerability-database/cve/cve-2026-17106
+- NHS Digital Cyber Alert CC-4828 (2026-08-10): https://digital.nhs.uk/cyber-alerts/2026/cc-4828
+- Imperva CopyEscape technical write-up: https://www.imperva.com/blog/copyescape-taking-over-docker-hosts-with-docker-cp/
+- Docker Engine 29.7.2 Release Notes: https://docs.docker.com/engine/release-notes/29/
+
+#### Recommended Action
+Run `sudo apt-get update && sudo apt-get install -y docker-ce=29.7.2*` to upgrade Docker Engine to ≥29.7.2. Until patched: (1) avoid `docker cp` against images not built in-repo; (2) add file-integrity checks on /usr/bin and ~/.ssh to CI pre-flight; (3) pin all docker-compose service images to known-good digests as defence-in-depth. Validate stack with `bash scripts/run-stage0-smoke.sh` post-upgrade.
