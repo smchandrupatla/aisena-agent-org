@@ -8,6 +8,8 @@ Behavior:
   appends a short summary to a repo-scoped memory file under `memories/repo/` and updates
   the agent's `AGENT.md` with a last-updated timestamp.
 - Commits the memory and AGENT.md changes to git locally.
+- Loads docs/AGENTIC_AI_KNOWLEDGE_BASE.md on startup and enriches each agent's memory
+  with KB sections relevant to that agent's declared skills (config.json `skills` array).
 
 This is intentionally lightweight and deterministic (no heavy ML). Replace the
 `learn_from_batch` placeholder with real training logic as needed.
@@ -17,10 +19,17 @@ import time
 import threading
 import logging
 import subprocess
+import sys
 from pathlib import Path
 import json
 import datetime
 import shutil
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.agents.daily_self_learning import run_once as run_daily_self_learning
 try:
     import joblib
 except Exception:
@@ -43,7 +52,6 @@ try:
 except Exception:
     psycopg2 = None
 
-ROOT = Path(__file__).resolve().parents[2]
 AGENTS_DIR = ROOT / 'agents'
 MEMORIES_DIR = ROOT / 'memories' / 'repo'
 MEMORIES_DIR.mkdir(parents=True, exist_ok=True)
@@ -52,6 +60,9 @@ MODELS_DIR.mkdir(parents=True, exist_ok=True)
 METRICS_FILE = ROOT / 'memories' / 'repo' / 'agent_metrics.json'
 if not METRICS_FILE.exists():
     METRICS_FILE.write_text('{}')
+
+KB_FILE = ROOT / 'docs' / 'AGENTIC_AI_KNOWLEDGE_BASE.md'
+
 
 OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL', 'http://opensearch:9200')
 POSTGRES_DSN = os.environ.get('POSTGRES_DSN', 'host=postgres dbname=hsfs user=hsfs password=hsfs_pw')
@@ -62,6 +73,93 @@ METRICS_PORT = int(os.environ.get('AGENT_METRICS_PORT', '9500'))
 METRICS_PATH = os.environ.get('AGENT_METRICS_PATH', '/metrics')
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
+
+
+
+# ---------------------------------------------------------------------------
+# Knowledge Base loader
+# ---------------------------------------------------------------------------
+
+def load_knowledge_base() -> dict:
+    """Parse docs/AGENTIC_AI_KNOWLEDGE_BASE.md into {section_title: content}.
+
+    Sections are identified by top-level ## headings. Returns {} if the file is
+    missing or unreadable.
+    """
+    if not KB_FILE.exists():
+        logging.warning('Knowledge base not found at %s', KB_FILE)
+        return {}
+    try:
+        text = KB_FILE.read_text()
+        sections = {}
+        current_title = None
+        current_lines: list = []
+        for line in text.splitlines():
+            if line.startswith('## '):
+                if current_title is not None:
+                    sections[current_title] = '\n'.join(current_lines).strip()
+                current_title = line[3:].strip()
+                current_lines = []
+            else:
+                current_lines.append(line)
+        if current_title is not None:
+            sections[current_title] = '\n'.join(current_lines).strip()
+        logging.info('Knowledge base loaded: %d sections', len(sections))
+        return sections
+    except Exception:
+        logging.exception('Failed to load knowledge base')
+        return {}
+
+
+# Skill key -> KB section titles that are relevant to that skill.
+_SKILL_KB_MAP: dict = {
+    'agent_skills.prompt_engineering':  ['Prompt Starter Patterns', 'Best Practices'],
+    'agent_skills.tool_calling':        ['Core Components', 'Key Agent Capabilities'],
+    'agent_skills.function_calling':    ['Core Components', 'Key Agent Capabilities'],
+    'agent_skills.rag':                 ['Popular Tools & Frameworks', 'Core Components'],
+    'agent_skills.memory':              ['Core Components', 'Popular Tools & Frameworks'],
+    'agent_skills.multi_agent_systems': ['Types of Agents', 'Agent Loop (Plan -> Reason -> Act)'],
+    'llms.openai_gpt':                  ['Popular Tools & Frameworks'],
+    'llms.claude':                      ['Popular Tools & Frameworks'],
+    'llms.gemini':                      ['Popular Tools & Frameworks'],
+    'llms.llama':                       ['Popular Tools & Frameworks'],
+    'ai_frameworks.langchain':          ['Popular Tools & Frameworks'],
+    'ai_frameworks.langgraph':          ['Popular Tools & Frameworks'],
+    'ai_frameworks.llamaindex':         ['Popular Tools & Frameworks'],
+    'databases.vector_db_pinecone':     ['Popular Tools & Frameworks'],
+    'databases.chromadb':               ['Popular Tools & Frameworks'],
+    'databases.faiss':                  ['Popular Tools & Frameworks'],
+    'databases.postgresql':             ['Popular Tools & Frameworks'],
+    'apis.rest_api':                    ['Key Agent Capabilities'],
+    'apis.mcp':                         ['Popular Tools & Frameworks'],
+    'deployment.docker':                ['Popular Tools & Frameworks'],
+    'deployment.aws':                   ['Popular Tools & Frameworks'],
+    'foundations.python':               ['10-Step Agentic AI Development Roadmap'],
+    'foundations.git':                  ['Agent Development Checklist'],
+}
+
+# KB loaded once at startup; shared read-only across all agent threads.
+_KB_SECTIONS: dict = {}
+
+
+def get_relevant_kb_sections(skills: list, kb: dict) -> list:
+    """Return list of (title, excerpt) tuples from KB relevant to the agent's skills.
+
+    Each excerpt is capped at 400 characters to keep memory entries readable.
+    """
+    if not kb or not skills:
+        return []
+    wanted: set = set()
+    for skill in skills:
+        for title in _SKILL_KB_MAP.get(skill, []):
+            wanted.add(title)
+    results = []
+    for title in sorted(wanted):
+        content = kb.get(title, '')
+        if content:
+            excerpt = content[:400] + ('...' if len(content) > 400 else '')
+            results.append((title, excerpt))
+    return results
 
 
 def list_agents():
@@ -183,12 +281,24 @@ def get_agent_config(agent_path):
     return defaults
 
 
-def update_agent_memory(agent_id, summary):
+def update_agent_memory(agent_id, summary, kb_sections=None):
+    """Append a learning entry to the agent's memory file.
+
+    If kb_sections is provided (list of (title, excerpt) tuples from the knowledge
+    base), the relevant KB context is appended so the agent has framework grounding
+    alongside its operational data.
+    """
     mem_file = MEMORIES_DIR / f'agent-{agent_id}.md'
     txt = f"- {summary['learned_at']}: learned {summary['count']} items\n"
     if 'accuracy' in summary:
         txt += f"  - accuracy: {summary['accuracy']}\n"
-    txt += "  - examples: " + json.dumps(summary['examples'], default=str) + "\n\n"
+    txt += "  - examples: " + json.dumps(summary['examples'], default=str) + "\n"
+    if kb_sections:
+        txt += "  - kb_context:\n"
+        for title, excerpt in kb_sections:
+            safe_excerpt = excerpt.replace('\n', ' ')[:200]
+            txt += f"    - [{title}]: {safe_excerpt}\n"
+    txt += "\n"
     with open(mem_file, 'a') as f:
         f.write(txt)
     return mem_file
@@ -269,13 +379,20 @@ def agent_loop(agent_path: Path):
         if not batch:
             batch = fetch_recent_results_from_postgres()
 
+        # Resolve KB sections relevant to this agent once per cycle (cheap read).
+        cfg = get_agent_config(agent_path)
+        skills = cfg.get('skills', [])
+        kb_sections = get_relevant_kb_sections(skills, _KB_SECTIONS) if _KB_SECTIONS else []
+        if kb_sections:
+            logging.debug('Agent %s: %d KB sections matched from %d skills', agent_id, len(kb_sections), len(skills))
+
         if batch:
             summary = learn_from_batch(agent_path, batch)
-            mem_file = update_agent_memory(agent_id, summary)
+            mem_file = update_agent_memory(agent_id, summary, kb_sections=kb_sections)
             ag_md = touch_agent_manifest(agent_path)
             emit_metrics(agent_id, summary)
             git_commit([mem_file, ag_md, METRICS_FILE], f'agent({agent_id}): self-learning update {summary["learned_at"]}')
-            logging.info('Agent %s learned %d items', agent_id, summary['count'])
+            logging.info('Agent %s learned %d items, %d KB sections', agent_id, summary['count'], len(kb_sections))
         else:
             logging.info('Agent %s: no data to learn from', agent_id)
 
@@ -317,7 +434,26 @@ def start_metrics_server():
     httpd.serve_forever()
 
 
+def daily_self_learning_loop():
+    """Run evidence-backed domain research independently of batch learning."""
+    interval = int(os.environ.get('AGENT_DAILY_LEARNING_INTERVAL', '86400'))
+    while True:
+        try:
+            report_path = run_daily_self_learning()
+            logging.info('Daily self-learning report written to %s', report_path)
+        except Exception:
+            logging.exception('Daily self-learning cycle failed')
+        time.sleep(interval)
+
+
 def main():
+    global _KB_SECTIONS
+    _KB_SECTIONS = load_knowledge_base()
+    if _KB_SECTIONS:
+        logging.info('Agentic AI knowledge base active: %d sections available', len(_KB_SECTIONS))
+    else:
+        logging.warning('Agentic AI knowledge base unavailable — agents will run without KB context')
+
     agents = list_agents()
     if not agents:
         logging.warning('No agents found in agents/ - exiting')
@@ -330,6 +466,8 @@ def main():
 
     metrics_thread = threading.Thread(target=start_metrics_server, daemon=True)
     metrics_thread.start()
+    daily_learning_thread = threading.Thread(target=daily_self_learning_loop, daemon=True)
+    daily_learning_thread.start()
 
     # Keep main thread alive
     try:
