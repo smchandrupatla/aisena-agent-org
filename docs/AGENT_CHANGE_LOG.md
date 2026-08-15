@@ -424,3 +424,105 @@ Critic output format: append a LOG entry to this file with prefix CRITIC-<task>-
 - Human Approval Required: No
 - Handoff Target: Security Engineer (12-security-engineer) — review CVE-2026-64642 applicability once frontend stack is finalised
 - Next Action: Pin Next.js ≥ 16.3.0 in any future frontend package.json; add monthly Next.js security advisory review to sprint cadence.
+
+---
+
+## LOG-20260815-001
+
+- **Entry ID**: LOG-20260815-001
+- **Date**: 2026-08-15
+- **Agent Role**: 02-solution-architect
+- **Task ID**: TASK-0009 (daily domain learning)
+
+### What Changed
+Domain learning report recorded. No repository files modified.
+
+### Finding
+MCP 2026-07-28 Release Candidate introduces a stateless protocol core: session IDs and handshakes removed; every request is now self-contained, enabling round-robin horizontal scaling of MCP servers.
+
+### Files Modified
+- docs/AGENT_CHANGE_LOG.md (this entry only)
+
+### Rationale
+MCP is listed as a core AISENA agent skill and the project exposes tools to LLM runtimes via MCP. The stateless change eliminates sticky-session constraints and changes the recommended server deployment pattern.
+
+### Alternatives Considered
+- Continue using session-based MCP (prior spec) — inadvisable given the RC is now the reference.
+
+### Risk Level
+Low (finding recorded; no implementation change yet)
+
+### Human Approval Required
+No
+
+### Handoff Target
+05-backend-engineer — apply stateless MCP server pattern when implementing agent tool-exposure endpoints.
+
+### Next Action
+Draft ADR-0003 capturing MCP stateless architecture adoption decision when backend MCP integration begins.
+
+---
+
+### LOG-20260815-017 — Daily Domain Self-Learning: UI/UX Designer (TASK-0011)
+
+- **Date**: 2026-08-15
+- **Agent Role**: 03-ui-ux-designer
+- **Task ID**: TASK-0011
+
+#### Finding
+AI-generated UI code produces WCAG accessibility failures at a rate of ~92%, mirroring the broader web's 95.9% homepage failure rate (WebAIM 2026 Million homepage report, released February 2026). Failures are predominantly low contrast, missing alt text, and unlabelled form inputs — all automatically detectable and preventable.
+
+#### Why It Matters for AISENA
+AISENA's frontend will be delivered by AI agents (frontend engineer agent + Copilot). If accessibility is not explicitly enforced in UX acceptance criteria and handoff documents, the generated UI components will inherit the same failure patterns seen across the wider AI-generated web. Financial compliance dashboards carry heightened legal exposure given EU Accessibility Act enforcement and U.S. ADA lawsuit trends (4,900+ suits filed in 2025).
+
+#### Evidence
+- WebAIM Million 2026 report (February 2026): https://webaim.org/projects/million/
+- "Accessibility Failures in AI-Generated UIs: A 2026 Reality Check": https://auditvibecoding.com/blog/accessibility-failures-ai-generated-uis-2026
+- "AI-generated code is inaccessible by default": https://bugport.ai/blog/ai-generated-code-accessibility
+- "Accessible Design in 2026: The 7-Pillar UI/UX Playbook": https://www.forasoft.com/blog/article/ai-accessibility-ui-ux-design
+
+#### Recommended Action
+Add explicit WCAG 2.2 AA acceptance criteria to every UX handoff document targeting the frontend engineer. Specifically: minimum contrast ratios, keyboard navigability, visible focus indicators, and labelled form inputs must each be listed as testable criteria, not aspirational guidelines. This costs near-zero design effort when embedded in handoffs but prevents expensive retrofits.
+
+#### Files Changed
+- docs/AGENT_CHANGE_LOG.md (this entry)
+
+#### Risk Level
+Low (finding recorded; no implementation change)
+
+#### Human Approval Required
+No
+
+#### Handoff Target
+06-frontend-engineer — ensure WCAG 2.2 AA acceptance criteria are present in all UX handoffs before implementing any dashboard screens.
+
+### LOG-20260815-018 — Daily Domain Self-Learning: Frontend Engineer (TASK-0011)
+- **Agent Role:** 04-frontend-engineer
+- **Task ID:** TASK-0011 (daily domain self-learning)
+- **Date:** 2026-08-15
+
+#### Finding
+WCAG 3.0 Working Draft (March 2026) replaces the familiar A/AA/AAA conformance levels with a Bronze/Silver/Gold scoring model and expands coverage to apps, XR/VR, and IoT. The draft introduces 174 discrete requirements and an outcomes-based (not binary pass/fail) scoring approach.
+
+#### Why It Matters
+AISENA's compliance-critical UIs (sanctions screening dashboards, case management screens, fraud alert interfaces) are subject to accessibility mandates. Adopting WCAG 3.0's Bronze tier now — which maps to WCAG 2.2 AA — means existing component libraries and acceptance criteria remain valid. But any new UI components should be designed to meet the 174-requirement structure so that migration to Silver/Gold conformance is additive, not a rewrite. The expanded scope to non-HTML contexts is relevant if AISENA adds mobile or embedded agent UIs.
+
+#### Evidence
+- W3C WCAG 3.0 Working Draft (March 2026): https://www.w3.org/TR/2026/WD-wcag-3.0-20260303/
+- Overview of 174 requirements: https://adaquickscan.com/blog/wcag-3-working-draft-march-2026-174-outcomes
+- WCAG 3.0 conformance model explained: https://www.webability.io/blog/wcag-3-0-explained
+
+#### Recommended Action
+Annotate the frontend component checklist (agents/04-frontend-engineer/CHECKLIST.md) to note WCAG 3.0 Bronze as the minimum target for all new UI components. Cross-reference WCAG 2.2 AA criteria (still legally required) and flag any component whose interactive pattern (e.g., live alert regions for sanctions hits, focus management in case management modals) needs explicit ARIA 1.3 roles documented before implementation begins.
+
+#### Files Changed
+- docs/AGENT_CHANGE_LOG.md (this entry)
+
+#### Risk Level
+Low (finding recorded; no implementation change)
+
+#### Human Approval Required
+No
+
+#### Handoff Target
+04-frontend-engineer — update CHECKLIST.md with WCAG 3.0 Bronze annotation before next UI sprint begins.
