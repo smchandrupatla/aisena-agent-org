@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic AI Cheatsheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Cheatsheet-specific overrides ── */
+    .steps-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .step-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      min-width: 80px;
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 10px 8px;
+      font-size: 12px;
+      text-align: center;
+      transition: background 0.2s;
+    }
+    .step-badge:hover { background: #dce8ff; }
+    .step-badge .step-num {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      color: var(--brand);
+      font-weight: 600;
+    }
+    .step-badge .step-label {
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+    .agent-loop {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .loop-step {
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+      color: #fff;
+      border-radius: var(--radius-md);
+      padding: 18px 14px;
+      text-align: center;
+    }
+    .loop-step .loop-num {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+    .loop-step strong { display: block; font-size: 15px; margin-bottom: 4px; }
+    .loop-step p { font-size: 12px; opacity: 0.9; margin: 0; }
+    .loop-observe {
+      grid-column: 1 / -1;
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .loop-observe .observe-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .arch-diagram {
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .tool-category {
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+    .tool-category h4 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      color: var(--brand);
+      font-family: "IBM Plex Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .tool-category ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .tool-category li {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      padding: 2px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .tool-category li:last-child { border-bottom: none; }
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-size: 13px;
+    }
+    .check-item .check-icon {
+      color: var(--ok);
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .agent-type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .agent-type-card {
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+    .agent-type-card h4 {
+      margin: 0 0 6px 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .agent-type-card p {
+      margin: 0 0 6px 0;
+      font-size: 12.5px;
+      color: var(--ink-soft);
+    }
+    .agent-type-card .best-for {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      color: var(--brand);
+    }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .metric-card {
+      background: linear-gradient(135deg, #f0f5ff 0%, #e8f4ff 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      text-align: center;
+    }
+    .metric-card .metric-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin-bottom: 4px;
+    }
+    .metric-card .metric-desc {
+      font-size: 11.5px;
+      color: var(--ink-soft);
+    }
+    .guard-table td:first-child { font-weight: 600; font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+    .mistake-table td:first-child { color: var(--warn); font-weight: 600; font-size: 12.5px; }
+    .prompt-card {
+      background: var(--bg-soft);
+      border-left: 3px solid var(--brand);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+    }
+    .prompt-card .pattern-name {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      color: var(--brand);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .prompt-card code {
+      font-size: 12.5px;
+      color: var(--ink);
+    }
+    .hsfs-mapping td:first-child { font-weight: 600; color: var(--brand-dark); font-size: 12.5px; }
+    .agi-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .agi-level {
+      flex: 1;
+      min-width: 120px;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+    }
+    .agi-level .level-num {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .agi-level strong { display: block; font-size: 13px; margin-bottom: 4px; }
+    .agi-level p { font-size: 11.5px; margin: 0; }
+    .l1 { background: #f0f9ff; border: 1px solid #bae6fd; color: #075985; }
+    .l2 { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+    .l3 { background: #fefce8; border: 1px solid #fde047; color: #854d0e; }
+    .l4 { background: #fff7ed; border: 1px solid #fdba74; color: #9a3412; }
+    .l5 { background: #fdf4ff; border: 1px solid #e879f9; color: #701a75; }
+  </style>
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+        <a href="agentic-ai-cheatsheet.html" style="color:var(--brand);font-weight:700;">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero fade-up delay-1">
+        <div class="kicker">The Complete Agentic AI Cheatsheet</div>
+        <h1>Build, Deploy &amp; Scale AI Agents That Think, Act &amp; Deliver Results.</h1>
+        <p class="lede">10 steps from your first prompt to a production fleet — covering agent types, the agent loop, tools, architecture, evaluation, guardrails, and more.</p>
+      </section>
+
+      <section class="grid">
+
+        <!-- 10-Step Roadmap -->
+        <article class="card span-12 fade-up">
+          <h2>10-Step Agentic AI Roadmap</h2>
+          <div class="steps-row">
+            <div class="step-badge"><span class="step-num">01</span><span class="step-label">What is Agentic AI</span></div>
+            <div class="step-badge"><span class="step-num">02</span><span class="step-label">Use Cases</span></div>
+            <div class="step-badge"><span class="step-num">03</span><span class="step-label">Core Components</span></div>
+            <div class="step-badge"><span class="step-num">04</span><span class="step-label">Choose Tools</span></div>
+            <div class="step-badge"><span class="step-num">05</span><span class="step-label">Design Agent</span></div>
+            <div class="step-badge"><span class="step-num">06</span><span class="step-label">Build &amp; Test</span></div>
+            <div class="step-badge"><span class="step-num">07</span><span class="step-label">Deploy</span></div>
+            <div class="step-badge"><span class="step-num">08</span><span class="step-label">Monitor</span></div>
+            <div class="step-badge"><span class="step-num">09</span><span class="step-label">Optimize</span></div>
+            <div class="step-badge"><span class="step-num">10</span><span class="step-label">Scale</span></div>
+          </div>
+        </article>
+
+        <!-- What is Agentic AI -->
+        <article class="card span-6 fade-up">
+          <h2>What is Agentic AI?</h2>
+          <p>Agentic AI refers to autonomous systems that perceive inputs, plan multi-step actions, invoke external tools, and complete tasks with minimal human intervention.</p>
+          <div class="pill-list">
+            <span class="pill">Goal-directed</span>
+            <span class="pill">Tool-using</span>
+            <span class="pill">Memory-enabled</span>
+            <span class="pill">Self-correcting</span>
+            <span class="pill">Adaptive</span>
+          </div>
+          <div class="notice ok" style="margin-top:14px;">
+            <strong>Agent vs Chatbot:</strong> A chatbot replies. An agent acts, verifies, iterates, and delivers an outcome.
+          </div>
+        </article>
+
+        <!-- Core Components -->
+        <article class="card span-6 fade-up">
+          <h2>Core Components</h2>
+          <table class="table">
+            <tbody>
+              <tr><td><strong>LLM Brain</strong></td><td>Reasoning, language understanding, decisions</td></tr>
+              <tr><td><strong>Memory</strong></td><td>Short-term (context), long-term (vector/DB), episodic</td></tr>
+              <tr><td><strong>Planning</strong></td><td>Break goals into steps; re-plan on failure</td></tr>
+              <tr><td><strong>Tools / Actions</strong></td><td>Web search, code exec, API calls, file I/O</td></tr>
+              <tr><td><strong>Orchestration</strong></td><td>Coordinate agents, tools, and workflows</td></tr>
+              <tr><td><strong>Observability</strong></td><td>Tracing, token usage, latency, eval scores</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <!-- Agent Types -->
+        <article class="card span-12 fade-up">
+          <h2>Types of Agents</h2>
+          <div class="agent-type-grid">
+            <div class="agent-type-card">
+              <h4>Simple Reflex</h4>
+              <p>Condition-action rules, no internal state.</p>
+              <span class="best-for">Best for: fast deterministic responses</span>
+            </div>
+            <div class="agent-type-card">
+              <h4>Model-Based</h4>
+              <p>Maintains an internal world model.</p>
+              <span class="best-for">Best for: stateful multi-turn tasks</span>
+            </div>
+            <div class="agent-type-card">
+              <h4>Goal-Oriented</h4>
+              <p>Plans a sequence of actions toward a defined objective.</p>
+              <span class="best-for">Best for: end-to-end task completion</span>
+            </div>
+            <div class="agent-type-card">
+              <h4>Utility-Based</h4>
+              <p>Maximizes a utility or reward function.</p>
+              <span class="best-for">Best for: optimization problems</span>
+            </div>
+            <div class="agent-type-card">
+              <h4>Learning</h4>
+              <p>Improves from feedback and experience over time.</p>
+              <span class="best-for">Best for: evolving tasks, personalization</span>
+            </div>
+            <div class="agent-type-card">
+              <h4>Multi-Agent Systems</h4>
+              <p>Multiple specialized agents collaborate or compete.</p>
+              <span class="best-for">Best for: complex, parallel, specialized work</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Agent Loop -->
+        <article class="card span-6 fade-up">
+          <h2>Agent Loop — Plan → Reason → Act</h2>
+          <div class="agent-loop">
+            <div class="loop-step">
+              <div class="loop-num">STEP 1</div>
+              <strong>PLAN</strong>
+              <p>Break the goal into ordered, executable steps</p>
+            </div>
+            <div class="loop-step">
+              <div class="loop-num">STEP 2</div>
+              <strong>REASON</strong>
+              <p>Select the next action; apply chain-of-thought</p>
+            </div>
+            <div class="loop-step">
+              <div class="loop-num">STEP 3</div>
+              <strong>ACT</strong>
+              <p>Call a tool, write output, or delegate to a sub-agent</p>
+            </div>
+            <div class="loop-observe">
+              <span class="observe-icon">🔁</span>
+              <div>
+                <strong>Observe &amp; Reflect</strong> — check result against goal, update memory, decide: done or loop back to Plan.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Key Capabilities -->
+        <article class="card span-6 fade-up">
+          <h2>Key Agent Capabilities</h2>
+          <table class="table">
+            <tbody>
+              <tr><td><strong>Memory &amp; Recall</strong></td><td>Retrieve past context, facts, and decisions</td></tr>
+              <tr><td><strong>Tool Use</strong></td><td>Call APIs, run code, search web, query databases</td></tr>
+              <tr><td><strong>Reasoning &amp; Planning</strong></td><td>Decompose tasks, sequence actions logically</td></tr>
+              <tr><td><strong>Decision Making</strong></td><td>Choose between alternatives given constraints</td></tr>
+              <tr><td><strong>Learning &amp; Adapting</strong></td><td>Update behaviour from feedback signals</td></tr>
+              <tr><td><strong>Collaboration</strong></td><td>Hand off to or coordinate with other agents</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <!-- Agent Architecture -->
+        <article class="card span-12 fade-up">
+          <h2>Agent Architecture</h2>
+          <div class="arch-diagram">
+                        ┌──────────────────────────────────────┐
+   User / System ──────►│               AGENT                  │──────► Output
+                        │                                      │
+                        │  ┌──────────────┐  ┌─────────────┐  │
+                        │  │    MEMORY    │  │    TOOLS    │  │
+                        │  │  Short-term  │  │ Web search  │  │
+                        │  │  Long-term   │  │ Code exec   │  │
+                        │  │  Episodic    │  │ APIs / DBs  │  │
+                        │  └──────┬───────┘  └──────┬──────┘  │
+                        │         │                 │         │
+                        │         └────── LLM ───────┘         │
+                        │                  │                   │
+                        └──────────────────┼───────────────────┘
+                                           │
+                                 ┌─────────▼──────────┐
+                                 │    ENVIRONMENT     │
+                                 │  (context, state,  │
+                                 │   external world)  │
+                                 └────────────────────┘</div>
+        </article>
+
+        <!-- Tools & Frameworks -->
+        <article class="card span-12 fade-up">
+          <h2>Popular Tools &amp; Frameworks</h2>
+          <div class="tools-grid">
+            <div class="tool-category">
+              <h4>LLM Providers</h4>
+              <ul>
+                <li>OpenAI GPT-4o / o1</li>
+                <li>Anthropic Claude</li>
+                <li>Google Gemini</li>
+                <li>AWS Bedrock</li>
+                <li>Mistral AI</li>
+                <li>Meta Llama</li>
+              </ul>
+            </div>
+            <div class="tool-category">
+              <h4>Agent Frameworks</h4>
+              <ul>
+                <li>LangChain</li>
+                <li>LangGraph</li>
+                <li>AutoGen</li>
+                <li>CrewAI</li>
+                <li>Haystack</li>
+                <li>Camel</li>
+              </ul>
+            </div>
+            <div class="tool-category">
+              <h4>Vector Databases</h4>
+              <ul>
+                <li>Pinecone</li>
+                <li>ChromaDB</li>
+                <li>Weaviate</li>
+                <li>Qdrant</li>
+                <li>FAISS</li>
+                <li>Milvus</li>
+              </ul>
+            </div>
+            <div class="tool-category">
+              <h4>Memory Stores</h4>
+              <ul>
+                <li>Redis</li>
+                <li>PostgreSQL</li>
+                <li>MongoDB</li>
+                <li>SQLite</li>
+                <li>Neo4j</li>
+                <li>DynamoDB</li>
+              </ul>
+            </div>
+            <div class="tool-category">
+              <h4>Tools &amp; Integrations</h4>
+              <ul>
+                <li>Zapier / Make / n8n</li>
+                <li>Slack / Notion / Jira</li>
+                <li>GitHub / Confluence</li>
+                <li>Google Workspace</li>
+                <li>HubSpot</li>
+              </ul>
+            </div>
+            <div class="tool-category">
+              <h4>Deployment Platforms</h4>
+              <ul>
+                <li>Railway / Render</li>
+                <li>AWS Lambda</li>
+                <li>Fly.io</li>
+                <li>Google Cloud Run</li>
+                <li>Azure Container Apps</li>
+              </ul>
+            </div>
+            <div class="tool-category">
+              <h4>Observability</h4>
+              <ul>
+                <li>LangSmith</li>
+                <li>LangFuse</li>
+                <li>Arize Phoenix</li>
+                <li>Weights &amp; Biases</li>
+                <li>Helicone</li>
+                <li>PromptLayer</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Evaluation Metrics -->
+        <article class="card span-8 fade-up">
+          <h2>Evaluation Metrics</h2>
+          <div class="metrics-row">
+            <div class="metric-card">
+              <div class="metric-name">Task Success Rate</div>
+              <div class="metric-desc">% of tasks completed correctly end-to-end</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-name">Goal Completion</div>
+              <div class="metric-desc">Did the agent fully achieve the stated goal?</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-name">Response Time</div>
+              <div class="metric-desc">Latency from request to final output</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-name">Token Efficiency</div>
+              <div class="metric-desc">Tokens consumed per successful task</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-name">User Satisfaction</div>
+              <div class="metric-desc">Human-rated quality score</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-name">Error Rate</div>
+              <div class="metric-desc">% runs with tool errors or hallucinations</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Best Practices -->
+        <article class="card span-4 fade-up">
+          <h2>Best Practices</h2>
+          <div class="pill-list" style="flex-direction:column;align-items:flex-start;gap:8px;">
+            <span class="pill">Start small, inside first</span>
+            <span class="pill">Define clear goals &amp; success criteria</span>
+            <span class="pill">Use the right tools — don't over-build</span>
+            <span class="pill">Monitor continuously, not just on failure</span>
+            <span class="pill">Validate &amp; test rigorously — evals first</span>
+            <span class="pill">Optimize &amp; reduce costs at scale</span>
+            <span class="pill">Keep humans in the loop for high stakes</span>
+          </div>
+        </article>
+
+        <!-- Agent Development Checklist -->
+        <article class="card span-12 fade-up">
+          <h2>Agent Development Checklist</h2>
+          <div class="checklist-grid">
+            <div class="check-item"><span class="check-icon">✓</span><span>Define clear goal and success criteria before building</span></div>
+            <div class="check-item"><span class="check-icon">✓</span><span>Choose the right model for the task complexity</span></div>
+            <div class="check-item"><span class="check-icon">✓</span><span>Add tools and validate each one independently</span></div>
+            <div class="check-item"><span class="check-icon">✓</span><span>Handle errors gracefully — retry logic and fallbacks</span></div>
+            <div class="check-item"><span class="check-icon">✓</span><span>Create eval dataset (minimum 20 diverse examples)</span></div>
+            <div class="check-item"><span class="check-icon">✓</span><span>Set up tracing and observability from day one</span></div>
+            <div class="check-item"><span class="check-icon">✓</span><span>Implement guardrails — input validation, output filtering</span></div>
+            <div class="check-item"><span class="check-icon">✓</span><span>Test edge cases — empty inputs, malformed data, timeouts</span></div>
+            <div class="check-item"><span class="check-icon">✓</span><span>Document escalation conditions and human override triggers</span></div>
+            <div class="check-item"><span class="check-icon">✓</span><span>Version-pin all dependencies — model, framework, tools</span></div>
+          </div>
+        </article>
+
+        <!-- Guard Types -->
+        <article class="card span-6 fade-up">
+          <h2>Guard Types</h2>
+          <table class="table guard-table">
+            <thead><tr><th>Guard</th><th>Scope</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Input Guard</td><td>Sanitize incoming requests</td><td>Block prompt injection, PII stripping</td></tr>
+              <tr><td>Output Guard</td><td>Filter agent output</td><td>Remove harmful content, format enforcement</td></tr>
+              <tr><td>Tool Guard</td><td>Control tool invocation</td><td>Allowlist APIs, rate limiting</td></tr>
+              <tr><td>Scope Guard</td><td>Restrict agent domain</td><td>Refuse out-of-scope requests</td></tr>
+              <tr><td>Cost Guard</td><td>Cap spend per run</td><td>Max tokens, budget alerts</td></tr>
+              <tr><td>Human-in-Loop</td><td>Approval for high-risk actions</td><td>Production changes, irreversible ops</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <!-- Prompt Patterns -->
+        <article class="card span-6 fade-up">
+          <h2>Prompt Starter Patterns</h2>
+          <div class="prompt-card">
+            <div class="pattern-name">GOAL DECOMPOSITION</div>
+            <code>"Break this goal into ordered subtasks: [GOAL]"</code>
+          </div>
+          <div class="prompt-card">
+            <div class="pattern-name">REACT</div>
+            <code>"Thought: ... Action: ... Observation: ... [repeat]"</code>
+          </div>
+          <div class="prompt-card">
+            <div class="pattern-name">CHAIN-OF-THOUGHT</div>
+            <code>"Let's think step by step: ..."</code>
+          </div>
+          <div class="prompt-card">
+            <div class="pattern-name">SELF-CRITIQUE</div>
+            <code>"Review your last output. What could be wrong?"</code>
+          </div>
+          <div class="prompt-card">
+            <div class="pattern-name">CLARIFICATION</div>
+            <code>"Before proceeding, confirm: [ASSUMPTION LIST]"</code>
+          </div>
+        </article>
+
+        <!-- Common Mistakes -->
+        <article class="card span-6 fade-up">
+          <h2>Common Mistakes</h2>
+          <table class="table mistake-table">
+            <thead><tr><th>Mistake</th><th>Fix</th></tr></thead>
+            <tbody>
+              <tr><td>Vague goal</td><td>Write explicit success criteria first</td></tr>
+              <tr><td>Too many tools</td><td>Start with one, add incrementally</td></tr>
+              <tr><td>No eval dataset</td><td>Build evals before the agent</td></tr>
+              <tr><td>Ignoring latency</td><td>Profile every tool call; cache where possible</td></tr>
+              <tr><td>Trusting LLM blindly</td><td>Validate all tool inputs and outputs</td></tr>
+              <tr><td>No guardrails</td><td>Implement input/output guards from the start</td></tr>
+              <tr><td>Skipping observability</td><td>Instrument with tracing on day one</td></tr>
+              <tr><td>Hardcoded prompts</td><td>Version-control prompts like code</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <!-- Levels of AGI -->
+        <article class="card span-6 fade-up">
+          <h2>Levels of AGI</h2>
+          <div class="agi-row">
+            <div class="agi-level l1">
+              <div class="level-num">L1</div>
+              <strong>Chatbot</strong>
+              <p>Conversational — GPT-3.5 chat</p>
+            </div>
+            <div class="agi-level l2">
+              <div class="level-num">L2</div>
+              <strong>Reasoner</strong>
+              <p>Problem solving — o1, Claude 3.5</p>
+            </div>
+            <div class="agi-level l3">
+              <div class="level-num">L3</div>
+              <strong>Agent</strong>
+              <p>Takes actions — tool-calling GPT-4o</p>
+            </div>
+            <div class="agi-level l4">
+              <div class="level-num">L4</div>
+              <strong>Innovator</strong>
+              <p>Novel solutions — research agents</p>
+            </div>
+            <div class="agi-level l5">
+              <div class="level-num">L5</div>
+              <strong>Org</strong>
+              <p>Multi-agent autonomous systems</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- HSFS Mapping -->
+        <article class="card span-12 fade-up">
+          <h2>How This Maps to the HSFS Agent Framework</h2>
+          <table class="table hsfs-mapping">
+            <thead><tr><th>Cheatsheet Concept</th><th>HSFS Implementation</th></tr></thead>
+            <tbody>
+              <tr><td>Agent Loop (Plan→Reason→Act)</td><td><code>agents/manager/agent_manager.py</code> — continuous learning loop</td></tr>
+              <tr><td>Memory Stores</td><td>PostgreSQL (structured) + OpenSearch (vector search)</td></tr>
+              <tr><td>Multi-Agent Systems</td><td>35 specialized roles with explicit handoffs in <code>project/handoffs/</code></td></tr>
+              <tr><td>Observability</td><td>Prometheus metrics <code>:9500</code>, Grafana dashboards, Loki logs</td></tr>
+              <tr><td>Guardrails / Approval Gates</td><td><code>docs/AGENT_OPERATIONS_WIKI.md</code> — gate definitions</td></tr>
+              <tr><td>Agent Development Checklist</td><td>Per-agent <code>CHECKLIST.md</code> in each agent folder</td></tr>
+              <tr><td>Evaluation Metrics</td><td><code>project/governance/metrics-tracker.md</code></td></tr>
+              <tr><td>Tool Use</td><td>Flask REST API, Kafka, OpenSearch, PostgreSQL integrations</td></tr>
+              <tr><td>Goal-Oriented Agents</td><td>Each <code>AGENT.md</code> defines mission, scope, Definition of Done</td></tr>
+              <tr><td>LLM Providers</td><td>GitHub Copilot CLI runtime (current) — expandable to direct API calls</td></tr>
+              <tr><td>Deployment</td><td>Docker Compose local stack → AWS (Stage 3+ target)</td></tr>
+            </tbody>
+          </table>
+          <div class="pill-list" style="margin-top:14px;">
+            <a class="pill" href="workflow.html">See delivery workflow</a>
+            <a class="pill" href="guardrails.html">Review guardrails</a>
+            <a class="pill" href="agent-learning.html">Agent learning metrics</a>
+          </div>
+        </article>
+
+      </section>
+
+      <p class="footer fade-up">Source: <em>The Complete Agentic AI Cheatsheet</em> — genai.works, August 2026. Applied to HSFS autonomous delivery framework.</p>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

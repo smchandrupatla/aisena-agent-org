@@ -1,3 +1,5 @@
+const API_BASE = "http://localhost:5000";
+
 function setActiveNav() {
   const path = window.location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll("nav a").forEach((link) => {
@@ -17,6 +19,18 @@ function staggerFade() {
 
 async function loadAgentCatalog() {
   try {
+    const response = await fetch(`${API_BASE}/api/agents`, { cache: "no-store" });
+    if (response.ok) {
+      const data = await response.json();
+      if (Array.isArray(data.agents) && data.agents.length) {
+        return data.agents;
+      }
+    }
+  } catch (err) {
+    // Fall through to static fallback
+  }
+
+  try {
     const response = await fetch("agents.json", { cache: "no-store" });
     if (response.ok) {
       const data = await response.json();
@@ -25,40 +39,13 @@ async function loadAgentCatalog() {
       }
     }
   } catch (err) {
-    // Fall through to static fallback
+    // Ignore and use embedded payload as final fallback.
   }
 
   if (typeof AGENT_CATALOG !== "undefined" && Array.isArray(AGENT_CATALOG)) {
     return AGENT_CATALOG;
   }
   return [];
-}
-
-function renderAgentDirectory(catalog) {
-  const container = document.getElementById("agentDirectory");
-  if (!container || !catalog.length) {
-    return;
-  }
-
-  const groups = {};
-  catalog.forEach((agent) => {
-    if (!groups[agent.group]) {
-      groups[agent.group] = [];
-    }
-    groups[agent.group].push(agent);
-  });
-
-  container.innerHTML = Object.keys(groups)
-    .map((groupName) => {
-      const items = groups[groupName]
-        .map((agent) => {
-          const runnerTag = agent.hasDedicatedRunner ? "Dedicated runner" : "Generic runner";
-          return `<div class="agent-chip"><span>${agent.id}</span><div><strong>${agent.name}</strong><small>${agent.focus}</small><small>${runnerTag}: ${agent.runCommand}</small></div></div>`;
-        })
-        .join("");
-      return `<section class="agent-group-card"><h4>${groupName}</h4>${items}</section>`;
-    })
-    .join("");
 }
 
 function renderDocumentationCatalog() {
@@ -116,23 +103,6 @@ function saveChatState(agentKey, messages) {
   localStorage.setItem(getChatKey(agentKey), JSON.stringify(messages));
 }
 
-function agentReply(agent, userText) {
-  const lower = userText.toLowerCase();
-  if (lower.includes("run") || lower.includes("start") || lower.includes("launch")) {
-    return `${agent.name}: Run me from terminal with: ${agent.runCommand} (fallback: ${agent.runCommandFallback})`;
-  }
-  if (lower.includes("status") || lower.includes("progress")) {
-    return `${agent.name}: Current recommendation is to define objective, acceptance criteria, and next measurable checkpoint.`;
-  }
-  if (lower.includes("test") || lower.includes("qa")) {
-    return `${agent.name}: Add a targeted test slice first, then expand to integration and regression coverage.`;
-  }
-  if (lower.includes("risk") || lower.includes("security") || lower.includes("compliance")) {
-    return `${agent.name}: Document the risk, assign severity, and route through the correct approval gate before execution.`;
-  }
-  return `${agent.name}: I can help with ${agent.focus.toLowerCase()} Starter prompt: "${agent.prompt}"`;
-}
-
 function renderChatMessages(messages, root) {
   root.innerHTML = "";
   messages.forEach((msg) => {
@@ -142,6 +112,24 @@ function renderChatMessages(messages, root) {
     root.appendChild(line);
   });
   root.scrollTop = root.scrollHeight;
+}
+
+function updateStatusBadge(agentKey, status, label) {
+  const badge = document.getElementById("chatAgentStatus");
+  if (!badge) {
+    return;
+  }
+  const normalized = (status || "ready").toLowerCase();
+  const safeLabel = label || normalized || "ready";
+  badge.textContent = safeLabel;
+  badge.dataset.status = normalized;
+  badge.classList.remove("ready", "busy", "blocked");
+  badge.classList.add(normalized);
+
+  const option = document.querySelector(`.agent-option[data-agent-key="${agentKey}"]`);
+  if (option) {
+    option.dataset.status = normalized;
+  }
 }
 
 function initAgentChat(catalog) {
@@ -175,6 +163,10 @@ function initAgentChat(catalog) {
       agentFileRoot.textContent = agent.agentFile || "N/A";
     }
 
+    const status = agent.status || "ready";
+    const statusLabel = agent.statusMessage || "Ready";
+    updateStatusBadge(agent.key, status, statusLabel);
+
     document.querySelectorAll(".agent-option").forEach((node) => {
       node.classList.toggle("active", node.dataset.agentKey === agent.key);
     });
@@ -192,7 +184,8 @@ function initAgentChat(catalog) {
   list.innerHTML = catalog
     .map((agent) => {
       const mode = agent.hasDedicatedRunner ? "Dedicated" : "Generic";
-      return `<button type="button" class="agent-option" data-agent-key="${agent.key}"><span>${agent.id}</span><div><strong>${agent.name}</strong><small>${agent.group} • ${mode}</small></div></button>`;
+      const status = agent.status || "ready";
+      return `<button type="button" class="agent-option" data-agent-key="${agent.key}" data-status="${status}"><span>${agent.id}</span><div><strong>${agent.name}</strong><small>${agent.group} • ${mode}</small></div></button>`;
     })
     .join("");
 
@@ -205,7 +198,7 @@ function initAgentChat(catalog) {
     });
   });
 
-  function sendMessage() {
+  async function sendMessage() {
     if (!activeAgent) {
       return;
     }
@@ -213,12 +206,34 @@ function initAgentChat(catalog) {
     if (!text) {
       return;
     }
+
     const messages = getChatState(activeAgent.key);
     messages.push({ role: "user", text });
-    messages.push({ role: "assistant", text: agentReply(activeAgent, text) });
     saveChatState(activeAgent.key, messages);
     renderChatMessages(messages, messagesRoot);
     chatInput.value = "";
+    updateStatusBadge(activeAgent.key, "busy", "Generating...");
+
+    try {
+      const response = await fetch(`${API_BASE}/api/agents/${activeAgent.key}/message`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, tool_actions: ["read_file", "grep_search"] }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Agent request failed");
+      }
+      messages.push({ role: "assistant", text: result.reply });
+      saveChatState(activeAgent.key, messages);
+      renderChatMessages(messages, messagesRoot);
+      updateStatusBadge(activeAgent.key, result.status || "ready", result.status_message || "Ready");
+    } catch (error) {
+      messages.push({ role: "assistant", text: `${activeAgent.name}: I could not reach the live runtime. ${error.message}` });
+      saveChatState(activeAgent.key, messages);
+      renderChatMessages(messages, messagesRoot);
+      updateStatusBadge(activeAgent.key, "blocked", "Runtime error");
+    }
   }
 
   sendButton.addEventListener("click", sendMessage);
@@ -261,13 +276,62 @@ function initAgentChat(catalog) {
   setActiveAgent(catalog[0]);
 }
 
+function initCrossCheck(catalog) {
+  const primarySelect = document.getElementById("crossCheckPrimaryAgent");
+  const peerSelect = document.getElementById("crossCheckPeerAgent");
+  const runButton = document.getElementById("runCrossCheck");
+  const promptInput = document.getElementById("crossCheckPrompt");
+  const summaryEl = document.getElementById("crossCheckSummary");
+
+  if (!primarySelect || !peerSelect || !runButton || !summaryEl || !catalog.length) {
+    return;
+  }
+
+  const options = catalog
+    .map((agent) => `<option value="${agent.key}">${agent.name}</option>`)
+    .join("");
+  primarySelect.innerHTML = options;
+  peerSelect.innerHTML = options;
+  primarySelect.value = catalog[0].key;
+  peerSelect.value = catalog[1]?.key || catalog[0].key;
+
+  runButton.addEventListener("click", async () => {
+    const primaryAgent = primarySelect.value;
+    const peerAgent = peerSelect.value;
+    const turnCap = Number(document.getElementById("crossCheckTurnCap").value || 2);
+    const prompt = promptInput.value.trim() || "Review the proposal for risks and next actions.";
+
+    summaryEl.textContent = "Running peer review...";
+
+    try {
+      const response = await fetch(`${API_BASE}/api/agents/cross-check`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          primary_agent: primaryAgent,
+          peer_agent: peerAgent,
+          turn_cap: turnCap,
+          prompt,
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Cross-check failed");
+      }
+      summaryEl.textContent = result.summary || "No summary returned.";
+    } catch (error) {
+      summaryEl.textContent = `Cross-check failed: ${error.message}`;
+    }
+  });
+}
+
 async function initSite() {
   setActiveNav();
   staggerFade();
   renderDocumentationCatalog();
   renderWordTemplateCatalog();
   const catalog = await loadAgentCatalog();
-  renderAgentDirectory(catalog);
+  initCrossCheck(catalog);
   initAgentChat(catalog);
 }
 
