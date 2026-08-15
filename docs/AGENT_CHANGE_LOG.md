@@ -323,3 +323,59 @@ Critic output format: append a LOG entry to this file with prefix CRITIC-<task>-
 - Rollback Plan: N/A.
 - Human Approval Required: Yes — token creation and/or interactive login requires human action.
 - Handoff Target: Repository owner / Codespace user (smchandrupatla)
+
+### LOG-20260815-003 — Daily Agent Domain Self-Learning (TASK-0011)
+- Agent Role: Implementation Manager
+- Task ID: TASK-0011
+- Test Date: 2026-08-15
+- What Changed:
+  - Added a configurable 24-hour scheduler that asks every discovered agent to research current findings in its declared domain.
+  - Required concise findings, HSFS impact, authoritative evidence, and a recommended action in every prompt response.
+  - Integrated results with the existing latest-learning registry and append-only history.
+  - Added dated Markdown reports under `memories/repo/agent-learning-reports/`.
+  - Added isolated tests that do not invoke Copilot or modify live learning data.
+- Files Changed:
+  - `/scripts/agents/daily_self_learning.py`
+  - `/scripts/agents/test_daily_self_learning.py`
+  - `/agents/manager/agent_manager.py`
+  - `/memories/repo/AGENT_SELF_LEARNING.md`
+  - `/.github/copilot-instructions.md`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- Commit / Version Ref: pending
+- Rationale: Agent domain knowledge needs an evidence-backed daily refresh that is separate from the existing 30-second screening-data learning loop.
+- Alternatives Considered:
+  - Reuse `AGENT_LEARN_INTERVAL` — rejected because model feedback and external domain research have different cadence and failure characteristics.
+  - Add a host cron job — rejected because the agent manager already owns continuous agent lifecycle scheduling.
+- Risk Impact: Low (local agent-runtime automation; no production or user-data changes).
+- Metrics Observed: 3 scheduler unit tests passed; both Python modules compiled; direct script help and manager import from outside the repository succeeded.
+- Rollback Plan: Remove the daily scheduler thread and the two scheduler files; retain existing batch learning and registry behavior.
+- Human Approval Required: No
+- Handoff Target: Implementation Manager (monitor first authenticated daily run)
+
+---
+
+## 2026-08-15 — Copilot CLI Runtime Diagnosis: Final Root Cause
+
+### LOG-20260815-001
+- Entry ID: LOG-20260815-001
+- Date: 2026-08-15
+- Agent Role: Implementation Manager
+- Task ID: TASK-0003 / TASK-0007
+- What Changed:
+  - Root cause of Copilot CLI authentication failure identified definitively.
+- Diagnosis:
+  - The `copilot` CLI binary in this Codespace is a VS Code extension-managed executable.
+  - It authenticates via VS Code's internal OAuth session (Unix socket + nonce), not via environment variables.
+  - `GH_TOKEN` env var is valid and works for `gh` CLI (GitHub API calls succeed).
+  - When `copilot` is invoked as a subprocess from within an existing Copilot agent session, it cannot access VS Code's internal auth channel — it always returns "No authentication information found."
+  - This is an architectural constraint: recursive Copilot CLI invocation from within a Copilot agent is not supported in this environment.
+- Implications:
+  - The `copilot -i "..."` pattern in `run-agent.sh` works from a regular terminal session, NOT from within an active Copilot agent session.
+  - TASK-0003 and TASK-0007 cannot be resolved by adding tokens to the environment — the constraint is structural.
+- Recommended Path Forward (choose one):
+  1. Run `scripts/agents/run-agent.sh <role>` directly from a Codespace terminal (outside any Copilot agent session).
+  2. Use the VS Code Copilot chat panel directly as the agent runtime for each specialist role — paste the agent AGENT.md as the system prompt.
+  3. Document that multi-agent orchestration via subprocess `copilot` invocation is not available in this environment, and proceed with single-agent delivery (Implementation Manager driving all work directly).
+- Risk Impact: Medium — affects multi-agent automation; single-agent delivery remains fully viable.
+- Human Approval Required: No
+- Handoff Target: Product Owner (to decide preferred delivery model)
