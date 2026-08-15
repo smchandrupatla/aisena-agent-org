@@ -1,5 +1,26 @@
 # Agent Change Log (Append-Only)
 
+## 2026-08-15
+
+### LOG-20260815-001
+- Agent Role: 27-backend-detection-services
+- Task ID: DAILY-LEARNING-20260815
+- What Changed:
+  - Created `agents/27-backend-detection-services/DAILY_FINDINGS.md` with daily domain research finding.
+- Files Changed:
+  - `/agents/27-backend-detection-services/DAILY_FINDINGS.md`
+- Commit / Version Ref: pending
+- Rationale:
+  - Peer-reviewed 2026 benchmark (IJCTT V74) validates sub-100ms Kafka-based fraud detection at scale.
+    Recommend adding latency fields to the screening result payload now, before Stage 1 ML rules land.
+- Alternatives Considered:
+  - Wait until Stage 1 to add observability fields (deferred cost, higher rework risk).
+- Risk Impact: Low
+- Metrics Observed: Domain research only; no runtime metrics changed.
+- Rollback Plan: Remove DAILY_FINDINGS.md entry; no code changed.
+- Human Approval Required: No (documentation and non-breaking additive recommendation)
+- Handoff Target: 05-backend-engineer, 15-sanctions-sme
+
 ## 2026-08-11
 
 ### LOG-20260811-001
