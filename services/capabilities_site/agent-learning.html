@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agent Self Learning</title>
+  <title>AISENA — Agent Self Learning</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,10 +14,11 @@
     <header class="topbar fade-up">
       <div class="brand">
         <div class="badge">AI</div>
-        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+        <div class="brand-title"><strong>AISENA</strong>Domain-Agnostic Implementation System</div>
       </div>
       <nav>
         <a href="index.html">Overview</a>
+        <a href="start-project.html">Start a Project</a>
         <a href="capabilities.html">Capabilities</a>
         <a href="documentation.html">Documentation</a>
         <a href="tasks.html">Tasks</a>
@@ -60,12 +61,42 @@
                   <th>Agent</th>
                   <th>Updated At</th>
                   <th>Latest Learning</th>
+                  <th>Recommendation</th>
+                  <th>Status</th>
+                  <th>Acceptance</th>
+                  <th>Accepted At</th>
+                  <th>Application</th>
+                  <th>Action ID</th>
+                  <th>Applied At</th>
                   <th>Context</th>
                   <th>Evidence</th>
                 </tr>
               </thead>
               <tbody id="agentLearningBody">
-                <tr><td colspan="5">Loading...</td></tr>
+                <tr><td colspan="12">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="card span-12 fade-up">
+          <div class="pill-list">
+            <span class="pill">Audited actions: <strong id="learningActionAuditCount">0</strong></span>
+          </div>
+          <div style="overflow:auto; margin-top: 12px;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Agent</th>
+                  <th>Action ID</th>
+                  <th>Action</th>
+                  <th>Status</th>
+                  <th>Detail</th>
+                </tr>
+              </thead>
+              <tbody id="learningActionAuditBody">
+                <tr><td colspan="6">Loading...</td></tr>
               </tbody>
             </table>
           </div>

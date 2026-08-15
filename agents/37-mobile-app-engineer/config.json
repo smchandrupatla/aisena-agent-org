@@ -1,0 +1,13 @@
+{
+  "alpha": 0.0001,
+  "data_window": 50,
+  "skills": [
+    "foundations.javascript",
+    "foundations.git",
+    "agent_skills.prompt_engineering",
+    "apis.rest_api",
+    "apis.graphql",
+    "deployment.docker",
+    "deployment.vercel"
+  ]
+}

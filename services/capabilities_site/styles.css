@@ -656,6 +656,154 @@ button:disabled {
   border-bottom-color: var(--brand-dark);
 }
 
+.hero-cta {
+  background: #fff;
+  color: var(--brand-dark) !important;
+  border: none;
+  font-weight: 700;
+  padding: 10px 16px;
+  box-shadow: 0 12px 26px rgba(8, 24, 63, 0.3);
+}
+
+.hero-cta:hover {
+  transform: translateY(-1px);
+}
+
+.wizard-form {
+  display: grid;
+  gap: 16px;
+}
+
+.field-group {
+  display: grid;
+  gap: 6px;
+}
+
+.field-group label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #58719d;
+}
+
+.field-group input,
+.field-group select,
+.field-group textarea {
+  width: 100%;
+}
+
+.checkbox-grid,
+.radio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.check-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  border: 1px solid #cfdcf7;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #f9fbff;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+.check-card:has(input:checked) {
+  border-color: var(--brand);
+  background: #eef4ff;
+}
+
+.check-card input {
+  margin-top: 2px;
+  width: auto;
+}
+
+.check-card div strong {
+  display: block;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.check-card div small {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.plan-phase {
+  border: 1px solid #d7e2f6;
+  border-radius: 14px;
+  padding: 14px;
+  background: #f9fcff;
+  margin-bottom: 10px;
+}
+
+.plan-phase h4 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plan-phase .phase-index {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.plan-phase p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.plan-output {
+  display: none;
+}
+
+.plan-output.visible {
+  display: block;
+}
+
+.deploy-track {
+  border-left: 3px solid var(--brand);
+  padding-left: 12px;
+  margin-bottom: 10px;
+}
+
+.deploy-track h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+
+.deploy-track p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.brief-output {
+  white-space: pre-wrap;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  background: #0f1b33;
+  color: #dce7ff;
+  border-radius: 12px;
+  padding: 14px;
+  max-height: 420px;
+  overflow: auto;
+}
+
 .fade-up {
   opacity: 0;
   transform: translateY(10px);

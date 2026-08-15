@@ -453,5 +453,44 @@
     "runCommand": "scripts/agents/run-agent.sh 34-technical-writer",
     "runCommandFallback": "scripts/agents/run-agent.sh 34-technical-writer",
     "hasDedicatedRunner": false
+  },
+  {
+    "id": "35",
+    "key": "domain-analyst",
+    "folder": "35-domain-analyst",
+    "name": "Domain Analyst",
+    "group": "Expanded Delivery",
+    "focus": "Domain Analyst for the AISENA domain-agnostic implementation system.",
+    "prompt": "Give me the top 3 actions for Domain Analyst this sprint.",
+    "agentFile": "agents/35-domain-analyst/AGENT.md",
+    "runCommand": "scripts/agents/run-agent.sh 35-domain-analyst",
+    "runCommandFallback": "scripts/agents/run-agent.sh 35-domain-analyst",
+    "hasDedicatedRunner": false
+  },
+  {
+    "id": "36",
+    "key": "implementation-pattern-specialist",
+    "folder": "36-implementation-pattern-specialist",
+    "name": "Implementation Pattern Specialist",
+    "group": "Expanded Delivery",
+    "focus": "Implementation Pattern Specialist for reusable design and delivery patterns in the AISENA domain-agnostic system.",
+    "prompt": "Give me the top 3 actions for Implementation Pattern Specialist this sprint.",
+    "agentFile": "agents/36-implementation-pattern-specialist/AGENT.md",
+    "runCommand": "scripts/agents/run-agent.sh 36-implementation-pattern-specialist",
+    "runCommandFallback": "scripts/agents/run-agent.sh 36-implementation-pattern-specialist",
+    "hasDedicatedRunner": false
+  },
+  {
+    "id": "37",
+    "key": "mobile-app-engineer",
+    "folder": "37-mobile-app-engineer",
+    "name": "Mobile App Engineer",
+    "group": "Expanded Delivery",
+    "focus": "Mobile App Engineer for cross-platform mobile application delivery (iOS and Android).",
+    "prompt": "Give me the top 3 actions for Mobile App Engineer this sprint.",
+    "agentFile": "agents/37-mobile-app-engineer/AGENT.md",
+    "runCommand": "scripts/agents/run-agent.sh 37-mobile-app-engineer",
+    "runCommandFallback": "scripts/agents/run-agent.sh 37-mobile-app-engineer",
+    "hasDedicatedRunner": false
   }
 ]

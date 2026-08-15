@@ -273,7 +273,9 @@ function initAgentChat(catalog) {
     });
   }
 
-  setActiveAgent(catalog[0]);
+  const requestedKey = new URLSearchParams(window.location.search).get("agent");
+  const initialAgent = catalog.find((agent) => agent.key === requestedKey) || catalog[0];
+  setActiveAgent(initialAgent);
 }
 
 function initCrossCheck(catalog) {

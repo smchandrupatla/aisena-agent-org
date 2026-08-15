@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AISENA — Start a Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>AISENA</strong>Domain-Agnostic Implementation System</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="start-project.html">Start a Project</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+              <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Domain-Agnostic Intake</div>
+        <h1>Describe what you want to build. Get a full SDLC delivery plan.</h1>
+        <p class="lede">
+          Works for any business domain and any application type: websites, mobile apps, backend
+          services, and data pipelines, deployed locally, in the cloud, or both. The plan below maps
+          your answers to the real AISENA agent roster and a starter backlog.
+        </p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-8 fade-up">
+          <h2>Project Intake</h2>
+          <p>Nothing here is sent to a server. The plan is generated in your browser from the real agent roster.</p>
+          <form id="projectForm" class="wizard-form">
+            <div class="field-group">
+              <label for="projectName">Project name</label>
+              <input type="text" id="projectName" placeholder="e.g., Riverside Clinic Scheduler" required>
+            </div>
+
+            <div class="field-group">
+              <label for="projectDomain">Business domain (any industry)</label>
+              <input type="text" id="projectDomain" placeholder="e.g., healthcare, logistics, retail, fintech, internal tools" required>
+            </div>
+
+            <div class="field-group">
+              <label for="projectDescription">What should it do?</label>
+              <textarea id="projectDescription" rows="3" placeholder="Describe the problem, users, and the outcome you want." required></textarea>
+            </div>
+
+            <div class="field-group">
+              <label>Application type (select all that apply)</label>
+              <div class="checkbox-grid" id="appTypeGrid">
+                <label class="check-card">
+                  <input type="checkbox" name="appType" value="web" checked>
+                  <div><strong>Website / Web App</strong><small>Browser-based UI, dashboards, portals</small></div>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="appType" value="mobile">
+                  <div><strong>Mobile App</strong><small>iOS and Android client</small></div>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="appType" value="api">
+                  <div><strong>Backend Service / API</strong><small>Headless service, integrations</small></div>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="appType" value="data">
+                  <div><strong>Data & Analytics Pipeline</strong><small>Ingestion, storage, reporting</small></div>
+                </label>
+                <label class="check-card">
+                  <input type="checkbox" name="appType" value="desktop">
+                  <div><strong>Desktop / Local Tool</strong><small>Runs on a workstation or local server</small></div>
+                </label>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label>Deployment target</label>
+              <div class="radio-grid" id="deployTargetGrid">
+                <label class="check-card">
+                  <input type="radio" name="deployTarget" value="local" checked>
+                  <div><strong>Local only</strong><small>Docker Compose / on-prem servers</small></div>
+                </label>
+                <label class="check-card">
+                  <input type="radio" name="deployTarget" value="cloud">
+                  <div><strong>Cloud only</strong><small>AWS, GCP, Azure, or managed PaaS</small></div>
+                </label>
+                <label class="check-card">
+                  <input type="radio" name="deployTarget" value="hybrid">
+                  <div><strong>Hybrid</strong><small>Local proof, cloud production path</small></div>
+                </label>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="projectConstraints">Constraints or notes (optional)</label>
+              <textarea id="projectConstraints" rows="2" placeholder="Compliance, data sensitivity, expected scale, integrations, deadlines..."></textarea>
+            </div>
+
+            <div class="chat-actions">
+              <button type="submit">Generate Delivery Plan</button>
+              <button type="reset" class="ghost">Reset</button>
+            </div>
+          </form>
+        </article>
+
+        <aside class="card span-4 fade-up">
+          <h3>How this works</h3>
+          <p>Your answers are mapped to real roles in <code>/agents</code> and a staged, incremental delivery model, so the same system can build any application in any domain.</p>
+          <div class="pill-list" style="margin-top: 10px;">
+            <span class="pill">Any domain</span>
+            <span class="pill">Web + Mobile</span>
+            <span class="pill">Local + Cloud</span>
+            <span class="pill">Full SDLC</span>
+          </div>
+          <div class="notice ok" style="margin-top: 14px;">
+            After generating a plan, you can download it as a project brief or send it straight into the
+            Implementation Manager chat to start execution.
+          </div>
+        </aside>
+      </section>
+
+      <section id="planOutput" class="plan-output">
+        <section class="grid" style="margin-top: 4px;">
+          <article class="card span-12 fade-up">
+            <h2 id="planTitle">Delivery Plan</h2>
+            <div class="pill-list" id="planSummaryPills"></div>
+          </article>
+
+          <article class="card span-8 fade-up">
+            <h3>SDLC Phases and Owning Agents</h3>
+            <div id="planPhases"></div>
+          </article>
+
+          <article class="card span-4 fade-up">
+            <h3>Deployment Path</h3>
+            <div id="deploymentTracks"></div>
+          </article>
+
+          <article class="card span-12 fade-up">
+            <h3>Starter Backlog</h3>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Epic</th>
+                  <th>Description</th>
+                  <th>Primary Agent</th>
+                </tr>
+              </thead>
+              <tbody id="backlogRows"></tbody>
+            </table>
+          </article>
+
+          <article class="card span-12 fade-up">
+            <h3>Project Brief</h3>
+            <p>Copy this, download it, or send it directly to the Implementation Manager agent to begin execution.</p>
+            <div class="chat-actions" style="margin-bottom: 10px;">
+              <button id="downloadBrief" type="button">Download Brief (.md)</button>
+              <button id="sendToManager" type="button" class="ghost">Send to Implementation Manager</button>
+            </div>
+            <pre id="briefPreview" class="brief-output"></pre>
+          </article>
+        </section>
+      </section>
+
+      <p class="footer fade-up">Next: open Agents + Chat to hand this brief to the Implementation Manager and follow the handoff chain.</p>
+    </main>
+  </div>
+  <script src="script.js"></script>
+  <script src="start-project.js"></script>
+</body>
+</html>

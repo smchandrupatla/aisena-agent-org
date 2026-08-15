@@ -1,5 +1,7 @@
-# -h-s-f-s-agent-org
+# AISENA — Domain-Agnostic Implementation System
 
-This repository is a bootstrap for an AI-assisted software delivery organisation.
+This repository bootstraps a domain-agnostic AI implementation system for building software delivery organizations, product teams, and implementation workflows across any business domain.
 
-See `/project/architecture/AISENA-AI-Agent-Team.md` for the proposed AISENA (AISENA) agent roster, delivery approach, and operating model.
+AISENA is not limited to a single vertical or use case. The same architecture can be applied to compliance, operations, healthcare, logistics, retail, SaaS, internal tooling, or risk and fraud programs. The repository includes an example implementation pattern and a staged agent operating model, but the system is intentionally designed to be reusable beyond any one domain.
+
+See `/project/architecture/AISENA-AI-Agent-Team.md` for the proposed AISENA agent roster, delivery approach, and operating model.

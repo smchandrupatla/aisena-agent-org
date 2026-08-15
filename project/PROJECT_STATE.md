@@ -3,7 +3,7 @@
 ## Current Architecture
 - Repository currently contains only a README.
 - No clear frontend, backend, database, or CI infrastructure exists yet.
-- AI delivery organisation is being bootstrapped.
+- AI delivery organisation is being bootstrapped as a domain-agnostic implementation system rather than a single-vertical product.
 
 ## Current Milestone
 - Stage 1: Definition roles created and initial scope documented.

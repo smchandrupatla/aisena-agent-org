@@ -1,0 +1,305 @@
+// Client-side SDLC plan generator for the "Start a Project" intake wizard.
+// Everything runs in the browser and maps answers to the real /agents roster.
+
+const ENGINEERING_MAP = {
+  web: { label: "Web / UI implementation", agent: "Frontend Engineer / Frontend GUI Developer" },
+  mobile: { label: "Mobile client implementation (iOS & Android)", agent: "Mobile App Engineer" },
+  api: { label: "Backend services and APIs", agent: "Backend Engineer" },
+  data: { label: "Data pipeline, storage, and reporting", agent: "Data Architecture & Database SME / Database Engineer" },
+  desktop: { label: "Local / desktop tooling", agent: "Backend Engineer with Infrastructure/Platform Engineer support" },
+};
+
+const APP_TYPE_LABELS = {
+  web: "Website / Web App",
+  mobile: "Mobile App",
+  api: "Backend Service / API",
+  data: "Data & Analytics Pipeline",
+  desktop: "Desktop / Local Tool",
+};
+
+const DEPLOY_LABELS = {
+  local: "Local only",
+  cloud: "Cloud only",
+  hybrid: "Hybrid (local + cloud)",
+};
+
+function collectFormData() {
+  const name = document.getElementById("projectName").value.trim() || "Untitled Project";
+  const domain = document.getElementById("projectDomain").value.trim() || "general business";
+  const description = document.getElementById("projectDescription").value.trim();
+  const constraints = document.getElementById("projectConstraints").value.trim();
+  const appTypes = Array.from(document.querySelectorAll('input[name="appType"]:checked')).map((el) => el.value);
+  const deployTarget = (document.querySelector('input[name="deployTarget"]:checked') || {}).value || "local";
+  return { name, domain, description, constraints, appTypes, deployTarget };
+}
+
+function deployAgents(target) {
+  if (target === "cloud") {
+    return ["Cloud & AWS SME", "DevOps/Release Engineer", "Infrastructure/Platform Engineer"];
+  }
+  if (target === "hybrid") {
+    return ["Infrastructure/Platform Engineer", "Cloud & AWS SME", "DevOps/Release Engineer"];
+  }
+  return ["Infrastructure/Platform Engineer", "DevOps/Release Engineer"];
+}
+
+function deployDetail(target) {
+  if (target === "cloud") {
+    return "Provision managed cloud infrastructure (containers, managed DB/search, IAM-scoped secrets) and automate release via CI/CD.";
+  }
+  if (target === "hybrid") {
+    return "Prove the flow locally with Docker Compose or Minikube first, then promote the same containers/Helm charts to cloud infrastructure.";
+  }
+  return "Run the stack locally with Docker Compose or Minikube; document the path to cloud if needed later.";
+}
+
+function buildPhases(data) {
+  const engineeringLines = data.appTypes.map((t) => ENGINEERING_MAP[t]).filter(Boolean);
+  const apiOnly = data.appTypes.length === 1 && data.appTypes[0] === "api";
+
+  return [
+    {
+      title: "Discovery & Requirements",
+      agents: ["Domain Analyst", "Business Analyst", "Implementation Manager"],
+      detail: `Capture the ${data.domain} problem statement, actors, and success measures, and turn "${data.description || "the goal you described"}" into user stories and acceptance criteria.`,
+    },
+    {
+      title: "UX & Product Design",
+      agents: apiOnly ? ["Solution Architect"] : ["UI/UX Designer", "Case Management & UX SME (if workflow-driven)"],
+      detail: apiOnly
+        ? "API-only scope: design request/response contracts and developer-facing documentation instead of screen UX."
+        : "Design user flows, wireframes, and the interaction model across the selected application types.",
+    },
+    {
+      title: "Architecture & Technology Selection",
+      agents: ["Solution Architect", "Implementation Pattern Specialist"],
+      detail: "Define component boundaries, data flow, integration contracts, and reusable implementation patterns suited to this domain.",
+    },
+    {
+      title: "Engineering & Build",
+      agents: engineeringLines.length ? engineeringLines.map((e) => e.agent) : ["Backend Engineer"],
+      detail: engineeringLines.length
+        ? engineeringLines.map((e) => e.label).join("; ")
+        : "Select at least one application type above to see specific build guidance.",
+    },
+    {
+      title: "Quality Assurance",
+      agents: ["QA Engineer", "Test Automation Engineer", "Performance Engineer"],
+      detail: "Automated test coverage, functional validation, and performance/load checks appropriate to the selected platforms.",
+    },
+    {
+      title: "Security & Compliance",
+      agents: ["Security Engineer", "Security & Compliance Engineer", "Security & Identity SME"],
+      detail: `Threat review, access control, secrets handling, and any domain-specific compliance checks${data.constraints ? ` (noted constraints: ${data.constraints})` : ""}.`,
+    },
+    {
+      title: "DevOps, Release & Deployment",
+      agents: deployAgents(data.deployTarget),
+      detail: deployDetail(data.deployTarget),
+    },
+    {
+      title: "Documentation & Handoff",
+      agents: ["Documentation Engineer", "Technical Writer"],
+      detail: "Runbooks, API docs, architecture docs, and onboarding material for maintainers.",
+    },
+    {
+      title: "Release & Ongoing Operations",
+      agents: ["Release Manager", "Product Owner"],
+      detail: "Release packaging, rollback plan, and backlog grooming for the next incremental delivery stage.",
+    },
+  ];
+}
+
+function buildDeploymentTracks(data) {
+  const tracks = [];
+  if (data.deployTarget === "local" || data.deployTarget === "hybrid") {
+    tracks.push({
+      title: "Local Deployment",
+      detail: "docker compose up (see /infra) or Minikube for Kubernetes-shaped local proofs. Good for fast iteration, demos, and offline environments.",
+    });
+  }
+  if (data.deployTarget === "cloud" || data.deployTarget === "hybrid") {
+    tracks.push({
+      title: "Cloud Deployment",
+      detail: "Container registry plus managed Kubernetes or PaaS, managed database/search, IAM-scoped secrets, and a CI/CD promotion pipeline.",
+    });
+  }
+  if (data.appTypes.includes("mobile")) {
+    tracks.push({
+      title: "Mobile Distribution",
+      detail: "Cross-platform build (React Native or Flutter), emulator/simulator validation, then app store or enterprise distribution via the Release Manager.",
+    });
+  }
+  return tracks;
+}
+
+function buildBacklog(data) {
+  let n = 0;
+  const pad = () => String((n += 1)).padStart(3, "0");
+  const epics = [
+    { id: `EPIC-${pad()}`, desc: `${data.domain} discovery and requirements capture`, agent: "Domain Analyst" },
+    { id: `EPIC-${pad()}`, desc: `Architecture and technology selection for ${data.name}`, agent: "Solution Architect" },
+  ];
+  data.appTypes.forEach((t) => {
+    const map = ENGINEERING_MAP[t];
+    epics.push({
+      id: `EPIC-${pad()}`,
+      desc: `${map ? map.label : APP_TYPE_LABELS[t] || t} for ${data.domain}`,
+      agent: map ? map.agent : "Backend Engineer",
+    });
+  });
+  epics.push({ id: `EPIC-${pad()}`, desc: "Automated test coverage and quality hardening", agent: "QA Engineer" });
+  epics.push({ id: `EPIC-${pad()}`, desc: "Security review and compliance checks", agent: "Security Engineer" });
+  epics.push({ id: `EPIC-${pad()}`, desc: `Deployment readiness (${DEPLOY_LABELS[data.deployTarget]})`, agent: "DevOps/Release Engineer" });
+  epics.push({ id: `EPIC-${pad()}`, desc: "Documentation and release handoff", agent: "Documentation Engineer" });
+  return epics;
+}
+
+function renderPlan(data, phases, tracks, epics) {
+  document.getElementById("planTitle").textContent = `Delivery Plan — ${data.name}`;
+
+  const pillsRoot = document.getElementById("planSummaryPills");
+  const typePills = data.appTypes.length
+    ? data.appTypes.map((t) => `<span class="pill">${APP_TYPE_LABELS[t] || t}</span>`).join("")
+    : `<span class="pill">No application type selected</span>`;
+  pillsRoot.innerHTML = `<span class="pill">${data.domain}</span>${typePills}<span class="pill">${DEPLOY_LABELS[data.deployTarget]}</span>`;
+
+  const phasesRoot = document.getElementById("planPhases");
+  phasesRoot.innerHTML = phases
+    .map(
+      (phase, i) => `
+      <div class="plan-phase">
+        <h4><span class="phase-index">Phase ${i + 1}</span>${phase.title}</h4>
+        <p>${phase.detail}</p>
+        <div class="pill-list">${phase.agents.map((a) => `<span class="pill">${a}</span>`).join("")}</div>
+      </div>`
+    )
+    .join("");
+
+  const tracksRoot = document.getElementById("deploymentTracks");
+  tracksRoot.innerHTML = tracks
+    .map((t) => `<div class="deploy-track"><h4>${t.title}</h4><p>${t.detail}</p></div>`)
+    .join("");
+
+  const backlogRoot = document.getElementById("backlogRows");
+  backlogRoot.innerHTML = epics
+    .map((e) => `<tr><td>${e.id}</td><td>${e.desc}</td><td>${e.agent}</td></tr>`)
+    .join("");
+
+  document.getElementById("planOutput").classList.add("visible");
+}
+
+function buildBriefText(data, phases, tracks, epics) {
+  const lines = [];
+  lines.push(`# Project Brief — ${data.name}`);
+  lines.push("");
+  lines.push(`**Domain:** ${data.domain}`);
+  lines.push(`**Application type(s):** ${data.appTypes.map((t) => APP_TYPE_LABELS[t] || t).join(", ") || "Not specified"}`);
+  lines.push(`**Deployment target:** ${DEPLOY_LABELS[data.deployTarget]}`);
+  lines.push("");
+  lines.push(`## Description`);
+  lines.push(data.description || "(no description provided)");
+  if (data.constraints) {
+    lines.push("");
+    lines.push(`## Constraints / Notes`);
+    lines.push(data.constraints);
+  }
+  lines.push("");
+  lines.push(`## SDLC Delivery Plan`);
+  phases.forEach((phase, i) => {
+    lines.push(`${i + 1}. **${phase.title}** — ${phase.agents.join(", ")}`);
+    lines.push(`   ${phase.detail}`);
+  });
+  lines.push("");
+  lines.push(`## Deployment Path`);
+  tracks.forEach((t) => {
+    lines.push(`- **${t.title}:** ${t.detail}`);
+  });
+  lines.push("");
+  lines.push(`## Starter Backlog`);
+  epics.forEach((e) => {
+    lines.push(`- ${e.id}: ${e.desc} (owner: ${e.agent})`);
+  });
+  lines.push("");
+  lines.push(`_Generated by the AISENA "Start a Project" intake wizard._`);
+  return lines.join("\n");
+}
+
+function slugify(text) {
+  return (
+    text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "") || "project"
+  );
+}
+
+function getChatKey(agentKey) {
+  return `agent-chat-${agentKey}`;
+}
+
+function seedImplementationManagerChat(briefText) {
+  const key = getChatKey("implementation-manager");
+  const messages = [
+    { role: "system", text: "Implementation Manager ready. Reviewing the incoming project brief." },
+    { role: "user", text: briefText },
+  ];
+  localStorage.setItem(key, JSON.stringify(messages));
+}
+
+function initStartProjectPage() {
+  const form = document.getElementById("projectForm");
+  if (!form) {
+    return;
+  }
+
+  let lastBrief = "";
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const data = collectFormData();
+    const phases = buildPhases(data);
+    const tracks = buildDeploymentTracks(data);
+    const epics = buildBacklog(data);
+    renderPlan(data, phases, tracks, epics);
+    lastBrief = buildBriefText(data, phases, tracks, epics);
+    document.getElementById("briefPreview").textContent = lastBrief;
+    document.getElementById("planOutput").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  form.addEventListener("reset", () => {
+    document.getElementById("planOutput").classList.remove("visible");
+    lastBrief = "";
+  });
+
+  const downloadButton = document.getElementById("downloadBrief");
+  if (downloadButton) {
+    downloadButton.addEventListener("click", () => {
+      if (!lastBrief) {
+        return;
+      }
+      const data = collectFormData();
+      const blob = new Blob([lastBrief], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${slugify(data.name)}-project-brief.md`;
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  const sendButton = document.getElementById("sendToManager");
+  if (sendButton) {
+    sendButton.addEventListener("click", () => {
+      if (!lastBrief) {
+        return;
+      }
+      seedImplementationManagerChat(lastBrief);
+      window.location.href = "agents-chat.html?agent=implementation-manager";
+    });
+  }
+}
+
+initStartProjectPage();

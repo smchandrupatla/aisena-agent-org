@@ -4,6 +4,20 @@
 
 **Prepared for:** Satish (Client / Product Sponsor)
 
+## 0. Domain-Agnostic Operating Principle
+
+AISENA is designed as a domain-agnostic implementation system. It is a reusable pattern for orchestrating AI specialists, capturing requirements, sequencing delivery, governing quality, and producing runnable software in any vertical.
+
+The same model can support:
+- compliance and risk operations
+- healthcare workflows and patient operations
+- logistics and supply-chain processes
+- retail and customer support systems
+- internal enterprise tooling
+- product and platform delivery across any domain
+
+The repository currently includes a risk/compliance-style example flow, but that example is a demonstration, not a constraint on the system itself.
+
 ## 1. Operating Model
 
 The AISENA delivery organisation is structured around a single point of contact for the sponsor: the Implementation Manager.
@@ -102,10 +116,11 @@ Each SME researches their domain and authors implementation-ready epics, stories
 
 ### SME common responsibilities
 
-- Research current best practice, open-source options, and regulatory expectations.
+- Research current best practice, open-source options, and operating expectations in the target domain.
 - Convert sponsor direction into epics → stories → tasks with SMART acceptance criteria.
 - Provide concrete implementation guidance.
-- Flag domain and regulatory risk early.
+- Flag domain, operational, and governance risk early.
+- Keep the system reusable by translating domain-specific requirements into general implementation patterns when possible.
 
 ## 3. Tier 2 — Delivery Team Agents
 

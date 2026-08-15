@@ -1,9 +1,11 @@
 # AISENA Architecture Implementation
 
-This package provides a reference implementation for the Hybrid Sanctions & Fraud Monitoring System architecture.
+This package provides a reference implementation for the AISENA domain-agnostic implementation system.
+
+It demonstrates how a multi-stage event-driven system can be assembled from reusable building blocks such as source systems, enrichment services, detection engines, workflow orchestration, case management, observability, and governance layers. The example code models a risk/compliance-inspired flow, but the structure is intentionally reusable for other domains.
 
 It includes:
-- `components.py`: lightweight component classes for source systems, KYC, sanctions and PEP screening, risk enrichment, detection engines, alerting, case management, and governance.
+- `components.py`: lightweight component classes for source systems, enrichment stages, detection logic, workflow orchestration, alerting, case management, and governance.
 - `runner.py`: a sample pipeline that exercises the components in order.
 
 ## Run the sample pipeline
