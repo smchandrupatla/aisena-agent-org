@@ -664,3 +664,38 @@ AISENA's local stack runs on Docker Compose and the environment currently has Do
 
 #### Recommended Action
 Run `sudo apt-get update && sudo apt-get install -y docker-ce=29.7.2*` to upgrade Docker Engine to ≥29.7.2. Until patched: (1) avoid `docker cp` against images not built in-repo; (2) add file-integrity checks on /usr/bin and ~/.ssh to CI pre-flight; (3) pin all docker-compose service images to known-good digests as defence-in-depth. Validate stack with `bash scripts/run-stage0-smoke.sh` post-upgrade.
+
+### LOG-20260815-002
+- **Agent Role:** 13-release-manager
+- **Task ID:** Daily Domain Finding (2026-08-15)
+- **What Changed:**
+  - Created `/agents/13-release-manager/daily-findings/2026-08-15-aws-devops-agent-release-management.md` with actionable finding.
+- **Files Changed:**
+  - `/agents/13-release-manager/daily-findings/2026-08-15-aws-devops-agent-release-management.md`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit / Version Ref:** pending
+- **Rationale:**
+  - AWS DevOps Agent launched release management (preview, June 2026) with AI-driven readiness reviews and autonomous release testing gated on YAML policy files. Directly relevant to AISENA's forthcoming Stage 2 AWS deployment and the release manager's responsibility for policy-as-code release gates.
+- **Alternatives Considered:**
+  - No credible alternative finding of equal specificity and recency was identified for this 24-hour window.
+- **Risk Impact:** Low (documentation and planning artifact only)
+- **Metrics Observed:** No runtime metrics; documentation artifact creation only.
+- **Rollback Plan:** Delete finding artifact file; no code or infrastructure change made.
+- **Human Approval Required:** No
+- **Handoff Target:** 06-devops-engineer (CI pipeline wiring), 00-implementation-manager (awareness)
+
+#### Domain Finding: AWS DevOps Agent — Policy-as-Code Release Gates (Preview)
+
+#### Finding
+AWS DevOps Agent (preview, June 2026) now provides AI-driven release readiness reviews and autonomous release testing gated on YAML-defined release standards, enabling policy-as-code enforcement before any change reaches production.
+
+#### Why It Matters
+AISENA's target infrastructure is AWS-hosted and the project is currently bootstrapping its CI/CD pipeline. The feature maps directly to this agent's core responsibilities: release readiness checks, deployment gating, rollback criteria, and go-live verification. YAML release standards can enforce "no new critical CVEs", "integration tests pass", and "rollback script present" automatically, supporting the human-approval governance model by surfacing objective evidence before approval gates trigger.
+
+#### Evidence
+- AWS What's New (June 2026): https://aws.amazon.com/about-aws/whats-new/2026/06/aws-devops-agent-release-management/
+- AWS Blog: https://aws.amazon.com/blogs/aws/aws-devops-agent-adds-release-management-capabilities-to-assess-code-changes-before-production-preview/
+- AWS Docs: https://docs.aws.amazon.com/devopsagent/latest/userguide/working-with-devops-agent-release-management-index.html
+
+#### Recommended Action
+Author `release-standards.yaml` under `/agents/13-release-manager/` defining AISENA's Stage 0 release criteria. Coordinate with agent 06-devops-engineer to wire into the CI pipeline at Stage 2.
