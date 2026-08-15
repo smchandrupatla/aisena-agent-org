@@ -813,3 +813,32 @@ Under the proposed standard, institutions using AISENA must show examiners that 
 
 #### Recommended Action
 Add acceptance criterion to the Stage 0 screening story: each detection event record MUST include a structured `alert_rationale` field (rule triggered, matched field, confidence score) sufficient to populate a SAR narrative. Tag as REQ-REGULATORY-EFFECTIVENESS in `/project/requirements`.
+
+---
+
+### LOG-20260815-024 — Daily Domain Self-Learning: Data Architecture & Database SME (TASK-0011)
+
+- **Agent Role:** 19-data-architecture-database-sme
+- **Task ID:** TASK-0011 (daily domain self-learning)
+- **Date:** 2026-08-15
+- **Risk Level:** Low
+- **Human Approval Required:** No
+- **Rollback Plan:** Delete finding artifact file; no code or infrastructure change made.
+- **Handoff Target:** 05-backend-engineer (pgvector upgrade advisory), 12-product-owner (awareness)
+
+#### Domain Finding: pgvector 0.8.6 Released — IVFFlat Memory Safety & Stability Fixes
+
+#### FINDING
+pgvector 0.8.6 (released 2026-07-29) patches a memory-safety bug in IVFFlat index builds and fixes a sparse-vector casting defect that could silently corrupt similarity-search results — both are relevant to AISENA's planned PostgreSQL + vector-search screening pipeline.
+
+#### WHY_IT_MATTERS
+AISENA's data architecture uses PostgreSQL as the primary relational store and lists pgvector/FAISS/ChromaDB as supported vector-search backends. The IVFFlat memory bug and the array-to-sparsevec casting error in versions prior to 0.8.6 could produce incorrect nearest-neighbour results during entity screening (e.g., name-matching against sanctions watchlists using vector similarity). In a regulated AML/CFT environment, silent score corruption violates audit-trail integrity requirements and the FinCEN effectiveness standard recently logged (LOG-20260815-023). Upgrading to 0.8.6 is low-risk, low-effort, and closes a latent correctness gap before any vector-search feature enters production.
+
+#### EVIDENCE
+- pgvector CHANGELOG (GitHub, 2026-07-29): https://github.com/pgvector/pgvector/blob/master/CHANGELOG.md
+- pgxn.org release listing: https://pgxn.org/dist/vector/
+- Modern PostgreSQL 2026 deep-dive (2026-05-16): https://www.youngju.dev/blog/culture/2026-05-16-modern-postgresql-2026-postgres-17-18-pgvector-pgvectorscale-pgai-timescaledb-postgis-citus-deep-dive.en
+- Ispirer financial database architecture guide (2026): https://www.ispirer.com/blog/best-database-for-financial-data
+
+#### RECOMMENDED_ACTION
+Pin `pgvector>=0.8.6` in the AISENA PostgreSQL environment (Dockerfile / `docker-compose.yml` postgres image or extension install script). Add a migration note to the Stage 0 schema setup that the IVFFlat index must be rebuilt after upgrade. Document this as a non-functional acceptance criterion: "pgvector version MUST be ≥ 0.8.6 before any vector-similarity screening feature is enabled."
