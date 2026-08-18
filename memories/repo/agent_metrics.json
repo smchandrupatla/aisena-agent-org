@@ -16,5 +16,23 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T13:01:20.495553Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T13:01:20.596266Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "14-product-owner": {
+    "learned_at": "2026-08-18T13:01:20.833282Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
