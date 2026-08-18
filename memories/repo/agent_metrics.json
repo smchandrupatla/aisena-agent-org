@@ -22,5 +22,23 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "22-cloud-aws-sme": {
+    "learned_at": "2026-08-18T12:29:02.062169Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T12:29:03.011515Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "33-security-compliance-engineer": {
+    "learned_at": "2026-08-18T12:29:03.310814Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
