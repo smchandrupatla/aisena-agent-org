@@ -1,14 +1,7 @@
 {
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:57:16.809574Z",
+  "33-security-compliance-engineer": {
+    "learned_at": "2026-08-18T12:57:20.072962Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "00-implementation-manager": {
-    "learned_at": "2026-08-18T12:57:18.245438Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
