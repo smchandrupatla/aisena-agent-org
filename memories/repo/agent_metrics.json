@@ -106,5 +106,34 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "33-security-compliance-engineer": {
+    "learned_at": "2026-08-18T12:59:21.549618Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-18T12:59:21.551414Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T12:59:22.510420Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:59:22.692721Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T12:59:23.183858Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
