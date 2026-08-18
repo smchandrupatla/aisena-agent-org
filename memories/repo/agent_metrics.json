@@ -1,25 +1,44 @@
 {
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T12:26:08.208238Z",
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:26:10.198683Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T12:26:08.707243Z",
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:26:10.338718Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T12:26:08.798267Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:26:10.409639Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T12:26:09.343197Z",
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:26:10.691038Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T12:26:10.728226Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:26:11.155078Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:26:11.275299Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
