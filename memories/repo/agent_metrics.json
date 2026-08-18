@@ -1,37 +1,44 @@
 {
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:21:38.785368Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:21:39.239794Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:21:39.284899Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:21:39.605456Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
   "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T12:12:07.559610Z",
+    "learned_at": "2026-08-18T12:21:39.704235Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:12:22.700518Z",
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:21:40.150786Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T12:12:23.032424Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:21:40.233662Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:12:28.191609Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:12:28.495668Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:12:28.615713Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}

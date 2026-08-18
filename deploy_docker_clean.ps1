@@ -14,8 +14,8 @@ Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 Write-Host "Waiting for Docker Desktop to initialize..."
 Start-Sleep -Seconds 15
 
-# 3. Navigate to repo root and deploy services (uses the top-level docker-compose.yml)
-Set-Location $PSScriptRoot
+# 3. Navigate to infra directory and deploy services
+Set-Location "c:\GitHub\aisena-agent-org\infra"
 
 # 4. Build and start all services
 Write-Host "Building and deploying AISENA services..."

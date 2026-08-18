@@ -3,8 +3,8 @@
 
 Write-Host "Starting AISENA Docker deployment..."
 
-# Change to repo root (uses the top-level docker-compose.yml, which includes capabilities-site and Grafana provisioning)
-Set-Location $PSScriptRoot
+# Change to infra directory
+Set-Location "c:\GitHub\aisena-agent-org\infra"
 
 # Stop any existing services
 Write-Host "Stopping existing Docker services..."
