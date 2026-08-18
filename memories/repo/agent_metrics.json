@@ -1,7 +1,8 @@
 {
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T13:08:04.421680Z",
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T13:08:11.817499Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
+  }
+}
