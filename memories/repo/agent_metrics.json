@@ -88,5 +88,16 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:34:39.548017Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:34:40.172094Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
