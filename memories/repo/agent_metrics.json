@@ -1,26 +1,11 @@
 {
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T13:13:06.251322Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T13:13:07.351530Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T13:13:14.949509Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T13:13:17.252805Z",
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T13:13:19.698649Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
+}
+  }
+}}
 }
