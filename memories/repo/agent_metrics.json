@@ -1,66 +1,6 @@
 {
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T12:53:54.800111Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T12:53:55.869020Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:53:56.635690Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:53:56.759699Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:54:05.087150Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T12:54:06.585244Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T12:54:07.412240Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:54:07.492222Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T12:54:09.464741Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T12:54:09.490675Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T12:54:09.549728Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:54:13.357503Z",
     "count": 1,
     "accuracy": null,
     "model": null
