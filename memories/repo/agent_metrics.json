@@ -1,22 +1,26 @@
 {
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T13:00:16.955006Z",
+  "13-release-manager": {
+    "learned_at": "2026-08-18T13:00:19.405799Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T13:00:17.309341Z",
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T13:00:20.288891Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T13:00:17.879597Z",
+  "14-product-owner": {
+    "learned_at": "2026-08-18T13:00:20.591908Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}l": null
+  },
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T13:00:21.183186Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
