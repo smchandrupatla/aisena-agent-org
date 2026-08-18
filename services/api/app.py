@@ -59,6 +59,31 @@ def save_json(path, data):
     path.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 
+def load_issues():
+    issues_path = ROOT / "project" / "issues.json"
+    if not issues_path.exists():
+        return []
+    try:
+        return json.loads(issues_path.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+
+
+def save_issues(issues):
+    issues_path = ROOT / "project" / "issues.json"
+    save_json(issues_path, issues)
+
+
+def find_issue(issues, issue_id):
+    return next((i for i in issues if i["id"] == issue_id), None)
+
+
+def generate_issue_id(issues):
+    numbers = [int(i["id"].replace("ISSUE-", "")) for i in issues if i["id"].startswith("ISSUE-")]
+    next_num = max(numbers) + 1 if numbers else 1
+    return f"ISSUE-{str(next_num).zfill(4)}"
+
+
 def fetch_results(limit=50):
     if psycopg2 is None:
         return []
