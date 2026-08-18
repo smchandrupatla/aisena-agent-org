@@ -1,42 +1,6 @@
 {
-  "27-backend-detection-services": {
-    "learned_at": "2026-08-18T13:01:55.709146Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T13:01:56.252619Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T13:01:56.253632Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "35-domain-analyst": {
-    "learned_at": "2026-08-18T13:01:57.493836Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T13:01:57.774625Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T13:01:58.617122Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T13:01:59.102580Z",
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T13:02:01.485525Z",
     "count": 1,
     "accuracy": null,
     "model": null
