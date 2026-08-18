@@ -28,5 +28,35 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T12:51:36.323205Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:51:36.529707Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:51:37.806122Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:51:38.009423Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:51:38.136931Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
