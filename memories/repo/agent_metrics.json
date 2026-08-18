@@ -1,16 +1,20 @@
 {
-  "35-domain-analyst": {
-    "learned_at": "2026-08-18T12:58:55.682602Z",
+  "32-test-manager": {
+    "learned_at": "2026-08-18T12:58:58.569444Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "05-backend-engineer": {
-    "learned_at": "2026-08-18T12:58:57.376365Z",
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:58:58.888595Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:58:58.927853Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
