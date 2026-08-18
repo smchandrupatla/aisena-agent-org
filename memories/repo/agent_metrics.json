@@ -1,34 +1,20 @@
 {
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T13:02:54.035390Z",
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T13:03:01.688114Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T13:02:54.637022Z",
+  "32-test-manager": {
+    "learned_at": "2026-08-18T13:03:01.885767Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T13:02:55.237528Z",
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T13:03:02.083731Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T13:02:55.375231Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T13:02:56.107701Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}el": null
   }
 }
