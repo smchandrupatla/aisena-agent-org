@@ -1,32 +1,22 @@
 {
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T13:00:07.026132Z",
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T13:00:16.955006Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T13:00:09.459516Z",
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T13:00:17.309341Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T13:00:09.556362Z",
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T13:00:17.879597Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T13:00:09.604697Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T13:00:09.697650Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
+  }
+}l": null
   }
 }
