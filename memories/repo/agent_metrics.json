@@ -4,5 +4,41 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T12:32:41.344776Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:32:41.707060Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-18T12:32:41.919408Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:32:42.131776Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:32:42.832319Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:32:43.670739Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
