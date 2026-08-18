@@ -1,38 +1,13 @@
 {
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T13:02:01.485525Z",
+  "33-security-compliance-engineer": {
+    "learned_at": "2026-08-18T13:02:24.408039Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T13:02:07.527136Z",
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T13:02:25.448430Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T13:02:09.828191Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T13:02:10.021522Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T13:02:10.422697Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T13:02:10.596878Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
