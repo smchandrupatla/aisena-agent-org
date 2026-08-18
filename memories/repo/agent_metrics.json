@@ -4,5 +4,28 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T12:39:47.426459Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "05-backend-engineer": {
+    "learned_at": "2026-08-18T12:39:47.500641Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:39:48.867695Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "32-test-manager": {
+    "learned_at": "2026-08-18T12:39:49.076752Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
