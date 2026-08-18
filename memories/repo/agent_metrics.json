@@ -137,3 +137,16 @@
     "accuracy": null,
     "model": null
   },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:59:24.764995Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:59:24.809058Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
