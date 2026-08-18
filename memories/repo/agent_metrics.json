@@ -1,50 +1,19 @@
 {
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T13:09:19.307763Z",
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T13:09:34.952630Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T13:09:19.445598Z",
+  "25-infrastructure-platform-engineer": {
+    "learned_at": "2026-08-18T13:09:35.188194Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T13:09:23.781537Z",
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-18T13:09:35.874307Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T13:09:26.958501Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T13:09:26.958875Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T13:09:27.822622Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T13:09:32.318161Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T13:09:32.722346Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
