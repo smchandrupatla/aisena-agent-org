@@ -1,80 +1,19 @@
 {
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:37:23.301559Z",
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-18T12:37:43.388088Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "14-product-owner": {
-    "learned_at": "2026-08-18T12:37:29.135944Z",
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:37:43.648089Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:37:30.075182Z",
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:37:43.962069Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T12:37:30.307491Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:37:33.113688Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:37:33.913049Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:37:34.922352Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:37:35.880825Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:37:36.304934Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:37:39.159307Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:37:40.841871Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T12:37:41.957559Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T12:37:42.400533Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
