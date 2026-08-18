@@ -4,5 +4,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T13:05:11.946745Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T13:05:12.524693Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
