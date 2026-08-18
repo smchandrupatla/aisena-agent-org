@@ -466,3 +466,71 @@
   - accuracy: None
   - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
 
+- 2026-08-18T12:01:34.605874Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:02:04.699439Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:02:34.788113Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:03:04.837704Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:03:34.888076Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:04:04.966725Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:04:35.046632Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:05:05.100474Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:05:35.151839Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:06:05.206819Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:06:35.256463Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:07:05.330594Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:07:35.437766Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:08:05.537485Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:08:35.689340Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:09:05.897488Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+
+- 2026-08-18T12:09:36.091902Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+

@@ -726,3 +726,173 @@
     - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
     - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
 
+- 2026-08-18T12:01:27.194021Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:01:57.287996Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:02:27.416455Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:02:57.490293Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:03:27.542776Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:03:57.716646Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:04:27.851946Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:04:57.921381Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:05:28.006165Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:05:58.077111Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:06:28.176285Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:06:58.222639Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:07:28.273373Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:07:58.324291Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:08:28.373150Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:08:58.473700Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:09:28.820419Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+

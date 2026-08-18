@@ -682,3 +682,156 @@
     - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
     - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
 
+- 2026-08-18T12:01:33.089220Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:02:03.153059Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:02:33.234362Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:03:03.284513Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:03:33.348439Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:04:03.410680Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:04:33.470295Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:05:03.528774Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:05:33.575148Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:06:03.626109Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:06:33.674943Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:07:03.724164Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:07:33.775657Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:08:03.852250Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:08:33.966564Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:09:04.347993Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+
+- 2026-08-18T12:09:34.626088Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [10-Step Agentic AI Development Roadmap]: | Step | Name | Focus | |------|------|-------| | 1 | What is Agentic AI | Definition, key characteristics, differentiation | | 2 | Use Cases | Customer support, data analysis, coding, content, resear
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+

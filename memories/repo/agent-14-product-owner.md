@@ -682,3 +682,156 @@
     - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
     - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
 
+- 2026-08-18T12:01:19.547267Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:01:49.599704Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:02:19.677850Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:02:49.742238Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:03:19.806220Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:03:49.892623Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:04:19.955665Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:04:50.068016Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:05:20.113602Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:05:50.172888Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:06:20.221135Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:06:50.257974Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:07:20.292473Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:07:50.336629Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:08:20.481509Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:08:50.772824Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+
+- 2026-08-18T12:09:20.935019Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+    - [Types of Agents]: | Type | Description | Best for | |------|-------------|----------| | **Simple Reflex** | Condition-action rules, no internal state | Fast deterministic responses | | **Model-Based** | Maintains inter
+

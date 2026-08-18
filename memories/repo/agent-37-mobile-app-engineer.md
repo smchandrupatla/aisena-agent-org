@@ -428,3 +428,173 @@
     - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
     - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
 
+- 2026-08-18T12:01:31.595941Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:02:01.677591Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:02:31.783612Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:03:01.875232Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:03:31.994959Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:04:02.032428Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:04:32.110093Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:05:02.167017Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:05:32.229603Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:06:02.280259Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:06:32.333681Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:07:02.377414Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:07:32.428467Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:08:02.466108Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:08:32.561396Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:09:02.922459Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
+- 2026-08-18T12:09:33.045634Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Best Practices]: - Start small, inside first — build a minimal working agent before adding tools - Define clear goals — vague objectives produce vague agents - Use the right tools — don't over-engineer tool sets - Mon
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+    - [Popular Tools & Frameworks]: ### LLM Providers | Provider | Notes | |----------|-------| | OpenAI (GPT-4o, o1) | Strongest tool-calling, widest ecosystem | | Anthropic Claude | Long context, strong reasoning, safety-focused | | G
+    - [Prompt Starter Patterns]: | Pattern | Template | |---------|---------| | Goal decomposition | "Break this goal into ordered subtasks: [GOAL]" | | ReAct | "Thought: ... Action: ... Observation: ... [repeat]" | | Chain-of-though
+
