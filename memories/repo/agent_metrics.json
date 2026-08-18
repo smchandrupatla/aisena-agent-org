@@ -17,3 +17,28 @@
     "accuracy": null,
     "model": null
   },
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-18T12:35:12.536445Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:35:12.792227Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:35:13.301608Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:35:14.037664Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
