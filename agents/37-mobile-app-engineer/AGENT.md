@@ -92,4 +92,4 @@ Expected interaction with other agents:
 - **Docker**: Local backend dependencies for mobile development
 - **Vercel**: Companion web/backend deployment used alongside mobile clients
 
-Last-Updated: 2026-08-18T12:31:12.572122Z
+Last-Updated: 2026-08-18T12:31:42.683571Z

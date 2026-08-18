@@ -1,60 +1,18 @@
 {
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:31:32.021357Z",
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:31:41.983481Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:31:32.800973Z",
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:31:42.675872Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:31:33.620822Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:31:34.373010Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:31:34.995495Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:31:37.320804Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:31:38.806186Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T12:31:39.086116Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T12:31:39.102313Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T12:31:41.211568Z",
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:31:43.425772Z",
     "count": 1,
     "accuracy": null,
     "model": null
