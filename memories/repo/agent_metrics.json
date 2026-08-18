@@ -11,3 +11,34 @@
     "accuracy": null,
     "model": null
   },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:34:20.000797Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T12:34:20.137457Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:34:20.503878Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:34:20.601544Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:34:20.993856Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
