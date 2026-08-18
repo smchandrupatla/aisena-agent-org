@@ -1,36 +1,24 @@
 {
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T12:52:24.164398Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:52:37.035453Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "32-test-manager": {
-    "learned_at": "2026-08-18T12:52:24.688795Z",
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:52:38.164609Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T12:52:24.750446Z",
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:52:38.333507Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:52:25.967701Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:52:26.198844Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:52:34.770250Z",
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:52:38.465222Z",
     "count": 1,
     "accuracy": null,
     "model": null
