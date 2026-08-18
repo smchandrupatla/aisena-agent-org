@@ -1,9 +1,11 @@
 {
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:39:28.258424Z",
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:39:43.366996Z",
     "count": 1,
     "accuracy": null,
     "model": null
+  }
+}ll
   },
   "29-frontend-gui-developer": {
     "learned_at": "2026-08-18T12:39:28.347294Z",
@@ -55,6 +57,18 @@
   },
   "04-frontend-engineer": {
     "learned_at": "2026-08-18T12:39:40.331154Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:39:42.059639Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T12:39:43.407577Z",
     "count": 1,
     "accuracy": null,
     "model": null
