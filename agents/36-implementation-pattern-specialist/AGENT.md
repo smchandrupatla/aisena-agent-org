@@ -92,4 +92,4 @@ Expected interaction with other agents:
 ### APIs
 - **REST API**: API structure and integration patterns
 
-Last-Updated: 2026-08-18T13:08:56.629290Z
+Last-Updated: 2026-08-18T13:09:26.982692Z
