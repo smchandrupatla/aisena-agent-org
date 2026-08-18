@@ -52,5 +52,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "20-search-opensearch-sme": {
+    "learned_at": "2026-08-18T12:34:32.519485Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "22-cloud-aws-sme": {
+    "learned_at": "2026-08-18T12:34:33.274858Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
