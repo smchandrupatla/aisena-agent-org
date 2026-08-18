@@ -1,14 +1,7 @@
 {
-  "35-domain-analyst": {
-    "learned_at": "2026-08-18T12:50:19.979150Z",
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T12:50:21.966652Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T12:50:20.056950Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
