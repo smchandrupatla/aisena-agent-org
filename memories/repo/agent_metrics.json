@@ -1,66 +1,6 @@
 {
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:27:27.156822Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:27:30.741523Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:27:31.616123Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:27:31.781402Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:27:32.127105Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:27:33.754157Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:27:34.695577Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:27:36.022205Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T12:27:36.098080Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:27:36.130116Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T12:27:36.320993Z",
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:27:39.331842Z",
     "count": 1,
     "accuracy": null,
     "model": null
