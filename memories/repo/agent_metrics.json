@@ -35,3 +35,64 @@
     "accuracy": null,
     "model": null
   },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:24:38.673120Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "05-backend-engineer": {
+    "learned_at": "2026-08-18T12:24:39.442862Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T12:24:39.564533Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T12:24:39.744777Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:24:39.939136Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:24:40.043847Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:24:40.239307Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T12:24:40.275572Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T12:24:40.712145Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:24:40.844534Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
