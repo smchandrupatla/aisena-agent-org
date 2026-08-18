@@ -1,20 +1,13 @@
 {
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T12:55:14.468282Z",
+  "25-infrastructure-platform-engineer": {
+    "learned_at": "2026-08-18T12:55:17.530990Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "00-implementation-manager": {
-    "learned_at": "2026-08-18T12:55:16.598147Z",
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-18T12:55:17.962210Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T12:55:16.872948Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
