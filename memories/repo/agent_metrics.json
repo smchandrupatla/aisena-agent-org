@@ -10,5 +10,23 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T12:32:33.734369Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "33-security-compliance-engineer": {
+    "learned_at": "2026-08-18T12:32:34.516456Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "25-infrastructure-platform-engineer": {
+    "learned_at": "2026-08-18T12:32:35.199463Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
