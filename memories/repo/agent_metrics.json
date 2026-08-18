@@ -82,5 +82,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:31:49.243372Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:31:49.440322Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
