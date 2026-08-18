@@ -1,58 +1,8 @@
 {
-  "00-implementation-manager": {
-    "learned_at": "2026-08-18T13:05:59.398531Z",
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T13:06:04.228435Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T13:06:01.880696Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T13:06:02.338032Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T13:06:02.478020Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T13:06:02.567099Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T13:06:02.881293Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T13:06:02.918496Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "27-backend-detection-services": {
-    "learned_at": "2026-08-18T13:06:03.142207Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T13:06:03.422800Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}ll
   }
 }
