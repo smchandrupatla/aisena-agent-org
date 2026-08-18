@@ -136,5 +136,29 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "11-performance-engineer": {
+    "learned_at": "2026-08-18T12:35:49.446551Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:35:49.589925Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T12:35:49.592008Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:35:49.748227Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
