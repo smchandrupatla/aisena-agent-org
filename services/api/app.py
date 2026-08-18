@@ -468,5 +468,83 @@ def agent_status(agent_key):
     return jsonify({"agent": agent.get("key"), **status})
 
 
+# Issue API endpoints
+@app.route('/api/issues', methods=['GET'])
+def get_issues():
+    issues = load_issues()
+    return jsonify(issues)
+
+
+@app.route('/api/issues', methods=['POST'])
+def create_issue():
+    data = request.get_json()
+    title = data.get('title')
+    severity = data.get('severity', 'Medium')
+    owner = data.get('owner', 'Implementation Manager')
+    mitigation = data.get('mitigation', '')
+    
+    if not title:
+        return jsonify({'error': 'Title is required'}), 400
+    
+    issues = load_issues()
+    issue_id = generate_issue_id(issues)
+    new_issue = {
+        'id': issue_id,
+        'title': title,
+        'severity': severity,
+        'owner': owner,
+        'status': 'Open',
+        'mitigation': mitigation,
+    }
+    issues.insert(0, new_issue)  # Insert at beginning
+    save_issues(issues)
+    return jsonify(new_issue), 201
+
+
+@app.route('/api/issues/<issue_id>', methods=['GET'])
+def get_issue(issue_id):
+    issues = load_issues()
+    issue = find_issue(issues, issue_id)
+    if not issue:
+        return jsonify({'error': 'Issue not found'}), 404
+    return jsonify(issue)
+
+
+@app.route('/api/issues/<issue_id>', methods=['PUT'])
+def update_issue(issue_id):
+    data = request.get_json()
+    issues = load_issues()
+    issue = find_issue(issues, issue_id)
+    if not issue:
+        return jsonify({'error': 'Issue not found'}), 404
+    
+    # Update fields if provided
+    if 'title' in data:
+        issue['title'] = data['title']
+    if 'severity' in data:
+        issue['severity'] = data['severity']
+    if 'owner' in data:
+        issue['owner'] = data['owner']
+    if 'mitigation' in data:
+        issue['mitigation'] = data['mitigation']
+    if 'status' in data:
+        issue['status'] = data['status']
+    
+    save_issues(issues)
+    return jsonify(issue)
+
+
+@app.route('/api/issues/<issue_id>', methods=['DELETE'])
+def delete_issue(issue_id):
+    issues = load_issues()
+    issue = find_issue(issues, issue_id)
+    if not issue:
+        return jsonify({'error': 'Issue not found'}), 404
+    
+    issues.remove(issue)
+    save_issues(issues)
+    return jsonify({'message': 'Issue deleted'}), 200
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
