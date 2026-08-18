@@ -1,60 +1,12 @@
 {
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:59:29.009512Z",
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:59:49.898560Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:59:36.921632Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T12:59:39.361125Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T12:59:39.461120Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:59:39.516514Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T12:59:39.611538Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T12:59:45.975860Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T12:59:46.818576Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T12:59:47.392956Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:59:47.490316Z",
+  "14-product-owner": {
+    "learned_at": "2026-08-18T12:59:50.399651Z",
     "count": 1,
     "accuracy": null,
     "model": null
