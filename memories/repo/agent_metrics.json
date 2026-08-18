@@ -10,5 +10,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T12:56:05.676324Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T12:56:06.979028Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
