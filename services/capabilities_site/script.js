@@ -1,4 +1,5 @@
-const API_BASE = "http://localhost:5000";
+// Same-origin: server.js proxies /api, /health, /results, /self-learning to the backend.
+const API_BASE = window.API_BASE_OVERRIDE || "";
 
 function setActiveNav() {
   const path = window.location.pathname.split("/").pop() || "index.html";

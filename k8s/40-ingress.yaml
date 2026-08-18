@@ -1,0 +1,31 @@
+# Requires an ingress controller (e.g. `minikube addons enable ingress`,
+# or install ingress-nginx: https://kubernetes.github.io/ingress-nginx/).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aisena-ingress
+  namespace: aisena
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: aisena.local
+    http:
+      paths:
+      - path: /api(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: api
+            port:
+              number: 5000
+      - path: /()(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: capabilities-site
+            port:
+              number: 3000

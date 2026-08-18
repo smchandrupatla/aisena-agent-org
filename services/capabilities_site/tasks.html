@@ -50,30 +50,10 @@
                 <th>Status</th>
                 <th>Priority</th>
                 <th>Next Checkpoint</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>TASK-0010 Governance Activation</td>
-                <td>Implementation Manager</td>
-                <td>In Progress</td>
-                <td>High</td>
-                <td>Artifact review and signoff</td>
-              </tr>
-              <tr>
-                <td>TASK-0011 Metrics and Critic Cadence</td>
-                <td>Release Manager</td>
-                <td>Planned</td>
-                <td>High</td>
-                <td>Define metric checklist</td>
-              </tr>
-              <tr>
-                <td>TASK-0009 Stage 0 Backend Plan</td>
-                <td>Backend Engineer</td>
-                <td>Planned</td>
-                <td>High</td>
-                <td>Implementation scaffold review</td>
-              </tr>
+            <tbody id="tasksBody">
             </tbody>
           </table>
         </article>
@@ -81,19 +61,48 @@
         <article class="card span-6 fade-up">
           <h3>Quick Actions</h3>
           <div class="pill-list">
-            <span class="pill">Add task in backlog</span>
-            <span class="pill">Assign owner</span>
-            <span class="pill">Set dependency</span>
-            <span class="pill">Log handoff</span>
+            <button type="button" class="pill" id="quickAddTask">Add task in backlog</button>
+            <button type="button" class="pill" id="quickAssignOwner">Assign owner</button>
+            <button type="button" class="pill" id="quickSetDependency">Set dependency</button>
+            <button type="button" class="pill" id="quickLogHandoff">Log handoff</button>
           </div>
         </article>
 
         <article class="card span-6 fade-up">
-          <div class="notice ok">Use this menu as the navigation hub for task planning and execution reviews.</div>
+          <div class="notice ok" id="tasksNotice">Use this menu as the navigation hub for task planning and execution reviews.</div>
         </article>
       </section>
+
+      <dialog id="taskDialog">
+        <form method="dialog" id="taskForm">
+          <h3 id="taskDialogTitle">Add Task</h3>
+          <label>Task name<input type="text" id="taskName" required placeholder="TASK-0012 Short description"></label>
+          <label>Owner<input type="text" id="taskOwner" required placeholder="Owner name"></label>
+          <label>Status
+            <select id="taskStatus">
+              <option>Planned</option>
+              <option>In Progress</option>
+              <option>Blocked</option>
+              <option>Done</option>
+            </select>
+          </label>
+          <label>Priority
+            <select id="taskPriority">
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
+          </label>
+          <label>Next Checkpoint<input type="text" id="taskCheckpoint" placeholder="What happens next"></label>
+          <div class="chat-actions">
+            <button type="submit" id="taskDialogSave">Save</button>
+            <button type="button" class="ghost" id="taskDialogCancel">Cancel</button>
+          </div>
+        </form>
+      </dialog>
     </main>
   </div>
   <script src="script.js"></script>
+  <script src="tasks.js"></script>
 </body>
 </html>

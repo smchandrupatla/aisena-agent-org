@@ -1,0 +1,19 @@
+# One-shot event publisher, mirrors `docker compose run ingestion`.
+# Re-run with: kubectl create job --from=job/ingestion ingestion-manual -n aisena
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ingestion
+  namespace: aisena
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: ingestion
+        image: aisena/ingestion:latest
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: aisena-config

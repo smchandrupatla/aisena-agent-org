@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redmine
+  namespace: aisena
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redmine
+  template:
+    metadata:
+      labels:
+        app: redmine
+    spec:
+      containers:
+      - name: redmine
+        image: redmine:5.0
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REDMINE_DB_POSTGRES
+          value: "postgres"
+        - name: REDMINE_DB_DATABASE
+          value: "aisena"
+        - name: REDMINE_DB_USERNAME
+          value: "aisena"
+        - name: REDMINE_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: aisena-secrets
+              key: REDMINE_DB_PASSWORD
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redmine
+  namespace: aisena
+spec:
+  selector:
+    app: redmine
+  ports:
+  - port: 3000
+    targetPort: 3000

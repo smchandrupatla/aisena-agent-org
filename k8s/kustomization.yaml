@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: aisena
+resources:
+  - 00-namespace.yaml
+  - 01-configmap.yaml
+  - 02-secrets.yaml
+  - 10-postgres.yaml
+  - 11-zookeeper.yaml
+  - 12-kafka.yaml
+  - 13-opensearch.yaml
+  - 20-agent-manager.yaml
+  - 21-api.yaml
+  - 22-detection.yaml
+  - 23-ingestion-job.yaml
+  - 24-capabilities-site.yaml
+  - 30-grafana.yaml
+  - 31-prometheus.yaml
+  - 32-loki.yaml
+  - 33-redmine.yaml
+  - 34-apicurio.yaml
+  - 35-vault.yaml
+  - 40-ingress.yaml
+images:
+  - name: aisena/agent-manager
+    newTag: latest
+  - name: aisena/api
+    newTag: latest
+  - name: aisena/ingestion
+    newTag: latest
+  - name: aisena/detection
+    newTag: latest
+  - name: aisena/capabilities-site
+    newTag: latest

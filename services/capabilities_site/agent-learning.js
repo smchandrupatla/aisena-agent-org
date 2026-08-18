@@ -17,11 +17,10 @@ function normalizeLearningRows(data) {
     });
 }
 
-const TRIGGER_API_BASES = [
-  window.AGENT_LEARNING_API_BASE,
-  "http://localhost:8082/api",
-  "http://localhost:5000",
-].filter(Boolean);
+// Same-origin first: server.js proxies /self-learning/trigger to the backend.
+const TRIGGER_API_BASES = [window.AGENT_LEARNING_API_BASE, ""].filter(
+  (base) => base !== undefined && base !== null
+);
 
 async function postTrigger(payload) {
   let lastError = null;

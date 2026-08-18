@@ -81,4 +81,4 @@ Expected interaction with other agents:
 ### Deployment
 - **Vercel**: Vercel frontend deployment
 
-Last-Updated: 2026-08-11T06:54:58.273415Z
+Last-Updated: 2026-08-18T11:57:55.651281Z

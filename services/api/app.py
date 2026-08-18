@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import os
 import re
 import subprocess
 from datetime import datetime, timezone
@@ -14,7 +15,7 @@ except Exception:  # pragma: no cover - DB is optional in tests
 
 app = Flask(__name__)
 
-DSN = "host=localhost dbname=aisena user=aisena password=aisena_pw"
+DSN = os.environ.get('POSTGRES_DSN', "host=localhost dbname=aisena user=aisena password=aisena_pw")
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG_PATH = ROOT / "services" / "capabilities_site" / "agents.json"
 STATE_PATH = ROOT / "project" / "agent_transcripts.json"

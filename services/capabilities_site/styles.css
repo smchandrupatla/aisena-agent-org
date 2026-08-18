@@ -450,6 +450,33 @@ button:disabled {
   color: #8d2834;
 }
 
+dialog {
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  max-width: 420px;
+  width: calc(100% - 40px);
+}
+
+dialog::backdrop {
+  background: rgba(16, 26, 45, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+dialog form {
+  display: grid;
+  gap: 12px;
+}
+
+dialog label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
 .footer {
   margin-top: 24px;
   font-size: 13px;

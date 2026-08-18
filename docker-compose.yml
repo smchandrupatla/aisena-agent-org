@@ -25,8 +25,10 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9093,EXTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9093,EXTERNAL://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper
@@ -98,13 +100,52 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=/api
+      - API_BASE_URL=http://api:5000
     depends_on:
       - agent-manager
+      - api
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.capabilities-site.rule=Host(`aisena.local`)"
       - "traefik.http.routers.capabilities-site.entrypoints=web"
       - "traefik.http.services.capabilities-site.loadbalancer.healthcheck.path=/"
+
+  api:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+    environment:
+      - POSTGRES_DSN=host=postgres dbname=aisena user=aisena password=aisena_pw
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+
+  ingestion:
+    build:
+      context: .
+      dockerfile: services/ingestion/Dockerfile
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9093
+      - KAFKA_TOPIC=aisena-stage0-events
+    depends_on:
+      - kafka
+    restart: "no"
+
+  detection:
+    build:
+      context: .
+      dockerfile: services/detection/Dockerfile
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9093
+      - KAFKA_TOPIC=aisena-stage0-events
+      - POSTGRES_DSN=host=postgres dbname=aisena user=aisena password=aisena_pw
+      - OPENSEARCH_URL=http://opensearch:9200
+    depends_on:
+      - kafka
+      - postgres
+      - opensearch
+    restart: unless-stopped
 
   loki:
     image: grafana/loki:2.8.1

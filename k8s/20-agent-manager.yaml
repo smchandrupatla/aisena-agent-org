@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-manager
+  namespace: aisena
+  labels:
+    app: agent-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-manager
+  template:
+    metadata:
+      labels:
+        app: agent-manager
+    spec:
+      containers:
+      - name: agent-manager
+        image: aisena/agent-manager:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9500
+          name: metrics
+        envFrom:
+        - configMapRef:
+            name: aisena-config
+        env:
+        - name: POSTGRES_DSN
+          valueFrom:
+            configMapKeyRef:
+              name: aisena-config
+              key: POSTGRES_DSN
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: 9500
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 9500
+          initialDelaySeconds: 20
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-manager
+  namespace: aisena
+spec:
+  selector:
+    app: agent-manager
+  ports:
+  - port: 9500
+    targetPort: 9500
+    name: metrics

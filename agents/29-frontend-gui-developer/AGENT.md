@@ -65,4 +65,4 @@ Commands it may need:
 ### Deployment
 - **Vercel**: Vercel frontend deployment
 
-Last-Updated: 2026-08-11T06:54:59.112924Z
+Last-Updated: 2026-08-18T11:58:03.898849Z

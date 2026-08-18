@@ -6,8 +6,8 @@ from kafka import KafkaProducer
 
 BASE_DIR = os.path.dirname(__file__)
 SAMPLE_EVENT_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', '..', 'project', 'implementation', 'data', 'sample-event.json'))
-TOPIC = 'aisena-stage0-events'
-BOOTSTRAP = 'localhost:9092'
+TOPIC = os.environ.get('KAFKA_TOPIC', 'aisena-stage0-events')
+BOOTSTRAP = os.environ.get('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
 
 def main():
     producer = KafkaProducer(bootstrap_servers=BOOTSTRAP,

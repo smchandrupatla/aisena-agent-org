@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aisena-config
+  namespace: aisena
+data:
+  POSTGRES_HOST: "postgres"
+  POSTGRES_DB: "aisena"
+  POSTGRES_USER: "aisena"
+  POSTGRES_DSN: "host=postgres dbname=aisena user=aisena password=aisena_pw"
+  KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+  KAFKA_TOPIC: "aisena-stage0-events"
+  OPENSEARCH_URL: "http://opensearch:9200"
+  AGENT_METRICS_PORT: "9500"
+  AGENT_METRICS_PATH: "/metrics"
+  AGENT_AUTO_PUSH: "false"
+  NODE_ENV: "production"
+  NEXT_PUBLIC_API_URL: "/api"
+  API_BASE_URL: "http://api:5000"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: aisena
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+
+    scrape_configs:
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+
+      - job_name: 'agent_manager'
+        metrics_path: '/metrics'
+        static_configs:
+          - targets: ['agent-manager:9500']
+
+      - job_name: 'grafana'
+        static_configs:
+          - targets: ['grafana:3000']

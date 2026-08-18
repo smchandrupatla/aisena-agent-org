@@ -50,32 +50,15 @@
                 <th>Owner</th>
                 <th>Status</th>
                 <th>Mitigation</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Copilot runtime model unavailable</td>
-                <td>High</td>
-                <td>Implementation Manager</td>
-                <td>Open</td>
-                <td>Runtime diagnostics and fallback path</td>
-              </tr>
-              <tr>
-                <td>No CI baseline configured</td>
-                <td>Medium</td>
-                <td>DevOps Engineer</td>
-                <td>Open</td>
-                <td>Bootstrap minimal pipeline</td>
-              </tr>
-              <tr>
-                <td>Task-to-goal traceability drift risk</td>
-                <td>Medium</td>
-                <td>Product Owner</td>
-                <td>Monitoring</td>
-                <td>Periodic alignment checkpoints</td>
-              </tr>
+            <tbody id="issuesBody">
             </tbody>
           </table>
+          <div class="chat-actions" style="margin-top: 14px;">
+            <button type="button" id="reportIssueBtn">Report Issue</button>
+          </div>
         </article>
 
         <article class="card span-6 fade-up">
@@ -89,11 +72,32 @@
         </article>
 
         <article class="card span-6 fade-up">
-          <div class="notice warn">Escalate immediately when issue impacts production, legal exposure, pricing, or user data handling.</div>
+          <div class="notice warn" id="issuesNotice">Escalate immediately when issue impacts production, legal exposure, pricing, or user data handling.</div>
         </article>
       </section>
+
+      <dialog id="issueDialog">
+        <form method="dialog" id="issueForm">
+          <h3>Report Issue</h3>
+          <label>Issue<input type="text" id="issueTitle" required placeholder="Short description of the problem"></label>
+          <label>Severity
+            <select id="issueSeverity">
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
+          </label>
+          <label>Owner<input type="text" id="issueOwner" required placeholder="Owner name"></label>
+          <label>Mitigation<textarea id="issueMitigation" rows="3" placeholder="Planned mitigation or next step"></textarea></label>
+          <div class="chat-actions">
+            <button type="submit" id="issueDialogSave">Save</button>
+            <button type="button" class="ghost" id="issueDialogCancel">Cancel</button>
+          </div>
+        </form>
+      </dialog>
     </main>
   </div>
   <script src="script.js"></script>
+  <script src="issues.js"></script>
 </body>
 </html>

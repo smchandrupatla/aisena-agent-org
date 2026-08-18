@@ -7,11 +7,11 @@ from kafka import KafkaConsumer
 import psycopg2
 import requests
 
-TOPIC = 'aisena-stage0-events'
-BOOTSTRAP = 'localhost:9092'
+TOPIC = os.environ.get('KAFKA_TOPIC', 'aisena-stage0-events')
+BOOTSTRAP = os.environ.get('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
 
-POSTGRES_DSN = "host=localhost dbname=aisena user=aisena password=aisena_pw"
-OPENSEARCH_URL = 'http://localhost:9200'
+POSTGRES_DSN = os.environ.get('POSTGRES_DSN', "host=localhost dbname=aisena user=aisena password=aisena_pw")
+OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL', 'http://localhost:9200')
 
 CREATE_TABLE_SQL = '''
 CREATE TABLE IF NOT EXISTS aisena_screening_results (
