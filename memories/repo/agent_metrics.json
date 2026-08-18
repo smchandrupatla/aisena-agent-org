@@ -101,3 +101,29 @@
     "accuracy": null,
     "model": null
   },
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-18T12:57:57.022163Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "32-test-manager": {
+    "learned_at": "2026-08-18T12:57:58.414723Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:57:58.560361Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:57:58.671098Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+} }
+}
