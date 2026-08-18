@@ -1,15 +1,8 @@
 {
-  "14-product-owner": {
-    "learned_at": "2026-08-18T13:12:17.157981Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T13:12:17.178963Z",
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T13:12:18.217835Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
-}  }
 }
