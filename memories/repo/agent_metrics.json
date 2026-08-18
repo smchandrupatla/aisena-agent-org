@@ -1,38 +1,16 @@
 {
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:55:57.118707Z",
+  "11-performance-engineer": {
+    "learned_at": "2026-08-18T12:56:13.480451Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:55:57.244060Z",
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:56:15.633951Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:56:05.676324Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T12:56:06.979028Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T12:56:07.960827Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T12:56:08.054600Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
+  }
+}l": null
   }
 }
