@@ -34,5 +34,35 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:58:46.424948Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:58:47.251001Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:58:47.312899Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T12:58:48.662202Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:58:48.777586Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
