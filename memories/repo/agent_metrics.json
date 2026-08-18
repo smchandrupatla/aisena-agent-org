@@ -34,5 +34,34 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:33:13.737808Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T12:33:15.001997Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "05-backend-engineer": {
+    "learned_at": "2026-08-18T12:33:15.437010Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:33:15.784708Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:33:15.901804Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
