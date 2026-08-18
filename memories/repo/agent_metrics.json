@@ -1,18 +1,12 @@
 {
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:54:26.798113Z",
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T12:54:37.578729Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:54:26.934402Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:54:35.167120Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:54:37.635489Z",
     "count": 1,
     "accuracy": null,
     "model": null
