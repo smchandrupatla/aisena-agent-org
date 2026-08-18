@@ -10,5 +10,23 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T12:56:51.882212Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:56:52.144606Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T12:56:52.543309Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
