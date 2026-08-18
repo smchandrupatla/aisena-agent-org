@@ -34,5 +34,11 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T13:03:41.340505Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
