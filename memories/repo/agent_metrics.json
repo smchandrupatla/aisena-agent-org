@@ -1,85 +1,8 @@
 {
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:38:35.675360Z",
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:38:47.648033Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:38:36.772495Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:38:37.341640Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:38:37.475989Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:38:39.673606Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:38:41.069285Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:38:42.336756Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T12:38:42.415004Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T12:38:42.847266Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "27-backend-detection-services": {
-    "learned_at": "2026-08-18T12:38:44.137298Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T12:38:44.373511Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T12:38:44.472384Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "21-streaming-messaging-infra-sme": {
-    "learned_at": "2026-08-18T12:38:44.623142Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:38:44.757996Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}
