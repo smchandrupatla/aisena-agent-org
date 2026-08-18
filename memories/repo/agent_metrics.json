@@ -1,36 +1,6 @@
 {
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T12:24:09.785836Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:24:09.831623Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T12:24:10.068212Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T12:24:10.134190Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T12:24:10.612864Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "00-implementation-manager": {
-    "learned_at": "2026-08-18T12:24:10.692074Z",
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:24:25.596730Z",
     "count": 1,
     "accuracy": null,
     "model": null
