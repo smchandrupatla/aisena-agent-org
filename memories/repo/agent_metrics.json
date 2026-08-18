@@ -46,5 +46,65 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:59:15.828482Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "11-performance-engineer": {
+    "learned_at": "2026-08-18T12:59:16.525483Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:59:16.580172Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:59:17.321549Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:59:17.396772Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T12:59:18.864711Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:59:19.832903Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "14-product-owner": {
+    "learned_at": "2026-08-18T12:59:20.206880Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T12:59:20.733442Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "20-search-opensearch-sme": {
+    "learned_at": "2026-08-18T12:59:21.014508Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
