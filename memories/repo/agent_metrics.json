@@ -1,39 +1,8 @@
 {
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T12:56:26.851314Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:56:27.291563Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:56:27.409512Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:56:36.019029Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T12:56:37.565571Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T12:56:38.619635Z",
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:56:43.936398Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
-}
 }
