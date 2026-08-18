@@ -1,51 +1,20 @@
 {
-  "21-streaming-messaging-infra-sme": {
-    "learned_at": "2026-08-18T12:55:25.509740Z",
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:55:41.663875Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "32-test-manager": {
-    "learned_at": "2026-08-18T12:55:26.567267Z",
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:55:42.397388Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:55:27.035208Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:55:27.121037Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:55:35.490885Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T12:55:36.850634Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T12:55:37.833278Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:55:37.914745Z",
+  "11-performance-engineer": {
+    "learned_at": "2026-08-18T12:55:43.056417Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
-}
 }
