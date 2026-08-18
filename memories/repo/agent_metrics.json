@@ -16,5 +16,35 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T12:55:51.653394Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "09-security-engineer": {
+    "learned_at": "2026-08-18T12:55:51.697945Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:55:52.138528Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:55:52.416301Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:55:52.690087Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
