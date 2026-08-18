@@ -1,33 +1,20 @@
 {
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T13:01:00.293851Z",
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T13:01:18.456369Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T13:01:07.241365Z",
+  "11-performance-engineer": {
+    "learned_at": "2026-08-18T13:01:18.545112Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T13:01:09.648685Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T13:01:09.809972Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T13:01:10.184302Z",
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T13:01:18.684489Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
-}
 }
