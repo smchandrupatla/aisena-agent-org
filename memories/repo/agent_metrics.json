@@ -131,3 +131,15 @@
     "accuracy": null,
     "model": null
   },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:37:14.951992Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T12:37:16.594775Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
