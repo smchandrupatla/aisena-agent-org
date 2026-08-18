@@ -40,5 +40,23 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:52:07.953372Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:52:08.138534Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:52:08.272961Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
