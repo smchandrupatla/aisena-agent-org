@@ -11,3 +11,10 @@
     "accuracy": null,
     "model": null
   },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:36:47.049067Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
