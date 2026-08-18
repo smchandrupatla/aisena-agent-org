@@ -17,3 +17,40 @@
     "accuracy": null,
     "model": null
   },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:37:45.083872Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "05-backend-engineer": {
+    "learned_at": "2026-08-18T12:37:46.681654Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:37:46.934455Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "32-test-manager": {
+    "learned_at": "2026-08-18T12:37:46.971096Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:37:47.069153Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:37:47.284185Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
