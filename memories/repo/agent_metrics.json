@@ -1,18 +1,12 @@
 {
-  "32-test-manager": {
-    "learned_at": "2026-08-18T12:36:16.601569Z",
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T12:36:19.817793Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:36:16.792091Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:36:16.907663Z",
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:36:19.941725Z",
     "count": 1,
     "accuracy": null,
     "model": null
