@@ -1,33 +1,14 @@
 {
-  "00-implementation-manager": {
-    "learned_at": "2026-08-18T12:32:18.843435Z",
+  "20-search-opensearch-sme": {
+    "learned_at": "2026-08-18T12:32:32.206571Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:32:19.559845Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T12:32:19.593959Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "14-product-owner": {
-    "learned_at": "2026-08-18T12:32:27.814459Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T12:32:28.448990Z",
+  "22-cloud-aws-sme": {
+    "learned_at": "2026-08-18T12:32:32.961914Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
-} }
 }
