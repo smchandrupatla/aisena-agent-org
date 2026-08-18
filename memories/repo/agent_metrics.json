@@ -1,10 +1,26 @@
 {
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T12:36:49.882007Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:36:52.712468Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}ull
+  },
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T12:36:52.776470Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:36:52.868146Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:36:52.913671Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
