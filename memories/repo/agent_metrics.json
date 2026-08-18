@@ -1,26 +1,7 @@
 {
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T13:12:18.217835Z",
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T13:12:31.960889Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T13:12:20.582575Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T13:12:22.182759Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "21-streaming-messaging-infra-sme": {
-    "learned_at": "2026-08-18T13:12:22.924371Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
