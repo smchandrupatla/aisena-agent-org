@@ -1,67 +1,38 @@
 {
-  "21-streaming-messaging-infra-sme": {
-    "learned_at": "2026-08-18T12:24:06.840188Z",
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:24:09.785836Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "32-test-manager": {
-    "learned_at": "2026-08-18T12:24:06.890257Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:24:09.831623Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:24:06.933109Z",
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:24:10.068212Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "11-performance-engineer": {
-    "learned_at": "2026-08-18T12:24:07.001708Z",
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T12:24:10.134190Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T12:24:07.093016Z",
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:24:10.612864Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T12:24:07.283801Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:24:10.692074Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T12:24:08.262990Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T12:24:08.361691Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T12:24:08.546913Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "05-backend-engineer": {
-    "learned_at": "2026-08-18T12:24:09.312968Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:24:09.365758Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}
