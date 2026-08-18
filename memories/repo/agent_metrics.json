@@ -5,3 +5,16 @@
     "accuracy": null,
     "model": null
   },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T13:01:30.545283Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T13:01:30.858393Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
