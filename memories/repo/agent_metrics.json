@@ -1,6 +1,12 @@
 {
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:28:09.481302Z",
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T12:28:12.978141Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:28:13.265136Z",
     "count": 1,
     "accuracy": null,
     "model": null
