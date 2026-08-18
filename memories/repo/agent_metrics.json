@@ -1,36 +1,24 @@
 {
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T13:07:15.686810Z",
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T13:07:33.931449Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T13:07:23.175885Z",
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T13:07:34.822733Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T13:07:25.881785Z",
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T13:07:35.728413Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T13:07:26.147689Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T13:07:26.336020Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T13:07:30.072522Z",
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T13:07:35.802239Z",
     "count": 1,
     "accuracy": null,
     "model": null
