@@ -1,28 +1,8 @@
 {
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T12:49:49.864496Z",
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:49:52.991187Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:49:50.533956Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T12:49:50.738899Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "05-backend-engineer": {
-    "learned_at": "2026-08-18T12:49:51.404390Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
   }
 }
