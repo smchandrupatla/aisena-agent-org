@@ -4,5 +4,23 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "14-product-owner": {
+    "learned_at": "2026-08-18T12:25:25.889349Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T12:25:25.988512Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:25:26.028046Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
