@@ -46,5 +46,40 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T13:01:48.793284Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T13:01:49.180874Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T13:01:49.380508Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T13:01:50.787361Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T13:01:50.748351Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "14-product-owner": {
+    "learned_at": "2026-08-18T13:01:51.011858Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
