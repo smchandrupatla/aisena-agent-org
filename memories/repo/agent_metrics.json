@@ -1,40 +1,8 @@
 {
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T13:10:37.650050Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T13:10:54.114711Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "27-backend-detection-services": {
-    "learned_at": "2026-08-18T13:10:39.545236Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T13:10:43.452298Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T13:10:49.104355Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T13:10:49.352035Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "35-domain-analyst": {
-    "learned_at": "2026-08-18T13:10:50.483539Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}el": null
   }
 }
