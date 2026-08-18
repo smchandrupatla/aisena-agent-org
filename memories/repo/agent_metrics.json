@@ -29,3 +29,22 @@
     "accuracy": null,
     "model": null
   },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:36:13.159401Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:36:13.612309Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:36:14.441264Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
