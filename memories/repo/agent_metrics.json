@@ -1,48 +1,18 @@
 {
-  "00-implementation-manager": {
-    "learned_at": "2026-08-18T12:50:40.361719Z",
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:50:50.153739Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:50:40.468530Z",
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:50:50.233081Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:50:41.770477Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:50:42.734188Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:50:43.225137Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:50:43.350093Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:50:44.075191Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:50:47.251767Z",
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:50:51.069288Z",
     "count": 1,
     "accuracy": null,
     "model": null
