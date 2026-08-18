@@ -1217,3 +1217,45 @@
     - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
     - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
 
+- 2026-08-18T12:46:34.191925Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+
+- 2026-08-18T12:47:04.361922Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+
+- 2026-08-18T12:47:34.661641Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+
+- 2026-08-18T12:48:04.858519Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+
+- 2026-08-18T12:48:35.004442Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+
+- 2026-08-18T12:49:05.154686Z: learned 1 items
+  - accuracy: None
+  - examples: [{"db_id": 1, "event": {"transactionId": "TX-0001", "customerName": "Acme Global Industries", "customerCountry": "US", "amount": 12500.0, "currency": "USD", "purpose": "International supplier payment", "referenceId": "REF-12345", "debtor": {"name": "Acme Corp", "address": {"street_name": "123 Main St", "town_name": "New York", "country": "US", "post_code": "10001"}}, "creditor": {"name": "Global Supplies Ltd", "address": {"town_name": "London", "country": "GB"}}}, "flagged": true, "reason": "amount>1000", "ts": 1787053135.1313639}]
+  - kb_context:
+    - [Agent Development Checklist]: - [ ] Define clear goal and success criteria - [ ] Choose right model for the task - [ ] Add tools & validate each one independently - [ ] Handle errors gracefully (retry logic, fallbacks) - [ ] Creat
+    - [Key Agent Capabilities]: | Capability | Description | |------------|-------------| | **Memory & Recall** | Retrieve past context, facts, and decisions | | **Tool Use** | Call APIs, run code, search web, query databases | | **
+

@@ -128,6 +128,72 @@ function proxyToApi(req, res, pathname, search) {
   });
 }
 
+// Handle API POST requests for creating a project
+async function handleApiPost(req, res, pathname) {
+  if (pathname === '/create-project') {
+    let body = [];
+    req.on('data', (chunk) => body.push(chunk));
+    req.on('end', () => {
+      body = Buffer.concat(body);
+      try {
+        const payload = JSON.parse(body.toString());
+        // In a real implementation, this would save the project and return its details
+        // For now, we'll just echo back a success message with a mock project ID
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          success: true,
+          message: 'Project created successfully (mock)',
+          projectId: 'mock-project-' + Date.now(),
+          payload: payload
+        }));
+      } catch (error) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
+      }
+    });
+    return;
+  }
+  // Fall through to proxy for other paths
+  const target = parse(API_BASE_URL);
+  const client = target.protocol === 'https:' ? httpsRequest : httpRequest;
+
+  const chunks = [];
+  req.on('data', (chunk) => chunks.push(chunk));
+  req.on('error', () => {
+    res.writeHead(502);
+    res.end('Bad gateway');
+  });
+  req.on('end', () => {
+    const body = Buffer.concat(chunks);
+    const headers = { ...req.headers, host: target.host };
+    if (body.length) {
+      headers['content-length'] = body.length;
+    }
+
+    const proxyReq = client(
+      {
+        protocol: target.protocol,
+        hostname: target.hostname,
+        port: target.port,
+        path: `${pathname}${search || ''}`,
+        method: req.method,
+        headers,
+      },
+      (proxyRes) => {
+        res.writeHead(proxyRes.statusCode || 502, proxyRes.headers);
+        proxyRes.pipe(res);
+      }
+    );
+
+    proxyReq.on('error', () => {
+      res.writeHead(502, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Unable to reach the API backend.' }));
+    });
+
+    proxyReq.end(body);
+  });
+}
+
 const server = createServer((req, res) => {
   const parsedUrl = parse(req.url, true);
 
