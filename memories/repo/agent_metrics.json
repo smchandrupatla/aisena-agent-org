@@ -1,6 +1,8 @@
 {
-  "27-backend-detection-services": {
-    "learned_at": "2026-08-18T12:30:39.797100Z",
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:30:42.360638Z",
     "count": 1,
     "accuracy": null,
-    "model"
+    "model": null
+  }
+}
