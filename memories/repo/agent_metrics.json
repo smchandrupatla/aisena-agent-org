@@ -1,19 +1,15 @@
 {
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T13:12:05.636797Z",
+  "14-product-owner": {
+    "learned_at": "2026-08-18T13:12:17.157981Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T13:12:05.806497Z",
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T13:12:17.178963Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T13:12:14.517169Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}  }
+}
