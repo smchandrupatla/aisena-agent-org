@@ -34,5 +34,11 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T12:50:16.790843Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
