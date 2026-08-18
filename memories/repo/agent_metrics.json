@@ -4,5 +4,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:55:16.598147Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:55:16.872948Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
