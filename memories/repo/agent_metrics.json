@@ -28,5 +28,11 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T13:07:30.072522Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
