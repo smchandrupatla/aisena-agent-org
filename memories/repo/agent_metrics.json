@@ -1,50 +1,6 @@
 {
-  "14-product-owner": {
-    "learned_at": "2026-08-18T12:30:27.119424Z",
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T12:30:39.797100Z",
     "count": 1,
     "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:30:27.974514Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:30:31.446969Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:30:32.508834Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:30:33.405439Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:30:33.899971Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:30:34.654657Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:30:36.217646Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
+    "model"
