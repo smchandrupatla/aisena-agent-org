@@ -5,3 +5,28 @@
     "accuracy": null,
     "model": null
   },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T13:03:31.869357Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T13:03:31.890562Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "32-test-manager": {
+    "learned_at": "2026-08-18T13:03:32.255161Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T13:03:32.456011Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
