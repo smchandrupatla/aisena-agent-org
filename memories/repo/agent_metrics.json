@@ -1,36 +1,6 @@
 {
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:23:02.630230Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:23:04.830488Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T12:23:04.886533Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:23:05.125608Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T12:23:05.229465Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T12:23:05.962496Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:23:10.492001Z",
     "count": 1,
     "accuracy": null,
     "model": null
