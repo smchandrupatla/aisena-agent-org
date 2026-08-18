@@ -1,30 +1,12 @@
 {
-  "21-streaming-messaging-infra-sme": {
-    "learned_at": "2026-08-18T13:09:09.001366Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T13:09:19.307763Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T13:09:11.426106Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T13:09:12.305102Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T13:09:13.237520Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "05-backend-engineer": {
-    "learned_at": "2026-08-18T13:09:13.755389Z",
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T13:09:19.445598Z",
     "count": 1,
     "accuracy": null,
     "model": null
