@@ -71,3 +71,33 @@
     "accuracy": null,
     "model": null
   },
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T12:57:52.844306Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:57:54.211467Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:57:54.409552Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:57:55.061684Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:57:56.873003Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
