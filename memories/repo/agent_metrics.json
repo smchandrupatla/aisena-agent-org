@@ -136,5 +136,28 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:26:05.453388Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "09-security-engineer": {
+    "learned_at": "2026-08-18T12:26:05.510738Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T12:26:05.641020Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:26:05.715339Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
