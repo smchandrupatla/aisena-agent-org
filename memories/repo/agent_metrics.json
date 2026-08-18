@@ -76,5 +76,77 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:22:07.823827Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:22:07.981243Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:22:08.231996Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T12:22:08.389655Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:22:08.634869Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:22:08.858258Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:22:09.389457Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:22:09.415130Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:22:09.690560Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T12:22:09.781479Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:22:10.228240Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:22:10.345641Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
