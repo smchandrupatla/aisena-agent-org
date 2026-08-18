@@ -1,11 +1,14 @@
 {
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T12:29:12.356416Z",
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:29:14.886567Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-} }
-}l
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:29:14.900219Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
