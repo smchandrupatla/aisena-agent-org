@@ -1,15 +1,9 @@
 {
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T12:30:13.481235Z",
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:30:15.646726Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
-}},
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:30:13.471778Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
+} }
 }
