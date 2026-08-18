@@ -70,5 +70,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "33-security-compliance-engineer": {
+    "learned_at": "2026-08-18T12:35:04.933243Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "25-infrastructure-platform-engineer": {
+    "learned_at": "2026-08-18T12:35:05.656631Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
