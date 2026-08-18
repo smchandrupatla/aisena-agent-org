@@ -1,48 +1,6 @@
 {
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:57:20.072962Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:57:20.209158Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:57:22.155432Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:57:22.314191Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "27-backend-detection-services": {
-    "learned_at": "2026-08-18T12:57:22.694137Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T12:57:24.048964Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T12:57:24.156261Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:57:24.968289Z",
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-18T12:57:26.922414Z",
     "count": 1,
     "accuracy": null,
     "model": null
