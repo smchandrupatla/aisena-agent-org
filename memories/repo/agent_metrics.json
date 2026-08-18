@@ -41,3 +41,33 @@
     "accuracy": null,
     "model": null
   },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:58:17.067910Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:58:17.178089Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T12:58:18.568824Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:58:18.691491Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:58:19.610815Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
