@@ -10,5 +10,11 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T13:10:43.452298Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
