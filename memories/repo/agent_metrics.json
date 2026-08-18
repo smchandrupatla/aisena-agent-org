@@ -1,13 +1,14 @@
 {
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T12:57:39.159851Z",
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:57:46.969024Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T12:57:45.157274Z",
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:57:47.043084Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
+  }
+}
