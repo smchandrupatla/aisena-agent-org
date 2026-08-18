@@ -1,24 +1,12 @@
 {
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:53:13.447833Z",
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:53:21.056428Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:53:14.637537Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:53:14.690273Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:53:16.008726Z",
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:53:21.898537Z",
     "count": 1,
     "accuracy": null,
     "model": null
