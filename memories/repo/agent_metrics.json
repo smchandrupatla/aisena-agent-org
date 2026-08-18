@@ -10,5 +10,35 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "22-cloud-aws-sme": {
+    "learned_at": "2026-08-18T12:24:30.561261Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T12:24:30.870796Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "33-security-compliance-engineer": {
+    "learned_at": "2026-08-18T12:24:31.275714Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "25-infrastructure-platform-engineer": {
+    "learned_at": "2026-08-18T12:24:32.933625Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-18T12:24:32.993057Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
