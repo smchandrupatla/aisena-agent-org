@@ -143,3 +143,28 @@
     "accuracy": null,
     "model": null
   },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:37:16.813583Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "32-test-manager": {
+    "learned_at": "2026-08-18T12:37:16.855693Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:37:16.972115Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:37:17.173579Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
