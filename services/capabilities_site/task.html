@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Task detail page with editable fields, activity log, comment thread, and per-task AI chat.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Task Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html" class="active">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+              <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker"><a href="tasks.html" style="color: inherit;">&larr; Back to Tasks</a></div>
+        <h1 id="taskHeading">Loading task&hellip;</h1>
+        <p class="lede" id="taskSubtitle"></p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-8 fade-up" id="taskNotFound" style="display:none;">
+          <div class="notice warn">Task not found. It may have been deleted, or the link is incorrect.</div>
+        </article>
+
+        <article class="card span-8 fade-up" id="taskFieldsCard">
+          <h2>Task Fields</h2>
+          <form id="taskFieldsForm" class="detail-grid">
+            <div class="field-group span-full">
+              <label for="fieldTitle">Title</label>
+              <input type="text" id="fieldTitle" required>
+            </div>
+            <div class="field-group span-full">
+              <label for="fieldDescription">Description</label>
+              <textarea id="fieldDescription" rows="4" placeholder="Freeform, markdown-capable"></textarea>
+            </div>
+            <div class="field-group">
+              <label for="fieldOwner">Owner / Assignee</label>
+              <select id="fieldOwner"></select>
+            </div>
+            <div class="field-group">
+              <label for="fieldStatus">Status</label>
+              <select id="fieldStatus"></select>
+            </div>
+            <div class="field-group">
+              <label for="fieldPriority">Priority</label>
+              <select id="fieldPriority"></select>
+            </div>
+            <div class="field-group">
+              <label for="fieldDependency">Dependency</label>
+              <select id="fieldDependency"><option value="">None</option></select>
+            </div>
+            <div class="field-group">
+              <label for="fieldCheckpoint">Next Checkpoint</label>
+              <input type="text" id="fieldCheckpoint" placeholder="What happens next">
+            </div>
+            <div class="field-group">
+              <label for="fieldTags">Tags</label>
+              <input type="text" id="fieldTags" placeholder="Comma-separated">
+            </div>
+          </form>
+          <div class="detail-meta">
+            <span class="pill">Created <span id="taskCreatedAt">-</span></span>
+            <span class="pill">Updated <span id="taskUpdatedAt">-</span></span>
+          </div>
+          <div class="detail-save-row">
+            <button type="button" id="saveTaskFields">Save Changes</button>
+            <span class="save-status" id="taskSaveStatus"></span>
+          </div>
+        </article>
+
+        <article class="card span-4 fade-up" id="activityCard">
+          <h3>Activity Log</h3>
+          <div class="activity-log" id="activityLog"></div>
+        </article>
+
+        <article class="card span-12 fade-up" id="commentsCard">
+          <h3>Comment Thread</h3>
+          <div class="comment-thread" id="commentThread"></div>
+          <form class="comment-form" id="commentForm">
+            <textarea id="commentText" rows="2" placeholder="Add a comment..." required></textarea>
+            <div class="comment-form-row">
+              <button type="submit">Post Comment</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="card span-12 fade-up" id="chatCard">
+          <div class="chat-header">
+            <h3>AI Chat</h3>
+            <label style="font-size: 13px; font-weight: 600; color: var(--ink-soft);">
+              Responding as
+              <select id="chatAgentSelect" style="margin-left: 6px;"></select>
+            </label>
+          </div>
+          <p class="chat-focus">Scoped to this task's current state, comment thread, and activity log. Uses the same agent backend as Agents + Chat.</p>
+          <div id="chatMessages" class="chat-messages"></div>
+          <div class="chat-controls">
+            <textarea id="chatInput" rows="3" placeholder="Ask about this task (e.g. what's blocking this, summarize progress)..."></textarea>
+            <div class="chat-actions">
+              <button id="sendChat" type="button">Send</button>
+              <button id="clearChat" type="button" class="ghost">Clear Chat</button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+  <script src="task.js"></script>
+</body>
+</html>

@@ -1,58 +1,71 @@
-// Dynamic Tasks board: localStorage-backed CRUD for the Tasks page.
-const TASKS_STORAGE_KEY = "aisena-tasks-v1";
-const STATUS_CYCLE = ["Planned", "In Progress", "Blocked", "Done"];
+// Task workflow: fetches tasks and the live agent directory from the API, renders a
+// filterable list (state synced to the URL query string), and wires the add-task
+// dialog + quick actions. Single source of truth: /api/tasks and /api/agents.
+const TASK_STATUSES = ["Backlog", "Planned", "In Progress", "Blocked", "In Review", "Done"];
+const TASK_PRIORITIES = ["Low", "Medium", "High", "Critical"];
 
-const DEFAULT_TASKS = [
-  {
-    id: "TASK-0010",
-    name: "TASK-0010 Governance Activation",
-    owner: "Implementation Manager",
-    status: "In Progress",
-    priority: "High",
-    checkpoint: "Artifact review and signoff",
-  },
-  {
-    id: "TASK-0011",
-    name: "TASK-0011 Metrics and Critic Cadence",
-    owner: "Release Manager",
-    status: "Planned",
-    priority: "High",
-    checkpoint: "Define metric checklist",
-  },
-  {
-    id: "TASK-0009",
-    name: "TASK-0009 Stage 0 Backend Plan",
-    owner: "Backend Engineer",
-    status: "Planned",
-    priority: "High",
-    checkpoint: "Implementation scaffold review",
-  },
-];
+let tasksCache = [];
+let agentsCache = [];
 
-function loadTasks() {
-  const raw = localStorage.getItem(TASKS_STORAGE_KEY);
-  if (!raw) {
-    saveTasks(DEFAULT_TASKS);
-    return DEFAULT_TASKS.slice();
-  }
+async function fetchTasks() {
   try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : DEFAULT_TASKS.slice();
+    const response = await fetch(`${API_BASE}/api/tasks`, { cache: "no-store" });
+    if (!response.ok) return [];
+    const data = await response.json();
+    return Array.isArray(data.tasks) ? data.tasks : [];
   } catch (err) {
-    return DEFAULT_TASKS.slice();
+    return [];
   }
 }
 
-function saveTasks(tasks) {
-  localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks));
+function ownerLabel(ownerKey) {
+  if (!ownerKey) return "Unassigned";
+  const agent = agentsCache.find((a) => a.key === ownerKey);
+  return agent ? agent.name : ownerKey;
 }
 
-function nextTaskId(tasks) {
-  const numbers = tasks
-    .map((t) => parseInt(String(t.id).replace(/\D/g, ""), 10))
-    .filter((n) => !Number.isNaN(n));
-  const next = (numbers.length ? Math.max(...numbers) : 9) + 1;
-  return `TASK-${String(next).padStart(4, "0")}`;
+function getFiltersFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    q: params.get("q") || "",
+    owner: params.get("owner") || "",
+    status: params.get("status") || "",
+    priority: params.get("priority") || "",
+  };
+}
+
+function setFiltersInUrl(filters) {
+  const params = new URLSearchParams();
+  if (filters.q) params.set("q", filters.q);
+  if (filters.owner) params.set("owner", filters.owner);
+  if (filters.status) params.set("status", filters.status);
+  if (filters.priority) params.set("priority", filters.priority);
+  const query = params.toString();
+  const newUrl = `${window.location.pathname}${query ? `?${query}` : ""}`;
+  window.history.replaceState({}, "", newUrl);
+}
+
+function readFiltersFromForm() {
+  return {
+    q: document.getElementById("filterText").value.trim(),
+    owner: document.getElementById("filterOwner").value,
+    status: document.getElementById("filterStatus").value,
+    priority: document.getElementById("filterPriority").value,
+  };
+}
+
+function applyFilters(tasks, filters) {
+  const q = filters.q.toLowerCase();
+  return tasks.filter((task) => {
+    if (q) {
+      const haystack = `${task.title || ""} ${task.description || ""}`.toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    if (filters.owner && task.owner !== filters.owner) return false;
+    if (filters.status && task.status !== filters.status) return false;
+    if (filters.priority && task.priority !== filters.priority) return false;
+    return true;
+  });
 }
 
 function setTasksNotice(message, tone) {
@@ -66,148 +79,203 @@ function setTasksNotice(message, tone) {
 function renderTasks() {
   const body = document.getElementById("tasksBody");
   if (!body) return;
-  const tasks = loadTasks();
+  const filters = readFiltersFromForm();
+  setFiltersInUrl(filters);
+  const filtered = applyFilters(tasksCache, filters);
 
-  if (!tasks.length) {
-    body.innerHTML = `<tr><td colspan="6">No tasks yet. Use "Add task in backlog" to create one.</td></tr>`;
+  if (!filtered.length) {
+    body.innerHTML = `<tr class="empty-row"><td colspan="6">No tasks match this view. Use "Add task in backlog" to create one.</td></tr>`;
     return;
   }
 
-  body.innerHTML = tasks
+  body.innerHTML = filtered
     .map(
       (task) => `<tr data-task-id="${task.id}">
-        <td>${task.name}</td>
-        <td>${task.owner}</td>
+        <td><a class="task-link" href="task.html?id=${encodeURIComponent(task.id)}">${task.id} ${task.title}</a></td>
+        <td>${ownerLabel(task.owner)}</td>
         <td><span class="pill">${task.status}</span></td>
         <td>${task.priority}</td>
-        <td>${task.checkpoint || "-"}</td>
+        <td>${task.next_checkpoint || "-"}</td>
         <td>
-          <button type="button" class="ghost task-cycle" data-task-id="${task.id}">Cycle status</button>
+          <a class="ghost" href="task.html?id=${encodeURIComponent(task.id)}" style="text-decoration:none; display:inline-block; padding:9px 15px; border-radius:11px;">Open</a>
           <button type="button" class="ghost task-delete" data-task-id="${task.id}">Delete</button>
         </td>
       </tr>`
     )
     .join("");
 
-  body.querySelectorAll(".task-cycle").forEach((btn) => {
-    btn.addEventListener("click", () => cycleTaskStatus(btn.dataset.taskId));
-  });
   body.querySelectorAll(".task-delete").forEach((btn) => {
     btn.addEventListener("click", () => deleteTask(btn.dataset.taskId));
   });
 }
 
-function cycleTaskStatus(taskId) {
-  const tasks = loadTasks();
-  const task = tasks.find((t) => t.id === taskId);
-  if (!task) return;
-  const idx = STATUS_CYCLE.indexOf(task.status);
-  task.status = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length];
-  saveTasks(tasks);
-  renderTasks();
-  setTasksNotice(`${task.name} moved to ${task.status}.`, "ok");
-}
-
-function deleteTask(taskId) {
-  const tasks = loadTasks();
-  const task = tasks.find((t) => t.id === taskId);
-  if (!task || !window.confirm(`Delete ${task.name}?`)) return;
-  saveTasks(tasks.filter((t) => t.id !== taskId));
-  renderTasks();
-  setTasksNotice(`${task.name} deleted.`, "warn");
-}
-
-function promptSelectTask(actionLabel) {
-  const tasks = loadTasks();
-  if (!tasks.length) {
-    window.alert("No tasks available yet.");
-    return null;
+async function deleteTask(taskId) {
+  const task = tasksCache.find((t) => t.id === taskId);
+  if (!task || !window.confirm(`Delete ${task.id} ${task.title}?`)) return;
+  try {
+    const response = await fetch(`${API_BASE}/api/tasks/${encodeURIComponent(taskId)}`, { method: "DELETE" });
+    if (!response.ok) throw new Error("Delete failed");
+    tasksCache = tasksCache.filter((t) => t.id !== taskId);
+    renderTasks();
+    setTasksNotice(`${task.id} deleted.`, "warn");
+  } catch (err) {
+    setTasksNotice(`Could not delete ${task.id}: ${err.message}`, "warn");
   }
-  const listing = tasks.map((t, i) => `${i + 1}. ${t.name}`).join("\n");
-  const choice = window.prompt(`${actionLabel}\n\n${listing}\n\nEnter the task number:`, "1");
-  if (choice === null) return null;
-  const idx = parseInt(choice, 10) - 1;
-  return tasks[idx] || null;
+}
+
+function populateFilterSelects() {
+  const ownerSelect = document.getElementById("filterOwner");
+  const statusSelect = document.getElementById("filterStatus");
+  const prioritySelect = document.getElementById("filterPriority");
+
+  const ownerOptions = agentsCache
+    .map((agent) => `<option value="${agent.key}">${agent.name}</option>`)
+    .join("");
+  ownerSelect.innerHTML = `<option value="">All Owners</option>${ownerOptions}`;
+  statusSelect.innerHTML = `<option value="">All Statuses</option>${TASK_STATUSES.map((s) => `<option value="${s}">${s}</option>`).join("")}`;
+  prioritySelect.innerHTML = `<option value="">All Priorities</option>${TASK_PRIORITIES.map((p) => `<option value="${p}">${p}</option>`).join("")}`;
+
+  const filters = getFiltersFromUrl();
+  document.getElementById("filterText").value = filters.q;
+  ownerSelect.value = filters.owner;
+  statusSelect.value = filters.status;
+  prioritySelect.value = filters.priority;
+}
+
+function initFilterBar() {
+  ["filterText", "filterOwner", "filterStatus", "filterPriority"].forEach((id) => {
+    document.getElementById(id).addEventListener("input", renderTasks);
+    document.getElementById(id).addEventListener("change", renderTasks);
+  });
+  document.getElementById("filterClear").addEventListener("click", () => {
+    document.getElementById("filterText").value = "";
+    document.getElementById("filterOwner").value = "";
+    document.getElementById("filterStatus").value = "";
+    document.getElementById("filterPriority").value = "";
+    renderTasks();
+  });
+}
+
+function populateTaskDialogSelects() {
+  const ownerSelect = document.getElementById("taskOwner");
+  const statusSelect = document.getElementById("taskStatus");
+  const prioritySelect = document.getElementById("taskPriority");
+  const dependencySelect = document.getElementById("taskDependency");
+
+  ownerSelect.innerHTML = agentsCache.map((agent) => `<option value="${agent.key}">${agent.name}</option>`).join("");
+  statusSelect.innerHTML = TASK_STATUSES.map((s) => `<option value="${s}" ${s === "Backlog" ? "selected" : ""}>${s}</option>`).join("");
+  prioritySelect.innerHTML = TASK_PRIORITIES.map((p) => `<option value="${p}" ${p === "Medium" ? "selected" : ""}>${p}</option>`).join("");
+  dependencySelect.innerHTML =
+    `<option value="">None</option>` +
+    tasksCache.map((t) => `<option value="${t.id}">${t.id} ${t.title}</option>`).join("");
 }
 
 function initTaskDialog() {
   const dialog = document.getElementById("taskDialog");
   const form = document.getElementById("taskForm");
-  const title = document.getElementById("taskDialogTitle");
   const cancelBtn = document.getElementById("taskDialogCancel");
   if (!dialog || !form) return;
 
   cancelBtn.addEventListener("click", () => dialog.close());
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const name = document.getElementById("taskName").value.trim();
-    const owner = document.getElementById("taskOwner").value.trim();
-    if (!name || !owner) return;
-
-    const tasks = loadTasks();
-    tasks.unshift({
-      id: nextTaskId(tasks),
-      name,
-      owner,
-      status: document.getElementById("taskStatus").value,
-      priority: document.getElementById("taskPriority").value,
-      checkpoint: document.getElementById("taskCheckpoint").value.trim(),
-    });
-    saveTasks(tasks);
-    renderTasks();
-    setTasksNotice(`${name} added to the backlog.`, "ok");
-    dialog.close();
-    form.reset();
-  });
-
   document.getElementById("quickAddTask")?.addEventListener("click", () => {
-    title.textContent = "Add Task";
+    form.reset();
+    populateTaskDialogSelects();
     dialog.showModal();
   });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const title = document.getElementById("taskTitle").value.trim();
+    if (!title) return;
+
+    const tags = document
+      .getElementById("taskTags")
+      .value.split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    const payload = {
+      title,
+      description: document.getElementById("taskDescription").value.trim(),
+      owner: document.getElementById("taskOwner").value,
+      status: document.getElementById("taskStatus").value,
+      priority: document.getElementById("taskPriority").value,
+      dependency: document.getElementById("taskDependency").value || null,
+      next_checkpoint: document.getElementById("taskCheckpoint").value.trim(),
+      tags,
+    };
+
+    try {
+      const response = await fetch(`${API_BASE}/api/tasks`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Create failed");
+      tasksCache.unshift(result.task);
+      renderTasks();
+      setTasksNotice(`${result.task.id} added to the backlog.`, "ok");
+      dialog.close();
+      form.reset();
+    } catch (err) {
+      setTasksNotice(`Could not create task: ${err.message}`, "warn");
+    }
+  });
 }
 
-function initQuickActions() {
+function initQuickPickActions() {
+  const dialog = document.getElementById("quickPickDialog");
+  const form = document.getElementById("quickPickForm");
+  const titleEl = document.getElementById("quickPickTitle");
+  const labelEl = document.getElementById("quickPickLabel");
+  const select = document.getElementById("quickPickTask");
+  const cancelBtn = document.getElementById("quickPickCancel");
+  if (!dialog || !form) return;
+
+  let focusField = null;
+
+  cancelBtn.addEventListener("click", () => dialog.close());
+
+  function openQuickPick(title, labelText, field) {
+    if (!tasksCache.length) {
+      window.alert("No tasks available yet. Add a task first.");
+      return;
+    }
+    focusField = field;
+    titleEl.textContent = title;
+    labelEl.firstChild.textContent = `${labelText} `;
+    select.innerHTML = tasksCache.map((t) => `<option value="${t.id}">${t.id} ${t.title}</option>`).join("");
+    dialog.showModal();
+  }
+
   document.getElementById("quickAssignOwner")?.addEventListener("click", () => {
-    const task = promptSelectTask("Assign owner to which task?");
-    if (!task) return;
-    const owner = window.prompt("New owner:", task.owner);
-    if (!owner) return;
-    const tasks = loadTasks();
-    const target = tasks.find((t) => t.id === task.id);
-    target.owner = owner.trim();
-    saveTasks(tasks);
-    renderTasks();
-    setTasksNotice(`${task.name} reassigned to ${target.owner}.`, "ok");
+    openQuickPick("Assign owner", "Task to reassign", "owner");
   });
-
   document.getElementById("quickSetDependency")?.addEventListener("click", () => {
-    const task = promptSelectTask("Set a dependency on which task?");
-    if (!task) return;
-    const dependency = window.prompt("Dependency note:", "");
-    if (!dependency) return;
-    const tasks = loadTasks();
-    const target = tasks.find((t) => t.id === task.id);
-    target.checkpoint = `Depends on: ${dependency.trim()}`;
-    saveTasks(tasks);
-    renderTasks();
-    setTasksNotice(`Dependency recorded for ${task.name}.`, "ok");
+    openQuickPick("Set dependency", "Task to update", "dependency");
+  });
+  document.getElementById("quickLogHandoff")?.addEventListener("click", () => {
+    openQuickPick("Log handoff", "Task to update", "next_checkpoint");
   });
 
-  document.getElementById("quickLogHandoff")?.addEventListener("click", () => {
-    const task = promptSelectTask("Log a handoff for which task?");
-    if (!task) return;
-    const note = window.prompt("Handoff note:", "");
-    if (!note) return;
-    const tasks = loadTasks();
-    const target = tasks.find((t) => t.id === task.id);
-    target.checkpoint = `Handoff: ${note.trim()}`;
-    saveTasks(tasks);
-    renderTasks();
-    setTasksNotice(`Handoff logged for ${task.name}.`, "ok");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const taskId = select.value;
+    if (!taskId) return;
+    window.location.href = `task.html?id=${encodeURIComponent(taskId)}&focus=${encodeURIComponent(focusField)}`;
   });
 }
 
-renderTasks();
-initTaskDialog();
-initQuickActions();
+async function initTasksPage() {
+  agentsCache = await loadAgentCatalog();
+  tasksCache = await fetchTasks();
+  populateFilterSelects();
+  initFilterBar();
+  initTaskDialog();
+  initQuickPickActions();
+  renderTasks();
+}
+
+initTasksPage();

@@ -42,6 +42,19 @@
       <section class="grid">
         <article class="card span-12 fade-up">
           <h2>Current Task List</h2>
+          <div class="filter-bar">
+            <input type="text" id="filterText" placeholder="Search title or description...">
+            <select id="filterOwner">
+              <option value="">All Owners</option>
+            </select>
+            <select id="filterStatus">
+              <option value="">All Statuses</option>
+            </select>
+            <select id="filterPriority">
+              <option value="">All Priorities</option>
+            </select>
+            <button type="button" class="ghost" id="filterClear">Clear Filters</button>
+          </div>
           <table class="table">
             <thead>
               <tr>
@@ -74,29 +87,42 @@
       </section>
 
       <dialog id="taskDialog">
-        <form method="dialog" id="taskForm">
-          <h3 id="taskDialogTitle">Add Task</h3>
-          <label>Task name<input type="text" id="taskName" required placeholder="TASK-0012 Short description"></label>
-          <label>Owner<input type="text" id="taskOwner" required placeholder="Owner name"></label>
+        <form id="taskForm">
+          <h3>Add Task</h3>
+          <label>Title<input type="text" id="taskTitle" required placeholder="Short, action-oriented title"></label>
+          <label>Description<textarea id="taskDescription" rows="3" placeholder="Freeform detail (markdown-capable)"></textarea></label>
+          <label>Owner
+            <select id="taskOwner" required></select>
+          </label>
           <label>Status
-            <select id="taskStatus">
-              <option>Planned</option>
-              <option>In Progress</option>
-              <option>Blocked</option>
-              <option>Done</option>
-            </select>
+            <select id="taskStatus"></select>
           </label>
           <label>Priority
-            <select id="taskPriority">
-              <option>High</option>
-              <option>Medium</option>
-              <option>Low</option>
+            <select id="taskPriority"></select>
+          </label>
+          <label>Dependency
+            <select id="taskDependency">
+              <option value="">None</option>
             </select>
           </label>
           <label>Next Checkpoint<input type="text" id="taskCheckpoint" placeholder="What happens next"></label>
+          <label>Tags<input type="text" id="taskTags" placeholder="Comma-separated, e.g. backend, urgent"></label>
           <div class="chat-actions">
             <button type="submit" id="taskDialogSave">Save</button>
             <button type="button" class="ghost" id="taskDialogCancel">Cancel</button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog id="quickPickDialog">
+        <form id="quickPickForm">
+          <h3 id="quickPickTitle">Choose a task</h3>
+          <label id="quickPickLabel">Task
+            <select id="quickPickTask"></select>
+          </label>
+          <div class="chat-actions">
+            <button type="submit" id="quickPickGo">Open Task</button>
+            <button type="button" class="ghost" id="quickPickCancel">Cancel</button>
           </div>
         </form>
       </dialog>

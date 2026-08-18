@@ -71,6 +71,15 @@ def get_task_by_id(tasks, task_id):
     return next((t for t in tasks if t["id"] == task_id), None)
 
 
+def load_json(path, default):
+    if not path.exists():
+        return default
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return default
+
+
 def save_json(path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2), encoding="utf-8")
@@ -515,6 +524,140 @@ def agent_status(agent_key):
         return jsonify({"error": "Unknown agent"}), 404
     status = get_agent_status(agent.get("key"))
     return jsonify({"agent": agent.get("key"), **status})
+
+
+# Task API endpoints
+TASK_STATUSES = ["Backlog", "Planned", "In Progress", "Blocked", "In Review", "Done"]
+TASK_PRIORITIES = ["Low", "Medium", "High", "Critical"]
+TASK_EDITABLE_FIELDS = [
+    "title", "description", "owner", "status", "priority",
+    "dependency", "next_checkpoint", "tags",
+]
+
+
+def add_task_activity(task, actor, action, details):
+    task.setdefault("activity_log", []).append({
+        "timestamp": utc_now_iso(),
+        "actor": actor,
+        "action": action,
+        "details": details,
+    })
+
+
+@app.route('/api/tasks', methods=['GET'])
+def get_tasks():
+    return jsonify({"tasks": load_tasks()})
+
+
+@app.route('/api/tasks', methods=['POST'])
+def create_task():
+    data = request.get_json(silent=True) or {}
+    title = (data.get('title') or '').strip()
+    if not title:
+        return jsonify({"error": "Title is required"}), 400
+
+    tasks = load_tasks()
+    now = utc_now_iso()
+    status = data.get('status') if data.get('status') in TASK_STATUSES else 'Backlog'
+    priority = data.get('priority') if data.get('priority') in TASK_PRIORITIES else 'Medium'
+    tags = data.get('tags') if isinstance(data.get('tags'), list) else []
+    actor = data.get('actor') or 'user'
+
+    new_task = {
+        "id": next_task_id(tasks),
+        "title": title,
+        "description": data.get('description') or '',
+        "owner": (data.get('owner') or data.get('assignee') or '').strip(),
+        "status": status,
+        "priority": priority,
+        "dependency": data.get('dependency') or None,
+        "next_checkpoint": data.get('next_checkpoint') or '',
+        "tags": tags,
+        "created_at": now,
+        "updated_at": now,
+        "comments": [],
+        "activity_log": [],
+    }
+    add_task_activity(new_task, actor, "created", f"Task created with status {status}")
+    tasks.insert(0, new_task)
+    save_tasks(tasks)
+    return jsonify({"task": new_task}), 201
+
+
+@app.route('/api/tasks/<task_id>', methods=['GET'])
+def get_task(task_id):
+    task = get_task_by_id(load_tasks(), task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+    return jsonify({"task": task})
+
+
+@app.route('/api/tasks/<task_id>', methods=['PUT'])
+def update_task(task_id):
+    data = request.get_json(silent=True) or {}
+    tasks = load_tasks()
+    task = get_task_by_id(tasks, task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    actor = data.get('actor') or 'user'
+    changed = False
+    for field in TASK_EDITABLE_FIELDS:
+        if field not in data:
+            continue
+        new_value = data[field]
+        if field == 'status' and new_value not in TASK_STATUSES:
+            continue
+        if field == 'priority' and new_value not in TASK_PRIORITIES:
+            continue
+        if field == 'tags' and not isinstance(new_value, list):
+            continue
+        old_value = task.get(field)
+        if old_value == new_value:
+            continue
+        task[field] = new_value
+        changed = True
+        add_task_activity(task, actor, f"{field}_changed", f"{field} changed from '{old_value}' to '{new_value}'")
+
+    if changed:
+        task['updated_at'] = utc_now_iso()
+    save_tasks(tasks)
+    return jsonify({"task": task})
+
+
+@app.route('/api/tasks/<task_id>', methods=['DELETE'])
+def delete_task(task_id):
+    tasks = load_tasks()
+    task = get_task_by_id(tasks, task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+    tasks = [t for t in tasks if t["id"] != task_id]
+    save_tasks(tasks)
+    return jsonify({"message": "Task deleted"}), 200
+
+
+@app.route('/api/tasks/<task_id>/comments', methods=['POST'])
+def add_task_comment(task_id):
+    data = request.get_json(silent=True) or {}
+    text = (data.get('text') or '').strip()
+    if not text:
+        return jsonify({"error": "Comment text is required"}), 400
+
+    tasks = load_tasks()
+    task = get_task_by_id(tasks, task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    author = data.get('author') or 'User'
+    task.setdefault('comments', []).append({
+        "author": author,
+        "text": text,
+        "timestamp": utc_now_iso(),
+    })
+    add_task_activity(task, author, "comment_added", f"{author} added a comment")
+    task['updated_at'] = utc_now_iso()
+    save_tasks(tasks)
+    return jsonify({"task": task}), 201
 
 
 # Issue API endpoints
