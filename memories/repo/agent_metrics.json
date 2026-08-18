@@ -1,24 +1,6 @@
 {
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T12:38:25.178574Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "14-product-owner": {
-    "learned_at": "2026-08-18T12:38:29.883005Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T12:38:31.520741Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:38:31.508373Z",
+  "22-cloud-aws-sme": {
+    "learned_at": "2026-08-18T12:38:35.675360Z",
     "count": 1,
     "accuracy": null,
     "model": null
