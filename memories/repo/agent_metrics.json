@@ -16,5 +16,23 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T13:06:12.992761Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T13:06:14.673823Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T13:06:14.749917Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
