@@ -94,5 +94,34 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "11-performance-engineer": {
+    "learned_at": "2026-08-18T12:53:11.130955Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:53:12.491091Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:53:12.788876Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T12:53:12.873536Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:53:12.909225Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
