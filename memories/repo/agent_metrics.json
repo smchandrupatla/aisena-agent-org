@@ -47,3 +47,28 @@
     "accuracy": null,
     "model": null
   },
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T13:05:02.687014Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T13:05:02.828709Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T13:05:03.407880Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T13:05:03.408621Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
