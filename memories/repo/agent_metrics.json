@@ -41,3 +41,18 @@
     "accuracy": null,
     "model": null
   },
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-18T12:59:57.762372Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:59:59.417889Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}: null
+  }
+}
