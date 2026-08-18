@@ -16,5 +16,59 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T12:31:44.811922Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "05-backend-engineer": {
+    "learned_at": "2026-08-18T12:31:45.172126Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "32-test-manager": {
+    "learned_at": "2026-08-18T12:31:45.518395Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:31:45.559897Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:31:45.596428Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:31:45.783189Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:31:46.105590Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T12:31:46.182424Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T12:31:46.855993Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
