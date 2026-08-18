@@ -22,5 +22,31 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T13:09:46.778933Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T13:09:47.057479Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T13:09:47.056804Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T13:09:47.814965Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}": null
   }
 }
