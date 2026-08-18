@@ -40,5 +40,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T12:21:54.870421Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:21:54.964843Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
