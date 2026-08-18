@@ -16,5 +16,29 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T13:01:57.493836Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T13:01:57.774625Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T13:01:58.617122Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T13:01:59.102580Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
