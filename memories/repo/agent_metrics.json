@@ -1,39 +1,8 @@
 {
-  "32-test-manager": {
-    "learned_at": "2026-08-18T13:02:31.416076Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T13:02:31.827039Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T13:02:37.626960Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T13:02:39.926748Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T13:02:40.134193Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T13:02:40.810142Z",
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T13:02:50.030822Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
-}
 }
