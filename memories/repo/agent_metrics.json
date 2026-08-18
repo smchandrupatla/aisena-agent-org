@@ -10,5 +10,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T13:11:35.505486Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T13:11:35.649370Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
