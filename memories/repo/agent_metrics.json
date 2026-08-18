@@ -1,24 +1,6 @@
 {
-  "32-test-manager": {
-    "learned_at": "2026-08-18T13:05:37.440834Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T13:05:38.774496Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T13:05:42.344847Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T13:05:42.810626Z",
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T13:05:44.084303Z",
     "count": 1,
     "accuracy": null,
     "model": null
