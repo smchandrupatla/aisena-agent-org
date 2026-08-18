@@ -1,14 +1,13 @@
 {
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T12:59:49.898560Z",
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T12:59:52.685690Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "14-product-owner": {
-    "learned_at": "2026-08-18T12:59:50.399651Z",
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:59:52.941909Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
