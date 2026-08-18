@@ -4,5 +4,35 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "09-security-engineer": {
+    "learned_at": "2026-08-18T12:51:20.025187Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T12:51:20.099236Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T12:51:20.259188Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:51:20.410914Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:51:20.456763Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
