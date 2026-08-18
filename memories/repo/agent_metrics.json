@@ -106,5 +106,29 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-18T12:33:42.185978Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:33:42.519971Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:33:43.019825Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:33:43.811523Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
