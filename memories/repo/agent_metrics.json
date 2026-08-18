@@ -82,5 +82,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-18T12:35:07.998180Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:35:09.680718Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
