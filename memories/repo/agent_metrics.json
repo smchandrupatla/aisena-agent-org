@@ -1,34 +1,38 @@
 {
   "02-solution-architect": {
-    "learned_at": "2026-08-18T12:09:35.972364Z",
+    "learned_at": "2026-08-18T12:11:36.808541Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T12:09:36.063074Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:11:36.898077Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
   "00-implementation-manager": {
-    "learned_at": "2026-08-18T12:09:36.091902Z",
+    "learned_at": "2026-08-18T12:11:36.970208Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
   "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T12:09:36.236922Z",
+    "learned_at": "2026-08-18T12:11:37.067234Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
   "10-qa-engineer": {
-    "learned_at": "2026-08-18T12:09:36.322139Z",
+    "learned_at": "2026-08-18T12:11:37.131793Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}": null
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T12:11:37.155260Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
