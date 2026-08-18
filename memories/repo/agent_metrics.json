@@ -1,42 +1,6 @@
 {
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T12:39:46.365779Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T12:39:47.426459Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "05-backend-engineer": {
-    "learned_at": "2026-08-18T12:39:47.500641Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T12:39:48.867695Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "32-test-manager": {
-    "learned_at": "2026-08-18T12:39:49.076752Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:39:49.323870Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:39:49.324391Z",
+  "11-performance-engineer": {
+    "learned_at": "2026-08-18T12:46:01.785568Z",
     "count": 1,
     "accuracy": null,
     "model": null
