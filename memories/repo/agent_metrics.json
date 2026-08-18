@@ -82,5 +82,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:53:08.548213Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:53:08.795731Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
