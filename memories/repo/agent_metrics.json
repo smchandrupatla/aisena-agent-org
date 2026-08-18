@@ -17,3 +17,27 @@
     "accuracy": null,
     "model": null
   },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:39:11.307628Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "09-security-engineer": {
+    "learned_at": "2026-08-18T12:39:12.666681Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:39:12.671120Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T12:39:13.017400Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
