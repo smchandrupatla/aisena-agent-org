@@ -1,15 +1,8 @@
 {
-  "32-test-manager": {
-    "learned_at": "2026-08-18T12:39:18.253751Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:39:18.996274Z",
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:39:23.897326Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
-} }
 }
