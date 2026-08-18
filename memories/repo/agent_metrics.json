@@ -1,12 +1,18 @@
 {
-  "32-test-manager": {
-    "learned_at": "2026-08-18T13:06:39.088501Z",
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T13:06:43.301617Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T13:06:39.179605Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T13:06:44.922664Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T13:06:45.400877Z",
     "count": 1,
     "accuracy": null,
     "model": null
