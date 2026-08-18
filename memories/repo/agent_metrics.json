@@ -1,73 +1,9 @@
 {
-  "21-streaming-messaging-infra-sme": {
-    "learned_at": "2026-08-18T13:03:30.954849Z",
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T13:03:56.110259Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T13:03:31.869357Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T13:03:31.890562Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "32-test-manager": {
-    "learned_at": "2026-08-18T13:03:32.255161Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T13:03:32.456011Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T13:03:37.886668Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T13:03:41.340505Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T13:03:42.073247Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T13:03:42.797459Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T13:03:50.374519Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T13:03:54.333099Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T13:03:54.786491Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+} }
+}
