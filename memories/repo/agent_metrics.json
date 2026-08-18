@@ -10,5 +10,23 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T13:05:55.483337Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T13:05:55.586587Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T13:05:55.804187Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
