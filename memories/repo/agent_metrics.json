@@ -40,5 +40,35 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T12:35:16.038631Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "05-backend-engineer": {
+    "learned_at": "2026-08-18T12:35:16.122312Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:35:16.335444Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:35:16.614171Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:35:16.699256Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
