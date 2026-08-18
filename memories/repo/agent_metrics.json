@@ -10,5 +10,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:54:39.714388Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:54:39.811130Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
