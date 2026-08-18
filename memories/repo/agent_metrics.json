@@ -22,5 +22,18 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T12:56:37.565571Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T12:56:38.619635Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
+}
 }
