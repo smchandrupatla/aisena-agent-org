@@ -40,5 +40,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T13:03:42.073247Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T13:03:42.797459Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
