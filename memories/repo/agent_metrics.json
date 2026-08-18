@@ -40,5 +40,23 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "14-product-owner": {
+    "learned_at": "2026-08-18T12:26:26.122623Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T12:26:26.261973Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:26:26.315452Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
