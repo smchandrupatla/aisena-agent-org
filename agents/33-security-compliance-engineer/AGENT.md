@@ -64,4 +64,4 @@ Commands it may need:
 - **Docker**: Docker containerization and Docker Compose local stacks
 - **Aws**: AWS cloud infrastructure (ECS, RDS, S3, Lambda, etc.)
 
-Last-Updated: 2026-08-18T12:52:44.225480Z
+Last-Updated: 2026-08-18T12:53:14.664950Z
