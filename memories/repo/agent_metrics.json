@@ -1,74 +1,37 @@
 {
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:24:25.596730Z",
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:24:37.150606Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:24:30.070199Z",
+  "11-performance-engineer": {
+    "learned_at": "2026-08-18T12:24:37.298152Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:24:30.561261Z",
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T12:24:37.348226Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:24:30.870796Z",
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:24:37.488470Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:24:31.275714Z",
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:24:38.362043Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:24:32.933625Z",
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:24:38.460117Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:24:32.993057Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:24:35.119069Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T12:24:35.140088Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:24:35.339830Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T12:24:35.446774Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T12:24:36.419341Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
