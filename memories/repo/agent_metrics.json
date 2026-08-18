@@ -1,14 +1,19 @@
 {
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:27:05.944390Z",
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T12:27:10.802044Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T12:27:06.088932Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:27:10.900865Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T12:27:10.997413Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
