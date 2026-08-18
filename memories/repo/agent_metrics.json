@@ -22,5 +22,11 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-18T12:38:39.673606Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
