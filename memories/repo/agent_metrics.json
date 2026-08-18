@@ -1,24 +1,6 @@
 {
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T13:12:31.960889Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T13:12:35.797587Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T13:12:36.353468Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T13:12:44.703466Z",
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T13:12:48.924813Z",
     "count": 1,
     "accuracy": null,
     "model": null
