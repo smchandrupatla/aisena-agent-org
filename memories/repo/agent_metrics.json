@@ -5,3 +5,28 @@
     "accuracy": null,
     "model": null
   },
+  "22-cloud-aws-sme": {
+    "learned_at": "2026-08-18T12:33:03.028654Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T12:33:03.798102Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "33-security-compliance-engineer": {
+    "learned_at": "2026-08-18T12:33:04.570491Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "25-infrastructure-platform-engineer": {
+    "learned_at": "2026-08-18T12:33:05.263550Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
