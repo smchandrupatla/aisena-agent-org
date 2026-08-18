@@ -28,5 +28,64 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T12:22:36.241106Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T12:22:36.331872Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "32-test-manager": {
+    "learned_at": "2026-08-18T12:22:36.557837Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:22:36.662326Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "11-performance-engineer": {
+    "learned_at": "2026-08-18T12:22:36.739157Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T12:22:36.785025Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T12:22:36.989935Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:22:37.895446Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:22:38.056789Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:22:38.300279Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
