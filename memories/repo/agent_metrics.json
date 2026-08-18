@@ -1,36 +1,24 @@
 {
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:52:43.344537Z",
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T12:52:50.743018Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:52:44.217532Z",
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:52:50.846693Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:52:44.527999Z",
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:52:50.907186Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:52:45.771674Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:52:48.442943Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:52:48.526033Z",
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:52:51.642567Z",
     "count": 1,
     "accuracy": null,
     "model": null
