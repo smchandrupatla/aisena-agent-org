@@ -16,5 +16,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "09-security-engineer": {
+    "learned_at": "2026-08-18T13:09:13.237520Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "05-backend-engineer": {
+    "learned_at": "2026-08-18T13:09:13.755389Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
