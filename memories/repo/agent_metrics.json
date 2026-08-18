@@ -4,5 +4,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T13:09:11.426106Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T13:09:12.305102Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
