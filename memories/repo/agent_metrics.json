@@ -1,55 +1,14 @@
 {
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T13:00:48.285775Z",
+  "09-security-engineer": {
+    "learned_at": "2026-08-18T13:00:54.158984Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "00-implementation-manager": {
-    "learned_at": "2026-08-18T13:00:50.314028Z",
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T13:00:55.532695Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T13:00:50.470947Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "14-product-owner": {
-    "learned_at": "2026-08-18T13:00:50.747646Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T13:00:51.302039Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T13:00:52.389694Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T13:00:52.667144Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T13:00:52.823756Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T13:00:53.700082Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}
