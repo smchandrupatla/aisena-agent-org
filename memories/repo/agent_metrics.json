@@ -1,31 +1,8 @@
 {
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:32:02.135000Z",
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:32:09.474926Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:32:02.894696Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:32:03.677342Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:32:04.464787Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:32:05.128400Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}
