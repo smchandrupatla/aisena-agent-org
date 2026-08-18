@@ -1,12 +1,24 @@
 {
-  "35-domain-analyst": {
-    "learned_at": "2026-08-18T12:55:22.153913Z",
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-18T12:55:25.509740Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:55:22.635786Z",
+  "32-test-manager": {
+    "learned_at": "2026-08-18T12:55:26.567267Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:55:27.035208Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:55:27.121037Z",
     "count": 1,
     "accuracy": null,
     "model": null
