@@ -1,62 +1,13 @@
 {
-  "00-implementation-manager": {
-    "learned_at": "2026-08-18T12:37:53.749258Z",
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:38:14.265654Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "14-product-owner": {
-    "learned_at": "2026-08-18T12:37:59.785604Z",
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:38:15.422118Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:38:00.731201Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T12:38:00.926238Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:38:04.303946Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:38:05.451743Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:38:06.525407Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:38:06.655536Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:38:09.488688Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:38:10.959519Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
