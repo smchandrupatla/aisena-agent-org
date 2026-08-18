@@ -1,52 +1,14 @@
 {
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T13:09:40.474736Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T13:09:49.597910Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T13:09:41.970709Z",
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T13:09:49.704545Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T13:09:42.847122Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T13:09:43.490341Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T13:09:46.778933Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T13:09:47.057479Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T13:09:47.056804Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T13:09:47.814965Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}": null
   }
 }
