@@ -1,10 +1,14 @@
 {
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T13:13:04.101628Z",
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T13:13:06.251322Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T13:13:07.351530Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
