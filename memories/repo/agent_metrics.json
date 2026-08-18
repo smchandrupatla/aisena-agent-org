@@ -46,5 +46,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "25-infrastructure-platform-engineer": {
+    "learned_at": "2026-08-18T12:24:02.851645Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-18T12:24:02.903430Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
