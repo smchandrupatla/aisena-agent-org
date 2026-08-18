@@ -1,14 +1,7 @@
 {
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T12:28:36.695004Z",
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:28:39.660366Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:28:36.794979Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
