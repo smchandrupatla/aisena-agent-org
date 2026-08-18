@@ -10,5 +10,29 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T12:59:39.361125Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T12:59:39.461120Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:59:39.516514Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T12:59:39.611538Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
