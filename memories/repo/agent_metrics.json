@@ -71,3 +71,10 @@
     "accuracy": null,
     "model": null
   },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T13:05:28.648239Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
