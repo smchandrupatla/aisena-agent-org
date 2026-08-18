@@ -83,3 +83,34 @@
     "accuracy": null,
     "model": null
   },
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T13:01:51.707199Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "20-search-opensearch-sme": {
+    "learned_at": "2026-08-18T13:01:52.592091Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "25-infrastructure-platform-engineer": {
+    "learned_at": "2026-08-18T13:01:53.484693Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-18T13:01:53.563566Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "22-cloud-aws-sme": {
+    "learned_at": "2026-08-18T13:01:53.957698Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
