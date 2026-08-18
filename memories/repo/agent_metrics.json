@@ -1,32 +1,23 @@
 {
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T13:13:22.719716Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T13:13:33.027868Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T13:13:25.466748Z",
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T13:13:34.269929Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T13:13:25.981419Z",
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T13:13:34.846850Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T13:13:28.618715Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T13:13:29.505442Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
+  }
+}
+}
   }
 }
