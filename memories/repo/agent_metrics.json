@@ -1,36 +1,6 @@
 {
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T12:27:10.802044Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:27:10.900865Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T12:27:10.997413Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T12:27:11.410817Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "00-implementation-manager": {
-    "learned_at": "2026-08-18T12:27:11.563380Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "14-product-owner": {
-    "learned_at": "2026-08-18T12:27:26.364132Z",
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:27:27.156822Z",
     "count": 1,
     "accuracy": null,
     "model": null
