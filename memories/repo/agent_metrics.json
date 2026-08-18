@@ -10,5 +10,28 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T12:57:48.420645Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:57:48.440096Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:57:49.472164Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "14-product-owner": {
+    "learned_at": "2026-08-18T12:57:49.512884Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
