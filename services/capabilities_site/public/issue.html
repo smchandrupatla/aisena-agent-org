@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Detailed view of a specific issue with workflow stepper, comment thread, activity log, and AI chat.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Issue Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .stepper { display: flex; flex-direction: column; max-width: 400px; margin: 20px 0; }
+    .step { text-align: center; margin: 0 10px; }
+    .step:not(.current) { opacity: 0.5; }
+    .step strong { color: #2d8cf0; }
+    .activity-log { margin-top: 20px; }
+    .activity-entry { border-left: 4px solid #e0e0e0; padding: 8px 12px; margin-bottom: 6px; font-family: monospace; }
+    #chatArea { border: 1px solid #ddd; padding: 10px; height: 200px; overflow-y: auto; margin-top: 10px; }
+    #chatInput { width: 100%; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+              <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Issue Detail</div>
+        <h1>Issue #<span id="issueId">?</span></h1>
+      </section>
+
+      <article class="card span-12">
+        <div id="issueContent">
+          <!-- Content will be loaded via JS -->
+        </div>
+      </article>
+    </main>
+  </div>
+
+  <script>
+    // Extract issue ID from URL query string
+    const urlParams = new URLSearchParams(window.location.search);
+    const issueId = urlParams.get('id');
+    if (!issueId) {
+      document.getElementById('issueContent').innerHTML = '<p>Missing issue ID in URL.</p>';
+      throw new Error('Issue ID required');
+    }
+
+    // Fetch issue data
+    async function loadIssue() {
+      const resp = await fetch(`/api/issues/${issueId}`);
+      if (!resp.ok) {
+        document.getElementById('issueContent').innerHTML = '<p>Issue not found.</p>';
+        return;
+      }
+      const issue = await resp.json();
+      renderIssue(issue);
+    }
+
+    // Render issue data into the page
+    function renderIssue(issue) {
+      const content = document.getElementById('issueContent');
+      const ownerAgent = issue.owner; // owner name as stored
+      const status = issue.status || 'Open';
+      
+      // Map owner name to agent key (simple heuristic)
+      const agentKey = (ownerAgent || '').replace(/\s+/g, '-').toLowerCase();
+      
+      // Lifecycle stepper
+      const steps = ['Report', 'Triage', 'Mitigate', 'Verify'];
+      const currentStepIndex = steps.indexOf(status);
+      
+      const stepperHtml = steps.map((step, idx) => `
+        <div class="step ${idx === currentStepIndex ? 'current' : ''}">
+          <span>${idx + 1}</span>
+          <strong>${step}</strong>
+        </div>
+      `).join('');
+      
+      // Activity log entries
+      const activityEntries = (issue.comments || []).map(c => `
+        <div class="activity-entry">
+          <strong>${new Date(c.timestamp).toLocaleString()}:</strong> ${c.text}
+        </div>
+      `).join('');
+      
+      // Owner dropdown options (using agent catalog)
+      const ownerOptions = await fetch('/api/agents')
+        .then(r => r.json())
+        .then(agents => agents.agents.map(a => a.name))
+        .catch(() => []);
+      
+      // Owner dropdown HTML
+      const ownerSelect = ownerOptions.map(name => `<option value="${name}">${name}</option>`).join('');
+      
+      content.innerHTML = `
+        <form id="issueForm">
+          <label>Title<br><input type="text" name="title" value="${issue.title || ''}" required></label><br><br>
+          <label>Severity<br>
+            <select name="severity">
+              <option ${issue.severity === 'Low' ? 'selected' : ''}>Low</option>
+              <option ${issue.severity === 'Medium' ? 'selected' : ''}>Medium</option>
+              <option ${issue.severity === 'High' ? 'selected' : ''}>High</option>
+              <option ${issue.severity === 'Critical' ? 'selected' : ''}>Critical</option>
+            </select>
+          </label><br><br>
+          <label>Owner<br>
+            <select name="owner">${ownerSelect}</select>
+          </label><br><br>
+          <label>Status<br>
+            <select name="status">
+              ${steps.map(s => `
+                <option ${s === status ? 'selected' : ''}>${s}</option>
+              `).join('')}
+            </select>
+          </label><br><br>
+          <label>Mitigation<br><textarea name="mitigation" rows="3">${issue.mitigation || ''}</textarea></label><br><br>
+          <label>Escalation Flag<br><input type="checkbox" name="escalation_flag" ${issue.escalation_flag ? 'checked' : ''}></label><br><br>
+          <button type="submit">Save Changes</button>
+        </form>
+        
+        <div class="activity-log">
+          <h3>Activity Log</h3>
+          <div>${activityEntries}</div>
+        </div>
+        
+        <h3>Comment Thread</h3>
+        <div id="commentList">
+          ${issue.comments ? issue.comments.map(c => `
+            <div class="comment">
+              <strong>${new Date(c.timestamp).toLocaleString()} - ${c.author || 'Anonymous'}:</strong> ${c.text}
+            </div>
+          `).join('') : '<p>No comments yet.</p>'}
+        </div>
+        <form id="commentForm">
+          <input type="text" name="comment" placeholder="Add a comment..." required>
+          <button type="submit">Post</button>
+        </form>
+        
+        <h3>AI Chat</h3>
+        <div id="chatArea"></div>
+        <form id="chatForm">
+          <input type="text" name="message" id="chatInput" placeholder="Ask about this issue..." required>
+          <button type="submit">Send</button>
+        </form>
+      `;
+      
+      // Save changes handler
+      document.getElementById('issueForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const updates = {};
+        for (const [key, value] of formData.entries()) {
+          updates[key] = value;
+        }
+        const resp = await fetch(`/api/issues/${issueId}`, {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(updates)
+        });
+        if (resp.ok) {
+          alert('Issue updated');
+          loadIssue(); // refresh
+        } else {
+          alert('Failed to update issue');
+        }
+      });
+      
+      // Comment posting
+      document.getElementById('commentForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const commentInput = e.target.elements.comment;
+        if (!commentInput.value.trim()) return;
+        const comment = {
+          author: 'User',
+          text: commentInput.value,
+          timestamp: new Date().toISOString()
+        };
+        const resp = await fetch(`/api/issues/${issueId}/comments`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(comment)
+        });
+        if (resp.ok) {
+          commentInput.value = '';
+          renderIssue(issue); // refresh to show new comment
+        } else {
+          alert('Failed to post comment');
+        }
+      });
+      
+      // AI Chat
+      let chatHistory = [];
+      async function sendChatMessage(message) {
+        const resp = await fetch(`/api/agents/${agentKey}/message`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            message: `Issue ${issueId}: ${message}\n\nTitle: ${issue.title}\nStatus: ${status}\nMitigation: ${issue.mitigation || ''}\n\nProvide a concise update or next steps.`,
+            tool_actions: []
+          })
+        });
+        if (!resp.ok) {
+          alert('Failed to get AI response');
+          return;
+        }
+        const data = await resp.json();
+        const reply = data.reply || 'No reply';
+        const chatArea = document.getElementById('chatArea');
+        const msgDiv = document.createElement('div');
+        msgDiv.textContent = `AI: ${reply}`;
+        chatArea.appendChild(msgDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+      document.getElementById('chatForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = e.target.elements.message;
+        if (input.value.trim()) {
+          await sendChatMessage(input.value.trim());
+          input.value = '';
+        }
+      }
+      
+      // Load initial issue
+      loadIssue();
+    }
+  </script>
+</body>
+</html>

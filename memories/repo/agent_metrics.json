@@ -1,98 +1,19 @@
 {
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:34:46.409378Z",
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:35:10.399111Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T12:34:47.302550Z",
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T12:35:11.785317Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T12:34:48.025379Z",
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:35:12.301169Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T12:34:48.992473Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T12:34:50.733165Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:34:50.760906Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T12:34:51.176433Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "14-product-owner": {
-    "learned_at": "2026-08-18T12:34:58.313178Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:34:59.279188Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:35:02.604694Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:35:03.369829Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:35:04.164572Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:35:04.933243Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:35:05.656631Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:35:07.998180Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:35:09.680718Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
