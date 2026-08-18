@@ -4,5 +4,29 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "32-test-manager": {
+    "learned_at": "2026-08-18T12:52:24.688795Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:52:24.750446Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:52:25.967701Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:52:26.198844Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
