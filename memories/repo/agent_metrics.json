@@ -1,55 +1,14 @@
 {
-  "00-implementation-manager": {
-    "learned_at": "2026-08-18T12:49:06.854197Z",
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:49:25.082241Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T12:49:07.470197Z",
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T12:49:32.871598Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:49:07.766125Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:49:10.611938Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:49:10.856349Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:49:12.151939Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:49:12.653314Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:49:13.325538Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:49:16.546772Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}
