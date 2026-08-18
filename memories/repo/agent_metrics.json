@@ -1,19 +1,9 @@
 {
-  "35-domain-analyst": {
-    "learned_at": "2026-08-18T13:08:37.561653Z",
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T13:08:43.164986Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "21-streaming-messaging-infra-sme": {
-    "learned_at": "2026-08-18T13:08:38.301632Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T13:08:38.671957Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+} }
+}
