@@ -1,19 +1,8 @@
 {
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:58:21.144986Z",
+  "35-domain-analyst": {
+    "learned_at": "2026-08-18T12:58:25.224512Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:58:22.352638Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:58:22.521138Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}
