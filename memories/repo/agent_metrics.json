@@ -40,5 +40,12 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T13:06:59.866095Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
+} }
 }
