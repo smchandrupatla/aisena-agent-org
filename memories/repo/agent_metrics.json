@@ -22,5 +22,16 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T13:06:55.766664Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T13:06:55.891231Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
