@@ -1,20 +1,7 @@
 {
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:53:37.224568Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:53:43.153494Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T12:53:39.214344Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T12:53:39.338304Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
