@@ -17,3 +17,22 @@
     "accuracy": null,
     "model": null
   },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T13:09:36.171985Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "22-cloud-aws-sme": {
+    "learned_at": "2026-08-18T13:09:36.511153Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T13:09:36.822158Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
