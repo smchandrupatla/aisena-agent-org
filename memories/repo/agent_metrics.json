@@ -1,86 +1,15 @@
 {
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:39:07.089020Z",
+  "32-test-manager": {
+    "learned_at": "2026-08-18T12:39:18.253751Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:39:07.980840Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T12:39:09.979353Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:39:11.307628Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T12:39:12.666681Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T12:39:12.671120Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T12:39:13.017400Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "27-backend-detection-services": {
-    "learned_at": "2026-08-18T12:39:14.503256Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T12:39:14.503846Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:39:15.551463Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T12:39:14.997276Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "21-streaming-messaging-infra-sme": {
-    "learned_at": "2026-08-18T12:39:15.552088Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T12:39:17.168905Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "05-backend-engineer": {
-    "learned_at": "2026-08-18T12:39:17.267740Z",
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:39:18.996274Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
+} }
 }
