@@ -70,5 +70,29 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-18T12:33:37.698416Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:33:39.400451Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T12:33:39.805858Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:33:39.837466Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
