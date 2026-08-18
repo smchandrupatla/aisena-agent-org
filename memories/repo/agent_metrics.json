@@ -1,24 +1,6 @@
 {
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T13:10:54.114711Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T13:10:57.900290Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T13:10:59.792832Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T13:10:59.829418Z",
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T13:11:04.684506Z",
     "count": 1,
     "accuracy": null,
     "model": null
