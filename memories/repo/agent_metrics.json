@@ -16,5 +16,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:55:44.688348Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:55:44.794074Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
