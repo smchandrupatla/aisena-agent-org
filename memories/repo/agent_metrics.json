@@ -1,21 +1,7 @@
 {
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T12:32:49.688256Z",
+  "20-search-opensearch-sme": {
+    "learned_at": "2026-08-18T12:33:02.267807Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "14-product-owner": {
-    "learned_at": "2026-08-18T12:32:57.883512Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T12:32:58.545790Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-} }
-}
