@@ -148,5 +148,40 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:25:05.242490Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "09-security-engineer": {
+    "learned_at": "2026-08-18T12:25:05.280333Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T12:25:05.433966Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:25:05.526812Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:25:06.528956Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T12:25:07.028771Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
