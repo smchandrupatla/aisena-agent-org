@@ -1,7 +1,14 @@
 {
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T13:11:25.863230Z",
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T13:11:29.941940Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T13:11:30.002626Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
