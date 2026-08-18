@@ -94,6 +94,38 @@ def generate_issue_id(issues):
     return f"ISSUE-{str(next_num).zfill(4)}"
 
 
+def add_comment(issue_id, comment):
+    issues = load_issues()
+    issue = find_issue(issues, issue_id)
+    if not issue:
+        return None
+    # Initialize comments array if it doesn't exist
+    if "comments" not in issue:
+        issue["comments"] = []
+    # Add comment with timestamp
+    comment_entry = {
+        "author": comment.get("author", "User"),
+        "text": comment.get("text", ""),
+        "timestamp": comment.get("timestamp", utc_now_iso()),
+    }
+    issue["comments"].append(comment_entry)
+    save_issues(issues)
+    return issue
+
+
+def add_activity_log(issue_id, entry):
+    issues = load_issues()
+    issue = find_issue(issues, issue_id)
+    if not issue:
+        return None
+    # Initialize activity_log array if it doesn't exist
+    if "activity_log" not in issue:
+        issue["activity_log"] = []
+    issue["activity_log"].append(entry)
+    save_issues(issues)
+    return issue
+
+
 def load_issues():
     issues_path = ROOT / "project" / "issues.json"
     if not issues_path.exists():
