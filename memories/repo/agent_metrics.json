@@ -11,3 +11,28 @@
     "accuracy": null,
     "model": null
   },
+  "05-backend-engineer": {
+    "learned_at": "2026-08-18T12:38:16.840674Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:38:17.130424Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:38:17.329767Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:38:17.408148Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}
