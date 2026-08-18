@@ -1,20 +1,7 @@
 {
-  "35-domain-analyst": {
-    "learned_at": "2026-08-18T12:51:50.546149Z",
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T12:51:54.513401Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T12:51:50.601734Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:51:51.387108Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
