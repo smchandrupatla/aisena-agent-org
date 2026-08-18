@@ -45,13 +45,30 @@ def utc_now_iso():
     return datetime.now(timezone.utc).isoformat()
 
 
-def load_json(path, default):
+def load_tasks():
+    path = ROOT / "project" / "tasks.json"
     if not path.exists():
-        return default
+        return []
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception:
-        return default
+        return []
+
+
+def save_tasks(tasks):
+    path = ROOT / "project" / "tasks.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(tasks, indent=2), encoding="utf-8")
+
+
+def next_task_id(tasks):
+    numbers = [int(t["id"].replace("TASK-", "")) for t in tasks if t["id"].startswith("TASK-")]
+    next_num = max(numbers) + 1 if numbers else 1
+    return f"TASK-{str(next_num).zfill(4)}"
+
+
+def get_task_by_id(tasks, task_id):
+    return next((t for t in tasks if t["id"] == task_id), None)
 
 
 def save_json(path, data):

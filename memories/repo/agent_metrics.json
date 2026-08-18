@@ -1,20 +1,7 @@
 {
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T12:34:42.695573Z",
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T12:34:46.409378Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:34:43.186142Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "35-domain-analyst": {
-    "learned_at": "2026-08-18T12:34:43.958180Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-}
