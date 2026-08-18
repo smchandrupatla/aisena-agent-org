@@ -1,91 +1,44 @@
 {
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T12:22:34.774994Z",
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-18T12:22:38.941525Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T12:22:34.830060Z",
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:22:39.535200Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T12:22:35.066647Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:22:39.581724Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T12:22:35.175108Z",
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:22:39.809631Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T12:22:35.905654Z",
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T12:22:39.893848Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "27-backend-detection-services": {
-    "learned_at": "2026-08-18T12:22:36.241106Z",
+  "29-frontend-gui-developer": {
+    "learned_at": "2026-08-18T12:22:40.338816Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T12:22:36.331872Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:22:40.431808Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "32-test-manager": {
-    "learned_at": "2026-08-18T12:22:36.557837Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:22:36.662326Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "11-performance-engineer": {
-    "learned_at": "2026-08-18T12:22:36.739157Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T12:22:36.785025Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T12:22:36.989935Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T12:22:37.895446Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T12:22:38.056789Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T12:22:38.300279Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}
