@@ -4,5 +4,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "14-product-owner": {
+    "learned_at": "2026-08-18T12:30:57.175229Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:30:58.041679Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
