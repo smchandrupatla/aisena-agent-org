@@ -1,20 +1,10 @@
 {
-  "32-test-manager": {
-    "learned_at": "2026-08-18T12:36:46.726626Z",
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:36:49.882007Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:36:46.882859Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T12:36:47.049067Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
+  }
+}ull
   }
 }
