@@ -46,5 +46,11 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:34:59.279188Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
