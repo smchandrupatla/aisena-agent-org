@@ -1,67 +1,8 @@
 {
-  "32-test-manager": {
-    "learned_at": "2026-08-18T12:25:07.272658Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:25:11.008701Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T12:25:07.476481Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T12:25:07.626994Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T12:25:08.472244Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T12:25:08.553007Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-18T12:25:08.888050Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "05-backend-engineer": {
-    "learned_at": "2026-08-18T12:25:09.535710Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:25:09.683933Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:25:09.923015Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T12:25:10.047625Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T12:25:10.147433Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}
