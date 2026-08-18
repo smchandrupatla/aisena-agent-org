@@ -64,5 +64,25 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "11-performance-engineer": {
+    "learned_at": "2026-08-18T12:51:10.190112Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-18T12:51:10.615073Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "13-release-manager": {
+    "learned_at": "2026-08-18T12:51:10.742718Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  }
+}model": null
   }
 }
