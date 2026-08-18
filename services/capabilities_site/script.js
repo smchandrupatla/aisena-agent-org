@@ -6,6 +6,9 @@ function setActiveNav() {
     const href = link.getAttribute("href");
     if (href === path) {
       link.classList.add("active");
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
     }
   });
 }
@@ -58,10 +61,29 @@ function renderDocumentationCatalog() {
     return;
   }
 
-  grid.innerHTML = DOC_TEMPLATE_CATALOG.map((item) => {
-    const list = item.templates.map((t) => `<li>${t}</li>`).join("");
-    return `<article class="card span-6 fade-up doc-card"><h3>${item.category}</h3><p class="doc-path">${item.path}</p><ul class="doc-list">${list}</ul></article>`;
-  }).join("");
+  grid.innerHTML = "";
+  DOC_TEMPLATE_CATALOG.forEach((item) => {
+    const article = document.createElement("article");
+    article.className = "card span-6 fade-up doc-card";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = item.category;
+
+    const path = document.createElement("p");
+    path.className = "doc-path";
+    path.textContent = item.path;
+
+    const list = document.createElement("ul");
+    list.className = "doc-list";
+    item.templates.forEach((t) => {
+      const li = document.createElement("li");
+      li.textContent = t;
+      list.appendChild(li);
+    });
+
+    article.append(h3, path, list);
+    grid.appendChild(article);
+  });
 }
 
 function renderWordTemplateCatalog() {
@@ -74,12 +96,29 @@ function renderWordTemplateCatalog() {
     return;
   }
 
-  root.innerHTML = WORD_TEMPLATE_CATALOG.map((group) => {
-    const links = group.templates
-      .map((item) => `<li><a href="${item.file}" download>${item.name}</a></li>`)
-      .join("");
-    return `<article class="card span-6 doc-card"><h3>${group.category}</h3><ul class="doc-list doc-download-list">${links}</ul></article>`;
-  }).join("");
+  root.innerHTML = "";
+  WORD_TEMPLATE_CATALOG.forEach((group) => {
+    const article = document.createElement("article");
+    article.className = "card span-6 doc-card";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = group.category;
+
+    const list = document.createElement("ul");
+    list.className = "doc-list doc-download-list";
+    group.templates.forEach((item) => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = item.file;
+      a.setAttribute("download", "");
+      a.textContent = item.name;
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+
+    article.append(h3, list);
+    root.appendChild(article);
+  });
 }
 
 function getChatKey(agentKey) {
@@ -273,9 +312,7 @@ function initAgentChat(catalog) {
     });
   }
 
-  const requestedKey = new URLSearchParams(window.location.search).get("agent");
-  const initialAgent = catalog.find((agent) => agent.key === requestedKey) || catalog[0];
-  setActiveAgent(initialAgent);
+  setActiveAgent(catalog[0]);
 }
 
 function initCrossCheck(catalog) {
@@ -304,6 +341,7 @@ function initCrossCheck(catalog) {
     const prompt = promptInput.value.trim() || "Review the proposal for risks and next actions.";
 
     summaryEl.textContent = "Running peer review...";
+    runButton.disabled = true;
 
     try {
       const response = await fetch(`${API_BASE}/api/agents/cross-check`, {
@@ -323,6 +361,8 @@ function initCrossCheck(catalog) {
       summaryEl.textContent = result.summary || "No summary returned.";
     } catch (error) {
       summaryEl.textContent = `Cross-check failed: ${error.message}`;
+    } finally {
+      runButton.disabled = false;
     }
   });
 }

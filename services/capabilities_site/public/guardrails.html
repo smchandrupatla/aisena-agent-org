@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AISENA — Guardrails and Escalation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>AISENA</strong>Domain-Agnostic Implementation System</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="start-project.html">Start a Project</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+              <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Control Plane</div>
+        <h1>Autonomy with explicit risk boundaries.</h1>
+        <p class="lede">Technical decisions are autonomous; business-impacting decisions route through human approval gates.</p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-6 fade-up">
+          <h3>Approval Gate Triggers</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Trigger</th>
+                <th>Why escalation is mandatory</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Production system change</td>
+                <td>Can affect live users and service continuity</td>
+              </tr>
+              <tr>
+                <td>Real infrastructure or API spend</td>
+                <td>Introduces financial commitment</td>
+              </tr>
+              <tr>
+                <td>User-data handling changes</td>
+                <td>Privacy, legal, and trust exposure</td>
+              </tr>
+              <tr>
+                <td>Pricing or legal impact</td>
+                <td>Requires business-level risk judgment</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <h3>Conflict Arbitration</h3>
+          <ol class="timeline">
+            <li>
+              <div class="step">Level 1</div>
+              <strong>Direct trade-off analysis</strong>
+              Roles document alternatives and expected impact.
+            </li>
+            <li>
+              <div class="step">Level 2</div>
+              <strong>Architecture arbitration</strong>
+              Solution Architect resolves technical conflict.
+            </li>
+            <li>
+              <div class="step">Level 3</div>
+              <strong>Policy arbitration</strong>
+              Security and compliance role enforces policy constraints.
+            </li>
+            <li>
+              <div class="step">Level 4</div>
+              <strong>Business decision</strong>
+              Product Owner decides risk tolerance trade-offs.
+            </li>
+          </ol>
+        </article>
+
+        <article class="card span-12 fade-up">
+          <h2>Release Safety Checklist</h2>
+          <div class="notice">
+            Every release candidate must include version pinning, rollback steps, and quality evidence.
+          </div>
+          <div class="pill-list">
+            <span class="pill">Commit reference linked</span>
+            <span class="pill">Rollback command tested</span>
+            <span class="pill">Critical tests green</span>
+            <span class="pill">Security scan reviewed</span>
+            <span class="pill">Change log appended</span>
+          </div>
+        </article>
+
+        <article class="card span-12 fade-up">
+          <div class="notice warn">
+            If a requested action falls outside technical judgment and into business risk ownership,
+            escalation is required before execution.
+          </div>
+        </article>
+      </section>
+
+      <p class="footer fade-up">This capability site is designed to be updated as the operating model evolves.</p>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

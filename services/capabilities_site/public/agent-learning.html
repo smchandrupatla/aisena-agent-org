@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AISENA — Agent Self Learning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>AISENA</strong>Domain-Agnostic Implementation System</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="start-project.html">Start a Project</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+              <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Learning Intelligence</div>
+        <h1>Latest self-learning captured by each agent.</h1>
+        <p class="lede">This page reads the synchronized learning snapshot and shows the latest improvement insight recorded per agent.</p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-12 fade-up">
+          <div class="pill-list">
+            <span class="pill">Generated: <strong id="learningGeneratedAt">-</strong></span>
+            <span class="pill">Agents: <strong id="learningTotalCount">0</strong></span>
+          </div>
+
+          <div class="learning-actions" style="margin-top: 12px;">
+            <label for="triggerAgentSelect">Agent</label>
+            <select id="triggerAgentSelect" class="learning-input">
+              <option value="">Select an agent</option>
+            </select>
+            <button id="triggerLearningBtn" type="button">Trigger Self Learning</button>
+            <span id="triggerLearningStatus" class="learning-status"></span>
+          </div>
+
+          <div style="overflow:auto; margin-top: 12px;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th>Updated At</th>
+                  <th>Latest Learning</th>
+                  <th>Recommendation</th>
+                  <th>Status</th>
+                  <th>Acceptance</th>
+                  <th>Accepted At</th>
+                  <th>Application</th>
+                  <th>Action ID</th>
+                  <th>Applied At</th>
+                  <th>Context</th>
+                  <th>Evidence</th>
+                </tr>
+              </thead>
+              <tbody id="agentLearningBody">
+                <tr><td colspan="12">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="card span-12 fade-up">
+          <div class="pill-list">
+            <span class="pill">Audited actions: <strong id="learningActionAuditCount">0</strong></span>
+          </div>
+          <div style="overflow:auto; margin-top: 12px;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Agent</th>
+                  <th>Action ID</th>
+                  <th>Action</th>
+                  <th>Status</th>
+                  <th>Detail</th>
+                </tr>
+              </thead>
+              <tbody id="learningActionAuditBody">
+                <tr><td colspan="6">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="agent-learning.js"></script>
+</body>
+</html>

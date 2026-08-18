@@ -5,5 +5,21 @@
   "amount": 12500.00,
   "currency": "USD",
   "purpose": "International supplier payment",
-  "referenceId": "REF-12345"
+  "referenceId": "REF-12345",
+  "debtor": {
+    "name": "Acme Corp",
+    "address": {
+      "street_name": "123 Main St",
+      "town_name": "New York",
+      "country": "US",
+      "post_code": "10001"
+    }
+  },
+  "creditor": {
+    "name": "Global Supplies Ltd",
+    "address": {
+      "town_name": "London",
+      "country": "GB"
+    }
+  }
 }

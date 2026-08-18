@@ -7,5 +7,18 @@
     "agent_skills.prompt_engineering",
     "agent_skills.rag",
     "apis.rest_api"
+  ],
+  "learned_capabilities": [
+    {
+      "id": "d101e9774c0652b0",
+      "name": "Lock scope, architecture boundaries, and handoff criteria early to improve delivery predictability.",
+      "status": "active",
+<<<<<<< Updated upstream
+      "installed_at": "2026-08-15T04:45:14Z",
+=======
+      "installed_at": "2026-08-15T02:18:06Z",
+>>>>>>> Stashed changes
+      "source": "automated-self-learning"
+    }
   ]
 }

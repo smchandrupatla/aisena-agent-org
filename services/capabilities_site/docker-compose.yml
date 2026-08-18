@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  capabilities-site:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8081:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=/api
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.capabilities-site.rule=Host(`aisena.local`)"
+      - "traefik.http.routers.capabilities-site.entrypoints=web"
+      - "traefik.http.services.capabilities-site.loadbalancer.healthcheck.path=/"
+    networks:
+      - web
+      - default
+
+  # Optional: Add a reverse proxy setup with Traefik
+  traefik:
+    image: traefik:2.10
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge

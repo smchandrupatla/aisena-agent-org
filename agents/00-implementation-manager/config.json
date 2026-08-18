@@ -19,5 +19,18 @@
     "agent_skills.multi_agent_systems",
     "apis.rest_api",
     "apis.mcp"
+  ],
+  "learned_capabilities": [
+    {
+      "id": "6e5a3bc005d31781",
+      "name": "Phase-gated delivery reduces rework by forcing requirement and architecture lock before implementation",
+      "status": "active",
+<<<<<<< Updated upstream
+      "installed_at": "2026-08-15T04:45:14Z",
+=======
+      "installed_at": "2026-08-15T02:18:06Z",
+>>>>>>> Stashed changes
+      "source": "automated-self-learning"
+    }
   ]
 }

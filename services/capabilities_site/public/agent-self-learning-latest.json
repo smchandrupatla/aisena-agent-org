@@ -1,0 +1,221 @@
+{
+  "generated_at": "2026-08-15T01:05:00Z",
+  "agents": {
+    "00-implementation-manager": {
+      "latest_learning": "Phase-gated delivery reduces rework by forcing requirement and architecture lock before implementation",
+      "updated_at": "2026-08-11T11:11:02Z",
+      "context": "delivery execution",
+      "evidence": "project/requirements/"
+    },
+    "01-business-analyst": {
+      "latest_learning": "Lock scope, architecture boundaries, and handoff criteria early to improve delivery predictability.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/01-business-analyst/AGENT.md"
+    },
+    "02-solution-architect": {
+      "latest_learning": "Lock scope, architecture boundaries, and handoff criteria early to improve delivery predictability.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/02-solution-architect/AGENT.md"
+    },
+    "03-ui-ux-designer": {
+      "latest_learning": "95.9% of top homepages failed WCAG audits in 2026 \u2014 worst rate on record \u2014 driven by AI-generated frontends skipping manual accessibility validation. WCAG 3.0 (March 2026) replaces A/AA/AAA pass/fail with 174 outcome-based requirements and partial-credit scoring. Every UX handoff must include explicit, testable accessibility gates: contrast ratios, keyboard navigation paths, ARIA roles, and WCAG 2.1 AA error-pattern requirements.",
+      "updated_at": "2026-08-15T01:05:00Z",
+      "context": "daily-domain-research",
+      "evidence": "https://www.forasoft.com/blog/article/ai-accessibility-ui-ux-design | https://adaquickscan.com/blog/wcag-3-working-draft-march-2026-174-outcomes | https://aberdeen.io/blog/2026/04/07/ada-title-iis-2026-update-what-changed-and-what-didnt/"
+    },
+    "04-frontend-engineer": {
+      "latest_learning": "Validate user flows with realistic scenarios early, then align implementation to measurable usability outcomes.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/04-frontend-engineer/AGENT.md"
+    },
+    "05-backend-engineer": {
+      "latest_learning": "Use API-first contracts and smoke tests early to catch schema and integration defects before downstream work.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/05-backend-engineer/AGENT.md"
+    },
+    "06-database-engineer": {
+      "latest_learning": "Design normalized schemas with migration-first discipline and index paths based on query behavior.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/06-database-engineer/AGENT.md"
+    },
+    "07-integration-engineer": {
+      "latest_learning": "Use API-first contracts and smoke tests early to catch schema and integration defects before downstream work.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/07-integration-engineer/AGENT.md"
+    },
+    "08-devops-engineer": {
+      "latest_learning": "Automate repeatable environment setup and deployment checks to lower release risk and recovery time.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/08-devops-engineer/AGENT.md"
+    },
+    "09-security-engineer": {
+      "latest_learning": "Shift security and compliance checks left so policy gaps are detected during design and implementation, not release.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/09-security-engineer/AGENT.md"
+    },
+    "10-qa-engineer": {
+      "latest_learning": "Run targeted automated checks per change and keep evidence traceability for faster defect isolation.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/10-qa-engineer/AGENT.md"
+    },
+    "11-performance-engineer": {
+      "latest_learning": "Run targeted automated checks per change and keep evidence traceability for faster defect isolation.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/11-performance-engineer/AGENT.md"
+    },
+    "12-documentation-engineer": {
+      "latest_learning": "Keep documentation synchronized with implementation milestones to prevent operational knowledge gaps.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/12-documentation-engineer/AGENT.md"
+    },
+    "13-release-manager": {
+      "latest_learning": "Automate repeatable environment setup and deployment checks to lower release risk and recovery time.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/13-release-manager/AGENT.md"
+    },
+    "14-product-owner": {
+      "latest_learning": "Lock scope, architecture boundaries, and handoff criteria early to improve delivery predictability.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/14-product-owner/AGENT.md"
+    },
+    "15-sanctions-screening-sme": {
+      "latest_learning": "Codify domain-specific rules as testable artifacts so specialist guidance is reproducible by engineering teams.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/15-sanctions-screening-sme/AGENT.md"
+    },
+    "16-fraud-detection-sme": {
+      "latest_learning": "Codify domain-specific rules as testable artifacts so specialist guidance is reproducible by engineering teams.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/16-fraud-detection-sme/AGENT.md"
+    },
+    "17-payments-messaging-sme": {
+      "latest_learning": "Codify domain-specific rules as testable artifacts so specialist guidance is reproducible by engineering teams.",
+      "updated_at": "2026-08-11T11:11:54Z",
+      "context": "baseline-seed",
+      "evidence": "agents/17-payments-messaging-sme/AGENT.md"
+    },
+    "18-regulatory-compliance-sme": {
+      "latest_learning": "Shift security and compliance checks left so policy gaps are detected during design and implementation, not release.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/18-regulatory-compliance-sme/AGENT.md"
+    },
+    "19-data-architecture-database-sme": {
+      "latest_learning": "Design normalized schemas with migration-first discipline and index paths based on query behavior.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/19-data-architecture-database-sme/AGENT.md"
+    },
+    "20-search-opensearch-sme": {
+      "latest_learning": "Codify domain-specific rules as testable artifacts so specialist guidance is reproducible by engineering teams.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/20-search-opensearch-sme/AGENT.md"
+    },
+    "21-streaming-messaging-infra-sme": {
+      "latest_learning": "Use API-first contracts and smoke tests early to catch schema and integration defects before downstream work.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/21-streaming-messaging-infra-sme/AGENT.md"
+    },
+    "22-cloud-aws-sme": {
+      "latest_learning": "Automate repeatable environment setup and deployment checks to lower release risk and recovery time.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/22-cloud-aws-sme/AGENT.md"
+    },
+    "23-security-identity-sme": {
+      "latest_learning": "Shift security and compliance checks left so policy gaps are detected during design and implementation, not release.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/23-security-identity-sme/AGENT.md"
+    },
+    "24-case-management-ux-sme": {
+      "latest_learning": "Validate user flows with realistic scenarios early, then align implementation to measurable usability outcomes.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/24-case-management-ux-sme/AGENT.md"
+    },
+    "25-infrastructure-platform-engineer": {
+      "latest_learning": "Automate repeatable environment setup and deployment checks to lower release risk and recovery time.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/25-infrastructure-platform-engineer/AGENT.md"
+    },
+    "26-backend-ingestion-streaming": {
+      "latest_learning": "Use API-first contracts and smoke tests early to catch schema and integration defects before downstream work.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/26-backend-ingestion-streaming/AGENT.md"
+    },
+    "27-backend-detection-services": {
+      "latest_learning": "Use API-first contracts and smoke tests early to catch schema and integration defects before downstream work.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/27-backend-detection-services/AGENT.md"
+    },
+    "28-backend-data-persistence": {
+      "latest_learning": "Use API-first contracts and smoke tests early to catch schema and integration defects before downstream work.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/28-backend-data-persistence/AGENT.md"
+    },
+    "29-frontend-gui-developer": {
+      "latest_learning": "Validate user flows with realistic scenarios early, then align implementation to measurable usability outcomes.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/29-frontend-gui-developer/AGENT.md"
+    },
+    "30-devops-release-engineer": {
+      "latest_learning": "Automate repeatable environment setup and deployment checks to lower release risk and recovery time.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/30-devops-release-engineer/AGENT.md"
+    },
+    "31-test-automation-engineer": {
+      "latest_learning": "Run targeted automated checks per change and keep evidence traceability for faster defect isolation.",
+      "updated_at": "2026-08-11T11:11:55Z",
+      "context": "baseline-seed",
+      "evidence": "agents/31-test-automation-engineer/AGENT.md"
+    },
+    "32-test-manager": {
+      "latest_learning": "Run targeted automated checks per change and keep evidence traceability for faster defect isolation.",
+      "updated_at": "2026-08-11T11:11:56Z",
+      "context": "baseline-seed",
+      "evidence": "agents/32-test-manager/AGENT.md"
+    },
+    "33-security-compliance-engineer": {
+      "latest_learning": "Shift security and compliance checks left so policy gaps are detected during design and implementation, not release.",
+      "updated_at": "2026-08-11T11:11:56Z",
+      "context": "baseline-seed",
+      "evidence": "agents/33-security-compliance-engineer/AGENT.md"
+    },
+    "34-technical-writer": {
+      "latest_learning": "Keep documentation synchronized with implementation milestones to prevent operational knowledge gaps.",
+      "updated_at": "2026-08-11T11:11:56Z",
+      "context": "baseline-seed",
+      "evidence": "agents/34-technical-writer/AGENT.md"
+    },
+    "manager": {
+      "latest_learning": "Lock scope, architecture boundaries, and handoff criteria early to improve delivery predictability.",
+      "updated_at": "2026-08-11T11:11:56Z",
+      "context": "baseline-seed",
+      "evidence": "agents/manager/AGENT.md"
+    }
+  }
+}

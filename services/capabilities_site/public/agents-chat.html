@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AISENA — Agents and Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>AISENA</strong>Domain-Agnostic Implementation System</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="start-project.html">Start a Project</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+              <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Agent Console</div>
+        <h1>Real AI-backed agents with live status and peer review.</h1>
+        <p class="lede">Each agent runs against the live backend, keeps a server-side transcript, and can be cross-checked by a peer reviewer with a built-in turn cap.</p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-4 fade-up">
+          <h3>Agent Directory</h3>
+          <p>Click an agent to load context and start a focused live chat.</p>
+          <div id="agentList" class="agent-list"></div>
+        </article>
+
+        <article class="card span-8 fade-up">
+          <div class="chat-header">
+            <h3 id="chatAgentName">Choose an agent</h3>
+            <div id="chatAgentGroup" class="agent-group"></div>
+          </div>
+          <p id="chatAgentFocus" class="chat-focus">Select an agent from the left to begin.</p>
+
+          <div class="runner-meta">
+            <div><strong>Run Command:</strong> <code id="chatRunCommand">N/A</code></div>
+            <div><strong>Agent File:</strong> <code id="chatAgentFile">N/A</code></div>
+            <div><strong>Status:</strong> <span id="chatAgentStatus" class="status-badge">ready</span></div>
+            <button id="copyRunCommand" type="button" class="ghost">Copy Command</button>
+          </div>
+
+          <div id="chatMessages" class="chat-messages">
+            <div class="msg system">The live agent backend is connected. Asking the selected agent now triggers a real Copilot-backed response and server-side transcript persistence.</div>
+          </div>
+
+          <div class="chat-controls">
+            <textarea id="chatInput" rows="3" placeholder="Type your request for the selected agent..."></textarea>
+            <div class="chat-actions">
+              <button id="sendChat" type="button">Send</button>
+              <button id="clearChat" type="button" class="ghost">Clear Agent Chat</button>
+            </div>
+          </div>
+
+          <div class="notice" style="margin-top: 12px;">
+            Guardrails are enforced on the server: secret redaction, allow-listed tools, and bounded turn limits for peer review.
+          </div>
+        </article>
+      </section>
+
+      <section class="card span-12 fade-up" style="margin-top: 20px;">
+        <h3>Cross-check Review</h3>
+        <div class="cross-check-grid">
+          <label>
+            Primary agent
+            <select id="crossCheckPrimaryAgent"></select>
+          </label>
+          <label>
+            Peer reviewer
+            <select id="crossCheckPeerAgent"></select>
+          </label>
+          <label>
+            Turn cap
+            <select id="crossCheckTurnCap">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </label>
+        </div>
+        <textarea id="crossCheckPrompt" rows="2" placeholder="Briefly describe the plan or decision to validate...">Review the proposal for risks, dependencies, and the highest-priority next step.</textarea>
+        <div class="chat-actions" style="margin-top: 12px;">
+          <button id="runCrossCheck" type="button">Run Review</button>
+        </div>
+        <pre id="crossCheckSummary" class="cross-check-summary">No review has run yet.</pre>
+      </section>
+    </main>
+  </div>
+
+  <script src="agents-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
