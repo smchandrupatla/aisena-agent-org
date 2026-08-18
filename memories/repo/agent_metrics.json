@@ -28,5 +28,29 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:38:41.069285Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T12:38:42.336756Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:38:42.415004Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "06-database-engineer": {
+    "learned_at": "2026-08-18T12:38:42.847266Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
