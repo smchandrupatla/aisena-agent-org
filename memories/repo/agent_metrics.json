@@ -1,48 +1,6 @@
 {
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T12:30:46.637319Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "14-product-owner": {
-    "learned_at": "2026-08-18T12:30:57.175229Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T12:30:58.041679Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "20-search-opensearch-sme": {
-    "learned_at": "2026-08-18T12:31:01.516954Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T12:31:02.659526Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T12:31:03.498932Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T12:31:04.139748Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T12:31:04.790228Z",
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:31:08.911025Z",
     "count": 1,
     "accuracy": null,
     "model": null
