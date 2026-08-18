@@ -1,54 +1,18 @@
 {
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T12:32:09.474926Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:32:18.843435Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "06-database-engineer": {
-    "learned_at": "2026-08-18T12:32:11.278759Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-18T12:32:19.559845Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "18-regulatory-compliance-sme": {
-    "learned_at": "2026-08-18T12:32:11.648858Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "21-streaming-messaging-infra-sme": {
-    "learned_at": "2026-08-18T12:32:11.815707Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T12:32:12.072759Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T12:32:12.754714Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "35-domain-analyst": {
-    "learned_at": "2026-08-18T12:32:13.579578Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T12:32:14.880335Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "05-backend-engineer": {
-    "learned_at": "2026-08-18T12:32:15.247076Z",
+  "02-solution-architect": {
+    "learned_at": "2026-08-18T12:32:19.593959Z",
     "count": 1,
     "accuracy": null,
     "model": null
