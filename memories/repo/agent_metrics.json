@@ -1,48 +1,6 @@
 {
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T13:03:01.688114Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "32-test-manager": {
-    "learned_at": "2026-08-18T13:03:01.885767Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-18T13:03:02.083731Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T13:03:07.758684Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T13:03:10.373635Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T13:03:10.475774Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T13:03:11.622593Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T13:03:20.179713Z",
+  "20-search-opensearch-sme": {
+    "learned_at": "2026-08-18T13:03:25.538593Z",
     "count": 1,
     "accuracy": null,
     "model": null
