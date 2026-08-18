@@ -1,39 +1,8 @@
 {
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T13:05:44.084303Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T13:05:52.480744Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T13:05:55.483337Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T13:05:55.586587Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T13:05:55.804187Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T13:05:57.827479Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T13:05:59.398531Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
-} }
 }
