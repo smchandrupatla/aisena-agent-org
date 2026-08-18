@@ -70,5 +70,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-18T12:31:48.075336Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:31:48.748508Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
