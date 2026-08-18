@@ -1,36 +1,6 @@
 {
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T13:09:34.952630Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T13:09:35.188194Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T13:09:35.874307Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T13:09:36.171985Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T13:09:36.511153Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "30-devops-release-engineer": {
-    "learned_at": "2026-08-18T13:09:36.822158Z",
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T13:09:40.474736Z",
     "count": 1,
     "accuracy": null,
     "model": null
