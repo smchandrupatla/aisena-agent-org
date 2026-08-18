@@ -1,18 +1,12 @@
 {
-  "13-release-manager": {
-    "learned_at": "2026-08-18T13:10:29.192472Z",
+  "30-devops-release-engineer": {
+    "learned_at": "2026-08-18T13:10:37.650050Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T13:10:34.408219Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T13:10:34.476566Z",
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T13:10:39.545236Z",
     "count": 1,
     "accuracy": null,
     "model": null
