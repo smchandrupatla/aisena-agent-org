@@ -60,6 +60,24 @@ def save_json(path, data):
 
 
 def load_issues():
+    return load_json(ROOT / "project" / "issues.json", [])
+
+
+def save_issues(issues):
+    save_json(ROOT / "project" / "issues.json", issues)
+
+
+def find_issue(issues, issue_id):
+    return next((i for i in issues if i["id"] == issue_id), None)
+
+
+def generate_issue_id(issues):
+    numbers = [int(i["id"].replace("ISSUE-", "")) for i in issues if i["id"].startswith("ISSUE-")]
+    next_num = max(numbers) + 1 if numbers else 1
+    return f"ISSUE-{str(next_num).zfill(4)}"
+
+
+def load_issues():
     issues_path = ROOT / "project" / "issues.json"
     if not issues_path.exists():
         return []
