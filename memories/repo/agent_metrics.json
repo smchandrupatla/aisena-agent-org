@@ -4,5 +4,17 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-18T13:13:25.466748Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T13:13:25.981419Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
