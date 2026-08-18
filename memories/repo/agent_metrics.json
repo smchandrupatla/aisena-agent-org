@@ -1,45 +1,14 @@
 {
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T12:56:57.862832Z",
+  "16-fraud-detection-sme": {
+    "learned_at": "2026-08-18T12:57:16.809574Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T12:57:06.233757Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T12:57:08.653742Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T12:57:08.981335Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T12:57:08.982008Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T12:57:14.923423Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T12:57:15.892233Z",
+  "00-implementation-manager": {
+    "learned_at": "2026-08-18T12:57:18.245438Z",
     "count": 1,
     "accuracy": null,
     "model": null
   }
-} }
 }
