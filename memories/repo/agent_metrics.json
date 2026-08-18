@@ -100,5 +100,34 @@
     "count": 1,
     "accuracy": null,
     "model": null
-  }
-}
+  },
+  "18-regulatory-compliance-sme": {
+    "learned_at": "2026-08-18T12:37:12.835600Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "27-backend-detection-services": {
+    "learned_at": "2026-08-18T12:37:13.087039Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-18T12:37:13.198642Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T12:37:13.497287Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "37-mobile-app-engineer": {
+    "learned_at": "2026-08-18T12:37:13.815814Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
