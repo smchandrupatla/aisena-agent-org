@@ -1,69 +1,25 @@
 {
-  "32-test-manager": {
-    "learned_at": "2026-08-18T13:06:08.706566Z",
+  "01-business-analyst": {
+    "learned_at": "2026-08-18T13:06:30.377861Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T13:06:08.986964Z",
+  "33-security-compliance-engineer": {
+    "learned_at": "2026-08-18T13:06:32.033835Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T13:06:12.504674Z",
+  "25-infrastructure-platform-engineer": {
+    "learned_at": "2026-08-18T13:06:32.538280Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T13:06:12.992761Z",
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T13:06:32.716121Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T13:06:14.673823Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T13:06:14.749917Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T13:06:22.693447Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T13:06:25.654780Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T13:06:25.736173Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "13-release-manager": {
-    "learned_at": "2026-08-18T13:06:25.917480Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T13:06:29.013712Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  }
-} }
-}
