@@ -28,5 +28,11 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T13:03:37.886668Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }

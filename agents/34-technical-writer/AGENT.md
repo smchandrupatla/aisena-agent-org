@@ -67,4 +67,4 @@ Commands it may need:
 - **Rest Api**: REST API design and implementation (Flask/FastAPI)
 - **Mcp**: MCP (Model Context Protocol) for exposing tools to LLM runtimes
 
-Last-Updated: 2026-08-18T13:03:07.769683Z
+Last-Updated: 2026-08-18T13:03:37.917150Z
