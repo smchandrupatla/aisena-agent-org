@@ -16,5 +16,24 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "10-qa-engineer": {
+    "learned_at": "2026-08-18T13:02:39.926748Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-18T13:02:40.134193Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "07-integration-engineer": {
+    "learned_at": "2026-08-18T13:02:40.810142Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
+}
 }
