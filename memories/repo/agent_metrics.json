@@ -1,18 +1,6 @@
 {
-  "37-mobile-app-engineer": {
-    "learned_at": "2026-08-18T13:00:57.032764Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-18T13:00:58.257172Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "19-data-architecture-database-sme": {
-    "learned_at": "2026-08-18T13:00:58.427514Z",
+  "08-devops-engineer": {
+    "learned_at": "2026-08-18T13:01:00.293851Z",
     "count": 1,
     "accuracy": null,
     "model": null
