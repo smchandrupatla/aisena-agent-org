@@ -34,5 +34,41 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "19-data-architecture-database-sme": {
+    "learned_at": "2026-08-18T13:07:40.205364Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T13:07:40.326239Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "09-security-engineer": {
+    "learned_at": "2026-08-18T13:07:40.699249Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "32-test-manager": {
+    "learned_at": "2026-08-18T13:07:40.870193Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "05-backend-engineer": {
+    "learned_at": "2026-08-18T13:07:40.900005Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-18T13:07:41.076177Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
