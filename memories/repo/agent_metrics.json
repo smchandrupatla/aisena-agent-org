@@ -1,25 +1,14 @@
 {
-  "01-business-analyst": {
-    "learned_at": "2026-08-18T13:06:30.377861Z",
+  "32-test-manager": {
+    "learned_at": "2026-08-18T13:06:39.088501Z",
     "count": 1,
     "accuracy": null,
     "model": null
   },
-  "33-security-compliance-engineer": {
-    "learned_at": "2026-08-18T13:06:32.033835Z",
+  "34-technical-writer": {
+    "learned_at": "2026-08-18T13:06:39.179605Z",
     "count": 1,
     "accuracy": null,
     "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T13:06:32.538280Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T13:06:32.716121Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
+  }
+}
