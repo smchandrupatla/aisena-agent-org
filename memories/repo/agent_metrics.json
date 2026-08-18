@@ -40,5 +40,35 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "25-infrastructure-platform-engineer": {
+    "learned_at": "2026-08-18T12:29:04.371765Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-18T12:29:05.551059Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "23-security-identity-sme": {
+    "learned_at": "2026-08-18T12:29:06.810932Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "09-security-engineer": {
+    "learned_at": "2026-08-18T12:29:06.854843Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "03-ui-ux-designer": {
+    "learned_at": "2026-08-18T12:29:06.905945Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
