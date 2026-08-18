@@ -52,5 +52,29 @@
     "count": 1,
     "accuracy": null,
     "model": null
+  },
+  "20-search-opensearch-sme": {
+    "learned_at": "2026-08-18T12:21:59.569144Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "22-cloud-aws-sme": {
+    "learned_at": "2026-08-18T12:21:59.961569Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "17-payments-messaging-sme": {
+    "learned_at": "2026-08-18T12:22:00.192737Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
+  },
+  "33-security-compliance-engineer": {
+    "learned_at": "2026-08-18T12:22:00.787944Z",
+    "count": 1,
+    "accuracy": null,
+    "model": null
   }
 }
