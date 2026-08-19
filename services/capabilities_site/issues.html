@@ -8,7 +8,7 @@
   <title>Issues</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,6 +17,10 @@
       <div class="brand">
         <div class="badge">AI</div>
         <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <div class="github-info">
+        <span class="github-icon">🐙</span>
+        <span class="github-name">aisena-agent-org</span>
       </div>
       <nav>
         <a href="index.html">Overview</a>
@@ -38,6 +42,7 @@
         <div class="kicker">Risk and Blockers</div>
         <h1>Issues Menu</h1>
         <p class="lede">Capture blockers, defects, and risks with clear severity and resolution ownership.</p>
+        <a href="start-project.html" class="cta-button">Create New App</a>
       </section>
 
       <section class="grid">
@@ -45,22 +50,15 @@
           <h2>Open Issues</h2>
           <div class="filter-bar">
             <input type="text" id="filterText" placeholder="Search issues..." />
+            <select id="filterOwner"><option value="">All Owners</option></select>
             <select id="filterSeverity">
               <option value="">All Severities</option>
-              <option>High</option>
-              <option>Medium</option>
-              <option>Low</option>
             </select>
             <select id="filterStatus">
               <option value="">All Statuses</option>
-              <option>Open</option>
-              <option>Monitoring</option>
-              <option>Mitigating</option>
-              <option>Verifying</option>
-              <option>Resolved</option>
             </select>
             <label><input type="checkbox" id="filterIncludeResolved" /> Include Resolved</label>
-            <button id="filterApplyBtn">Apply Filters</button>
+            <button type="button" class="ghost" id="filterClear">Clear Filters</button>
           </div>
           <table class="table">
             <thead>
@@ -100,15 +98,20 @@
         <form method="dialog" id="issueForm">
           <h3>Report Issue</h3>
           <label>Issue<input type="text" id="issueTitle" required placeholder="Short description of the problem"></label>
+          <label>Description / impact and evidence<textarea id="issueDescription" rows="4" placeholder="Describe impact, evidence, and affected users or systems"></textarea></label>
           <label>Severity
             <select id="issueSeverity">
+              <option>Critical</option>
               <option>High</option>
               <option>Medium</option>
               <option>Low</option>
             </select>
           </label>
-          <label>Owner<input type="text" id="issueOwner" required placeholder="Owner name"></label>
+          <label>Owner<select id="issueOwner" required></select></label>
           <label>Mitigation<textarea id="issueMitigation" rows="3" placeholder="Planned mitigation or next step"></textarea></label>
+          <label>Related task<input type="text" id="issueRelatedTask" placeholder="Optional TASK-0001"></label>
+          <label><input type="checkbox" id="issueEscalation" /> Escalation required</label>
+          <div class="notice warn" id="issueEscalationWarning" hidden>Escalate immediately when issue impacts production, legal exposure, pricing, or user data handling.</div>
           <div class="chat-actions">
             <button type="submit" id="issueDialogSave">Save</button>
             <button type="button" class="ghost" id="issueDialogCancel">Cancel</button>

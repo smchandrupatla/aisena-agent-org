@@ -6,6 +6,7 @@ Mission:
 - Analyse functional requirements and repository state.
 - Define user journeys, interaction patterns, and accessibility expectations.
 - Provide UI/UX guidance for implementation teams.
+- Redesign the AI Shop portal to modern, professional interface reflecting autonomous delivery shop capabilities.
 
 Responsibilities:
 - Review `/project/requirements`, `/project/architecture`, application goals, and any existing UI artifacts.
@@ -84,4 +85,4 @@ Expected interaction with other agents:
 ### Deployment
 - **Vercel**: Vercel frontend deployment
 
-Last-Updated: 2026-08-19T03:03:00.808251Z
+Last-Updated: 2026-08-19T03:15:01.110208Z

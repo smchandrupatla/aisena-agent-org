@@ -21,6 +21,52 @@ function staggerFade() {
   });
 }
 
+function initModernFeatures() {
+  // Initialize modern navigation behavior
+  setActiveNav();
+  
+  // Initialize stagger animations
+  staggerFade();
+  
+  // Add smooth scrolling
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+  
+  // Initialize card hover effects
+  const cards = document.querySelectorAll('.card, .vp-item');
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-4px)';
+      this.style.transition = 'all 0.3s ease';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = '';
+    });
+  });
+  
+  // Initialize CTA button tracking
+  const ctaButton = document.querySelector('.cta-button');
+  if (ctaButton) {
+    ctaButton.addEventListener('click', function() {
+      // Track CTA clicks for analytics
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'cta_click', {
+          'event_category': 'engagement',
+          'event_label': 'create_new_app'
+        });
+      }
+    });
+  }
+}
+
 async function loadAgentCatalog() {
   try {
     const response = await fetch(`${API_BASE}/api/agents`, { cache: "no-store" });
@@ -153,6 +199,9 @@ function renderChatMessages(messages, root) {
   });
   root.scrollTop = root.scrollHeight;
 }
+
+// Initialize modern features when DOM is ready
+document.addEventListener('DOMContentLoaded', initModernFeatures);
 
 function updateStatusBadge(agentKey, status, label) {
   const badge = document.getElementById("chatAgentStatus");

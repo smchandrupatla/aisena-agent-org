@@ -983,3 +983,41 @@ Add the following acceptance criterion to all Stage 0+ case management and scree
 - **Rollback Plan:** Remove the added navigation links and restore the previous intake page title, then rebuild `capabilities-site`.
 - **Human Approval Needed:** No
 - **Handoff Target:** 10-qa-engineer
+
+---
+
+### LOG-20260819-003
+
+- **Entry ID:** LOG-20260819-003
+- **Date:** 2026-08-19
+- **Agent Role:** 05-backend-engineer
+- **Task ID:** AGENT-CHAT-CROSSCHECK-001
+- **What Changed:** Replaced the unavailable-Copilot placeholder with a useful role-aware local fallback, passed primary output into peer review, and added explicit RED/AMBER/GREEN cross-check verdicts.
+- **Files Modified:** `services/api/app.py`, `services/api/test_app.py`
+- **Commit Ref:** pending
+- **Rationale:** The Docker API container has no authenticated `copilot` CLI, causing chat to appear non-functional and cross-check to repeat placeholder text.
+- **Alternatives Considered:** Add provider credentials to the repository or silently fail; rejected because credentials must not be committed and silent failure obscures runtime state.
+- **Risk Level:** Low
+- **Metrics Impact:** 5/5 API tests pass; browser-facing `/api` proxy returns working chat and cross-check responses.
+- **Rollback Plan:** Revert the fallback and peer-context changes, then rebuild the API image.
+- **Human Approval Needed:** No
+- **Handoff Target:** 10-qa-engineer
+
+---
+
+### LOG-20260819-002
+
+- **Entry ID:** LOG-20260819-002
+- **Date:** 2026-08-19
+- **Agent Role:** 04-frontend-engineer / 05-backend-engineer
+- **Task ID:** ISSUE-WORKFLOW-001
+- **What Changed:** Replaced the static Issues menu with API-backed issue creation, combined URL-synced filters, agent-directory ownership, dedicated issue detail pages, lifecycle progress, inline updates, audit activity, comments, and per-issue AI chat using the existing agent message endpoint.
+- **Files Modified:** `services/api/app.py`, `services/api/test_app.py`, `services/capabilities_site/issues.html`, `services/capabilities_site/issues.js`, `services/capabilities_site/issue.html`, `services/capabilities_site/issue.js`
+- **Commit Ref:** pending
+- **Rationale:** Make issue reporting and resolution a working workflow consistent with the existing Tasks implementation.
+- **Alternatives Considered:** Keep localStorage or duplicate the task chat backend; rejected because the requirement calls for shared API-backed workflow behavior.
+- **Risk Level:** Medium
+- **Metrics Impact:** API regression suite passes 4/4; issue list and detail pages return HTTP 200; create/update/comment smoke paths pass.
+- **Rollback Plan:** Revert the six issue workflow files and API changes, then rebuild `api` and `capabilities-site`.
+- **Human Approval Needed:** No
+- **Handoff Target:** 10-qa-engineer

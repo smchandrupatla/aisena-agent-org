@@ -116,6 +116,7 @@ services:
       dockerfile: services/api/Dockerfile
     environment:
       - POSTGRES_DSN=host=postgres dbname=aisena user=aisena password=aisena_pw
+      - COPILOT_GITHUB_TOKEN=${COPILOT_GITHUB_TOKEN:-}
     ports:
       - "5000:5000"
     depends_on:

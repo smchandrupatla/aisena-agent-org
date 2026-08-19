@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Issue detail with lifecycle, audit trail, comments, and AI chat.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"><title>Issue Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css">
+</head>
+<body><div class="site-wrap">
+  <header class="topbar fade-up"><div class="brand"><div class="badge">AI</div><div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div></div><nav>
+    <a href="index.html">Overview</a><a href="start-project.html">Create New App</a><a href="capabilities.html">Capabilities</a><a href="documentation.html">Documentation</a><a href="tasks.html">Tasks</a><a href="issues.html" class="active">Issues</a><a href="agent-learning.html">Agent Learning</a><a href="workflow.html">Workflow</a><a href="guardrails.html">Guardrails</a><a href="agents-chat.html">Agents + Chat</a><a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+  </nav></header>
+  <main><section class="hero fade-up"><div class="kicker"><a href="issues.html" style="color:inherit;">&larr; Back to Issues</a></div><h1 id="issueHeading">Loading issue...</h1><p class="lede" id="issueSubtitle"></p></section>
+    <section class="grid"><article class="card span-8" id="issueFieldsCard"><h2>Issue Fields</h2><form id="issueFieldsForm" class="detail-grid">
+      <div class="field-group span-full"><label for="fieldTitle">Title</label><input id="fieldTitle" required></div>
+      <div class="field-group span-full"><label for="fieldDescription">Impact and evidence</label><textarea id="fieldDescription" rows="5"></textarea></div>
+      <div class="field-group"><label for="fieldSeverity">Severity</label><select id="fieldSeverity"></select></div><div class="field-group"><label for="fieldOwner">Owner</label><select id="fieldOwner"></select></div>
+      <div class="field-group"><label for="fieldStatus">Status</label><select id="fieldStatus"></select></div><div class="field-group"><label for="fieldRelatedTask">Related task</label><input id="fieldRelatedTask"></div>
+      <div class="field-group span-full"><label for="fieldMitigation">Mitigation</label><textarea id="fieldMitigation" rows="4"></textarea></div>
+      <label class="span-full"><input type="checkbox" id="fieldEscalation"> Escalation required</label>
+    </form><div class="detail-meta"><span class="pill">Created <span id="issueCreatedAt">-</span></span><span class="pill">Updated <span id="issueUpdatedAt">-</span></span></div><div class="detail-save-row"><button id="saveIssueFields" type="button">Save Changes</button><span id="issueSaveStatus" class="save-status"></span></div></article>
+    <article class="card span-4"><h3>Issue Lifecycle</h3><div id="issueStepper" class="steps-row"></div><div class="notice warn" id="issueEscalationNotice" style="margin-top:14px;"></div></article>
+    <article class="card span-4"><h3>Activity Log</h3><div id="activityLog" class="activity-log"></div></article>
+    <article class="card span-8"><h3>Comment Thread</h3><div id="commentThread" class="comment-thread"></div><form id="commentForm" class="comment-form"><textarea id="commentText" rows="2" placeholder="Add a comment..." required></textarea><div class="comment-form-row"><button type="submit">Post Comment</button></div></form></article>
+    <article class="card span-12"><div class="chat-header"><h3>AI Chat</h3><label>Responding as <select id="chatAgentSelect"></select></label></div><p class="chat-focus">Scoped to this issue's state, comments, and activity log.</p><div id="chatMessages" class="chat-messages"></div><div class="chat-controls"><textarea id="chatInput" rows="3" placeholder="Ask about this issue..."></textarea><div class="chat-actions"><button id="sendChat" type="button">Send</button><button id="clearChat" type="button" class="ghost">Clear Chat</button></div></div></article></section>
+  </main></div><script src="script.js"></script><script src="issue.js"></script></body></html>

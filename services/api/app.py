@@ -219,6 +219,36 @@ def get_agent_prompt(agent):
     return agent_file.read_text(encoding="utf-8")
 
 
+def fallback_agent_response(agent, user_message, peer_review=False):
+    """Provide a useful local response when the optional Copilot CLI is unavailable."""
+    role = agent.get("name", "Selected agent")
+    focus = agent.get("focus", "the requested delivery work")
+    message = (user_message or "").strip()
+    lowered = message.lower()
+    if peer_review:
+        verdict = "AMBER"
+        if any(term in lowered for term in ("security", "secret", "production", "legal", "user data")):
+            verdict = "RED"
+        elif any(term in lowered for term in ("test", "validated", "rollback", "monitor")):
+            verdict = "GREEN"
+        return (
+            f"{role} local cross-check: {verdict}.\n"
+            f"Review focus: {focus}.\n"
+            "Action items: confirm the owner and acceptance criteria; identify dependencies and rollback steps; "
+            "run a focused test before approval. The Copilot CLI is unavailable, so this is a local rule-based review."
+        )
+
+    if any(term in lowered for term in ("top 3", "next 3", "next actions", "what should", "priority")):
+        answer = "1. Confirm the outcome and acceptance criteria. 2. Identify the highest-risk dependency. 3. Define the next testable delivery slice."
+    elif "summar" in lowered:
+        answer = f"Focus on {focus}; capture the current decision, risks, owner, and next checkpoint."
+    elif "risk" in lowered or "block" in lowered:
+        answer = "Check production impact, data exposure, security controls, dependencies, and rollback readiness before proceeding."
+    else:
+        answer = f"I can help with {focus}. Start by stating the desired outcome, constraints, and evidence needed for the next decision."
+    return f"{role} local assistant: {answer} The Copilot CLI is unavailable, so this response uses the local delivery fallback."
+
+
 def redact_secrets(text):
     if not isinstance(text, str):
         return ""
@@ -302,7 +332,7 @@ Reply in plain text, no markdown fences, and keep it focused.
 """
 
 
-def run_copilot_message(agent, user_message, history):
+def run_copilot_message(agent, user_message, history, peer_review=False):
     prompt = build_agent_prompt(agent, user_message, history)
     try:
         proc = subprocess.run(
@@ -322,10 +352,12 @@ def run_copilot_message(agent, user_message, history):
             timeout=120,
         )
     except FileNotFoundError:
-        return "The Copilot CLI is not available in this environment. Use the fallback guidance for the selected agent."
+        return fallback_agent_response(agent, user_message, peer_review=peer_review)
     except subprocess.TimeoutExpired:
         return "The agent runtime timed out. Please rephrase the request in a shorter, more specific ask."
 
+    if proc.returncode != 0:
+        return fallback_agent_response(agent, user_message, peer_review=peer_review)
     output = proc.stdout.strip() or proc.stderr.strip()
     if not output:
         output = "I cannot complete this request right now. Please try a more specific prompt."
@@ -492,9 +524,10 @@ def agent_cross_check():
         })
 
         peer_message = (
-            f"Compare the {primary_agent.get('name')} output against your domain expertise and provide a red/amber/green verdict with action items."
+            f"Review this proposal from {primary_agent.get('name')}:\n{primary_reply}\n\n"
+            "Compare it against your domain expertise and provide a red/amber/green verdict with action items."
         )
-        peer_reply = run_copilot_message(peer_agent, peer_message, load_transcript(peer_agent.get("key")))
+        peer_reply = run_copilot_message(peer_agent, peer_message, load_transcript(peer_agent.get("key")), peer_review=True)
         turns.append({
             "speaker": peer_agent.get("name"),
             "turn": turn + 1,
@@ -661,6 +694,21 @@ def add_task_comment(task_id):
 
 
 # Issue API endpoints
+ISSUE_SEVERITIES = ['Low', 'Medium', 'High', 'Critical']
+ISSUE_STATUSES = ['Open', 'Triaged', 'Mitigating', 'Monitoring', 'Verifying', 'Resolved']
+
+def issue_activity(issue, actor, action, details):
+    issue.setdefault('activity_log', []).append({
+        'actor': actor or 'system',
+        'action': action,
+        'details': details,
+        'timestamp': utc_now_iso(),
+    })
+
+def issue_escalation_required(data):
+    text = ' '.join(str(data.get(key, '')) for key in ('title', 'description', 'mitigation')).lower()
+    return bool(data.get('escalation_flag')) or any(term in text for term in ('production', 'legal', 'pricing', 'user data', 'userdata'))
+
 @app.route('/api/issues', methods=['GET'])
 def get_issues():
     issues = load_issues()
@@ -669,28 +717,41 @@ def get_issues():
 
 @app.route('/api/issues', methods=['POST'])
 def create_issue():
-    data = request.get_json()
-    title = data.get('title')
+    data = request.get_json() or {}
+    title = (data.get('title') or '').strip()
     severity = data.get('severity', 'Medium')
     owner = data.get('owner', 'Implementation Manager')
-    mitigation = data.get('mitigation', '')
+    mitigation = data.get('mitigation', '') or ''
     
     if not title:
         return jsonify({'error': 'Title is required'}), 400
     
+    if severity not in ISSUE_SEVERITIES:
+        return jsonify({'error': 'Invalid severity'}), 400
+    if data.get('status') and data['status'] not in ISSUE_STATUSES:
+        return jsonify({'error': 'Invalid status'}), 400
     issues = load_issues()
     issue_id = generate_issue_id(issues)
+    timestamp = utc_now_iso()
     new_issue = {
         'id': issue_id,
         'title': title,
+        'description': data.get('description', '') or '',
         'severity': severity,
         'owner': owner,
         'status': 'Open',
         'mitigation': mitigation,
+        'escalation_flag': issue_escalation_required(data),
+        'related_task': data.get('related_task') or None,
+        'created_at': timestamp,
+        'updated_at': timestamp,
+        'comments': [],
+        'activity_log': [],
     }
+    issue_activity(new_issue, data.get('actor', 'user'), 'created', f'{title} reported')
     issues.insert(0, new_issue)  # Insert at beginning
     save_issues(issues)
-    return jsonify(new_issue), 201
+    return jsonify({'issue': new_issue}), 201
 
 
 @app.route('/api/issues/<issue_id>', methods=['GET'])
@@ -704,26 +765,68 @@ def get_issue(issue_id):
 
 @app.route('/api/issues/<issue_id>', methods=['PUT'])
 def update_issue(issue_id):
-    data = request.get_json()
+    data = request.get_json() or {}
     issues = load_issues()
     issue = find_issue(issues, issue_id)
     if not issue:
         return jsonify({'error': 'Issue not found'}), 404
     
-    # Update fields if provided
+    changes = []
     if 'title' in data:
+        if not str(data['title']).strip():
+            return jsonify({'error': 'Title is required'}), 400
+        if issue['title'] != data['title']:
+            changes.append(('title_changed', f"Title changed from '{issue['title']}' to '{data['title']}'"))
         issue['title'] = data['title']
     if 'severity' in data:
+        if data['severity'] not in ISSUE_SEVERITIES:
+            return jsonify({'error': 'Invalid severity'}), 400
+        if issue['severity'] != data['severity']:
+            changes.append(('severity_changed', f"Severity changed from {issue['severity']} to {data['severity']}"))
         issue['severity'] = data['severity']
     if 'owner' in data:
+        if issue['owner'] != data['owner']:
+            changes.append(('owner_reassigned', f"Owner changed from {issue['owner']} to {data['owner']}"))
         issue['owner'] = data['owner']
     if 'mitigation' in data:
+        if issue['mitigation'] != data['mitigation']:
+            changes.append(('mitigation_updated', 'Mitigation plan updated'))
         issue['mitigation'] = data['mitigation']
+    if 'description' in data:
+        issue['description'] = data['description'] or ''
     if 'status' in data:
+        if data['status'] not in ISSUE_STATUSES:
+            return jsonify({'error': 'Invalid status'}), 400
+        if issue['status'] != data['status']:
+            changes.append(('status_changed', f"Status changed from {issue['status']} to {data['status']}"))
         issue['status'] = data['status']
+    if 'related_task' in data:
+        issue['related_task'] = data['related_task'] or None
+    if any(key in data for key in ('title', 'description', 'mitigation')):
+        issue['escalation_flag'] = issue_escalation_required(issue | data)
+    for action, details in changes:
+        issue_activity(issue, data.get('actor', 'user'), action, details)
+    issue['updated_at'] = utc_now_iso()
     
     save_issues(issues)
-    return jsonify(issue)
+    return jsonify({'issue': issue})
+
+@app.route('/api/issues/<issue_id>/comments', methods=['POST'])
+def add_issue_comment(issue_id):
+    data = request.get_json() or {}
+    text = (data.get('text') or '').strip()
+    if not text:
+        return jsonify({'error': 'Comment text is required'}), 400
+    issues = load_issues()
+    issue = find_issue(issues, issue_id)
+    if not issue:
+        return jsonify({'error': 'Issue not found'}), 404
+    author = data.get('author') or 'User'
+    issue.setdefault('comments', []).append({'author': author, 'text': text, 'timestamp': utc_now_iso()})
+    issue_activity(issue, author, 'comment_added', f'{author} added a comment')
+    issue['updated_at'] = utc_now_iso()
+    save_issues(issues)
+    return jsonify({'issue': issue}), 201
 
 
 @app.route('/api/issues/<issue_id>', methods=['DELETE'])

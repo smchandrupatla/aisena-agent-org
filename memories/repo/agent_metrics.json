@@ -1,84 +1,36 @@
 {
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-19T03:11:55.175252Z",
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-19T05:15:01.209882Z",
     "count": 6,
     "accuracy": null,
     "model": null
   },
-  "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-19T03:11:56.024448Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "16-fraud-detection-sme": {
-    "learned_at": "2026-08-19T03:11:56.189885Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-19T03:11:56.263512Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-19T03:11:58.683872Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-19T03:11:59.993230Z",
+  "05-backend-engineer": {
+    "learned_at": "2026-08-19T05:45:01.647412Z",
     "count": 6,
     "accuracy": null,
     "model": null
   },
   "08-devops-engineer": {
-    "learned_at": "2026-08-19T03:12:00.044001Z",
+    "learned_at": "2026-08-19T05:31:01.170887Z",
     "count": 6,
     "accuracy": null,
     "model": null
   },
-  "12-documentation-engineer": {
-    "learned_at": "2026-08-19T03:12:00.101645Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "21-streaming-messaging-infra-sme": {
-    "learned_at": "2026-08-19T03:12:00.143628Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "09-security-engineer": {
-    "learned_at": "2026-08-19T03:12:00.350751Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-19T03:12:00.452339Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "31-test-automation-engineer": {
-    "learned_at": "2026-08-19T03:12:00.742918Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "13-release-manager": {
-    "learned_at": "2026-08-19T03:12:13.526929Z",
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-19T05:25:01.172749Z",
     "count": 6,
     "accuracy": null,
     "model": null
   },
   "11-performance-engineer": {
-    "learned_at": "2026-08-19T03:12:16.187912Z",
+    "learned_at": "2026-08-19T05:23:01.269918Z",
+    "count": 6,
+    "accuracy": null,
+    "model": null
+  },
+  "28-backend-data-persistence": {
+    "learned_at": "2026-08-19T05:17:01.334530Z",
     "count": 6,
     "accuracy": null,
     "model": null
