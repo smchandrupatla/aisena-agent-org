@@ -1,127 +1,67 @@
 {
-  "13-release-manager": {
-    "learned_at": "2026-08-18T22:13:11.834152Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "07-integration-engineer": {
-    "learned_at": "2026-08-18T22:13:12.039023Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "03-ui-ux-designer": {
-    "learned_at": "2026-08-18T22:13:12.517559Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "17-payments-messaging-sme": {
-    "learned_at": "2026-08-18T22:13:15.456734Z",
-    "count": 1,
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-19T03:10:54.973218Z",
+    "count": 6,
     "accuracy": null,
     "model": null
   },
   "36-implementation-pattern-specialist": {
-    "learned_at": "2026-08-18T22:12:49.169912Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-18T22:12:49.733127Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-18T22:12:50.268672Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "15-sanctions-screening-sme": {
-    "learned_at": "2026-08-18T22:12:50.620281Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "02-solution-architect": {
-    "learned_at": "2026-08-18T22:12:50.685152Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "23-security-identity-sme": {
-    "learned_at": "2026-08-18T22:12:50.989171Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "25-infrastructure-platform-engineer": {
-    "learned_at": "2026-08-18T22:12:57.399891Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "22-cloud-aws-sme": {
-    "learned_at": "2026-08-18T22:12:57.934719Z",
-    "count": 1,
+    "learned_at": "2026-08-19T03:10:55.869303Z",
+    "count": 6,
     "accuracy": null,
     "model": null
   },
   "16-fraud-detection-sme": {
-    "learned_at": "2026-08-18T22:13:07.012375Z",
-    "count": 1,
+    "learned_at": "2026-08-19T03:10:56.009030Z",
+    "count": 6,
     "accuracy": null,
     "model": null
   },
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-18T22:13:07.466599Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "10-qa-engineer": {
-    "learned_at": "2026-08-18T22:13:07.572417Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "09-security-engineer": {
-    "learned_at": "2026-08-18T22:13:10.269895Z",
-    "count": 1,
-    "accuracy": null,
-    "model": null
-  },
-  "32-test-manager": {
-    "learned_at": "2026-08-18T22:13:10.273568Z",
-    "count": 1,
+  "15-sanctions-screening-sme": {
+    "learned_at": "2026-08-19T03:10:56.065073Z",
+    "count": 6,
     "accuracy": null,
     "model": null
   },
   "26-backend-ingestion-streaming": {
-    "learned_at": "2026-08-18T22:13:11.124925Z",
-    "count": 1,
+    "learned_at": "2026-08-19T03:10:58.496923Z",
+    "count": 6,
     "accuracy": null,
     "model": null
   },
-  "34-technical-writer": {
-    "learned_at": "2026-08-18T22:12:41.750340Z",
-    "count": 1,
+  "08-devops-engineer": {
+    "learned_at": "2026-08-19T03:10:59.800516Z",
+    "count": 6,
     "accuracy": null,
     "model": null
   },
-  "05-backend-engineer": {
-    "learned_at": "2026-08-18T22:12:49.778735Z",
-    "count": 1,
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-19T03:10:59.905352Z",
+    "count": 6,
     "accuracy": null,
     "model": null
   },
-  "29-frontend-gui-developer": {
-    "learned_at": "2026-08-18T22:11:40.840905Z",
-    "count": 1,
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-19T03:10:59.941847Z",
+    "count": 6,
+    "accuracy": null,
+    "model": null
+  },
+  "09-security-engineer": {
+    "learned_at": "2026-08-19T03:11:00.171810Z",
+    "count": 6,
+    "accuracy": null,
+    "model": null
+  },
+  "22-cloud-aws-sme": {
+    "learned_at": "2026-08-19T03:11:00.274869Z",
+    "count": 6,
+    "accuracy": null,
+    "model": null
+  },
+  "31-test-automation-engineer": {
+    "learned_at": "2026-08-19T03:11:00.506402Z",
+    "count": 6,
     "accuracy": null,
     "model": null
   }

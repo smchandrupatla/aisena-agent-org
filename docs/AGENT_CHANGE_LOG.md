@@ -964,3 +964,22 @@ AISENA's screening and case management layer must be designed from Stage 0 with 
 
 #### RECOMMENDED_ACTION
 Add the following acceptance criterion to all Stage 0+ case management and screening result stories: "Every case record MUST include a `decision_rationale` text field and an append-only `audit_events` log (analyst_id, timestamp, action, rationale). The UI MUST enforce a non-empty rationale entry before any case closure or alert override is permitted." Raise a backlog item with the Product Owner to add a `decision_rationale` column to the PostgreSQL `screening_results` table and a separate `case_audit_log` table before any analyst-facing UI is built.
+
+---
+
+### LOG-20260819-001
+
+- **Entry ID:** LOG-20260819-001
+- **Date:** 2026-08-19
+- **Agent Role:** 04-frontend-engineer
+- **Task ID:** UI-CREATE-NEW-APP-NAV
+- **What Changed:** Added a `Create New App` top-navigation link to every served capabilities-site page and aligned the intake page title.
+- **Files Modified:** `services/capabilities_site/*.html`, `docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** pending
+- **Rationale:** Make the existing application intake workflow discoverable and consistently reachable from the site header.
+- **Alternatives Considered:** Deploy the separate CRM portal or create a duplicate page; rejected because `start-project.html` already provides the deployed intake workflow.
+- **Risk Level:** Low
+- **Metrics Impact:** Capabilities site and intake page both return HTTP 200; deployed home page contains the new menu label.
+- **Rollback Plan:** Remove the added navigation links and restore the previous intake page title, then rebuild `capabilities-site`.
+- **Human Approval Needed:** No
+- **Handoff Target:** 10-qa-engineer
