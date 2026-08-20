@@ -63,6 +63,20 @@ function initialFormState(): CreateProjectPayload {
       i18n: { multiLanguage: false, multiCurrency: false },
     },
     deployment: { targets: [] },
+    eventing: {
+      enabled: true,
+      framework: 'aisena-eventing',
+      frameworkVersion: '1.0.0',
+      canonicalFormat: 'JSON',
+      categories: ['TECHNICAL', 'BUSINESS'],
+      definitionRegistry: 'project/eventing/definitions',
+      piiHandling: 'EXCLUDE',
+      delivery: {
+        transport: 'KAFKA',
+        technicalTopic: 'technical-events-development',
+        businessTopic: 'business-events-development',
+      },
+    },
   }
 }
 

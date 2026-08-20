@@ -1,5 +1,12 @@
 version: '3.8'
 
+x-application-logging: &application-logging
+  driver: fluentd
+  options:
+    fluentd-address: localhost:24224
+    fluentd-async: "true"
+    tag: aisena.{{.Name}}
+
 services:
   postgres:
     image: postgres:15
@@ -90,6 +97,7 @@ services:
       - postgres
       - kafka
       - opensearch
+    logging: *application-logging
 
   capabilities-site:
     build:
@@ -109,6 +117,7 @@ services:
       - "traefik.http.routers.capabilities-site.rule=Host(`aisena.local`)"
       - "traefik.http.routers.capabilities-site.entrypoints=web"
       - "traefik.http.services.capabilities-site.loadbalancer.healthcheck.path=/"
+    logging: *application-logging
 
   api:
     build:
@@ -117,10 +126,28 @@ services:
     environment:
       - POSTGRES_DSN=host=postgres dbname=aisena user=aisena password=aisena_pw
       - COPILOT_GITHUB_TOKEN=${COPILOT_GITHUB_TOKEN:-}
+      - SPLUNK_API_URL=${SPLUNK_API_URL:-https://splunk:8089}
+      - SPLUNK_USERNAME=${SPLUNK_USERNAME:-admin}
+      - SPLUNK_PASSWORD=${SPLUNK_PASSWORD:-}
+      - SPLUNK_HEC_INDEX=${SPLUNK_HEC_INDEX:-main}
+      - DYNATRACE_API_URL=${DYNATRACE_API_URL:-}
+      - DYNATRACE_API_TOKEN=${DYNATRACE_API_TOKEN:-}
     ports:
       - "5000:5000"
     depends_on:
       - postgres
+    logging: *application-logging
+
+  orchestrator:
+    build:
+      context: .
+      dockerfile: services/orchestrator/Dockerfile
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - GITHUB_ORG=${GITHUB_ORG:-}
+      - PORT=5100
+    ports:
+      - "5100:5100"
 
   ingestion:
     build:
@@ -132,6 +159,7 @@ services:
     depends_on:
       - kafka
     restart: "no"
+    logging: *application-logging
 
   detection:
     build:
@@ -147,11 +175,50 @@ services:
       - postgres
       - opensearch
     restart: unless-stopped
+    logging: *application-logging
 
   loki:
     image: grafana/loki:2.8.1
     ports:
       - "3100:3100"
+
+  splunk:
+    image: splunk/splunk:9.4.2
+    profiles: ["enterprise-observability"]
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com
+      - SPLUNK_PASSWORD=${SPLUNK_PASSWORD:-}
+      - SPLUNK_HEC_TOKEN=${SPLUNK_HEC_TOKEN:-}
+    volumes:
+      - splunk-data:/opt/splunk/var
+      - splunk-etc:/opt/splunk/etc
+    ports:
+      - "8000:8000"
+      - "8088:8088"
+    restart: unless-stopped
+
+  enterprise-log-gateway:
+    image: otel/opentelemetry-collector-contrib:0.133.0
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    profiles: ["enterprise-observability"]
+    environment:
+      - DEPLOYMENT_ENVIRONMENT=${DEPLOYMENT_ENVIRONMENT:-local}
+      - SPLUNK_HEC_ENDPOINT=${SPLUNK_HEC_ENDPOINT:-https://splunk:8088/services/collector}
+      - SPLUNK_HEC_TOKEN=${SPLUNK_HEC_TOKEN:-}
+      - SPLUNK_HEC_INDEX=${SPLUNK_HEC_INDEX:-main}
+      - SPLUNK_HEC_TLS_INSECURE=${SPLUNK_HEC_TLS_INSECURE:-true}
+      - DYNATRACE_OTLP_ENDPOINT=${DYNATRACE_OTLP_ENDPOINT:-}
+      - DYNATRACE_API_TOKEN=${DYNATRACE_API_TOKEN:-}
+    volumes:
+      - ./infra/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "13133:13133"
+      - "24224:24224"
+    depends_on:
+      splunk:
+        condition: service_healthy
+    restart: unless-stopped
 
   redmine:
     image: redmine:5.0
@@ -181,3 +248,5 @@ services:
 volumes:
   pgdata:
   opensearch-data:
+  splunk-data:
+  splunk-etc:

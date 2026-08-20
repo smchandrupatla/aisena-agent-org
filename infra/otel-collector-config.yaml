@@ -1,0 +1,52 @@
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+receivers:
+  fluentforward/docker:
+    endpoint: 0.0.0.0:24224
+
+processors:
+  batch:
+    send_batch_size: 1024
+    timeout: 5s
+  resource/aisena:
+    attributes:
+      - key: service.namespace
+        value: aisena
+        action: upsert
+      - key: deployment.environment
+        value: ${env:DEPLOYMENT_ENVIRONMENT}
+        action: upsert
+
+exporters:
+  splunk_hec:
+    endpoint: ${env:SPLUNK_HEC_ENDPOINT}
+    token: ${env:SPLUNK_HEC_TOKEN}
+    index: ${env:SPLUNK_HEC_INDEX}
+    source: aisena
+    sourcetype: _json
+    timeout: 30s
+    retry_on_failure:
+      enabled: true
+      max_elapsed_time: 0s
+    tls:
+      insecure_skip_verify: ${env:SPLUNK_HEC_TLS_INSECURE}
+  otlphttp/dynatrace:
+    endpoint: ${env:DYNATRACE_OTLP_ENDPOINT}
+    headers:
+      Authorization: Api-Token ${env:DYNATRACE_API_TOKEN}
+
+service:
+  extensions:
+    - health_check
+  pipelines:
+    logs:
+      receivers:
+        - fluentforward/docker
+      processors:
+        - resource/aisena
+        - batch
+      exporters:
+        - splunk_hec
+        - otlphttp/dynatrace

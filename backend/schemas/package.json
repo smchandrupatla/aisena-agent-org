@@ -1,0 +1,19 @@
+{
+  "name": "@aisena/schemas",
+  "version": "1.0.0",
+  "description": "Shared Kafka event schemas for the AISENA HSFS backend services",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "schemas/",
+    "index.js",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "validate": "node scripts/validate-schemas.js"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
+  }
+}

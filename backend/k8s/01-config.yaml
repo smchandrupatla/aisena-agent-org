@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hsfs-config
+  namespace: aisena-hsfs
+data:
+  KAFKA_BROKER: kafka.messaging.svc.cluster.local:9092
+  REDIS_HOST: redis.data.svc.cluster.local
+  REDIS_PORT: "6379"
+  PG_HOST: postgres.data.svc.cluster.local
+  PG_PORT: "5432"
+  PG_USER: aisena
+  TEMPORAL_ADDRESS: temporal.workflow.svc.cluster.local:7233
+  TEMPORAL_TASK_QUEUE: hsfs-screening
+  SCREENING_ENGINE_URL: http://screening-engine:3002
+  CASE_MANAGEMENT_URL: http://case-management:3003
+  AGENT_RUNTIME_URL: http://agent-runtime:3001
+  AUDIT_NOTIFICATION_URL: http://audit-notification:3005
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hsfs-secrets
+  namespace: aisena-hsfs
+type: Opaque
+stringData:
+  PG_PASSWORD: replace-before-deploy
+  JWT_SECRET: replace-before-deploy

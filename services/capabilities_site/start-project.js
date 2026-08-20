@@ -25,13 +25,14 @@ const DEPLOY_LABELS = {
 
 function collectFormData() {
   const name = document.getElementById("projectName").value.trim() || "Untitled Project";
+  const githubRepoName = document.getElementById("githubRepoName").value.trim() || slugify(name);
   const domain = document.getElementById("projectDomain").value.trim() || "general business";
   const description = document.getElementById("projectDescription").value.trim();
   const constraints = document.getElementById("projectConstraints").value.trim();
   const appTypes = Array.from(document.querySelectorAll('input[name="appType"]:checked')).map((el) => el.value);
   const deployTarget = (document.querySelector('input[name="deployTarget"]:checked') || {}).value || "local";
   const uploadedFile = window._uploadedProjectFile || null;
-  return { name, domain, description, constraints, appTypes, deployTarget, uploadedFile };
+  return { name, githubRepoName, domain, description, constraints, appTypes, deployTarget, uploadedFile };
 }
 
 function initFileUpload() {
@@ -315,6 +316,7 @@ function buildBriefText(data, phases, tracks, epics) {
   const lines = [];
   lines.push(`# Project Brief — ${data.name}`);
   lines.push("");
+  lines.push(`**GitHub repository:** ${data.githubRepoName || slugify(data.name)}`);
   lines.push(`**Domain:** ${data.domain}`);
   lines.push(`**Application type(s):** ${data.appTypes.map((t) => APP_TYPE_LABELS[t] || t).join(", ") || "Not specified"}`);
   lines.push(`**Deployment target:** ${DEPLOY_LABELS[data.deployTarget]}`);
@@ -362,6 +364,69 @@ function slugify(text) {
 
 function getChatKey(agentKey) {
   return `agent-chat-${agentKey}`;
+}
+
+function inferProjectSuggestion(prompt) {
+  const normalized = prompt.trim();
+  const lower = normalized.toLowerCase();
+  const name = normalized
+    .replace(/^(build|create|make|develop|i want|we need)\s+(an?\s+|a\s+)?/i, "")
+    .replace(/[.!?]+$/, "")
+    .trim() || "New AI Application";
+  const domain = lower.match(/health|clinic|medical/) ? "healthcare"
+    : lower.match(/food|restaurant|delivery|shop|retail/) ? "retail and logistics"
+      : lower.match(/finance|payment|bank|invoice/) ? "fintech"
+        : lower.match(/school|learn|course|student/) ? "education"
+          : "general business";
+  const appTypes = [];
+  if (lower.match(/mobile|ios|android/)) appTypes.push("mobile");
+  if (lower.match(/api|backend|service/)) appTypes.push("api");
+  if (lower.match(/data|analytics|report|pipeline/)) appTypes.push("data");
+  if (!appTypes.length || lower.match(/web|website|dashboard|portal/)) appTypes.unshift("web");
+  const deployTarget = lower.match(/cloud|aws|azure|gcp/) ? "cloud" : lower.match(/hybrid/) ? "hybrid" : "local";
+  return {
+    name: name.charAt(0).toUpperCase() + name.slice(1),
+    githubRepoName: slugify(name),
+    domain,
+    description: normalized,
+    appTypes: [...new Set(appTypes)],
+    deployTarget,
+  };
+}
+
+function initProjectAiAssistant() {
+  const input = document.getElementById("projectAiInput");
+  const messages = document.getElementById("projectAiMessages");
+  const sendButton = document.getElementById("sendProjectAi");
+  const applyButton = document.getElementById("applyProjectAi");
+  const fillButton = document.getElementById("aiFillForm");
+  const assistantButton = document.getElementById("aiChatAssistant");
+  const panel = document.querySelector(".ai-chat-panel");
+  if (!input || !messages || !sendButton || !applyButton || !panel) return;
+
+  let suggestion = null;
+  const showPanel = () => panel.scrollIntoView({ behavior: "smooth", block: "center" });
+  const ask = () => {
+    if (!input.value.trim()) return;
+    suggestion = inferProjectSuggestion(input.value);
+    messages.innerHTML = `<div class="msg user">${input.value.trim()}</div><div class="msg assistant"><strong>Suggested setup</strong><br>Project: ${suggestion.name}<br>GitHub repository: ${suggestion.githubRepoName}<br>Domain: ${suggestion.domain}<br>App type: ${suggestion.appTypes.map((type) => APP_TYPE_LABELS[type]).join(", ")}<br>Deployment: ${DEPLOY_LABELS[suggestion.deployTarget]}<br><br>Review these values, then apply them to the form.</div>`;
+    applyButton.disabled = false;
+  };
+  const apply = () => {
+    if (!suggestion) return;
+    document.getElementById("projectName").value = suggestion.name;
+    document.getElementById("githubRepoName").value = suggestion.githubRepoName;
+    document.getElementById("projectDomain").value = suggestion.domain;
+    document.getElementById("projectDescription").value = suggestion.description;
+    document.querySelectorAll('input[name="appType"]').forEach((input) => { input.checked = suggestion.appTypes.includes(input.value); });
+    const deploy = document.querySelector(`input[name="deployTarget"][value="${suggestion.deployTarget}"]`);
+    if (deploy) deploy.checked = true;
+    messages.insertAdjacentHTML("beforeend", `<div class="msg system">Applied. Check the form and generate your delivery plan when you are happy.</div>`);
+  };
+  sendButton.addEventListener("click", ask);
+  input.addEventListener("keydown", (event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); ask(); } });
+  applyButton.addEventListener("click", apply);
+  [fillButton, assistantButton].forEach((button) => { if (button) button.addEventListener("click", showPanel); });
 }
 
 function seedImplementationManagerChat(briefText) {
@@ -458,3 +523,4 @@ function initStartProjectPage() {
 
 initStartProjectPage();
 initFileUpload();
+initProjectAiAssistant();

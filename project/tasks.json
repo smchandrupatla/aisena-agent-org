@@ -1,1 +1,50 @@
-[]
+[
+  {
+    "id": "TASK-0002",
+    "title": "Task workflow smoke test",
+    "description": "Verify the task workflow",
+    "owner": "implementation-manager",
+    "status": "Backlog",
+    "priority": "High",
+    "dependency": null,
+    "next_checkpoint": "Review backlog",
+    "tags": [
+      "smoke"
+    ],
+    "created_at": "2026-08-20T11:26:24.122421+00:00",
+    "updated_at": "2026-08-20T11:26:24.122421+00:00",
+    "comments": [],
+    "activity_log": [
+      {
+        "timestamp": "2026-08-20T11:26:24.122518+00:00",
+        "actor": "user",
+        "action": "created",
+        "details": "Task created with status Backlog"
+      }
+    ]
+  },
+  {
+    "id": "TASK-0001",
+    "title": "Task workflow smoke test",
+    "description": "Verify the task workflow",
+    "owner": "implementation-manager",
+    "status": "Backlog",
+    "priority": "High",
+    "dependency": null,
+    "next_checkpoint": "Review backlog",
+    "tags": [
+      "smoke"
+    ],
+    "created_at": "2026-08-20T11:24:07.342997+00:00",
+    "updated_at": "2026-08-20T11:24:07.342997+00:00",
+    "comments": [],
+    "activity_log": [
+      {
+        "timestamp": "2026-08-20T11:24:07.343193+00:00",
+        "actor": "user",
+        "action": "created",
+        "details": "Task created with status Backlog"
+      }
+    ]
+  }
+]

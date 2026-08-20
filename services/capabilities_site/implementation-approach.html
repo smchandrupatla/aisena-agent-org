@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How the AISENA delivery shop implements a brand-new application, from intake to an independently deployable portal.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Wiki: Implementation Approach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="start-project.html">Create New App</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="test-dashboard.html">Test Dashboard</a>
+        <a href="postgres-viewer.html">Postgres Viewer</a>
+        <a href="kafka-viewer.html">Kafka Viewer</a>
+        <a href="splunk-viewer.html">Splunk Viewer</a>
+        <a href="dynatrace-viewer.html">Dynatrace Viewer</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+              <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker"><a href="wiki.html" style="color: inherit;">&larr; Wiki Home</a></div>
+        <h1>From a plain-language goal to an independently deployable app.</h1>
+        <p class="lede">
+          The same staged approach applies regardless of domain or application type. Start any new
+          build from the <a href="start-project.html">Create New App</a> intake wizard; the stages
+          below describe what happens after you submit it.
+        </p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-12 fade-up">
+          <h2>Delivery stages</h2>
+          <ol class="timeline">
+            <li>
+              <div class="step">Stage 0</div>
+              <strong>Intake and framing</strong>
+              Domain Analyst and Business Analyst turn the intake form into actors, workflows, entities,
+              and testable acceptance criteria. Product Owner sequences the initial backlog.
+            </li>
+            <li>
+              <div class="step">Stage 1</div>
+              <strong>Architecture and design</strong>
+              Solution Architect defines service boundaries, data flow, and integration contracts.
+              Implementation Pattern Specialist selects reusable patterns instead of one-off designs.
+              UI/UX Designer (and Case Management UX SME, where relevant) map the user journeys.
+            </li>
+            <li>
+              <div class="step">Stage 2</div>
+              <strong>Portal and environment setup</strong>
+              Infrastructure/Platform Engineer and DevOps Engineer stand up an independently deployable
+              portal and environment for the new application &mdash; kept separate from the AISENA
+              framework portal, with its own routes, configuration, and branding.
+            </li>
+            <li>
+              <div class="step">Stage 3</div>
+              <strong>Engineering build-out</strong>
+              Frontend, Backend, Database, Integration, and Mobile App Engineers implement the approved
+              design in small, testable increments, each ending in a working slice rather than a big-bang
+              delivery.
+            </li>
+            <li>
+              <div class="step">Stage 4</div>
+              <strong>Validation</strong>
+              QA Engineer, Test Automation Engineer, Performance Engineer, and Security Engineer verify
+              functionality, regression safety, load behavior, and vulnerability posture with recorded
+              evidence, not narrative claims.
+            </li>
+            <li>
+              <div class="step">Stage 5</div>
+              <strong>Release and operate</strong>
+              Release Manager and DevOps/Release Engineer coordinate go-live with a rollback plan;
+              Documentation/Technical Writer produce runbooks and handoff material for ongoing operation.
+            </li>
+          </ol>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <h3>Portal isolation is non-negotiable</h3>
+          <p>Every new application gets its own web portal: its own source boundary, configuration,
+          routes, assets, and branding, versioned and releasable independently. Shared libraries and
+          platform services may be reused, but the AISENA portal itself is never extended with
+          application-specific screens or navigation.</p>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <h3>Deployment targets</h3>
+          <p>The intake wizard captures whether the new app runs local-only (Docker Compose /
+          on-prem), cloud-only (AWS, GCP, Azure, managed PaaS), or hybrid (local proof with a cloud
+          production path). The same agent roster plans and builds for any of the three.</p>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <h3>Handoffs, not hallways</h3>
+          <p>Each stage transition produces a written handoff file
+          (<code>project/handoffs/TASK-NNNN-FROM-role-to-ROLE.md</code>) covering the objective, files
+          changed, decisions made, next actions, and open blockers, so any role can resume the work.</p>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <h3>Approval gates stay in force</h3>
+          <p>Autonomous engineering continues throughout, but production go-live, real
+          infrastructure/API spend, user-data handling changes, pricing changes, or legally exposed
+          decisions always route to a human approver before proceeding.</p>
+        </article>
+
+        <article class="card span-12 fade-up">
+          <h2>What each stage produces</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Stage</th>
+                <th>Primary roles</th>
+                <th>Artifacts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Intake and framing</td>
+                <td>Domain Analyst, Business Analyst, Product Owner</td>
+                <td>Requirements, user stories, acceptance criteria, initial backlog</td>
+              </tr>
+              <tr>
+                <td>Architecture and design</td>
+                <td>Solution Architect, Implementation Pattern Specialist, UI/UX Designer</td>
+                <td>Architecture decisions (ADRs), interface contracts, UX flows</td>
+              </tr>
+              <tr>
+                <td>Portal and environment setup</td>
+                <td>Infrastructure/Platform Engineer, DevOps Engineer</td>
+                <td>New portal scaffold, environment config, CI/CD pipeline skeleton</td>
+              </tr>
+              <tr>
+                <td>Engineering build-out</td>
+                <td>Frontend, Backend, Database, Integration, Mobile App Engineers</td>
+                <td>Working code increments, tests, API and schema definitions</td>
+              </tr>
+              <tr>
+                <td>Validation</td>
+                <td>QA, Test Automation, Performance, Security Engineers</td>
+                <td>Test evidence, scan reports, load results, defect logs</td>
+              </tr>
+              <tr>
+                <td>Release and operate</td>
+                <td>Release Manager, DevOps/Release Engineer, Technical Writer</td>
+                <td>Release notes, rollback plan, runbooks, change log entries</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <aside class="card span-12 fade-up">
+          <div class="notice ok">
+            The intake wizard on <a href="start-project.html">Create New App</a> maps your answers to
+            this real agent roster and generates a starter backlog you can hand straight to the
+            Implementation Manager.
+          </div>
+          <div class="pill-list" style="margin-top: 10px;">
+            <a class="pill" href="start-project.html">Open Create New App →</a>
+            <a class="pill" href="agent-roster.html">Browse Agent Roster →</a>
+          </div>
+        </aside>
+      </section>
+
+      <p class="footer fade-up">See <a href="workflow.html">Execution Workflow</a> and <a href="guardrails.html">Guardrails</a> for more detail on how each stage is governed.</p>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

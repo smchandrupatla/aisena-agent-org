@@ -2,6 +2,44 @@
 
 This backlog contains the canonical task list for the AI delivery organisation.
 
+## TASK-0013 — Orchestrator service for the Autonomous Dev Shop generalization
+
+Status: IN_PROGRESS
+Priority: High
+Owner: Implementation Manager
+Requested By: Product Owner / Client
+Created: 2026-08-20
+Dependencies: TASK-0012, REQ-0006, ADR-0003
+
+### Objective
+Implement the Orchestrator service (REQ-0007 / ADR-0004): dynamic expert capability registry, GitHub push-mode-aware integration, per-app audit trail and ticketing, and enterprise-app interoperability checks, generalizing the single-app Sena model to a multi-client, multi-app engine.
+
+### Context
+The existing Sena/AISENA delivery model (REQ-0006/ADR-0003) assumed one application and a fixed 37-role roster. The Product Owner supplied a broader "Autonomous AI Dev Shop" spec requiring dynamic expert spin-up, configurable auto-push/manual-approval GitHub workflows per client/project, and a queryable history of every app ever built.
+
+### Acceptance Criteria
+- `services/orchestrator` implements onboarding, spec decomposition, expert matching/synthesis, GitHub push-mode integration, ticket escalation, and audit trail, each covered by automated tests.
+- Enterprise apps receive an interoperability report against peer enterprise apps; mobile apps do not.
+- Wired into `docker-compose.yml` as an independent service.
+
+### Files / Components
+- `/services/orchestrator/*`
+- `/project/requirements/REQ-0007-autonomous-dev-shop-generalization.md`
+- `/project/decisions/ADR-0004-orchestrator-dynamic-expert-and-github-integration.md`
+- `/docker-compose.yml`
+
+### Required Reviewers
+- Implementation Manager, Security Engineer (GitHub token handling)
+
+### Output
+Working Orchestrator service with passing unit tests, ready for GitHub credential configuration by a human operator.
+
+### Handoff To
+Security Engineer (review token handling before enabling real GITHUB_TOKEN in any environment), DevOps Engineer (docker-compose/k8s rollout).
+
+### Notes
+GitHub-side actions (repo creation, PR merge, issue creation) are skipped gracefully when GITHUB_TOKEN is not configured; local audit/ticket/expert-assignment logic works standalone.
+
 ## TASK-0001 — Bootstrap AI delivery organisation
 
 Status: DONE

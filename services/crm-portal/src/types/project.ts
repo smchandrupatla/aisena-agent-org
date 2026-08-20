@@ -128,6 +128,21 @@ export interface DeploymentConfig {
   }
 }
 
+export interface EventingConfig {
+  enabled: boolean
+  framework: 'aisena-eventing'
+  frameworkVersion: string
+  canonicalFormat: 'JSON'
+  categories: ('TECHNICAL' | 'BUSINESS')[]
+  definitionRegistry: string
+  piiHandling: 'EXCLUDE' | 'MASK' | 'TOKENIZE'
+  delivery: {
+    transport: 'KAFKA'
+    technicalTopic: string
+    businessTopic: string
+  }
+}
+
 export interface CreateProjectPayload {
   type: ProjectType | null
   name: string
@@ -137,6 +152,7 @@ export interface CreateProjectPayload {
   config: Partial<WebAppConfig & WebsiteConfig & PortalConfig>
   enterpriseFeatures: EnterpriseFeaturesConfig
   deployment: DeploymentConfig
+  eventing: EventingConfig
 }
 
 export type UploadStatus = 'uploading' | 'processing' | 'ready' | 'error'

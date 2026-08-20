@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aisena.org/schemas/screening.completed.json",
+  "title": "ScreeningCompleted",
+  "description": "Published when the screening-engine finishes evaluating a transaction.",
+  "type": "object",
+  "required": ["eventId", "transactionId", "screeningId", "occurredAt", "status", "rulesMatched", "riskScore"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "transactionId": { "type": "string" },
+    "screeningId": { "type": "string" },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "status": { "type": "string", "enum": ["PASS", "FLAG"] },
+    "rulesMatched": { "type": "array", "items": { "type": "string" } },
+    "riskScore": { "type": "number", "minimum": 0, "maximum": 100 },
+    "details": { "type": "object" }
+  }
+}

@@ -1,0 +1,317 @@
+services:
+  # --- Kafka & Zookeeper ---
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "${HSFS_ZOOKEEPER_PORT:-12181}:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9093,EXTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9093,EXTERNAL://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    ports:
+      - "${HSFS_KAFKA_PORT:-19092}:9092"
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9093 --list >/dev/null 2>&1 && kafka-consumer-groups --bootstrap-server localhost:9093 --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 20s
+      retries: 12
+      start_period: 20s
+
+  # --- Temporal ---
+  temporal:
+    image: temporalio/auto-setup:1.27.0
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal_pw
+      - POSTGRES_SEEDS=postgres-temporal
+    ports:
+      - "${HSFS_TEMPORAL_PORT:-17233}:7233"
+    depends_on:
+      - postgres-temporal
+
+  temporal-ui:
+    image: temporalio/ui:2.28.0
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_UI_PORT=8233
+    ports:
+      - "${HSFS_TEMPORAL_UI_PORT:-18233}:8233"
+    depends_on:
+      - temporal
+
+  postgres-temporal:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: temporal
+      POSTGRES_PASSWORD: temporal_pw
+      POSTGRES_DB: temporal
+    volumes:
+      - temporal-pgdata:/var/lib/postgresql/data
+    ports:
+      - "${HSFS_TEMPORAL_POSTGRES_PORT:-15433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temporal -d temporal"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # --- PostgreSQL (per-service databases) ---
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: aisena
+      POSTGRES_PASSWORD: aisena_pw
+      POSTGRES_DB: aisena
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./services/case-management/init-db.sql:/docker-entrypoint-initdb.d/case_management.sql
+      - ./services/audit-notification/init-db.sql:/docker-entrypoint-initdb.d/audit_notification.sql
+    ports:
+      - "${HSFS_POSTGRES_PORT:-15432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aisena -d aisena"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # --- Redis ---
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${HSFS_REDIS_PORT:-16379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # --- Observability ---
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ../infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "${HSFS_PROMETHEUS_PORT:-19090}:9090"
+
+  grafana:
+    image: grafana/grafana-oss:10.0.0
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - ../infra/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ../infra/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    ports:
+      - "${HSFS_GRAFANA_PORT:-13006}:3000"
+    depends_on:
+      - prometheus
+
+  loki:
+    image: grafana/loki:2.8.1
+    ports:
+      - "${HSFS_LOKI_PORT:-13100}:3100"
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.133.0
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./observability/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "${HSFS_OTEL_GRPC_PORT:-14317}:4317"
+      - "${HSFS_OTEL_HTTP_PORT:-14318}:4318"
+    depends_on:
+      - prometheus
+      - loki
+
+  # --- Backend Services ---
+  api-gateway:
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
+    environment:
+      - PORT=3000
+      - KAFKA_BROKER=kafka:9093
+      - JWT_SECRET=mock-secret
+    ports:
+      - "${HSFS_API_GATEWAY_PORT:-13000}:3000"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  agent-runtime:
+    build:
+      context: .
+      dockerfile: services/agent-runtime/Dockerfile
+    environment:
+      - PORT=3001
+      - KAFKA_BROKER=kafka:9093
+    ports:
+      - "${HSFS_AGENT_RUNTIME_PORT:-13001}:3001"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3001/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  screening-engine:
+    build:
+      context: .
+      dockerfile: services/screening-engine/Dockerfile
+    environment:
+      - PORT=3002
+      - KAFKA_BROKER=kafka:9093
+    ports:
+      - "${HSFS_SCREENING_ENGINE_PORT:-13002}:3002"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3002/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  case-management:
+    build:
+      context: .
+      dockerfile: services/case-management/Dockerfile
+    environment:
+      - PORT=3003
+      - KAFKA_BROKER=kafka:9093
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_DATABASE=case_management
+      - PG_USER=aisena
+      - PG_PASSWORD=aisena_pw
+    ports:
+      - "${HSFS_CASE_MANAGEMENT_PORT:-13003}:3003"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3003/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  enrichment-service:
+    build:
+      context: .
+      dockerfile: services/enrichment-service/Dockerfile
+    environment:
+      - PORT=3004
+      - KAFKA_BROKER=kafka:9093
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "${HSFS_ENRICHMENT_SERVICE_PORT:-13004}:3004"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3004/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  audit-notification:
+    build:
+      context: .
+      dockerfile: services/audit-notification/Dockerfile
+    environment:
+      - PORT=3005
+      - KAFKA_BROKER=kafka:9093
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_DATABASE=audit_log
+      - PG_USER=aisena
+      - PG_PASSWORD=aisena_pw
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+    ports:
+      - "${HSFS_AUDIT_NOTIFICATION_PORT:-13005}:3005"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3005/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  # --- Temporal Worker ---
+  temporal-worker:
+    build:
+      context: .
+      dockerfile: temporal/Dockerfile
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_TASK_QUEUE=hsfs-screening
+      - SCREENING_ENGINE_URL=http://screening-engine:3002
+      - CASE_MANAGEMENT_URL=http://case-management:3003
+      - AGENT_RUNTIME_URL=http://agent-runtime:3001
+      - AUDIT_NOTIFICATION_URL=http://audit-notification:3005
+    depends_on:
+      - temporal
+      - screening-engine
+      - case-management
+      - agent-runtime
+      - audit-notification
+    restart: unless-stopped
+
+  # --- Temporal Workflow Server ---
+  temporal-workflow-server:
+    build:
+      context: .
+      dockerfile: temporal/Dockerfile
+    command: ["node", "dist/index.js"]
+    environment:
+      - PORT=4000
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_TASK_QUEUE=hsfs-screening
+    ports:
+      - "${HSFS_WORKFLOW_SERVER_PORT:-14000}:4000"
+    depends_on:
+      - temporal
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:4000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  pgdata:
+  temporal-pgdata:

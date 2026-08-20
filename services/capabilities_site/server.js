@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = __dirname;
 // Backend API this site proxies /api, /health, /results and /self-learning to.
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:5000';
-const API_PROXY_PREFIXES = ['/api/', '/health', '/results', '/self-learning/'];
+const API_PROXY_PREFIXES = ['/api/', '/health', '/results', '/self-learning/', '/db-tables', '/observability/'];
 
 function isProxiedPath(pathname) {
   return API_PROXY_PREFIXES.some((prefix) => pathname === prefix.replace(/\/$/, '') || pathname.startsWith(prefix));

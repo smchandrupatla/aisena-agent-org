@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Testing framework dashboard: test plans, run history, progress, and pass/fail results.">
+  <title>Test Dashboard</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <div class="github-info">
+        <span class="github-icon">🐙</span>
+        <span class="github-name">aisena-agent-org</span>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="start-project.html">Create New App</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="test-dashboard.html">Test Dashboard</a>
+        <a href="postgres-viewer.html">Postgres Viewer</a>
+        <a href="kafka-viewer.html">Kafka Viewer</a>
+        <a href="splunk-viewer.html">Splunk Viewer</a>
+        <a href="dynatrace-viewer.html">Dynatrace Viewer</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+        <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Testing Framework</div>
+        <h1>Test Dashboard</h1>
+        <p class="lede">View test plans, execution progress, and pass/fail results across every automated suite in the repo.</p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-4 fade-up">
+          <h3>Test Plans</h3>
+          <p id="summaryPlanCount" style="font-size:28px;font-weight:700;margin:6px 0 0;">-</p>
+          <p class="lede" style="margin:4px 0 0;">Defined test plans</p>
+        </article>
+        <article class="card span-4 fade-up">
+          <h3>Suites Executed</h3>
+          <p id="summarySuiteCount" style="font-size:28px;font-weight:700;margin:6px 0 0;">-</p>
+          <p class="lede" style="margin:4px 0 0;" id="summarySuiteDetail">- of - passing</p>
+        </article>
+        <article class="card span-4 fade-up">
+          <h3>Overall Case Pass Rate</h3>
+          <p id="summaryPassRate" style="font-size:28px;font-weight:700;margin:6px 0 0;">-</p>
+          <div class="progress-track" style="margin-top:8px;">
+            <div class="progress-fill" id="summaryPassRateBar" style="width:0%;"></div>
+          </div>
+        </article>
+
+        <article class="card span-12 fade-up">
+          <h2>Test Plans</h2>
+          <p class="lede">Each plan groups one or more automated suites and tracks the latest run against it.</p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Plan</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Suites</th>
+                <th>Latest Run</th>
+                <th>Pass Rate</th>
+              </tr>
+            </thead>
+            <tbody id="plansBody"><tr><td colspan="6">Loading test plans...</td></tr></tbody>
+          </table>
+          <div class="chat-actions" style="margin-top:12px;">
+            <button type="button" id="addPlanBtn">Add Test Plan</button>
+          </div>
+        </article>
+
+        <article class="card span-12 fade-up">
+          <h2>Test Runs</h2>
+          <p class="lede">Execution history for every suite. Select a run to see its recorded test cases.</p>
+          <div class="filter-bar">
+            <select id="filterSuite">
+              <option value="">All Suites</option>
+            </select>
+            <select id="filterStatus">
+              <option value="">All Statuses</option>
+              <option value="passed">Passed</option>
+              <option value="failed">Failed</option>
+              <option value="error">Error</option>
+              <option value="running">Running</option>
+              <option value="not_run">Not Run</option>
+            </select>
+            <button type="button" class="ghost" id="filterClear">Clear Filters</button>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Run</th>
+                <th>Suite</th>
+                <th>Status</th>
+                <th>Results</th>
+                <th>Duration</th>
+                <th>Started</th>
+                <th>Triggered By</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="runsBody"><tr><td colspan="8">Loading test runs...</td></tr></tbody>
+          </table>
+          <div class="chat-actions" style="margin-top:12px;">
+            <button type="button" id="logRunBtn">Log Test Run</button>
+          </div>
+        </article>
+
+        <article class="card span-12 fade-up" id="runDetailCard" style="display:none;">
+          <h3 id="runDetailTitle">Run Detail</h3>
+          <ul class="case-list" id="runDetailCases"></ul>
+        </article>
+
+        <article class="card span-12 fade-up">
+          <div class="notice ok" id="testDashboardNotice">Data is served from /api/test-plans and /api/test-runs.</div>
+        </article>
+      </section>
+
+      <section class="hero fade-up">
+        <a href="index.html" class="cta-button">Back to Overview</a>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="planDialog">
+    <form id="planForm">
+      <h3>Add Test Plan</h3>
+      <label>Title<input type="text" id="planTitle" required placeholder="e.g. Frontend Regression Plan"></label>
+      <label>Description<textarea id="planDescription" rows="3" placeholder="Scope and objective"></textarea></label>
+      <label>Owner<input type="text" id="planOwner" placeholder="e.g. 31-test-automation-engineer"></label>
+      <label>Status
+        <select id="planStatus">
+          <option value="Draft">Draft</option>
+          <option value="Active">Active</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </label>
+      <label>Suites<input type="text" id="planSuites" placeholder="Comma-separated, e.g. crm-portal-vitest"></label>
+      <div class="chat-actions">
+        <button type="submit">Save</button>
+        <button type="button" class="ghost" id="planDialogCancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="runDialog">
+    <form id="runForm">
+      <h3>Log Test Run</h3>
+      <label>Suite<input type="text" id="runSuite" required placeholder="e.g. crm-portal-vitest"></label>
+      <label>Plan
+        <select id="runPlan">
+          <option value="">None</option>
+        </select>
+      </label>
+      <label>Status
+        <select id="runStatus">
+          <option value="passed">Passed</option>
+          <option value="failed">Failed</option>
+          <option value="error">Error</option>
+          <option value="running">Running</option>
+          <option value="not_run">Not Run</option>
+        </select>
+      </label>
+      <label>Total Cases<input type="number" id="runTotal" min="0" placeholder="e.g. 10"></label>
+      <label>Passed<input type="number" id="runPassed" min="0" placeholder="e.g. 10"></label>
+      <label>Failed<input type="number" id="runFailed" min="0" placeholder="e.g. 0"></label>
+      <label>Duration (seconds)<input type="number" id="runDuration" min="0" placeholder="e.g. 42"></label>
+      <label>Notes<textarea id="runNotes" rows="2" placeholder="Optional context"></textarea></label>
+      <div class="chat-actions">
+        <button type="submit">Save</button>
+        <button type="button" class="ghost" id="runDialogCancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+  <script src="test-dashboard.js"></script>
+</body>
+</html>

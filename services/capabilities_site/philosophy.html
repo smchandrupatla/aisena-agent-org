@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The operating philosophy of the AISENA autonomous delivery shop: bounded autonomy, domain-agnostic delivery, and continuous evidence-backed learning.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Wiki: Philosophy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="start-project.html">Create New App</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="test-dashboard.html">Test Dashboard</a>
+        <a href="postgres-viewer.html">Postgres Viewer</a>
+        <a href="kafka-viewer.html">Kafka Viewer</a>
+        <a href="splunk-viewer.html">Splunk Viewer</a>
+        <a href="dynatrace-viewer.html">Dynatrace Viewer</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+              <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker"><a href="wiki.html" style="color: inherit;">&larr; Wiki Home</a></div>
+        <h1>Autonomy that is bounded, not unchecked.</h1>
+        <p class="lede">
+          The shop is built to turn a plain-language business goal into running, documented,
+          maintainable software with as little hand-holding as possible &mdash; while keeping every
+          business-impacting decision in human hands.
+        </p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-6 fade-up">
+          <h3>One human decision, many technical ones</h3>
+          <p>The Product Owner or client defines the business goal and priority. Every downstream
+          technical decision &mdash; architecture, libraries, data model, test strategy &mdash; is owned
+          by the agent team, not re-litigated with the human for each step.</p>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <h3>Domain-agnostic by design</h3>
+          <p>The same 37-role organization can deliver a sanctions-screening platform, a healthcare
+          scheduler, or an internal tool. Roles reason about actors, workflows, data, and risk in the
+          abstract, then specialize per project rather than being rebuilt per domain.</p>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <h3>Explicit handoffs over tribal knowledge</h3>
+          <p>Work moves between roles through written handoff files, a shared backlog, and a single
+          project-state document, never through implicit assumptions. Anyone (human or agent) can pick
+          up where another left off.</p>
+        </article>
+
+        <article class="card span-6 fade-up">
+          <h3>Evidence over assertion</h3>
+          <p>Claims of "done" are backed by test results, scan output, or metrics &mdash; not by
+          narrative alone. Each role researches current best practice before committing to an
+          approach rather than defaulting to habit.</p>
+        </article>
+
+        <article class="card span-12 fade-up">
+          <h2>Principles in practice</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Principle</th>
+                <th>What it looks like day to day</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Bounded autonomy</td>
+                <td>Technical work proceeds without sign-off; production changes, real spend, user-data handling, pricing, and legal exposure always route through an approval gate.</td>
+              </tr>
+              <tr>
+                <td>Conflict resolution order</td>
+                <td>Disagreements are resolved technically first, then escalated to the Solution Architect, then the Security Engineer, and only reach the Product Owner for business-risk calls.</td>
+              </tr>
+              <tr>
+                <td>Rotating critic</td>
+                <td>At least once per major increment, a role not involved in building the increment reviews it for blind spots and weak evidence.</td>
+              </tr>
+              <tr>
+                <td>Continuous learning</td>
+                <td>Roles self-benchmark confidence, research before deciding, and raise a capability-gap request when a specialist skill is genuinely missing.</td>
+              </tr>
+              <tr>
+                <td>Append-only memory</td>
+                <td>Every meaningful change is logged with rationale, alternatives considered, risk, and rollback plan &mdash; a permanent audit trail, not a mutable status field.</td>
+              </tr>
+              <tr>
+                <td>Portal isolation</td>
+                <td>Every new application gets its own independently deployable web portal; the AISENA portal stays focused on managing the framework and the agent organization.</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <aside class="card span-12 fade-up">
+          <div class="notice ok">
+            The goal is not "AI writes code unsupervised." The goal is a delivery organization where
+            humans set direction and risk tolerance, and agents own the depth of technical execution
+            &mdash; with a paper trail at every step.
+          </div>
+          <div class="pill-list" style="margin-top: 10px;">
+            <a class="pill" href="guardrails.html">See guardrail details →</a>
+            <a class="pill" href="workflow.html">See the delivery workflow →</a>
+          </div>
+        </aside>
+      </section>
+
+      <p class="footer fade-up">Next: see who carries out this philosophy in the <a href="agent-roster.html">Agent Roster</a>.</p>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

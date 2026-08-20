@@ -329,6 +329,10 @@ STATUS    — report current task, memory summary, tool calls made
 | Tool selection | "Which tool is most appropriate here and why?" |
 | Clarification | "Before proceeding, confirm: [ASSUMPTION LIST]" |
 
+See [PROMPTING_STRATEGY_MVP_DELTA.md](PROMPTING_STRATEGY_MVP_DELTA.md) for the full
+MVP-prompt / delta-prompt scoping strategy (one big scoped MVP prompt with explicit
+non-goals, followed by single-feature delta prompts).
+
 ---
 
 ## Common Mistakes

@@ -33,5 +33,8 @@ const AGENT_CATALOG = [
   { id: "31", key: "test-automation-engineer", name: "Test Automation Engineer", group: "Expanded Delivery", focus: "Implements end-to-end test automation suites.", prompt: "Create automated regression plan." },
   { id: "32", key: "test-manager", name: "Test Manager", group: "Expanded Delivery", focus: "Coordinates validation completeness and quality sign-off.", prompt: "Define go/no-go quality gates." },
   { id: "33", key: "security-compliance-engineer", name: "Security Compliance Engineer", group: "Expanded Delivery", focus: "Enforces security/compliance evidence and controls.", prompt: "Create compliance validation checklist." },
-  { id: "34", key: "technical-writer", name: "Technical Writer", group: "Expanded Delivery", focus: "Produces release notes and operational documentation.", prompt: "Write release notes for current increment." }
+  { id: "34", key: "technical-writer", name: "Technical Writer", group: "Expanded Delivery", focus: "Produces release notes and operational documentation.", prompt: "Write release notes for current increment." },
+  { id: "35", key: "domain-analyst", name: "Domain Analyst", group: "Domain-Agnostic Framework", focus: "Translates sponsor goals and business context into implementation requirements for any domain.", prompt: "Map this business goal into actors, workflows, and acceptance criteria." },
+  { id: "36", key: "implementation-pattern-specialist", name: "Implementation Pattern Specialist", group: "Domain-Agnostic Framework", focus: "Defines reusable implementation patterns for workflows, APIs, and integration contracts across domains.", prompt: "Recommend a reusable pattern for this workflow." },
+  { id: "37", key: "mobile-app-engineer", name: "Mobile App Engineer", group: "Domain-Agnostic Framework", focus: "Builds cross-platform iOS and Android clients from approved UX flows and API contracts.", prompt: "Scaffold a mobile screen for this approved UX flow." }
 ];

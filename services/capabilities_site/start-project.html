@@ -24,9 +24,15 @@
         <a href="index.html">Overview</a>
         <a href="start-project.html">Create New App</a>
         <a href="capabilities.html">Capabilities</a>
+        <a href="wiki.html">Wiki</a>
         <a href="documentation.html">Documentation</a>
         <a href="tasks.html">Tasks</a>
         <a href="issues.html">Issues</a>
+        <a href="test-dashboard.html">Test Dashboard</a>
+        <a href="postgres-viewer.html">Postgres Viewer</a>
+        <a href="kafka-viewer.html">Kafka Viewer</a>
+        <a href="splunk-viewer.html">Splunk Viewer</a>
+        <a href="dynatrace-viewer.html">Dynatrace Viewer</a>
         <a href="agent-learning.html">Agent Learning</a>
         <a href="workflow.html">Workflow</a>
         <a href="guardrails.html">Guardrails</a>
@@ -55,6 +61,12 @@
             <div class="field-group">
               <label for="projectName">Project name</label>
               <input type="text" id="projectName" placeholder="e.g., Riverside Clinic Scheduler" required>
+            </div>
+
+            <div class="field-group">
+              <label for="githubRepoName">GitHub repository name</label>
+              <input type="text" id="githubRepoName" placeholder="e.g., riverside-clinic-scheduler">
+              <small class="field-hint">Choose a repository name for the new app. The AI assistant can suggest one.</small>
             </div>
 
             <div class="field-group">
@@ -131,6 +143,7 @@
 
             <div class="chat-actions">
               <button type="submit">Generate Delivery Plan</button>
+              <button type="button" id="aiFillForm" class="ghost">AI Fill Form</button>
               <button type="reset" class="ghost">Reset</button>
             </div>
           </form>
@@ -146,10 +159,31 @@
             <span class="pill">Full SDLC</span>
           </div>
           <div class="notice ok" style="margin-top: 14px;">
-            After generating a plan, you can download it as a project brief or send it straight into the
-            Implementation Manager chat to start execution.
+            After generating a plan, you can download it as a project brief, send it straight into the
+            Implementation Manager chat to start execution, or use the AI Chat Assistant to refine your inputs.
           </div>
         </aside>
+      </section>
+
+      <section class="card ai-chat-panel fade-up">
+        <div class="chat-header">
+          <div>
+            <div class="kicker">AI Project Concierge</div>
+            <h2>Describe the app. Let AI shape the intake.</h2>
+          </div>
+          <span class="status-badge">browser-only</span>
+        </div>
+        <p class="chat-focus">Ask for a GitHub repository name, describe your idea, and review the suggested form values before applying them.</p>
+        <div id="projectAiMessages" class="project-ai-messages" aria-live="polite">
+          <div class="msg system">Tell me what you want to build. I will suggest a repository name and complete the project fields for your review.</div>
+        </div>
+        <div class="chat-controls">
+          <textarea id="projectAiInput" rows="3" placeholder="Example: Build a mobile app for a neighborhood food delivery service..."></textarea>
+          <div class="chat-actions">
+            <button id="sendProjectAi" type="button">Ask AI</button>
+            <button id="applyProjectAi" type="button" class="ghost" disabled>Apply suggestion to form</button>
+          </div>
+        </div>
       </section>
 
       <section id="planOutput" class="plan-output">
@@ -189,13 +223,14 @@
             <div class="chat-actions" style="margin-bottom: 10px;">
               <button id="downloadBrief" type="button">Download Brief (.md)</button>
               <button id="sendToManager" type="button" class="ghost">Send to Implementation Manager</button>
+              <button id="aiChatAssistant" type="button" class="ghost">AI Chat Assistant</button>
             </div>
             <pre id="briefPreview" class="brief-output"></pre>
           </article>
         </section>
       </section>
 
-      <p class="footer fade-up">Next: open Agents + Chat to hand this brief to the Implementation Manager and follow the handoff chain.</p>
+      <p class="footer fade-up">Next: open Agents + Chat to hand this brief to the Implementation Manager and follow the handoff chain. Use the AI Chat Assistant to help fill the form or refine your project details.</p>
     </main>
   </div>
   <script src="script.js"></script>

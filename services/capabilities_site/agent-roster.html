@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About page for every specialist role in the AISENA agent organization: mission, focus area, and delivery tier.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Wiki: Agent Roster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .roster-group-title {
+      grid-column: 1 / -1;
+      margin: 28px 0 4px;
+    }
+    .roster-group-title:first-child { margin-top: 0; }
+    .roster-group-title h2 { margin-bottom: 2px; }
+    .agent-card-id {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+      color: var(--brand, #3560d6);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .agent-card-path {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      opacity: 0.7;
+      display: block;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="start-project.html">Create New App</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="test-dashboard.html">Test Dashboard</a>
+        <a href="postgres-viewer.html">Postgres Viewer</a>
+        <a href="kafka-viewer.html">Kafka Viewer</a>
+        <a href="splunk-viewer.html">Splunk Viewer</a>
+        <a href="dynatrace-viewer.html">Dynatrace Viewer</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+              <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker"><a href="wiki.html" style="color: inherit;">&larr; Wiki Home</a></div>
+        <h1>37 specialist roles, one delivery organization.</h1>
+        <p class="lede">
+          Every role is defined by an <code>AGENT.md</code> file under <code>/agents</code> with a
+          mission, responsibilities, scope, inputs, and outputs. This page summarizes each one. Open
+          <a href="agents-chat.html">Agents + Chat</a> to talk to a role directly.
+        </p>
+      </section>
+
+      <section class="grid" id="rosterGrid"></section>
+
+      <p class="footer fade-up">Next: see how these roles collaborate to ship a new app in the <a href="implementation-approach.html">Implementation Approach</a>.</p>
+    </main>
+  </div>
+
+  <script src="agents-data.js"></script>
+  <script>
+    const GROUP_ORDER = ["Core Delivery", "Engineering", "Domain SMEs", "Expanded Delivery", "Domain-Agnostic Framework"];
+    const GROUP_BLURB = {
+      "Core Delivery": "Coordination, definition, and business-facing roles that frame what gets built and why.",
+      "Engineering": "Roles that design and build the system itself: UI, services, data, infrastructure, and quality.",
+      "Domain SMEs": "Subject-matter experts who bring regulatory, financial-crime, payments, and platform depth to the AISENA reference domain.",
+      "Expanded Delivery": "Additional delivery-focused roles covering platform build-out, release, testing, and technical writing.",
+      "Domain-Agnostic Framework": "Roles that keep the whole system reusable across industries: requirements framing, reusable patterns, and mobile delivery."
+    };
+
+    function renderRoster() {
+      const grid = document.getElementById("rosterGrid");
+      const byGroup = {};
+      AGENT_CATALOG.forEach((agent) => {
+        if (!byGroup[agent.group]) byGroup[agent.group] = [];
+        byGroup[agent.group].push(agent);
+      });
+
+      GROUP_ORDER.forEach((group) => {
+        const agents = byGroup[group];
+        if (!agents || !agents.length) return;
+
+        const titleWrap = document.createElement("div");
+        titleWrap.className = "roster-group-title fade-up";
+        titleWrap.innerHTML = `<h2>${group}</h2><p class="lede" style="margin:0;">${GROUP_BLURB[group] || ""}</p>`;
+        grid.appendChild(titleWrap);
+
+        agents.forEach((agent) => {
+          const card = document.createElement("article");
+          card.className = "card span-4 fade-up";
+          card.innerHTML = `
+            <span class="agent-card-id">Agent ${agent.id}</span>
+            <h3>${agent.name}</h3>
+            <p>${agent.focus}</p>
+            <span class="agent-card-path">agents/${agent.id}-${agent.key}/AGENT.md</span>
+          `;
+          grid.appendChild(card);
+        });
+      });
+    }
+
+    renderRoster();
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

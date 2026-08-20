@@ -1,0 +1,25 @@
+{
+  "eventDefinitionId": "PAYMENT.DECLINED.v1",
+  "eventName": "PAYMENT.DECLINED",
+  "category": "BUSINESS",
+  "subCategory": "PAYMENT",
+  "description": "Raised when a payment attempt is declined by a gateway or issuing bank.",
+  "mandatoryFields": [
+    "eventEnvelope.eventId",
+    "eventEnvelope.eventName",
+    "eventEnvelope.category",
+    "eventEnvelope.occurredAt",
+    "eventEnvelope.correlationId",
+    "actionTaken",
+    "outcome"
+  ],
+  "optionalFieldsExcluded": [
+    "context.deviceContext.jsVersion",
+    "payload.embeddedMessage"
+  ],
+  "piiFields": ["payload.cardLast4"],
+  "piiHandling": "MASK",
+  "customAttributesAllowed": true,
+  "retentionPolicy": "365d",
+  "version": "1.0.0"
+}

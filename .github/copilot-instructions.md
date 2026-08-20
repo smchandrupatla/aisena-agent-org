@@ -84,6 +84,13 @@ Sample JSON → Ingestion (`produce.py`) → Kafka topic `aisena-stage0-events` 
 
 ## Key Conventions
 
+### New Application Portal Isolation
+
+- Every new application created with this framework must have a web portal separate from the AISENA portal.
+- Treat the new application's portal as an independently deployable product surface with its own source boundary, configuration, routes, assets, and branding.
+- Do not add new application screens or application-specific navigation to the AISENA portal. The AISENA portal remains the framework and agent-organization management surface.
+- Shared libraries and platform services may be reused, but portal builds and deployments must remain independently versioned and releasable.
+
 ### Agent Definition Structure
 
 Every agent is a folder under `agents/`:

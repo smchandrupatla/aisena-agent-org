@@ -24,6 +24,7 @@ function staggerFade() {
 function initModernFeatures() {
   // Initialize modern navigation behavior
   setActiveNav();
+  initContextBackButton();
   
   // Initialize stagger animations
   staggerFade();
@@ -65,6 +66,30 @@ function initModernFeatures() {
       }
     });
   }
+}
+
+function initContextBackButton() {
+  const main = document.querySelector("main");
+  if (!main || main.querySelector(".context-back")) {
+    return;
+  }
+
+  const row = document.createElement("div");
+  row.className = "context-back-row";
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "context-back ghost";
+  button.setAttribute("aria-label", "Return to the previous page");
+  button.textContent = "← Back";
+  button.addEventListener("click", () => {
+    if (document.referrer && window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+    window.location.href = "index.html";
+  });
+  row.appendChild(button);
+  main.prepend(row);
 }
 
 async function loadAgentCatalog() {
@@ -198,6 +223,223 @@ function renderChatMessages(messages, root) {
     root.appendChild(line);
   });
   root.scrollTop = root.scrollHeight;
+}
+
+async function loadDatabaseTables() {
+  const container = document.getElementById("tablesContainer");
+  if (!container) {
+    return;
+  }
+
+  const aisenaPanel = document.getElementById("aisenaTablesPanel");
+  const applicationPanel = document.getElementById("applicationTablesPanel");
+  const aisenaTab = document.getElementById("aisenaTablesTab");
+  const applicationTab = document.getElementById("applicationTablesTab");
+  const dataContainer = document.getElementById("tableDataContainer");
+  const selectedName = document.getElementById("selectedTableName");
+  const selectedCount = document.getElementById("selectedTableCount");
+
+  const showMessage = (root, message, className = "notice") => {
+    const paragraph = document.createElement("p");
+    paragraph.className = className;
+    paragraph.textContent = message;
+    root.replaceChildren(paragraph);
+  };
+
+  const loadTableContents = async (tableName, button) => {
+    document.querySelectorAll(".db-table-button.active").forEach((item) => item.classList.remove("active"));
+    button.classList.add("active");
+    selectedName.textContent = tableName;
+    selectedCount.textContent = "Loading";
+    showMessage(dataContainer, "Loading table content...");
+
+    try {
+      const response = await fetch(`${API_BASE}/db-tables/${encodeURIComponent(tableName)}?limit=100`, { cache: "no-store" });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Unable to load table content");
+      }
+
+      selectedCount.textContent = `${result.rows.length} row${result.rows.length === 1 ? "" : "s"}`;
+      if (!result.rows.length) {
+        showMessage(dataContainer, "This table contains no rows.");
+        return;
+      }
+
+      const table = document.createElement("table");
+      table.className = "table db-data-table";
+      const head = document.createElement("thead");
+      const headRow = document.createElement("tr");
+      result.columns.forEach((column) => {
+        const cell = document.createElement("th");
+        cell.textContent = column;
+        headRow.appendChild(cell);
+      });
+      head.appendChild(headRow);
+
+      const body = document.createElement("tbody");
+      result.rows.forEach((row) => {
+        const tableRow = document.createElement("tr");
+        row.forEach((value) => {
+          const cell = document.createElement("td");
+          cell.textContent = value === null ? "NULL" : String(value);
+          if (value === null) {
+            cell.className = "db-null";
+          }
+          tableRow.appendChild(cell);
+        });
+        body.appendChild(tableRow);
+      });
+      table.append(head, body);
+      dataContainer.replaceChildren(table);
+    } catch (error) {
+      selectedCount.textContent = "Error";
+      showMessage(dataContainer, `Could not load table content: ${error.message}`, "notice error");
+    }
+  };
+
+  const renderTableGroup = (root, tables, emptyMessage) => {
+    if (!tables.length) {
+      showMessage(root, emptyMessage);
+      return;
+    }
+    const list = document.createElement("div");
+    list.className = "db-table-list";
+    tables.forEach((tableName) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "db-table-button";
+      button.textContent = tableName;
+      button.addEventListener("click", () => loadTableContents(tableName, button));
+      list.appendChild(button);
+    });
+    root.replaceChildren(list);
+  };
+
+  const activateTab = (activeTab, activePanel, inactiveTab, inactivePanel) => {
+    activeTab.classList.add("active");
+    activeTab.setAttribute("aria-selected", "true");
+    activePanel.hidden = false;
+    inactiveTab.classList.remove("active");
+    inactiveTab.setAttribute("aria-selected", "false");
+    inactivePanel.hidden = true;
+  };
+
+  aisenaTab.addEventListener("click", () => activateTab(aisenaTab, aisenaPanel, applicationTab, applicationPanel));
+  applicationTab.addEventListener("click", () => activateTab(applicationTab, applicationPanel, aisenaTab, aisenaPanel));
+
+  try {
+    const response = await fetch(`${API_BASE}/db-tables`, { cache: "no-store" });
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.error || "Unable to load database tables");
+    }
+
+    const aisenaTables = Array.isArray(result.aisena_tables) ? result.aisena_tables : [];
+    const applicationTables = Array.isArray(result.application_tables) ? result.application_tables : [];
+    renderTableGroup(aisenaPanel, aisenaTables, "No AISENA tables found.");
+    renderTableGroup(applicationPanel, applicationTables, "No application tables found.");
+    const firstButton = aisenaPanel.querySelector(".db-table-button") || applicationPanel.querySelector(".db-table-button");
+    if (firstButton) {
+      firstButton.click();
+    }
+  } catch (error) {
+    showMessage(aisenaPanel, `Could not load database tables: ${error.message}`, "notice error");
+  }
+}
+
+function initObservabilityViewers() {
+  document.querySelectorAll(".observability-viewer").forEach((viewer) => {
+    const endpoint = viewer.dataset.observabilityEndpoint;
+    const provider = viewer.dataset.observabilityProvider;
+    const queryInput = viewer.querySelector(".observability-query input");
+    const refreshButton = viewer.querySelector(".observability-refresh");
+    const status = viewer.querySelector("[data-observability-status]");
+    const count = viewer.querySelector("[data-observability-count]");
+    const message = viewer.querySelector("[data-observability-message]");
+    const eventsRoot = viewer.querySelector("[data-observability-events]");
+
+    const setStatus = (value) => {
+      const labels = {
+        connected: "Connected",
+        not_configured: "Not configured",
+        unavailable: "Unavailable",
+        loading: "Loading",
+      };
+      status.textContent = labels[value] || value;
+      status.className = "status-badge";
+      status.classList.add(value === "connected" ? "status-passed" : value === "loading" ? "status-running" : value === "unavailable" ? "status-error" : "status-not_run");
+    };
+
+    const renderEvents = (events) => {
+      eventsRoot.replaceChildren();
+      if (!events.length) {
+        const empty = document.createElement("p");
+        empty.textContent = "No matching events found in the last 24 hours.";
+        eventsRoot.appendChild(empty);
+        return;
+      }
+
+      const table = document.createElement("table");
+      table.className = "table observability-table";
+      const head = document.createElement("thead");
+      const headRow = document.createElement("tr");
+      ["Time", "Service", "Source", "Message"].forEach((label) => {
+        const cell = document.createElement("th");
+        cell.textContent = label;
+        headRow.appendChild(cell);
+      });
+      head.appendChild(headRow);
+      const body = document.createElement("tbody");
+      events.forEach((event) => {
+        const row = document.createElement("tr");
+        const timestamp = event.timestamp ? new Date(event.timestamp).toLocaleString() : "-";
+        [timestamp, event.service || "-", event.source || "-", event.message || ""].forEach((value) => {
+          const cell = document.createElement("td");
+          cell.textContent = value;
+          row.appendChild(cell);
+        });
+        body.appendChild(row);
+      });
+      table.append(head, body);
+      eventsRoot.appendChild(table);
+    };
+
+    const loadEvents = async () => {
+      setStatus("loading");
+      refreshButton.disabled = true;
+      message.textContent = `Loading ${provider} events...`;
+      try {
+        const params = new URLSearchParams({ query: queryInput.value.trim(), limit: "50" });
+        const response = await fetch(`${API_BASE}${endpoint}?${params}`, { cache: "no-store" });
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.message || `Unable to load ${provider} events`);
+        }
+        const events = Array.isArray(result.events) ? result.events : [];
+        setStatus(result.status || "unavailable");
+        count.textContent = `${events.length} event${events.length === 1 ? "" : "s"}`;
+        message.textContent = result.message || (result.status === "connected" ? `Showing events from ${provider}.` : `${provider} is not ready.`);
+        renderEvents(events);
+      } catch (error) {
+        setStatus("unavailable");
+        count.textContent = "0 events";
+        message.textContent = `Could not load ${provider} events: ${error.message}`;
+        renderEvents([]);
+      } finally {
+        refreshButton.disabled = false;
+      }
+    };
+
+    refreshButton.addEventListener("click", loadEvents);
+    queryInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        loadEvents();
+      }
+    });
+    loadEvents();
+  });
 }
 
 // Initialize modern features when DOM is ready
@@ -422,6 +664,8 @@ async function initSite() {
   staggerFade();
   renderDocumentationCatalog();
   renderWordTemplateCatalog();
+  loadDatabaseTables();
+  initObservabilityViewers();
   const catalog = await loadAgentCatalog();
   initCrossCheck(catalog);
   initAgentChat(catalog);

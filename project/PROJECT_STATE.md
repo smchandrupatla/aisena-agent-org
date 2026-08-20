@@ -12,6 +12,7 @@
 ## Active Tasks
 - TASK-0009 — Stage 0 architecture validation and backend implementation planning (IN_PROGRESS)
 - TASK-0011 — Governance metrics and critic cadence (IN_PROGRESS)
+- TASK-0012 — Sena operating model rollout: sibling-workspace separation, schema isolation, extraction workflow, gated change pipeline, configuration console, self-service ops (IN_PROGRESS)
 
 ## Recently Completed Tasks
 - Repository discovery and environment inspection.
@@ -66,3 +67,34 @@ Single-agent delivery adopted 2026-08-15. Implementation Manager drives all work
 
 ### Current Constraint
 - Copilot CLI runtime blocked: permission host returning "denied-interactively-by-user". Run `copilot` in an interactive terminal session to accept permission prompts, then retry non-interactive use. This blocks TASK-0011.
+
+## Update 2026-08-20 — Sena Operating Model Codified
+
+### New Direction
+- Product Owner / Client supplied a full "AI Sena — Operating Instructions" charter: Sena operates as a sibling dev shop beside each application, never mixed into its codebase, with an isolated database schema, a repeatable clean-repo extraction workflow, and a mandatory gated change pipeline (implementation → tests → regression → risk tagging → human go-ahead) with no automated deployment.
+
+### New Artifacts
+- REQ-0006 created to formalize the Sena operating instructions as a requirement.
+- ADR-0003 accepted to codify workspace/schema separation, the change-delivery pipeline, audit-trail artifacts, and the configuration-console/self-service model.
+
+### Active Governance Tasks
+- TASK-0012 IN_PROGRESS: roll out sibling-workspace separation, schema isolation, extraction workflow, gated change pipeline, configuration console, and self-service operator recovery for applications built under this model.
+
+## Update 2026-08-20 — Autonomous Dev Shop Generalization (Orchestrator)
+
+### New Direction
+- Product Owner / Client supplied an "Autonomous AI Dev Shop" spec generalizing the single-app, fixed-37-role Sena model into a stack-agnostic, multi-client, multi-app engine with dynamic expert spin-up, configurable GitHub push modes, per-app ticketing, and a queryable app history.
+
+### New Artifacts
+- REQ-0007 created to formalize the generalization, superseding REQ-0006/ADR-0003's single-app/fixed-roster scope while preserving their delivery-pipeline and separation guarantees.
+- ADR-0004 accepted to codify the new `services/orchestrator` service, dynamic expert capability registry, and GitHub push-mode integration.
+- TASK-0013 added to the backlog: implement and test the Orchestrator service.
+
+### Implementation Status
+- `services/orchestrator/` implemented: app/audit/ticket registries, capability registry (match existing persona or synthesize `agents/dynamic/<role-slug>/` on demand), GitHub client (push-mode-aware PR creation/merge, injectable session for tests), and Flask API.
+- 12 unit tests passing (`docker build -f services/orchestrator/Dockerfile -t orchestrator-test .` then `docker run --rm orchestrator-test python -m unittest test_orchestrator.py -v`).
+- Wired into root `docker-compose.yml` as the `orchestrator` service (port 5100).
+
+### Active Governance Tasks
+- TASK-0013 IN_PROGRESS: Orchestrator service delivered; pending human review of GitHub push-mode behavior before enabling real `GITHUB_TOKEN`/`GITHUB_ORG` credentials in any environment.
+

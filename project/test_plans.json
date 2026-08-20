@@ -1,0 +1,98 @@
+[
+  {
+    "id": "PLAN-0001",
+    "title": "CRM Portal Unit & Component Test Plan",
+    "description": "Vitest + React Testing Library coverage for the crm-portal create-project flow and dashboard components.",
+    "owner": "31-test-automation-engineer",
+    "status": "Active",
+    "suites": [
+      "crm-portal-vitest"
+    ],
+    "created_at": "2026-08-20T00:00:00+00:00",
+    "updated_at": "2026-08-20T00:00:00+00:00"
+  },
+  {
+    "id": "PLAN-0002",
+    "title": "CRM Portal GUI Regression Plan (Selenium)",
+    "description": "Headless-Chromium end-to-end checks that the dashboard loads and the create-project stepper navigates and validates correctly.",
+    "owner": "31-test-automation-engineer",
+    "status": "Active",
+    "suites": [
+      "crm-portal-selenium"
+    ],
+    "created_at": "2026-08-20T00:00:00+00:00",
+    "updated_at": "2026-08-20T00:00:00+00:00"
+  },
+  {
+    "id": "PLAN-0003",
+    "title": "API Service Regression Plan",
+    "description": "unittest coverage for services/api/app.py: agent catalog, cross-check, task and issue workflows.",
+    "owner": "10-qa-engineer",
+    "status": "Active",
+    "suites": [
+      "api-unittest"
+    ],
+    "created_at": "2026-08-18T00:00:00+00:00",
+    "updated_at": "2026-08-20T00:00:00+00:00"
+  },
+  {
+    "id": "PLAN-0004",
+    "title": "Orchestrator Service Test Plan",
+    "description": "unittest coverage for services/orchestrator: capability matching, workstream decomposition, handoffs, GitHub client push modes.",
+    "owner": "31-test-automation-engineer",
+    "status": "Active",
+    "suites": [
+      "orchestrator-unittest"
+    ],
+    "created_at": "2026-08-20T00:00:00+00:00",
+    "updated_at": "2026-08-20T00:00:00+00:00"
+  },
+  {
+    "id": "PLAN-0005",
+    "title": "Temporal Workflow Verification Plan",
+    "description": "Test-target Docker build validating backend/temporal workflow and activity definitions.",
+    "owner": "07-integration-engineer",
+    "status": "Active",
+    "suites": [
+      "temporal-tests"
+    ],
+    "created_at": "2026-08-20T00:00:00+00:00",
+    "updated_at": "2026-08-20T00:00:00+00:00"
+  },
+  {
+    "id": "PLAN-0006",
+    "title": "Sand-Bench ISO 20022 Integration Plan",
+    "description": "Integration coverage for ISO 20022 structured-address processing and the sanctions-screening pipeline handoff.",
+    "owner": "17-payments-messaging-sme",
+    "status": "Draft",
+    "suites": [
+      "sandbench-integration"
+    ],
+    "created_at": "2026-08-20T00:00:00+00:00",
+    "updated_at": "2026-08-20T00:00:00+00:00"
+  },
+  {
+    "id": "PLAN-0007",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-20T11:24:02.605711+00:00",
+    "updated_at": "2026-08-20T11:24:02.870237+00:00"
+  },
+  {
+    "id": "PLAN-0008",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-20T11:26:16.675293+00:00",
+    "updated_at": "2026-08-20T11:26:16.997528+00:00"
+  }
+]

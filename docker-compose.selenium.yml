@@ -1,0 +1,27 @@
+# Selenium GUI tests for the AISENA web portal (crm-portal).
+#
+# Usage:
+#   docker compose -f docker-compose.selenium.yml up --build --abort-on-container-exit --exit-code-from gui-tests
+#   docker compose -f docker-compose.selenium.yml down -v
+#
+# Wires two throwaway containers on their own project/network (isolated from the
+# main app stack in the root docker-compose.yml):
+#   crm-portal - production build of services/crm-portal served by nginx
+#   gui-tests  - pytest + headless Chromium test runner (services/crm-portal/tests_e2e)
+
+name: aisena-gui-tests
+
+services:
+  crm-portal:
+    build:
+      context: ./services/crm-portal
+    expose:
+      - "80"
+
+  gui-tests:
+    build:
+      context: ./services/crm-portal/tests_e2e
+    environment:
+      PORTAL_BASE_URL: http://crm-portal
+    depends_on:
+      - crm-portal

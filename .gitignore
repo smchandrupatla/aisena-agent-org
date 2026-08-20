@@ -11,3 +11,8 @@ __pycache__/
 
 # Local tooling
 .vscode/*.local.json
+
+# Node/JS artifacts
+node_modules/
+dist/
+coverage/

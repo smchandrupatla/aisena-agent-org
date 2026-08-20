@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aisena.org/schemas/case.created.json",
+  "title": "CaseCreated",
+  "description": "Published when a screening flag triggers case creation.",
+  "type": "object",
+  "required": ["eventId", "caseId", "transactionId", "screeningId", "occurredAt", "status", "assignedTo", "assignedType", "reason", "riskScore"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "caseId": { "type": "string" },
+    "transactionId": { "type": "string" },
+    "screeningId": { "type": "string" },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "status": { "type": "string", "enum": ["OPEN", "IN_REVIEW", "ESCALATED", "CLOSED"] },
+    "assignedTo": { "type": "string" },
+    "assignedType": { "type": "string", "enum": ["AI", "HUMAN"] },
+    "reason": { "type": "string" },
+    "riskScore": { "type": "number", "minimum": 0, "maximum": 100 }
+  }
+}

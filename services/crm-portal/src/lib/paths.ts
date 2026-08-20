@@ -16,9 +16,14 @@ export function setByPath<T>(obj: T, path: string, value: unknown): T {
   let cursor: Record<string, unknown> = clone
   for (let i = 0; i < keys.length - 1; i++) {
     const key = keys[i]
-    const next = cursor[key]
-    const nextClone =
-      next && typeof next === 'object' ? { ...(next as Record<string, unknown>) } : {}
+        const next = cursor[key]
+    // Preserve arrays when cloning intermediate segments — spreading an array
+    // into an object would silently turn ['a', 'b'] into {0: 'a', 1: 'b'}.
+    const nextClone = Array.isArray(next)
+      ? [...next]
+      : next && typeof next === 'object'
+        ? { ...(next as Record<string, unknown>) }
+        : {}
     cursor[key] = nextClone
     cursor = nextClone
   }

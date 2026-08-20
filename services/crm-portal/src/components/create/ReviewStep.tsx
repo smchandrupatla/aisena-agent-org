@@ -15,14 +15,16 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
   )
 }
 
-function SummaryGroup({ title, stepIndex, onEdit, children }: { title: string; stepIndex: number; onEdit: (i: number) => void; children: ReactNode }) {
+function SummaryGroup({ title, stepIndex, onEdit, children }: { title: string; stepIndex?: number; onEdit?: (i: number) => void; children: ReactNode }) {
   return (
     <div className="rounded-lg border border-border p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">{title}</h3>
-        <button type="button" onClick={() => onEdit(stepIndex)} className="flex items-center gap-1 text-xs text-primary hover:underline">
-          <Pencil size={12} /> Edit
-        </button>
+        {stepIndex !== undefined && onEdit && (
+          <button type="button" onClick={() => onEdit(stepIndex)} className="flex items-center gap-1 text-xs text-primary hover:underline">
+            <Pencil size={12} /> Edit
+          </button>
+        )}
       </div>
       <div className="mt-2 divide-y divide-border/60">{children}</div>
     </div>
@@ -41,19 +43,26 @@ export function ReviewStep() {
   const config = formState.config as Record<string, unknown>
   const ef = formState.enterpriseFeatures
   const dep = formState.deployment
+  const eventing = formState.eventing
 
   async function handleCreate() {
-    setSubmitting(true)
-    setError(null)
-    try {
-      await submitProject()
-      reset()
-      navigate('/', { state: { toast: `${typeLabel} created successfully.` } })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong.')
-      setSubmitting(false)
+      setSubmitting(true)
+      setError(null)
+      try {
+        const result = await submitProject(formState)
+        reset()
+        navigate('/', {
+          state: {
+            toast: `${typeLabel} created successfully.`,
+            deliberationId: result.deliberationId,
+            projectName: formState.name,
+          },
+        })
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Something went wrong.')
+        setSubmitting(false)
+      }
     }
-  }
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-4">
@@ -97,6 +106,14 @@ export function ReviewStep() {
         {dep.docker && <SummaryRow label="Docker base image" value={dep.docker.baseImage} />}
         {dep.executable && <SummaryRow label="Executable OS" value={dep.executable.targetOS.join(', ') || '—'} />}
         {dep.cloud && <SummaryRow label="Cloud" value={`${dep.cloud.provider} / ${dep.cloud.region} / ${dep.cloud.environment}`} />}
+      </SummaryGroup>
+
+      <SummaryGroup title="Application Eventing">
+        <SummaryRow label="Framework" value={eventing.framework} />
+        <SummaryRow label="Categories" value={eventing.categories.join(', ')} />
+        <SummaryRow label="Format" value={eventing.canonicalFormat} />
+        <SummaryRow label="Transport" value={`${eventing.delivery.transport} (Kafka)`} />
+        <SummaryRow label="PII policy" value={eventing.piiHandling} />
       </SummaryGroup>
 
       {error && (

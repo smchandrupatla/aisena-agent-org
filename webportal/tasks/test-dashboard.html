@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Comprehensive testing framework GUI: test plans, execution progress, detailed results, and analytics.">
+  <title>Testing Framework GUI</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Enhanced Testing Framework GUI Styles */
+    .gui-container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+      background: var(--bg);
+    }
+    
+    .gui-sidebar {
+      background: var(--panel);
+      border-right: 1px solid var(--line);
+      padding: 24px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    
+    .gui-main {
+      padding: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .gui-header {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--line);
+    }
+    
+    .gui-nav {
+      display: flex;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    
+    .gui-nav-item {
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    
+    .gui-nav-item:hover {
+      background: var(--bg-soft);
+      border-color: var(--line);
+    }
+    
+    .gui-nav-item.active {
+      background: var(--brand);
+      color: white;
+    }
+    
+    .gui-section {
+      margin-bottom: 32px;
+      display: none;
+    }
+    
+    .gui-section.active {
+      display: block;
+    }
+    
+    .gui-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    
+    .gui-metric-card {
+      background: var(--panel);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid var(--line);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .gui-metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+    }
+    
+    .gui-metric-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card);
+    }
+    
+    .gui-metric-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin: 8px 0;
+    }
+    
+    .gui-metric-label {
+      color: var(--ink-soft);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .gui-metric-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    
+    .gui-trend-up {
+      color: var(--ok);
+    }
+    
+    .gui-trend-down {
+      color: var(--warn);
+    }
+    
+    .gui-table-container {
+      background: var(--panel);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+    
+    .gui-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .gui-table th {
+      background: var(--bg-soft);
+      padding: 16px 24px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--ink);
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .gui-table td {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .gui-table tr:hover {
+      background: var(--bg-soft);
+    }
+    
+    .gui-status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .gui-status-passed { background: rgba(31, 157, 104, 0.1); color: var(--ok); }
+    .gui-status-failed { background: rgba(210, 75, 87, 0.1); color: var(--warn); }
+    .gui-status-running { background: rgba(35, 99, 235, 0.1); color: var(--brand); }
+    .gui-status-not_run { background: rgba(77, 93, 120, 0.1); color: var(--ink-soft); }
+    
+    .gui-progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-soft);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+    
+    .gui-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .gui-filter-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .gui-filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .gui-filter-label {
+      font-size: 14px;
+      color: var(--ink-soft);
+      min-width: 80px;
+    }
+    
+    .gui-filter-select,
+    .gui-filter-input {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--panel);
+      color: var(--ink);
+    }
+    
+    .gui-dialog {
+      background: var(--panel);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .gui-dialog-header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--line);
+    }
+    
+    .gui-form-group {
+      margin-bottom: 20px;
+    }
+    
+    .gui-form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    
+    .gui-form-input,
+    .gui-form-select,
+    .gui-form-textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--panel);
+      color: var(--ink);
+      font-family: inherit;
+    }
+    
+    .gui-form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .gui-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--radius-md);
+      background: var(--brand);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .gui-button:hover {
+      background: var(--brand-dark);
+      transform: translateY(-2px);
+    }
+    
+    .gui-button-secondary {
+      background: var(--bg-soft);
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    
+    .gui-button-secondary:hover {
+      background: var(--line);
+    }
+    
+    .gui-button-danger {
+      background: var(--warn);
+    }
+    
+    .gui-button-danger:hover {
+      background: #b33a2b;
+    }
+    
+    .gui-empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--ink-soft);
+    }
+    
+    .gui-empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    .gui-loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+    
+    .gui-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--line);
+      border-top: 4px solid var(--brand);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .gui-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--line);
+      margin-bottom: 24px;
+    }
+    
+    .gui-tab {
+      padding: 16px 24px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    
+    .gui-tab:hover {
+      background: var(--bg-soft);
+    }
+    
+    .gui-tab.active {
+      border-bottom-color: var(--brand);
+      color: var(--brand);
+    }
+    
+    .gui-detail-panel {
+      background: var(--panel);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      padding: 24px;
+      margin-top: 24px;
+    }
+    
+    .gui-detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .gui-detail-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .gui-detail-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    
+    .gui-detail-section {
+      margin-bottom: 20px;
+    }
+    
+    .gui-detail-label {
+      font-size: 14px;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+    
+    .gui-detail-value {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    .gui-analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    
+    .gui-analytics-card {
+      background: var(--panel);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+    
+    .gui-analytics-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin: 8px 0;
+    }
+    
+    .gui-analytics-label {
+      font-size: 12px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .gui-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--panel);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      padding: 16px 24px;
+      box-shadow: var(--shadow-card);
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .gui-notification.show {
+      transform: translateX(0);
+    }
+    
+    .gui-notification.success {
+      border-left: 4px solid var(--ok);
+    }
+    
+    .gui-notification.error {
+      border-left: 4px solid var(--warn);
+    }
+    
+    .gui-notification.info {
+      border-left: 4px solid var(--brand);
+    }
+    
+    .gui-float-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-card);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .gui-float-button:hover {
+      background: var(--brand-dark);
+      transform: scale(1.1);
+    }
+    
+    .gui-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .gui-modal.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .gui-modal-content {
+      background: var(--panel);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .gui-chart-placeholder {
+      height: 300px;
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-soft);
+      border: 2px dashed var(--line);
+    }
+    
+    .gui-timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+    
+    .gui-timeline::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--line);
+    }
+    
+    .gui-timeline-item {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    
+    .gui-timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -35px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--brand);
+      border: 2px solid var(--panel);
+    }
+    
+    .gui-timeline-content {
+      background: var(--panel);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      border: 1px solid var(--line);
+    }
+    
+    .gui-export-options {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    
+    .gui-export-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--panel);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .gui-export-btn:hover {
+      background: var(--bg-soft);
+      border-color: var(--brand);
+    }
+    
+    .gui-quick-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .gui-stat-item {
+      text-align: center;
+      padding: 16px;
+      background: var(--panel);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+    }
+    
+    .gui-stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin-bottom: 4px;
+    }
+    
+    .gui-stat-label {
+      font-size: 11px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+    }
+    
+    .gui-activity-log {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      background: var(--bg-soft);
+    }
+    
+    .gui-activity-item {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+    
+    .gui-activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .gui-activity-timestamp {
+      color: var(--ink-soft);
+      font-size: 12px;
+    }
+    
+    .gui-activity-message {
+      margin-top: 4px;
+    }
+    
+    .gui-activity-actor {
+      font-weight: 600;
+      color: var(--brand);
+    }
+    
+    @media (max-width: 1024px) {
+      .gui-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .gui-sidebar {
+        position: fixed;
+        left: -280px;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.3s ease;
+      }
+      
+      .gui-sidebar.open {
+        left: 0;
+      }
+      
+      .gui-main {
+        margin-left: 0;
+        padding: 20px;
+      }
+      
+      .gui-detail-content {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="gui-container">
+    <aside class="gui-sidebar" id="guiSidebar">
+      <div class="gui-header">
+        <div class="brand">
+          <div class="badge">AI</div>
+          <div class="brand-title"><strong>Testing</strong> Framework</div>
+        </div>
+      </div>
+      
+      <nav class="gui-nav">
+        <div class="gui-nav-item active" onclick="switchSection('overview')">
+          <span>📊 Overview</span>
+        </div>
+        <div class="gui-nav-item" onclick="switchSection('test-plans')">
+          <span>📋 Test Plans</span>
+        </div>
+        <div class="gui-nav-item" onclick="switchSection('test-runs')">
+          <span>🧪 Test Runs</span>
+        </div>
+        <div class="gui-nav-item" onclick="switchSection('analytics')">
+          <span>📈 Analytics</span>
+        </div>
+        <div class="gui-nav-item" onclick="switchSection('activity')">
+          <span>📝 Activity Log</span>
+        </div>
+        <div class="gui-nav-item" onclick="switchSection('reports')">
+          <span>📄 Reports</span>
+        </div>
+      </nav>
+      
+      <div style="margin-top: 32px;">
+        <h3 style="font-size: 14px; color: var(--ink-soft); margin-bottom: 16px;">Quick Stats</h3>
+        <div class="gui-quick-stats">
+          <div class="gui-stat-item">
+            <div class="gui-stat-value" id="sidebarPlanCount">-</div>
+            <div class="gui-stat-label">Test Plans</div>
+          </div>
+          <div class="gui-stat-item">
+            <div class="gui-stat-value" id="sidebarSuiteCount">-</div>
+            <div class="gui-stat-label">Suites Executed</div>
+          </div>
+          <div class="gui-stat-item">
+            <div class="gui-stat-value" id="sidebarPassRate">-</div>
+            <div class="gui-stat-label">Pass Rate</div>
+          </div>
+          <div class="gui-stat-item">
+            <div class="gui-stat-value" id="sidebarRunCount">-</div>
+            <div class="gui-stat-label">Total Runs</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+    
+    <main class="gui-main">
+      <header class="gui-header">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h1>Testing Framework GUI</h1>
+            <p class="lede">Comprehensive test management and analytics dashboard</p>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <button class="gui-button gui-button-secondary" onclick="toggleSidebar()">
+              ☰ Navigation
+            </button>
+            <button class="gui-button" onclick="showAddPlanDialog()">
+              + Add Test Plan
+            </button>
+          </div>
+        </div>
+      </header>
+      
+      <div id="notificationContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
+      
+      <!-- Overview Section -->
+      <section id="overview-section" class="gui-section active">
+        <div class="gui-card-grid">
+          <div class="gui-metric-card">
+            <div class="gui-metric-label">Test Plans</div>
+            <div class="gui-metric-value" id="overviewPlanCount">-</div>
+            <div class="gui-metric-trend">
+              <span>↑</span>
+              <span class="gui-trend-up">12% increase</span>
+            </div>
+          </div>
+          
+          <div class="gui-metric-card">
+            <div class="gui-metric-label">Suites Executed</div>
+            <div class="gui-metric-value" id="overviewSuiteCount">-</div>
+            <div class="gui-metric-trend">
+              <span>↑</span>
+              <span class="gui-trend-up">8% increase</span>
+            </div>
+          </div>
+          
+          <div class="gui-metric-card">
+            <div class="gui-metric-label">Overall Pass Rate</div>
+            <div class="gui-metric-value" id="overviewPassRate">-</div>
+            <div class="gui-progress-bar">
+              <div class="gui-progress-fill" id="overviewProgressBar" style="width: 0%"></div>
+            </div>
+          </div>
+          
+          <div class="gui-metric-card">
+            <div class="gui-metric-label">Total Test Runs</div>
+            <div class="gui-metric-value" id="overviewRunCount">-</div>
+            <div class="gui-metric-trend">
+              <span>↑</span>
+              <span class="gui-trend-up">24% increase</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gui-tabs">
+          <div class="gui-tab active" onclick="switchTab('recent-plans')">Recent Plans</div>
+          <div class="gui-tab" onclick="switchTab('recent-runs')">Recent Runs</div>
+          <div class="gui-tab" onclick="switchTab('suite-performance')">Suite Performance</div>
+        </div>
+        
+        <div id="tab-recent-plans" class="gui-tab-content">
+          <div class="gui-table-container">
+            <table class="gui-table">
+              <thead>
+                <tr>
+                  <th>Plan</th>
+                  <th>Owner</th>
+                  <th>Status</th>
+                  <th>Suites</th>
+                  <th>Latest Run</th>
+                  <th>Pass Rate</th>
+                </tr>
+              </thead>
+              <tbody id="overviewPlansBody">
+                <tr><td colspan="6">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div id="tab-recent-runs" class="gui-tab-content" style="display: none;">
+          <div class="gui-table-container">
+            <table class="gui-table">
+              <thead>
+                <tr>
+                  <th>Run ID</th>
+                  <th>Suite</th>
+                  <th>Status</th>
+                  <th>Results</th>
+                  <th>Duration</th>
+                  <th>Started</th>
+                </tr>
+              </thead>
+              <tbody id="overviewRunsBody">
+                <tr><td colspan="6">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div id="tab-suite-performance" class="gui-tab-content" style="display: none;">
+          <div class="gui-analytics-grid">
+            <div class="gui-analytics-card">
+              <div class="gui-analytics-value" id="analyticsSuiteCount">-</div>
+              <div class="gui-analytics-label">Total Suites</div>
+            </div>
+            <div class="gui-analytics-card">
+              <div class="gui-analytics-value" id="analyticsPassing">-</div>
+              <div class="gui-analytics-label">Passing Suites</div>
+            </div>
+            <div class="gui-analytics-card">
+              <div class="gui-analytics-value" id="analyticsFailing">-</div>
+              <div class="gui-analytics-label">Failing Suites</div>
+            </div>
+            <div class="gui-analytics-card">
+              <div class="gui-analytics-value" id="analyticsNotRun">-</div>
+              <div class="gui-analytics-label">Not Run</div>
+            </div>
+          </div>
+          
+          <div class="gui-chart-placeholder">
+            <div>Suite Performance Chart (Integration with Chart.js or similar)</div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Test Plans Section -->
+      <section id="test-plans-section" class="gui-section">
+        <div class="gui-header-bar">
+          <h2>Test Plans</h2>
+          <button class="gui-button" onclick="showAddPlanDialog()">+ Add Test Plan</button>
+        </div>
+        
+        <div class="gui-filter-bar">
+          <div class="gui-filter-group">
+            <label class="gui-filter-label">Search:</label>
+            <input type="text" class="gui-filter-input" id="planFilterText" placeholder="Filter by title...">
+          </div>
+          <div class="gui-filter-group">
+            <label class="gui-filter-label">Status:</label>
+            <select class="gui-filter-select" id="planFilterStatus">
+              <option value="">All Statuses</option>
+              <option value="Draft">Draft</option>
+              <option value="Active">Active</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+          <div class="gui-filter-group">
+            <label class="gui-filter-label">Owner:</label>
+            <select class="gui-filter-select" id="planFilterOwner">
+              <option value="">All Owners</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="gui-table-container">
+          <table class="gui-table">
+            <thead>
+              <tr>
+                <th>Plan ID</th>
+                <th>Title</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Suites</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="plansBody">
+              <tr><td colspan="7">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      
+      <!-- Test Runs Section -->
+      <section id="test-runs-section" class="gui-section">
+        <div class="gui-header-bar">
+          <h2>Test Runs</h2>
+          <button class="gui-button" onclick="showAddRunDialog()">+ Log Test Run</button>
+        </div>
+        
+        <div class="gui-filter-bar">
+          <div class="gui-filter-group">
+            <label class="gui-filter-label">Suite:</label>
+            <select class="gui-filter-select" id="runFilterSuite">
+              <option value="">All Suites</option>
+            </select>
+          </div>
+          <div class="gui-filter-group">
+            <label class="gui-filter-label">Status:</label>
+            <select class="gui-filter-select" id="runFilterStatus">
+              <option value="">All Statuses</option>
+              <option value="passed">Passed</option>
+              <option value="failed">Failed</option>
+              <option value="error">Error</option>
+              <option value="running">Running</option>
+              <option value="not_run">Not Run</option>
+            </select>
+          </div>
+          <div class="gui-filter-group">
+            <label class="gui-filter-label">Plan:</label>
+            <select class="gui-filter-select" id="runFilterPlan">
+              <option value="">All Plans</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="gui-table-container">
+          <table class="gui-table">
+            <thead>
+              <tr>
+                <th>Run ID</th>
+                <th>Suite</th>
+                <th>Plan</th>
+                <th>Status</th>
+                <th>Results</th>
+                <th>Duration</th>
+                <th>Started</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="runsBody">
+              <tr><td colspan="8">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      
+      <!-- Analytics Section -->
+      <section id="analytics-section" class="gui-section">
+        <h2>Analytics & Insights</h2>
+        
+        <div class="gui-analytics-grid">
+          <div class="gui-analytics-card">
+            <div class="gui-analytics-value" id="analyticsTotalPlans">-</div>
+            <div class="gui-analytics-label">Total Test Plans</div>
+          </div>
+          <div class="gui-analytics-card">
+            <div class="gui-analytics-value" id="analyticsTotalRuns">-</div>
+            <div class="gui-analytics-label">Total Test Runs</div>
+          </div>
+          <div class="gui-analytics-card">
+            <div class="gui-analytics-value" id="analyticsPassRate">-</div>
+            <div class="gui-analytics-label">Overall Pass Rate</div>
+          </div>
+          <div class="gui-analytics-card">
+            <div class="gui-analytics-value" id="analyticsAvgDuration">-</div>
+            <div class="gui-analytics-label">Avg Duration (sec)</div>
+          </div>
+        </div>
+        
+        <div class="gui-chart-placeholder">
+          <div>Test Run Trends Over Time (Integration with Chart.js or similar)</div>
+        </div>
+        
+        <div class="gui-chart-placeholder">
+          <div>Suite Performance Comparison (Integration with Chart.js or similar)</div>
+        </div>
+        
+        <div class="gui-detail-panel">
+          <div class="gui-detail-header">
+            <div class="gui-detail-title">Performance Summary</div>
+          </div>
+          <div class="gui-detail-content">
+            <div class="gui-detail-section">
+              <div class="gui-detail-label">Best Performing Suite</div>
+              <div class="gui-detail-value" id="bestSuite">-</div>
+            </div>
+            <div class="gui-detail-section">
+              <div class="gui-detail-label">Worst Performing Suite</div>
+              <div class="gui-detail-value" id="worstSuite">-</div>
+            </div>
+            <div class="gui-detail-section">
+              <div class="gui-detail-label">Most Frequent Status</div>
+              <div class="gui-detail-value" id="commonStatus">-</div>
+            </div>
+            <div class="gui-detail-section">
+              <div class="gui-detail-label">Peak Testing Time</div>
+              <div class="gui-detail-value" id="peakTime">-</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Activity Log Section -->
+      <section id="activity-section" class="gui-section">
+        <h2>Activity Log</h2>
+        
+        <div class="gui-filter-bar">
+          <div class="gui-filter-group">
+            <label class="gui-filter-label">Actor:</label>
+            <select class="gui-filter-select" id="activityFilterActor">
+              <option value="">All Actors</option>
+            </select>
+          </div>
+          <div class="gui-filter-group">
+            <label class="gui-filter-label">Action:</label>
+            <select class="gui-filter-select" id="activityFilterAction">
+              <option value="">All Actions</option>
+              <option value="created">Created</option>
+              <option value="updated">Updated</option>
+              <option value="added">Added</option>
+              <option value="deleted">Deleted</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="gui-activity-log" id="activityLog">
+          <div style="text-align: center; padding: 40px; color: var(--ink-soft);">
+            Loading activity log...
+          </div>
+        </div>
+      </section>
+      
+      <!-- Reports Section -->
+      <section id="reports-section" class="gui-section">
+        <h2>Reports & Exports</h2>
+        
+        <div class="gui-card-grid">
+          <div class="gui-metric-card">
+            <h3>Generate Reports</h3>
+            <p class="lede">Create comprehensive test reports in various formats</p>
+            <div class="gui-export-options">
+              <button class="gui-export-btn" onclick="exportReport('pdf')">
+                📄 PDF Report
+              </button>
+              <button class="gui-export-btn" onclick="exportReport('excel')">
+                📊 Excel Report
+              </button>
+              <button class="gui-export-btn" onclick="exportReport('json')">
+                📋 JSON Export
+              </button>
+            </div>
+          </div>
+          
+          <div class="gui-metric-card">
+            <h3>Schedule Reports</h3>
+            <p class="lede">Automate report generation and delivery</p>
+            <div class="gui-form-group">
+              <label class="gui-form-label">Frequency</label>
+              <select class="gui-form-select">
+                <option>Daily</option>
+                <option>Weekly</option>
+                <option>Monthly</option>
+              </select>
+            </div>
+            <div class="gui-form-group">
+              <label class="gui-form-label">Recipients</label>
+              <input type="text" class="gui-form-input" placeholder="Email addresses">
+            </div>
+            <button class="gui-button" style="width: 100%;">Save Schedule</button>
+          </div>
+        </div>
+        
+        <div class="gui-detail-panel">
+          <div class="gui-detail-header">
+            <div class="gui-detail-title">Recent Report History</div>
+          </div>
+          <div class="gui-table-container">
+            <table class="gui-table">
+              <thead>
+                <tr>
+                  <th>Report Type</th>
+                  <th>Generated</th>
+                  <th>Format</th>
+                  <th>Recipients</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="reportsBody">
+                <tr><td colspan="5">Loading report history...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+    
+    <!-- Floating Action Button -->
+    <button class="gui-float-button" onclick="showQuickActions()">
+      ⚡
+    </button>
+    
+    <!-- Modals and Dialogs -->
+    <div class="gui-modal" id="planDialog">
+      <div class="gui-modal-content">
+        <div class="gui-dialog-header">
+          <h3>Add Test Plan</h3>
+        </div>
+        <form id="planForm">
+          <div class="gui-form-group">
+            <label class="gui-form-label">Title</label>
+            <input type="text" class="gui-form-input" id="planTitle" required placeholder="Enter test plan title">
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Description</label>
+            <textarea class="gui-form-textarea" id="planDescription" placeholder="Describe the test plan scope"></textarea>
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Owner</label>
+            <input type="text" class="gui-form-input" id="planOwner" placeholder="Plan owner">
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Status</label>
+            <select class="gui-form-select" id="planStatus">
+              <option value="Draft">Draft</option>
+              <option value="Active">Active</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Suites (comma-separated)</label>
+            <input type="text" class="gui-form-input" id="planSuites" placeholder="e.g. crm-portal-vitest,backend-api">
+          </div>
+          <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button type="button" class="gui-button gui-button-secondary" onclick="closePlanDialog()">Cancel</button>
+            <button type="submit" class="gui-button">Save Plan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="gui-modal" id="runDialog">
+      <div class="gui-modal-content">
+        <div class="gui-dialog-header">
+          <h3>Log Test Run</h3>
+        </div>
+        <form id="runForm">
+          <div class="gui-form-group">
+            <label class="gui-form-label">Suite</label>
+            <input type="text" class="gui-form-input" id="runSuite" required placeholder="Suite name">
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Plan ID</label>
+            <select class="gui-form-select" id="runPlan">
+              <option value="">None</option>
+            </select>
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Status</label>
+            <select class="gui-form-select" id="runStatus">
+              <option value="passed">Passed</option>
+              <option value="failed">Failed</option>
+              <option value="error">Error</option>
+              <option value="running">Running</option>
+              <option value="not_run">Not Run</option>
+            </select>
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Total Cases</label>
+            <input type="number" class="gui-form-input" id="runTotal" placeholder="e.g. 10">
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Passed</label>
+            <input type="number" class="gui-form-input" id="runPassed" placeholder="e.g. 10">
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Failed</label>
+            <input type="number" class="gui-form-input" id="runFailed" placeholder="e.g. 0">
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Duration (seconds)</label>
+            <input type="number" class="gui-form-input" id="runDuration" placeholder="e.g. 42">
+          </div>
+          <div class="gui-form-group">
+            <label class="gui-form-label">Notes</label>
+            <textarea class="gui-form-textarea" id="runNotes" placeholder="Optional context and details"></textarea>
+          </div>
+          <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button type="button" class="gui-button gui-button-secondary" onclick="closeRunDialog()">Cancel</button>
+            <button type="submit" class="gui-button">Save Run</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <script>
+      // Global variables
+      let plansCache = [];
+      let runsCache = [];
+      let agentsCache = [];
+      let currentTab = 'recent-plans';
+      let currentSection = 'overview';
+      
+      // API Base URL
+      const API_BASE = window.API_BASE_OVERRIDE || '';
+      
+      // Initialize the GUI
+      document.addEventListener('DOMContentLoaded', async () => {
+        await loadInitialData();
+        setupEventListeners();
+        updateSidebarStats();
+      });
+      
+      // Load initial data
+      async function loadInitialData() {
+        showLoading(true);
+        try {
+          const [plans, runs, agents] = await Promise.all([
+            fetchJson('/api/test-plans').then(data => data && Array.isArray(data.plans) ? data.plans : []),
+            fetchJson('/api/test-runs').then(data => data && Array.isArray(data.runs) ? data.runs : []),
+            fetchJson('/api/agents').then(data => data && Array.isArray(data.agents) ? data.agents : [])
+          ]);
+          
+          plansCache = plans;
+          runsCache = runs;
+          agentsCache = agents;
+          
+          renderOverview();
+          renderPlans();
+          renderRuns();
+          populateFilterOptions();
+          updateAnalytics();
+          loadActivityLog();
+        } catch (error) {
+          showNotification('Failed to load data', 'error');
+        } finally {
+          showLoading(false);
+        }
+      }
+      
+      // API helper functions
+      async function fetchJson(path) {
+        try {
+          const response = await fetch(`${API_BASE}${path}`, { cache: 'no-store' });
+          if (!response.ok) return null;
+          return await response.json();
+        } catch (err) {
+          return null;
+        }
+      }
+      
+      // Section navigation
+      function switchSection(section) {
+        // Update sidebar
+        document.querySelectorAll('.gui-nav-item').forEach(item => item.classList.remove('active'));
+        event.target.closest('.gui-nav-item').classList.add('active');
+        
+        // Update sections
+        document.querySelectorAll('.gui-section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(`${section}-section`).classList.add('active');
+        
+        currentSection = section;
+        
+        // Refresh data for specific sections
+        if (section === 'test-plans') {
+          renderPlans();
+        } else if (section === 'test-runs') {
+          renderRuns();
+        } else if (section === 'analytics') {
+          updateAnalytics();
+        } else if (section === 'activity') {
+          loadActivityLog();
+        }
+      }
+      
+      // Tab navigation
+      function switchTab(tab) {
+        // Update tabs
+        document.querySelectorAll('.gui-tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        // Update tab content
+        document.querySelectorAll('.gui-tab-content').forEach(content => content.style.display = 'none');
+        document.getElementById(`tab-${tab}`).style.display = 'block';
+        
+        currentTab = tab;
+      }
+      
+      // Render overview
+      function renderOverview() {
+        // Update metric cards
+        document.getElementById('overviewPlanCount').textContent = plansCache.length;
+        const executedRuns = runsCache.filter(r => r.status !== 'not_run');
+        document.getElementById('overviewSuiteCount').textContent = executedRuns.length;
+        
+        const totalCases = runsCache.reduce((sum, r) => sum + (r.total || 0), 0);
+        const passedCases = runsCache.reduce((sum, r) => sum + (r.passed || 0), 0);
+        const passRate = totalCases > 0 ? Math.round(passedCases / totalCases * 100) : 0;
+        document.getElementById('overviewPassRate').textContent = `${passRate}%`;
+        document.getElementById('overviewProgressBar').style.width = `${passRate}%`;
+        
+        document.getElementById('overviewRunCount').textContent = runsCache.length;
+        
+        // Render recent plans
+        const recentPlans = plansCache.slice(0, 5);
+        const plansBody = document.getElementById('overviewPlansBody');
+        plansBody.innerHTML = recentPlans.map(plan => {
+          const latestRun = runsCache.find(r => r.plan_id === plan.id);
+          const passRate = latestRun ? (latestRun.passed / latestRun.total * 100).toFixed(1) : 0;
+          return `
+            <tr>
+              <td><strong>${plan.title}</strong><br><span class="lede" style="font-size: 12px;">${plan.id}</span></td>
+              <td>${plan.owner || 'Unassigned'}</td>
+              <td><span class="gui-status-badge gui-status-${plan.status.toLowerCase()}">${plan.status}</span></td>
+              <td>${(plan.suites || []).map(s => `<span class="pill">${s}</span>`).join(' ')}</td>
+              <td>${latestRun ? `<span class="gui-status-badge gui-status-${latestRun.status}">${latestRun.status}</span>` : '<span class="gui-status-badge gui-status-not_run">no runs</span>'}</td>
+              <td>${passRate}%</td>
+            </tr>
+          `;
+        }).join('');
+        
+        // Render recent runs
+        const recentRuns = runsCache.sort((a, b) => new Date(b.started_at || '') - new Date(a.started_at || '')).slice(0, 5);
+        const runsBody = document.getElementById('overviewRunsBody');
+        runsBody.innerHTML = recentRuns.map(run => {
+          const results = run.total ? `${run.passed || 0}/${run.total} passed` : '-';
+          return `
+            <tr>
+              <td>${run.id}</td>
+              <td><span class="pill">${run.suite}</span></td>
+              <td>${statusBadge(run.status)}</td>
+              <td>${results}</td>
+              <td>${run.duration_seconds || '-'}</td>
+              <td>${formatDateTime(run.started_at)}</td>
+            </tr>
+          `;
+        }).join('');
+        
+        // Update analytics
+        updateAnalytics();
+      }
+      
+      // Render plans table
+      function renderPlans() {
+        const filteredPlans = applyPlanFilters();
+        const plansBody = document.getElementById('plansBody');
+        
+        if (!filteredPlans.length) {
+          plansBody.innerHTML = '<tr><td colspan="7">No test plans match the current filters.</td></tr>';
+          return;
+        }
+        
+        plansBody.innerHTML = filteredPlans.map(plan => {
+          const planRuns = runsCache.filter(r => r.plan_id === plan.id);
+          const latestRun = planRuns.length > 0 ? planRuns[planRuns.length - 1] : null;
+          return `
+            <tr>
+              <td>${plan.id}</td>
+              <td><strong>${plan.title}</strong></td>
+              <td>${plan.owner || 'Unassigned'}</td>
+              <td><span class="gui-status-badge gui-status-${plan.status.toLowerCase()}">${plan.status}</span></td>
+              <td>${(plan.suites || []).map(s => `<span class="pill">${s}</span>`).join(' ')}</td>
+              <td>${formatDateTime(plan.created_at)}</td>
+              <td>
+                <button class="gui-button gui-button-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="viewPlanDetails('${plan.id}')">View</button>
+                <button class="gui-button gui-button-danger" style="padding: 6px 12px; font-size: 12px;" onclick="deletePlan('${plan.id}')">Delete</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+      
+      // Render runs table
+      function renderRuns() {
+        const filteredRuns = applyRunFilters();
+        const runsBody = document.getElementById('runsBody');
+        
+        if (!filteredRuns.length) {
+          runsBody.innerHTML = '<tr><td colspan="8">No test runs match the current filters.</td></tr>';
+          return;
+        }
+        
+        runsBody.innerHTML = filteredRuns.map(run => {
+          const plan = plansCache.find(p => p.id === run.plan_id);
+          const results = run.total ? `${run.passed || 0}/${run.total} passed` : '-';
+          return `
+            <tr>
+              <td>${run.id}</td>
+              <td><span class="pill">${run.suite}</span></td>
+              <td>${plan ? plan.title : (run.plan_id || '-')}</td>
+              <td>${statusBadge(run.status)}</td>
+              <td>${results}</td>
+              <td>${run.duration_seconds || '-'}</td>
+              <td>${formatDateTime(run.started_at)}</td>
+              <td>
+                <button class="gui-button gui-button-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="viewRunDetails('${run.id}')">View</button>
+                <button class="gui-button gui-button-danger" style="padding: 6px 12px; font-size: 12px;" onclick="deleteRun('${run.id}')">Delete</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+      
+      // Filter functions
+      function applyPlanFilters() {
+        const q = document.getElementById('planFilterText').value.toLowerCase();
+        const status = document.getElementById('planFilterStatus').value;
+        const owner = document.getElementById('planFilterOwner').value;
+        
+        return plansCache.filter(plan => {
+          if (q && !`${plan.title} ${plan.description}`.toLowerCase().includes(q)) return false;
+          if (status && plan.status !== status) return false;
+          if (owner && plan.owner !== owner) return false;
+          return true;
+        });
+      }
+      
+      function applyRunFilters() {
+        const suite = document.getElementById('runFilterSuite').value;
+        const status = document.getElementById('runFilterStatus').value;
+        const plan = document.getElementById('runFilterPlan').value;
+        
+        return runsCache.filter(run => {
+          if (suite && run.suite !== suite) return false;
+          if (status && run.status !== status) return false;
+          if (plan && run.plan_id !== plan) return false;
+          return true;
+        });
+      }
+      
+      // Event listeners
+      function setupEventListeners() {
+        // Plan filters
+        document.getElementById('planFilterText').addEventListener('input', () => {
+          renderPlans();
+        });
+        
+        document.getElementById('planFilterStatus').addEventListener('change', () => {
+          renderPlans();
+        });
+        
+        document.getElementById('planFilterOwner').addEventListener('change', () => {
+          renderPlans();
+        });
+        
+        // Run filters
+        document.getElementById('runFilterSuite').addEventListener('change', () => {
+          renderRuns();
+        });
+        
+        document.getElementById('runFilterStatus').addEventListener('change', () => {
+          renderRuns();
+        });
+        
+        document.getElementById('runFilterPlan').addEventListener('change', () => {
+          renderRuns();
+        });
+        
+        // Forms
+        document.getElementById('planForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          await createPlan();
+        });
+        
+        document.getElementById('runForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          await createRun();
+        });
+      }
+      
+      // API calls
+      async function createPlan() {
+        const formData = {
+          title: document.getElementById('planTitle').value,
+          description: document.getElementById('planDescription').value,
+          owner: document.getElementById('planOwner').value,
+          status: document.getElementById('planStatus').value,
+          suites: document.getElementById('planSuites').value.split(',').map(s => s.trim()).filter(Boolean)
+        };
+        
+        try {
+          const response = await fetch(`${API_BASE}/api/test-plans`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          
+          if (response.ok) {
+            const newPlan = await response.json();
+            plansCache.push(newPlan.plan);
+            closePlanDialog();
+            showNotification('Test plan created successfully', 'success');
+            renderOverview();
+            renderPlans();
+            updateSidebarStats();
+          } else {
+            showNotification('Failed to create test plan', 'error');
+          }
+        } catch (error) {
+          showNotification('Error creating test plan', 'error');
+        }
+      }
+      
+      async function createRun() {
+        const formData = {
+          suite: document.getElementById('runSuite').value,
+          plan_id: document.getElementById('runPlan').value || null,
+          status: document.getElementById('runStatus').value,
+          total: parseInt(document.getElementById('runTotal').value) || null,
+          passed: parseInt(document.getElementById('runPassed').value) || null,
+          failed: parseInt(document.getElementById('runFailed').value) || null,
+          duration_seconds: parseInt(document.getElementById('runDuration').value) || null,
+          notes: document.getElementById('runNotes').value,
+          triggered_by: 'gui'
+        };
+        
+        try {
+          const response = await fetch(`${API_BASE}/api/test-runs`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          
+          if (response.ok) {
+            const newRun = await response.json();
+            runsCache.push(newRun.run);
+            closeRunDialog();
+            showNotification('Test run logged successfully', 'success');
+            renderOverview();
+            renderRuns();
+            updateSidebarStats();
+          } else {
+            showNotification('Failed to log test run', 'error');
+          }
+        } catch (error) {
+          showNotification('Error logging test run', 'error');
+        }
+      }
+      
+      // Utility functions
+      function statusBadge(status) {
+        const label = (status || "unknown").replace(/_/g, " ");
+        return `<span class="gui-status-badge gui-status-${status || "unknown"}">${label}</span>`;
+      }
+      
+      function formatDateTime(iso) {
+        if (!iso) return '-';
+        try {
+          return new Date(iso).toLocaleString();
+        } catch (err) {
+          return iso;
+        }
+      }
+      
+      function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+        }[ch]));
+      }
+      
+      // UI helpers
+      function showLoading(show) {
+        // Implement loading indicator
+      }
+      
+      function showNotification(message, type) {
+        const container = document.getElementById('notificationContainer');
+        const notification = document.createElement('div');
+        notification.className = `gui-notification ${type}`;
+        notification.textContent = message;
+        container.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.classList.add('show');
+        }, 10);
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+          setTimeout(() => {
+            container.removeChild(notification);
+          }, 300);
+        }, 3000);
+      }
+      
+      function toggleSidebar() {
+        document.getElementById('guiSidebar').classList.toggle('open');
+      }
+      
+      function closePlanDialog() {
+        document.getElementById('planDialog').classList.remove('show');
+        document.getElementById('planForm').reset();
+      }
+      
+      function closeRunDialog() {
+        document.getElementById('runDialog').classList.remove('show');
+        document.getElementById('runForm').reset();
+      }
+      
+      function showAddPlanDialog() {
+        document.getElementById('planDialog').classList.add('show');
+      }
+      
+      function showAddRunDialog() {
+        populatePlanSelect();
+        document.getElementById('runDialog').classList.add('show');
+      }
+      
+      function populatePlanSelect() {
+        const select = document.getElementById('runPlan');
+        select.innerHTML = '<option value="">None</option>' + 
+          plansCache.map(plan => `<option value="${plan.id}">${plan.id} - ${plan.title}</option>`).join('');
+      }
+      
+      function populateFilterOptions() {
+        // Populate suite filter
+        const suiteSelect = document.getElementById('runFilterSuite');
+        const suites = [...new Set(runsCache.map(r => r.suite)].sort();
+        suiteSelect.innerHTML = '<option value="">All Suites</option>' + 
+          suites.forEach(suite => `<option value="${suite}">${suite}</option>`);
+        
+        
+        // Populate owner filter
+        const ownerSelect = document.getElementById('planFilterOwner');
+        const owners = [...new Set(plansCache.map(r => r.owner)].filter(Boolean);
+        ownerSelect.innerHTML = '<option value="">All Owners</option>' + 
+          owners.forEach(owner => `<option value="${owner}">${owner}</option>`);
+        
+        // Populate actor filter
+        const actorSelect = document.getElementById('activityFilterActor');
+        const actors = [...new Set(runsCache.map(r => r.triggered_by)].filter(Boolean);
+        actorSelect.innerHTML = '<option value="">All Actors</option>' + 
+          actors.forEach(actor => `<option value="${actor}">${actor}</option>`);
+      }
+      
+      function updateSidebarStats() {
+        document.getElementById('sidebarPlanCount').textContent = plansCache.length;
+        document.getElementById('sidebarSuiteCount').textContent = runsCache.filter(r => r.status !== 'not_run').length;
+        document.getElementById('sidebarPassRate').textContent = '-';
+        document.getElementById('sidebarRunCount').textContent = runsCache.length;
+      }
+      
+      function updateAnalytics() {
+        const totalPlans = plansCache.length;
+        const totalRuns = runsCache.length;
+        const totalCases = runsCache.reduce((sum, r) => sum + (r.total || 0), 0);
+        const passedCases = runsCache.reduce((sum, r) => sum + (r.passed || 0), 0);
+        const passRate = totalCases > 0 ? Math.round(passedCases / totalCases * 100) : 0;
+        const avgDuration = runsCache.reduce((sum, r) => sum + (r.duration_seconds || 0, 0) / totalRuns || 0;
+        
+        document.getElementById('analyticsTotalPlans').textContent = totalPlans;
+        document.getElementById('analyticsTotalRuns').textContent = totalRuns;
+        document.getElementById('analyticsPassRate').textContent = `${passRate}%`;
+        document.getElementById('analyticsAvgDuration').textContent = avgDuration.toFixed(1);
+        
+        // Update best/worst suites
+        const suiteStats = {};
+        runsCache.forEach(run => {
+          if (!suiteStats[run.suite]) {
+            suiteStats[run.suite] = { passed: 0, total: 0, runs: 0 };
+          }
+          if (run.total) {
+            suiteStats[run.suite].total += run.total;
+            suiteStats[run.suite].passed += run.passed || 0;
+          }
+          suiteStats[run.suite].runs++;
+        });
+        
+        const suitesArray = Object.entries(suiteStats);
+        if (suitesArray.length > 0) {
+          suitesArray.sort((a, b) => b[1].total - a[1].total);
+          const bestSuite = suitesArray[0];
+          const worstSuite = suitesArray[suitesArray.length - 1];
+          
+          document.getElementById('bestSuite').textContent = bestSuite[0];
+          document.getElementById('worstSuite').textContent = worstSuite[0];
+        }
+      }
+      
+      function loadActivityLog() {
+        // Load activity log from local storage or API
+        const activityLog = JSON.parse(localStorage.getItem('activityLog') || '[]');
+        const filteredLog = filterActivityLog(activityLog);
+        
+        const logContainer = document.getElementById('activityLog');
+        if (!filteredLog.length) {
+          logContainer.innerHTML = '<div class="gui-empty-state">No activity logs match the current filters.</div>';
+          return;
+        }
+        
+        logContainer.innerHTML = filteredLog.map(item => `
+          <div class="gui-activity-item">
+            <span class="gui-activity-timestamp">${formatDateTime(item.timestamp)}</span>
+            <span class="gui-activity-actor">${item.actor}</span>
+            <div class="gui-activity-message">${item.action}: ${item.details}</div>
+          </div>
+        `).join('');
+      }
+      
+      function filterActivityLog(log) {
+        const actor = document.getElementById('activityFilterActor').value;
+        const action = document.getElementById('activityFilterAction').value;
+        
+        return log.filter(item => {
+          if (actor && item.actor !== actor) return false;
+          if (action && item.action !== action) return false;
+          return true;
+        });
+      }
+      
+      // Quick actions
+      function showQuickActions() {
+        const actions = [
+          { title: 'Add Test Plan', action: showAddPlanDialog },
+          { title: 'Log Test Run', action: showAddRunDialog },
+          { title: 'Refresh Data', action: loadInitialData },
+          { title: 'Export Reports', action: () => showNotification('Export functionality coming soon', 'info') }
+        ];
+        
+        const modal = document.createElement('div');
+        modal.className = 'gui-modal show';
+        modal.innerHTML = `
+          <div class="gui-modal-content">
+            <div class="gui-dialog-header">
+              <h3>Quick Actions</h3>
+              <button class="gui-button gui-button-secondary" onclick="this.closest('.gui-modal').classList.remove('show')">✕</button>
+            </div>
+            <div class="gui-card-grid">
+              ${actions.map(action => `
+                <div class="gui-metric-card" onclick="${action.action.name}(); this.closest('.gui-modal').classList.remove('show')">
+                  <h4>${action.title}</h4>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.remove('show');
+            setTimeout(() => document.body.removeChild(modal), 300);
+          }
+        });
+      }
+      
+      function exportReport(format) {
+        showNotification(`Exporting report as ${format.toUpperCase()}...`, 'info');
+        // Implement export functionality
+      }
+      
+      // View details functions
+      function viewPlanDetails(planId) {
+        const plan = plansCache.find(p => p.id === planId);
+        if (!plan) return;
+        
+        showNotification(`Viewing plan details for ${plan.title}`, 'info');
+        // Implement plan details view
+      }
+      
+      function viewRunDetails(runId) {
+        const run = runsCache.find(r => r.id === runId);
+        if (!run) return;
+        
+        showNotification(`Viewing run details for ${run.id}`, 'info');
+        // Implement run details view
+      }
+      
+      function deletePlan(planId) {
+        if (confirm('Are you sure you want to delete this test plan?')) {
+          plansCache = plansCache.filter(p => p.id !== planId);
+          runsCache = runsCache.filter(r => r.plan_id !== planId);
+          renderOverview();
+          renderPlans();
+          updateSidebarStats();
+          showNotification('Test plan deleted', 'success');
+        }
+      }
+      
+      function deleteRun(runId) {
+        if (confirm('Are you sure you want to delete this test run?')) {
+          runsCache = runsCache.filter(r => r.id !== runId);
+          renderOverview();
+          renderRuns();
+          updateSidebarStats();
+          showNotification('Test run deleted', 'success');
+        }
+      }
+      
+      // Initialize
+      console.log('Testing Framework GUI initialized');
+    </script>
+  </div>
+</body>
+</html>

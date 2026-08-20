@@ -1,0 +1,175 @@
+[
+  {
+    "id": "RUN-0001",
+    "plan_id": "PLAN-0001",
+    "suite": "crm-portal-vitest",
+    "status": "passed",
+    "started_at": "2026-08-20T15:40:00+00:00",
+    "finished_at": "2026-08-20T15:40:52+00:00",
+    "duration_seconds": 52,
+    "total": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "triggered_by": "agent",
+    "environment": "docker (node:20-slim, detached container copy)",
+    "notes": "npm run test:coverage after fixing @dnd-kit version pins.",
+    "cases": [
+      {
+        "name": "Dashboard > loads and shows New button",
+        "status": "passed",
+        "duration_ms": 180
+      },
+      {
+        "name": "CreateProjectStore > setByPath updates nested field",
+        "status": "passed",
+        "duration_ms": 40
+      },
+      {
+        "name": "aiAssistant > requestAssistant returns suggestion",
+        "status": "passed",
+        "duration_ms": 25
+      }
+    ]
+  },
+  {
+    "id": "RUN-0002",
+    "plan_id": "PLAN-0002",
+    "suite": "crm-portal-selenium",
+    "status": "not_run",
+    "started_at": null,
+    "finished_at": null,
+    "duration_seconds": null,
+    "total": 3,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "triggered_by": null,
+    "environment": null,
+    "notes": "docker-compose.selenium.yml and tests_e2e suite exist but have not been executed yet in this environment.",
+    "cases": []
+  },
+  {
+    "id": "RUN-0003",
+    "plan_id": "PLAN-0003",
+    "suite": "api-unittest",
+    "status": "passed",
+    "started_at": "2026-08-19T09:12:00+00:00",
+    "finished_at": "2026-08-19T09:12:04+00:00",
+    "duration_seconds": 4,
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0,
+    "triggered_by": "agent",
+    "environment": "docker exec aisena-agent-org-api-1 (python -m unittest test_app.py -v)",
+    "notes": "Covers agent catalog, cross-check, task workflow, issue workflow + comment.",
+    "cases": [
+      {
+        "name": "test_agent_catalog_endpoint_exists",
+        "status": "passed",
+        "duration_ms": 12
+      },
+      {
+        "name": "test_cross_check_returns_review_context",
+        "status": "passed",
+        "duration_ms": 340
+      },
+      {
+        "name": "test_task_list_and_create_workflow",
+        "status": "passed",
+        "duration_ms": 8
+      },
+      {
+        "name": "test_issue_workflow_standard_fields_and_comment",
+        "status": "passed",
+        "duration_ms": 9
+      }
+    ]
+  },
+  {
+    "id": "RUN-0004",
+    "plan_id": "PLAN-0004",
+    "suite": "orchestrator-unittest",
+    "status": "passed",
+    "started_at": "2026-08-20T11:05:00+00:00",
+    "finished_at": "2026-08-20T11:05:03+00:00",
+    "duration_seconds": 3,
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0,
+    "triggered_by": "agent",
+    "environment": "docker build -f services/orchestrator/Dockerfile -t orchestrator-test . (throwaway image)",
+    "notes": "Capability matching, workstream decomposition, handoffs, GitHubClient push modes via FakeSession.",
+    "cases": []
+  },
+  {
+    "id": "RUN-0005",
+    "plan_id": "PLAN-0005",
+    "suite": "temporal-tests",
+    "status": "failed",
+    "started_at": "2026-08-20T13:20:00+00:00",
+    "finished_at": "2026-08-20T13:20:41+00:00",
+    "duration_seconds": 41,
+    "total": null,
+    "passed": null,
+    "failed": null,
+    "skipped": null,
+    "triggered_by": "agent",
+    "environment": "docker build -f backend/temporal/Dockerfile --target test -t aisena-temporal-tests backend",
+    "notes": "Test-target build/run exited with code 1; root cause not yet triaged.",
+    "cases": []
+  },
+  {
+    "id": "RUN-0006",
+    "plan_id": "PLAN-0006",
+    "suite": "sandbench-integration",
+    "status": "not_run",
+    "started_at": null,
+    "finished_at": null,
+    "duration_seconds": null,
+    "total": null,
+    "passed": null,
+    "failed": null,
+    "skipped": null,
+    "triggered_by": null,
+    "environment": null,
+    "notes": "Integration test module exists under projects/sand-bench/tests_e2e but has not been executed yet.",
+    "cases": []
+  },
+  {
+    "id": "RUN-0007",
+    "plan_id": null,
+    "suite": "smoke-suite",
+    "status": "passed",
+    "started_at": "2026-08-20T11:24:03.126937+00:00",
+    "finished_at": null,
+    "duration_seconds": null,
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": null,
+    "triggered_by": "manual",
+    "environment": "",
+    "notes": "",
+    "cases": []
+  },
+  {
+    "id": "RUN-0008",
+    "plan_id": null,
+    "suite": "smoke-suite",
+    "status": "passed",
+    "started_at": "2026-08-20T11:26:17.447993+00:00",
+    "finished_at": null,
+    "duration_seconds": null,
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": null,
+    "triggered_by": "manual",
+    "environment": "",
+    "notes": "",
+    "cases": []
+  }
+]

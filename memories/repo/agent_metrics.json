@@ -1,37 +1,7 @@
 {
-  "24-case-management-ux-sme": {
-    "learned_at": "2026-08-19T05:15:01.209882Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "05-backend-engineer": {
-    "learned_at": "2026-08-19T05:45:01.647412Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "08-devops-engineer": {
-    "learned_at": "2026-08-19T05:31:01.170887Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
   "04-frontend-engineer": {
-    "learned_at": "2026-08-19T05:25:01.172749Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "11-performance-engineer": {
-    "learned_at": "2026-08-19T05:23:01.269918Z",
-    "count": 6,
-    "accuracy": null,
-    "model": null
-  },
-  "28-backend-data-persistence": {
-    "learned_at": "2026-08-19T05:17:01.334530Z",
-    "count": 6,
+    "learned_at": "2026-08-20T03:46:20.967376Z",
+    "count": 8,
     "accuracy": null,
     "model": null
   }

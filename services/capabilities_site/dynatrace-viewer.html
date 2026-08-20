@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Search recent AISENA logs exported to Dynatrace.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Dynatrace Log Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="start-project.html">Create New App</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="test-dashboard.html">Test Dashboard</a>
+        <a href="postgres-viewer.html">Postgres Viewer</a>
+        <a href="kafka-viewer.html">Kafka Viewer</a>
+        <a href="splunk-viewer.html">Splunk Viewer</a>
+        <a href="dynatrace-viewer.html">Dynatrace Viewer</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+        <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker">Enterprise Observability</div>
+        <h1>Dynatrace Log Viewer</h1>
+        <p class="lede">Search recent AISENA events from the configured Dynatrace environment.</p>
+      </section>
+
+      <section class="card span-12 fade-up observability-viewer" data-observability-provider="dynatrace" data-observability-endpoint="/observability/dynatrace">
+        <div class="observability-toolbar">
+          <label class="observability-query">
+            Search query
+            <input type="search" value='service.namespace="aisena"' aria-label="Dynatrace search query">
+          </label>
+          <button type="button" class="observability-refresh">Refresh</button>
+        </div>
+        <div class="observability-summary">
+          <span class="status-badge status-not_run" data-observability-status>Checking</span>
+          <span data-observability-count>0 events</span>
+        </div>
+        <p class="notice" data-observability-message>Connecting to Dynatrace...</p>
+        <div class="observability-events" data-observability-events></div>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: aisena-hsfs
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: api-gateway }
+  template:
+    metadata:
+      labels: { app: api-gateway }
+    spec:
+      containers:
+        - name: api-gateway
+          image: aisena/hsfs-api-gateway:latest
+          ports: [{ name: http, containerPort: 3000 }]
+          envFrom:
+            - configMapRef: { name: hsfs-config }
+            - secretRef: { name: hsfs-secrets }
+          readinessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: aisena-hsfs
+spec:
+  selector: { app: api-gateway }
+  ports: [{ name: http, port: 3000, targetPort: http }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-runtime
+  namespace: aisena-hsfs
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: agent-runtime }
+  template:
+    metadata:
+      labels: { app: agent-runtime }
+    spec:
+      containers:
+        - name: agent-runtime
+          image: aisena/hsfs-agent-runtime:latest
+          ports: [{ name: http, containerPort: 3001 }]
+          envFrom:
+            - configMapRef: { name: hsfs-config }
+          readinessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-runtime
+  namespace: aisena-hsfs
+spec:
+  selector: { app: agent-runtime }
+  ports: [{ name: http, port: 3001, targetPort: http }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: screening-engine
+  namespace: aisena-hsfs
+spec:
+  replicas: 3
+  selector:
+    matchLabels: { app: screening-engine }
+  template:
+    metadata:
+      labels: { app: screening-engine }
+    spec:
+      containers:
+        - name: screening-engine
+          image: aisena/hsfs-screening-engine:latest
+          ports: [{ name: http, containerPort: 3002 }]
+          envFrom:
+            - configMapRef: { name: hsfs-config }
+          readinessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: screening-engine
+  namespace: aisena-hsfs
+spec:
+  selector: { app: screening-engine }
+  ports: [{ name: http, port: 3002, targetPort: http }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: case-management
+  namespace: aisena-hsfs
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: case-management }
+  template:
+    metadata:
+      labels: { app: case-management }
+    spec:
+      containers:
+        - name: case-management
+          image: aisena/hsfs-case-management:latest
+          ports: [{ name: http, containerPort: 3003 }]
+          env:
+            - { name: PG_DATABASE, value: case_management }
+          envFrom:
+            - configMapRef: { name: hsfs-config }
+            - secretRef: { name: hsfs-secrets }
+          readinessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: case-management
+  namespace: aisena-hsfs
+spec:
+  selector: { app: case-management }
+  ports: [{ name: http, port: 3003, targetPort: http }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enrichment-service
+  namespace: aisena-hsfs
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: enrichment-service }
+  template:
+    metadata:
+      labels: { app: enrichment-service }
+    spec:
+      containers:
+        - name: enrichment-service
+          image: aisena/hsfs-enrichment-service:latest
+          ports: [{ name: http, containerPort: 3004 }]
+          envFrom:
+            - configMapRef: { name: hsfs-config }
+          readinessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: enrichment-service
+  namespace: aisena-hsfs
+spec:
+  selector: { app: enrichment-service }
+  ports: [{ name: http, port: 3004, targetPort: http }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audit-notification
+  namespace: aisena-hsfs
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: audit-notification }
+  template:
+    metadata:
+      labels: { app: audit-notification }
+    spec:
+      containers:
+        - name: audit-notification
+          image: aisena/hsfs-audit-notification:latest
+          ports: [{ name: http, containerPort: 3005 }]
+          env:
+            - { name: PG_DATABASE, value: audit_log }
+          envFrom:
+            - configMapRef: { name: hsfs-config }
+            - secretRef: { name: hsfs-secrets }
+          readinessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: audit-notification
+  namespace: aisena-hsfs
+spec:
+  selector: { app: audit-notification }
+  ports: [{ name: http, port: 3005, targetPort: http }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-worker
+  namespace: aisena-hsfs
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: temporal-worker }
+  template:
+    metadata:
+      labels: { app: temporal-worker }
+    spec:
+      containers:
+        - name: temporal-worker
+          image: aisena/hsfs-temporal:latest
+          command: ["node", "dist/worker.js"]
+          envFrom:
+            - configMapRef: { name: hsfs-config }
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-workflow-server
+  namespace: aisena-hsfs
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: temporal-workflow-server }
+  template:
+    metadata:
+      labels: { app: temporal-workflow-server }
+    spec:
+      containers:
+        - name: temporal-workflow-server
+          image: aisena/hsfs-temporal:latest
+          command: ["node", "dist/index.js"]
+          ports: [{ name: http, containerPort: 4000 }]
+          envFrom:
+            - configMapRef: { name: hsfs-config }
+          readinessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal-workflow-server
+  namespace: aisena-hsfs
+spec:
+  selector: { app: temporal-workflow-server }
+  ports: [{ name: http, port: 4000, targetPort: http }]

@@ -1,6 +1,8 @@
 import json
 import unittest
+from unittest.mock import patch
 
+import app as app_module
 from app import app
 
 
@@ -78,6 +80,81 @@ class AgentApiTests(unittest.TestCase):
         })
         self.assertEqual(comment_response.status_code, 201)
         self.assertEqual(len(comment_response.get_json()['issue']['comments']), 1)
+
+    def test_test_plans_endpoint_returns_seeded_plans_enriched_with_latest_run(self):
+        response = self.client.get('/api/test-plans')
+        self.assertEqual(response.status_code, 200)
+        plans = response.get_json()['plans']
+        self.assertGreaterEqual(len(plans), 1)
+        plan = next(p for p in plans if p['id'] == 'PLAN-0001')
+        self.assertIn('latest_run', plan)
+        self.assertIn('pass_rate', plan)
+
+    def test_create_test_plan_workflow(self):
+        response = self.client.post('/api/test-plans', json={
+            'title': 'Smoke test plan',
+            'owner': 'qa-engineer',
+            'suites': ['smoke-suite'],
+        })
+        self.assertEqual(response.status_code, 201)
+        plan = response.get_json()['plan']
+        self.assertTrue(plan['id'].startswith('PLAN-'))
+        self.assertEqual(plan['status'], 'Draft')
+
+        update_response = self.client.put(f"/api/test-plans/{plan['id']}", json={'status': 'Active'})
+        self.assertEqual(update_response.status_code, 200)
+        self.assertEqual(update_response.get_json()['plan']['status'], 'Active')
+
+    def test_test_runs_list_and_filter_by_suite(self):
+        response = self.client.get('/api/test-runs', query_string={'suite': 'api-unittest'})
+        self.assertEqual(response.status_code, 200)
+        runs = response.get_json()['runs']
+        self.assertTrue(all(r['suite'] == 'api-unittest' for r in runs))
+
+    def test_create_test_run_workflow(self):
+        response = self.client.post('/api/test-runs', json={
+            'suite': 'smoke-suite',
+            'status': 'passed',
+            'total': 3,
+            'passed': 3,
+            'failed': 0,
+        })
+        self.assertEqual(response.status_code, 201)
+        run = response.get_json()['run']
+        self.assertTrue(run['id'].startswith('RUN-'))
+
+        get_response = self.client.get(f"/api/test-runs/{run['id']}")
+        self.assertEqual(get_response.status_code, 200)
+        self.assertEqual(get_response.get_json()['run']['suite'], 'smoke-suite')
+
+    def test_test_summary_endpoint(self):
+        response = self.client.get('/api/test-summary')
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertIn('suites', payload)
+        self.assertIn('plan_count', payload)
+
+    def test_splunk_viewer_reports_missing_configuration_without_secrets(self):
+        with patch.object(app_module, 'SPLUNK_PASSWORD', ''):
+            response = self.client.get('/observability/splunk')
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertEqual(payload['provider'], 'splunk')
+        self.assertEqual(payload['status'], 'not_configured')
+        self.assertEqual(payload['events'], [])
+        self.assertNotIn('password', payload)
+
+    def test_dynatrace_viewer_reports_missing_configuration_without_secrets(self):
+        with patch.object(app_module, 'DYNATRACE_API_URL', ''), patch.object(app_module, 'DYNATRACE_API_TOKEN', ''):
+            response = self.client.get('/observability/dynatrace')
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertEqual(payload['provider'], 'dynatrace')
+        self.assertEqual(payload['status'], 'not_configured')
+        self.assertEqual(payload['events'], [])
+        self.assertNotIn('token', payload)
 
 
 if __name__ == '__main__':

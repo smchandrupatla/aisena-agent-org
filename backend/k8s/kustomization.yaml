@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: aisena-hsfs
+resources:
+  - 00-namespace.yaml
+  - 01-config.yaml
+  - 10-services.yaml
+images:
+  - name: aisena/hsfs-api-gateway
+    newTag: latest
+  - name: aisena/hsfs-agent-runtime
+    newTag: latest
+  - name: aisena/hsfs-screening-engine
+    newTag: latest
+  - name: aisena/hsfs-case-management
+    newTag: latest
+  - name: aisena/hsfs-enrichment-service
+    newTag: latest
+  - name: aisena/hsfs-audit-notification
+    newTag: latest
+  - name: aisena/hsfs-temporal
+    newTag: latest

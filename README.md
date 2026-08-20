@@ -11,3 +11,8 @@ See `/project/architecture/AISENA-AI-Agent-Team.md` for the proposed AISENA agen
 - **Docker Compose** (local dev): `docker compose up -d`, or run [`deploy_aiena.ps1`](deploy_aiena.ps1).
 - **Kubernetes** (Minikube or any cluster): see [`k8s/README.md`](k8s/README.md), or run [`deploy_k8s.ps1`](deploy_k8s.ps1).
 
+## Observability
+
+- **Local stack**: Prometheus, Grafana, and Loki are included in the default Compose deployment.
+- **Splunk and Dynatrace logs**: see [`docs/ENTERPRISE_OBSERVABILITY.md`](docs/ENTERPRISE_OBSERVABILITY.md) for the credential-gated OpenTelemetry gateway.
+

@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aisena.org/schemas/screening.requested.json",
+  "title": "ScreeningRequested",
+  "description": "Published when a transaction is submitted for sanctions/fraud screening.",
+  "type": "object",
+  "required": ["eventId", "transactionId", "occurredAt", "transaction", "customer"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "transactionId": { "type": "string" },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "transaction": {
+      "type": "object",
+      "required": ["amount", "currency", "originAccount", "beneficiaryAccount", "beneficiaryName", "beneficiaryCountry", "transactionType"],
+      "properties": {
+        "amount": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+        "originAccount": { "type": "string" },
+        "beneficiaryAccount": { "type": "string" },
+        "beneficiaryName": { "type": "string" },
+        "beneficiaryCountry": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "transactionType": { "type": "string" }
+      }
+    },
+    "customer": {
+      "type": "object",
+      "required": ["customerId", "name", "country", "riskRating"],
+      "properties": {
+        "customerId": { "type": "string" },
+        "name": { "type": "string" },
+        "country": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "riskRating": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH"] }
+      }
+    }
+  }
+}

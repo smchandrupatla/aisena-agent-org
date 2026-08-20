@@ -2,20 +2,34 @@
 import json
 import os
 import re
+import ssl
 import subprocess
+from base64 import b64encode
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib import error as urlerror
+from urllib import parse as urlparse
+from urllib import request as urlrequest
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory, send_from_directory, send_from_directory
 
 try:
     import psycopg2
+    from psycopg2 import sql
 except Exception:  # pragma: no cover - DB is optional in tests
     psycopg2 = None
+    sql = None
 
 app = Flask(__name__)
 
 DSN = os.environ.get('POSTGRES_DSN', "host=localhost dbname=aisena user=aisena password=aisena_pw")
+SENSITIVE_COLUMN_PATTERN = re.compile(r"(?:password|passwd|secret|token|api_key|credential|salt)", re.IGNORECASE)
+SPLUNK_API_URL = os.environ.get("SPLUNK_API_URL", "https://splunk:8089").rstrip("/")
+SPLUNK_USERNAME = os.environ.get("SPLUNK_USERNAME", "admin")
+SPLUNK_PASSWORD = os.environ.get("SPLUNK_PASSWORD", "")
+SPLUNK_INDEX = os.environ.get("SPLUNK_HEC_INDEX", "main")
+DYNATRACE_API_URL = os.environ.get("DYNATRACE_API_URL", "").rstrip("/")
+DYNATRACE_API_TOKEN = os.environ.get("DYNATRACE_API_TOKEN", "")
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG_PATH = ROOT / "services" / "capabilities_site" / "agents.json"
 STATE_PATH = ROOT / "project" / "agent_transcripts.json"
@@ -559,6 +573,372 @@ def agent_status(agent_key):
     return jsonify({"agent": agent.get("key"), **status})
 
 
+@app.route('/kafka-messages')
+def kafka_messages():
+    results = fetch_results(limit=50)
+    messages = []
+    for r in results:
+        messages.append({
+            "content": r["event"],
+            "timestamp": r["created_at"],
+            "topic": "aisena-screening-results"
+        })
+    return jsonify({"messages": messages})
+
+
+@app.route('/db-tables')
+def db_tables():
+    if psycopg2 is None:
+        return jsonify({"error": "Database driver not available"}), 500
+    conn = psycopg2.connect(DSN)
+    cur = conn.cursor()
+    cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name;")
+    tables = [row[0] for row in cur.fetchall()]
+    cur.close()
+    conn.close()
+    return jsonify({
+        "tables": tables,
+        "aisena_tables": [name for name in tables if name.startswith("aisena_")],
+        "application_tables": [name for name in tables if not name.startswith("aisena_")],
+    })
+
+
+@app.route('/db-tables/<table_name>')
+def db_table_contents(table_name):
+    if psycopg2 is None or sql is None:
+        return jsonify({"error": "Database driver not available"}), 500
+
+    limit = min(max(request.args.get("limit", 100, type=int), 1), 200)
+    conn = psycopg2.connect(DSN)
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = %s",
+        (table_name,),
+    )
+    if cur.fetchone() is None:
+        cur.close()
+        conn.close()
+        return jsonify({"error": "Table not found"}), 404
+
+    cur.execute(sql.SQL("SELECT * FROM {} LIMIT %s").format(sql.Identifier(table_name)), (limit,))
+    columns = [description[0] for description in cur.description]
+    rows = []
+    for row in cur.fetchall():
+        rendered_row = []
+        for column, value in zip(columns, row):
+            if SENSITIVE_COLUMN_PATTERN.search(column):
+                rendered_row.append("[REDACTED]")
+            else:
+                rendered_row.append(value if isinstance(value, (str, int, float, bool, type(None))) else str(value))
+        rows.append(rendered_row)
+    cur.close()
+    conn.close()
+    return jsonify({"table": table_name, "columns": columns, "rows": rows, "limit": limit})
+
+
+def external_request(url, headers=None, data=None, insecure=False):
+    request_headers = {"Accept": "application/json", **(headers or {})}
+    request_data = urlparse.urlencode(data).encode("utf-8") if data is not None else None
+    context = ssl._create_unverified_context() if insecure else None
+    req = urlrequest.Request(url, data=request_data, headers=request_headers)
+    with urlrequest.urlopen(req, timeout=15, context=context) as response:
+        return response.read().decode("utf-8")
+
+
+def integration_error(provider, error):
+    if isinstance(error, urlerror.HTTPError):
+        detail = f"{provider} returned HTTP {error.code}."
+    elif isinstance(error, urlerror.URLError):
+        detail = f"{provider} could not be reached."
+    else:
+        detail = f"{provider} request failed."
+    return jsonify({"provider": provider.lower(), "status": "unavailable", "message": detail, "events": []})
+
+
+@app.route('/observability/splunk')
+def splunk_observability():
+    if not SPLUNK_PASSWORD:
+        return jsonify({
+            "provider": "splunk",
+            "status": "not_configured",
+            "message": "Set SPLUNK_PASSWORD and start the enterprise-observability profile.",
+            "events": [],
+        })
+
+    limit = min(max(request.args.get("limit", 50, type=int), 1), 100)
+    query = request.args.get("query", "service.namespace=aisena").strip() or "service.namespace=aisena"
+    search = f'search index="{SPLUNK_INDEX}" {query}'
+    credentials = b64encode(f"{SPLUNK_USERNAME}:{SPLUNK_PASSWORD}".encode("utf-8")).decode("ascii")
+    try:
+        payload = external_request(
+            f"{SPLUNK_API_URL}/services/search/jobs/export",
+            headers={"Authorization": f"Basic {credentials}"},
+            data={
+                "search": search,
+                "earliest_time": "-24h",
+                "latest_time": "now",
+                "output_mode": "json",
+                "count": limit,
+            },
+            insecure=True,
+        )
+        events = []
+        for line in payload.splitlines():
+            if not line.strip():
+                continue
+            item = json.loads(line)
+            result = item.get("result", {})
+            events.append({
+                "timestamp": result.get("_time"),
+                "source": result.get("source") or result.get("host") or "splunk",
+                "service": result.get("service.name") or result.get("service") or "aisena",
+                "message": result.get("_raw") or result.get("message") or json.dumps(result),
+            })
+            if len(events) >= limit:
+                break
+        return jsonify({"provider": "splunk", "status": "connected", "query": query, "events": events})
+    except (ValueError, urlerror.URLError, urlerror.HTTPError, TimeoutError) as error:
+        return integration_error("Splunk", error)
+
+
+@app.route('/observability/dynatrace')
+def dynatrace_observability():
+    if not DYNATRACE_API_URL or not DYNATRACE_API_TOKEN:
+        return jsonify({
+            "provider": "dynatrace",
+            "status": "not_configured",
+            "message": "Set DYNATRACE_API_URL and a token with logs.read scope.",
+            "events": [],
+        })
+
+    limit = min(max(request.args.get("limit", 50, type=int), 1), 100)
+    query = request.args.get("query", 'service.namespace="aisena"').strip() or 'service.namespace="aisena"'
+    params = urlparse.urlencode({"query": query, "from": "now-24h", "pageSize": limit})
+    try:
+        payload = json.loads(external_request(
+            f"{DYNATRACE_API_URL}/api/v2/logs/search?{params}",
+            headers={"Authorization": f"Api-Token {DYNATRACE_API_TOKEN}"},
+        ))
+        records = payload.get("results") or payload.get("logs") or []
+        events = []
+        for result in records[:limit]:
+            content = result.get("content") or result.get("message") or result
+            events.append({
+                "timestamp": result.get("timestamp") or result.get("@timestamp"),
+                "source": result.get("host.name") or result.get("source") or "dynatrace",
+                "service": result.get("service.name") or result.get("service.namespace") or "aisena",
+                "message": content if isinstance(content, str) else json.dumps(content),
+            })
+        return jsonify({"provider": "dynatrace", "status": "connected", "query": query, "events": events})
+    except (ValueError, urlerror.URLError, urlerror.HTTPError, TimeoutError) as error:
+        return integration_error("Dynatrace", error)
+
+
+# Test Dashboard API endpoints (test plans + test runs)
+TEST_PLANS_PATH = ROOT / "project" / "test_plans.json"
+TEST_RUNS_PATH = ROOT / "project" / "test_runs.json"
+TEST_PLAN_STATUSES = ["Draft", "Active", "Completed"]
+TEST_RUN_STATUSES = ["passed", "failed", "error", "running", "not_run"]
+
+
+def load_test_plans():
+    return load_json(TEST_PLANS_PATH, [])
+
+
+def save_test_plans(plans):
+    save_json(TEST_PLANS_PATH, plans)
+
+
+def load_test_runs():
+    return load_json(TEST_RUNS_PATH, [])
+
+
+def save_test_runs(runs):
+    save_json(TEST_RUNS_PATH, runs)
+
+
+def next_test_plan_id(plans):
+    numbers = [int(p["id"].replace("PLAN-", "")) for p in plans if p["id"].startswith("PLAN-")]
+    return f"PLAN-{str((max(numbers) + 1) if numbers else 1).zfill(4)}"
+
+
+def next_test_run_id(runs):
+    numbers = [int(r["id"].replace("RUN-", "")) for r in runs if r["id"].startswith("RUN-")]
+    return f"RUN-{str((max(numbers) + 1) if numbers else 1).zfill(4)}"
+
+
+def find_test_plan(plans, plan_id):
+    return next((p for p in plans if p["id"] == plan_id), None)
+
+
+def test_run_summary(run):
+    total = run.get("total")
+    passed = run.get("passed")
+    if not total:
+        return None
+    return round((passed or 0) / total * 100, 1)
+
+
+@app.route('/api/test-plans', methods=['GET'])
+def get_test_plans():
+    plans = load_test_plans()
+    runs = load_test_runs()
+    enriched = []
+    for plan in plans:
+        plan_runs = [r for r in runs if r.get("plan_id") == plan["id"]]
+        latest_run = plan_runs[-1] if plan_runs else None
+        enriched.append({
+            **plan,
+            "run_count": len(plan_runs),
+            "latest_run": latest_run,
+            "pass_rate": test_run_summary(latest_run) if latest_run else None,
+        })
+    return jsonify({"plans": enriched})
+
+
+@app.route('/api/test-plans', methods=['POST'])
+def create_test_plan():
+    data = request.get_json(silent=True) or {}
+    title = (data.get('title') or '').strip()
+    if not title:
+        return jsonify({"error": "Title is required"}), 400
+    status = data.get('status') if data.get('status') in TEST_PLAN_STATUSES else 'Draft'
+    suites = data.get('suites') if isinstance(data.get('suites'), list) else []
+
+    plans = load_test_plans()
+    now = utc_now_iso()
+    new_plan = {
+        "id": next_test_plan_id(plans),
+        "title": title,
+        "description": data.get('description') or '',
+        "owner": (data.get('owner') or '').strip(),
+        "status": status,
+        "suites": suites,
+        "created_at": now,
+        "updated_at": now,
+    }
+    plans.append(new_plan)
+    save_test_plans(plans)
+    return jsonify({"plan": new_plan}), 201
+
+
+@app.route('/api/test-plans/<plan_id>', methods=['PUT'])
+def update_test_plan(plan_id):
+    data = request.get_json(silent=True) or {}
+    plans = load_test_plans()
+    plan = find_test_plan(plans, plan_id)
+    if not plan:
+        return jsonify({"error": "Test plan not found"}), 404
+
+    if 'title' in data and str(data['title']).strip():
+        plan['title'] = data['title'].strip()
+    if 'description' in data:
+        plan['description'] = data['description'] or ''
+    if 'owner' in data:
+        plan['owner'] = data['owner'] or ''
+    if 'status' in data and data['status'] in TEST_PLAN_STATUSES:
+        plan['status'] = data['status']
+    if 'suites' in data and isinstance(data['suites'], list):
+        plan['suites'] = data['suites']
+    plan['updated_at'] = utc_now_iso()
+
+    save_test_plans(plans)
+    return jsonify({"plan": plan})
+
+
+@app.route('/api/test-runs', methods=['GET'])
+def get_test_runs():
+    runs = load_test_runs()
+    suite = request.args.get('suite')
+    plan_id = request.args.get('plan_id')
+    if suite:
+        runs = [r for r in runs if r.get('suite') == suite]
+    if plan_id:
+        runs = [r for r in runs if r.get('plan_id') == plan_id]
+    limit = request.args.get('limit', type=int)
+    runs = sorted(runs, key=lambda r: r.get('started_at') or '', reverse=True)
+    if limit:
+        runs = runs[:limit]
+    return jsonify({"runs": runs})
+
+
+@app.route('/api/test-runs/<run_id>', methods=['GET'])
+def get_test_run(run_id):
+    runs = load_test_runs()
+    run = next((r for r in runs if r["id"] == run_id), None)
+    if not run:
+        return jsonify({"error": "Test run not found"}), 404
+    return jsonify({"run": run})
+
+
+@app.route('/api/test-runs', methods=['POST'])
+def create_test_run():
+    data = request.get_json(silent=True) or {}
+    suite = (data.get('suite') or '').strip()
+    if not suite:
+        return jsonify({"error": "Suite is required"}), 400
+    status = data.get('status') if data.get('status') in TEST_RUN_STATUSES else 'running'
+
+    runs = load_test_runs()
+    new_run = {
+        "id": next_test_run_id(runs),
+        "plan_id": data.get('plan_id'),
+        "suite": suite,
+        "status": status,
+        "started_at": data.get('started_at') or utc_now_iso(),
+        "finished_at": data.get('finished_at'),
+        "duration_seconds": data.get('duration_seconds'),
+        "total": data.get('total'),
+        "passed": data.get('passed'),
+        "failed": data.get('failed'),
+        "skipped": data.get('skipped'),
+        "triggered_by": data.get('triggered_by') or 'manual',
+        "environment": data.get('environment') or '',
+        "notes": data.get('notes') or '',
+        "cases": data.get('cases') if isinstance(data.get('cases'), list) else [],
+    }
+    runs.append(new_run)
+    save_test_runs(runs)
+    return jsonify({"run": new_run}), 201
+
+
+@app.route('/api/test-summary', methods=['GET'])
+def get_test_summary():
+    plans = load_test_plans()
+    runs = load_test_runs()
+    latest_by_suite = {}
+    for run in sorted(runs, key=lambda r: r.get('started_at') or ''):
+        latest_by_suite[run['suite']] = run
+
+    executed = [r for r in latest_by_suite.values() if r['status'] != 'not_run']
+    passing = [r for r in executed if r['status'] == 'passed']
+    total_cases = sum(r.get('total') or 0 for r in executed)
+    passed_cases = sum(r.get('passed') or 0 for r in executed)
+
+    return jsonify({
+        "plan_count": len(plans),
+        "suite_count": len(latest_by_suite),
+        "executed_suite_count": len(executed),
+        "passing_suite_count": len(passing),
+        "overall_case_pass_rate": round(passed_cases / total_cases * 100, 1) if total_cases else None,
+        "suites": [
+            {
+                "suite": suite,
+                "status": run['status'],
+                "pass_rate": test_run_summary(run),
+                "last_run_id": run['id'],
+                "last_run_at": run.get('started_at'),
+            }
+            for suite, run in latest_by_suite.items()
+        ],
+    })
+
+
+@app.route('/test-dashboard')
+def test_dashboard_page():
+    return send_from_directory('.', 'test-dashboard.html')
+
+
 # Task API endpoints
 TASK_STATUSES = ["Backlog", "Planned", "In Progress", "Blocked", "In Review", "Done"]
 TASK_PRIORITIES = ["Low", "Medium", "High", "Critical"]
@@ -828,6 +1208,18 @@ def add_issue_comment(issue_id):
     save_issues(issues)
     return jsonify({'issue': issue}), 201
 
+@app.route('/postgres-viewer')
+def postgres_viewer():
+    return send_from_directory('.', 'postgres-viewer.html')
+
+@app.route('/kafka-viewer')
+def kafka_viewer():
+    return send_from_directory('.', 'kafka-viewer.html')
+
+@app.route('/')
+def root():
+    return send_from_directory('.', 'index.html')
+
 
 @app.route('/api/issues/<issue_id>', methods=['DELETE'])
 def delete_issue(issue_id):
@@ -839,6 +1231,92 @@ def delete_issue(issue_id):
     issues.remove(issue)
     save_issues(issues)
     return jsonify({'message': 'Issue deleted'}), 200
+
+
+# ── Deliberation API endpoints ──────────────────────────────────────────
+
+_AGENTS_MANAGER = ROOT / "agents" / "manager"
+import sys as _sys
+if str(_AGENTS_MANAGER) not in _sys.path:
+    _sys.path.insert(0, str(_AGENTS_MANAGER))
+
+try:
+    from deliberation import deliberate, get_deliberation, list_deliberations, \
+        start_execution, advance_phase, update_task_status
+    DELIBERATION_AVAILABLE = True
+except ImportError:
+    DELIBERATION_AVAILABLE = False
+
+
+@app.route('/api/deliberations', methods=['POST'])
+def create_deliberation():
+    """Start a multi-agent deliberation on a project specification."""
+    if not DELIBERATION_AVAILABLE:
+        return jsonify({"error": "Deliberation service unavailable"}), 503
+    payload = request.get_json(silent=True) or {}
+    if not payload.get("name"):
+        return jsonify({"error": "Project name is required"}), 400
+    try:
+        result = deliberate(payload)
+        return jsonify(result), 201
+    except Exception as e:
+        return jsonify({"error": f"Deliberation failed: {str(e)}"}), 500
+
+
+@app.route('/api/deliberations', methods=['GET'])
+def get_deliberations():
+    """List recent deliberations."""
+    if not DELIBERATION_AVAILABLE:
+        return jsonify({"error": "Deliberation service unavailable"}), 503
+    return jsonify({"deliberations": list_deliberations()})
+
+
+@app.route('/api/deliberations/<deliberation_id>', methods=['GET'])
+def get_deliberation_endpoint(deliberation_id):
+    """Get a specific deliberation by ID."""
+    if not DELIBERATION_AVAILABLE:
+        return jsonify({"error": "Deliberation service unavailable"}), 503
+    d = get_deliberation(deliberation_id)
+    if not d:
+        return jsonify({"error": "Deliberation not found"}), 404
+    return jsonify(d)
+
+
+@app.route('/api/deliberations/<deliberation_id>/execute', methods=['POST'])
+def execute_deliberation(deliberation_id):
+    """Start executing the plan from a deliberation."""
+    if not DELIBERATION_AVAILABLE:
+        return jsonify({"error": "Deliberation service unavailable"}), 503
+    d = start_execution(deliberation_id)
+    if not d:
+        return jsonify({"error": "Deliberation not found"}), 404
+    return jsonify(d)
+
+
+@app.route('/api/deliberations/<deliberation_id>/advance', methods=['POST'])
+def advance_deliberation(deliberation_id):
+    """Advance to the next execution phase."""
+    if not DELIBERATION_AVAILABLE:
+        return jsonify({"error": "Deliberation service unavailable"}), 503
+    d = advance_phase(deliberation_id)
+    if not d:
+        return jsonify({"error": "Deliberation not found"}), 404
+    return jsonify(d)
+
+
+@app.route('/api/deliberations/<deliberation_id>/tasks/<task_id>', methods=['PUT'])
+def update_task_endpoint(deliberation_id, task_id):
+    """Update a task status within a deliberation."""
+    if not DELIBERATION_AVAILABLE:
+        return jsonify({"error": "Deliberation service unavailable"}), 503
+    data = request.get_json(silent=True) or {}
+    new_status = data.get("status")
+    if not new_status:
+        return jsonify({"error": "Status is required"}), 400
+    d = update_task_status(deliberation_id, task_id, new_status)
+    if not d:
+        return jsonify({"error": "Deliberation not found"}), 404
+    return jsonify(d)
 
 
 if __name__ == '__main__':

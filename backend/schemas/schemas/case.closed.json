@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aisena.org/schemas/case.closed.json",
+  "title": "CaseClosed",
+  "description": "Published when a case is closed (approved or rejected).",
+  "type": "object",
+  "required": ["eventId", "caseId", "transactionId", "occurredAt", "decision", "reviewer", "notes"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "caseId": { "type": "string" },
+    "transactionId": { "type": "string" },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "decision": { "type": "string", "enum": ["APPROVED", "REJECTED"] },
+    "reviewer": { "type": "string" },
+    "notes": { "type": "string" }
+  }
+}
