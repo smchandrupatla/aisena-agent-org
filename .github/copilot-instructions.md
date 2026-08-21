@@ -84,6 +84,15 @@ Sample JSON → Ingestion (`produce.py`) → Kafka topic `aisena-stage0-events` 
 
 ## Key Conventions
 
+### Completion Workflow
+
+- For every completed change, validate the affected behavior, commit only the files changed for the task, and deploy the resulting artifact before reporting completion.
+- Treat commit and deployment as required completion steps, not optional follow-up work. Do not commit unrelated user changes from a dirty worktree.
+- Use the repository's existing deployment scripts and target the smallest applicable deployment scope. Verify deployment health after rollout.
+- If a mandatory approval gate applies, prepare and validate the change, then obtain human approval before committing or deploying it.
+- If the task has no deployable artifact, such as an instruction-only or documentation-only change, commit it and explicitly record deployment as not applicable.
+- If validation, commit, or deployment cannot be completed, report the blocker and do not claim the task is complete.
+
 ### New Application Portal Isolation
 
 - Every new application created with this framework must have a web portal separate from the AISENA portal.
