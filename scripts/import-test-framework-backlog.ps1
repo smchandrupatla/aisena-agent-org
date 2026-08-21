@@ -1,3 +1,9 @@
+# NOTE (2026-08-21): Tasks now live in Postgres (aisena_tasks table via
+# services/api/app.py /api/tasks endpoints), not project/tasks.json. This
+# script is kept for historical reference only; it operated on the JSON file
+# store that has since been retired (see project/db/schema.sql). Do not run
+# this against a fresh checkout without a tasks.json file - it will not see
+# already-imported tasks and will create colliding TASK-#### ids.
 param(
     [string]$TasksPath = (Join-Path $PSScriptRoot '..\project\tasks.json')
 )

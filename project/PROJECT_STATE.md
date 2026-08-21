@@ -98,3 +98,14 @@ Single-agent delivery adopted 2026-08-15. Implementation Manager drives all work
 ### Active Governance Tasks
 - TASK-0013 IN_PROGRESS: Orchestrator service delivered; pending human review of GitHub push-mode behavior before enabling real `GITHUB_TOKEN`/`GITHUB_ORG` credentials in any environment.
 
+## Update 2026-08-21 — Task/Issue Storage Migrated to Postgres
+
+### New Direction
+- Task and issue tracking moved from the `project/tasks.json` file store to Postgres (`aisena_tasks`, `aisena_issues` tables in the shared `aisena` database). `project/tasks.json` is retired and removed.
+
+### Implementation Status
+- `project/db/schema.sql` defines `aisena_tasks` and `aisena_issues` (prefixed to avoid collision with Redmine's own `issues` table in the same database).
+- `scripts/db/init_tasks_issues_db.py` creates the tables and can backfill from the legacy JSON stores.
+- `services/api/app.py` `/api/tasks*` endpoints (`load_tasks`/`save_tasks`) now read/write `aisena_tasks` directly instead of the JSON file; full CRUD (create/update/comment/delete) verified against the live `aisena-agent-org-postgres-1` container, and `services/api/test_app.py` (12 tests) passes with `tasks.json` absent.
+- `scripts/import-test-framework-backlog.ps1` is retained for historical reference only; it operated on the retired JSON file and should not be re-run against a fresh checkout.
+

@@ -59,20 +59,82 @@ def utc_now_iso():
     return datetime.now(timezone.utc).isoformat()
 
 
+TASK_COLUMNS = [
+    "id", "title", "description", "owner", "status", "priority", "dependency",
+    "next_checkpoint", "tags", "comments", "activity_log", "created_at", "updated_at",
+]
+
+
+def _task_row_to_dict(row):
+    return dict(zip(TASK_COLUMNS, row))
+
+
 def load_tasks():
-    path = ROOT / "project" / "tasks.json"
-    if not path.exists():
+    """Load all tasks from the aisena_tasks table (Postgres), newest first."""
+    if psycopg2 is None:
         return []
+    conn = psycopg2.connect(DSN)
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        return []
+        cur = conn.cursor()
+        cur.execute(
+            f"SELECT {', '.join(TASK_COLUMNS)} FROM aisena_tasks ORDER BY created_at DESC"
+        )
+        rows = cur.fetchall()
+        cur.close()
+    finally:
+        conn.close()
+    tasks = [_task_row_to_dict(row) for row in rows]
+    for task in tasks:
+        for key in ("created_at", "updated_at"):
+            if task.get(key) is not None:
+                task[key] = task[key].isoformat()
+    return tasks
 
 
 def save_tasks(tasks):
-    path = ROOT / "project" / "tasks.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(tasks, indent=2), encoding="utf-8")
+    """Replace the full contents of aisena_tasks with the given task list.
+
+    The FK on `dependency` is DEFERRABLE INITIALLY DEFERRED so a full
+    delete+insert can happen in one transaction regardless of ordering.
+    """
+    if psycopg2 is None:
+        return
+    conn = psycopg2.connect(DSN)
+    try:
+        cur = conn.cursor()
+        cur.execute("SET CONSTRAINTS ALL DEFERRED")
+        cur.execute("DELETE FROM aisena_tasks")
+        for task in tasks:
+            cur.execute(
+                """
+                INSERT INTO aisena_tasks
+                    (id, title, description, owner, status, priority, dependency,
+                     next_checkpoint, tags, comments, activity_log, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    task.get("id"),
+                    task.get("title"),
+                    task.get("description"),
+                    task.get("owner"),
+                    task.get("status") or "Backlog",
+                    task.get("priority") or "Medium",
+                    task.get("dependency"),
+                    task.get("next_checkpoint"),
+                    json.dumps(task.get("tags") or []),
+                    json.dumps(task.get("comments") or []),
+                    json.dumps(task.get("activity_log") or []),
+                    task.get("created_at") or utc_now_iso(),
+                    task.get("updated_at") or utc_now_iso(),
+                ),
+            )
+        conn.commit()
+        cur.close()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 
 def next_task_id(tasks):

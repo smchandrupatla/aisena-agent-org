@@ -4,9 +4,11 @@
 -- Redmine schema (which already owns `issues`, `projects`, etc.) that lives
 -- in the same database (see docker-compose.yml `redmine` service).
 --
--- aisena_tasks mirrors the structure of project/tasks.json (the canonical
--- task log used by scripts/import-test-framework-backlog.ps1 and the
--- Implementation Manager workflow).
+-- aisena_tasks is the canonical task log for the Implementation Manager
+-- workflow (services/api/app.py /api/tasks endpoints). It replaces the
+-- legacy project/tasks.json file store; the dependency FK is deferrable so
+-- callers can bulk-replace the table contents within a single transaction
+-- without hitting self-referential FK ordering issues.
 --
 -- aisena_issues mirrors the Ticket model used by services/orchestrator
 -- (services/orchestrator/models.py) for per-app blockers/escalations that
@@ -20,7 +22,8 @@ CREATE TABLE IF NOT EXISTS aisena_tasks (
     owner           VARCHAR(255),
     status          VARCHAR(50) NOT NULL DEFAULT 'Backlog',
     priority        VARCHAR(20) NOT NULL DEFAULT 'Medium',
-    dependency      VARCHAR(32) REFERENCES aisena_tasks(id) ON DELETE SET NULL,
+    dependency      VARCHAR(32) REFERENCES aisena_tasks(id) ON DELETE SET NULL
+                        DEFERRABLE INITIALLY DEFERRED,
     next_checkpoint TEXT,
     tags            JSONB NOT NULL DEFAULT '[]'::jsonb,
     comments        JSONB NOT NULL DEFAULT '[]'::jsonb,

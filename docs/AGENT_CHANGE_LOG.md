@@ -1382,3 +1382,22 @@ Add the following acceptance criterion to all Stage 0+ case management and scree
 - **Rollback Plan:** Revert the six issue workflow files and API changes, then rebuild `api` and `capabilities-site`.
 - **Human Approval Needed:** No
 - **Handoff Target:** 10-qa-engineer
+
+---
+
+### LOG-20260821-001
+
+- **Entry ID:** LOG-20260821-001
+- **Date:** 2026-08-21
+- **Agent Role:** 00-implementation-manager
+- **Task ID:** DB-TASK-MIGRATION-001
+- **What Changed:** Migrated task storage from the `project/tasks.json` file to Postgres. Added `aisena_tasks`/`aisena_issues` tables (`project/db/schema.sql`) with a deferrable self-referential FK on `dependency`, added `scripts/db/init_tasks_issues_db.py` to create/backfill the tables, rewired `services/api/app.py` `load_tasks`/`save_tasks` to read/write `aisena_tasks` directly, backfilled all 66 existing tasks, and removed the retired `project/tasks.json` file.
+- **Files Modified:** `project/db/schema.sql`, `scripts/db/init_tasks_issues_db.py`, `services/api/app.py`, `project/PROJECT_STATE.md`, `scripts/import-test-framework-backlog.ps1` (deprecation note); deleted `project/tasks.json`.
+- **Commit Ref:** pending
+- **Rationale:** Requested move of task storage from a repo-committed JSON file to the shared Postgres database so task state is centrally queryable and no longer round-trips through git.
+- **Alternatives Considered:** Mirror tasks.json into Postgres while keeping the file as the source of truth; rejected per explicit direction to fully retire the file-based store.
+- **Risk Level:** Medium
+- **Metrics Impact:** `services/api/test_app.py` (12 tests) passes with `tasks.json` absent; full CRUD (create/update/comment/delete) verified against the live `aisena-agent-org-postgres-1` container; task count round-trips correctly (66 before and after).
+- **Rollback Plan:** Restore `project/tasks.json` from git history and revert `services/api/app.py` task storage functions to the prior file-based implementation.
+- **Human Approval Needed:** No
+- **Handoff Target:** 10-qa-engineer
