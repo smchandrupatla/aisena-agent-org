@@ -302,12 +302,6 @@ h1 {
 }
 
 .pill {
-  border: 1px solid #cfdcf7;
-  border-radius: 999px;
-  padding: 6px 11px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #23467c;
   background: #f4f8ff;
 }
 
@@ -339,23 +333,6 @@ h1 {
   color: #8d2834;
   border-color: #f5b2b8;
 }
-
-.status-running {
-  background: #fff6df;
-  color: #7f5a19;
-  border-color: #ffd686;
-}
-
-.status-not_run {
-  background: #f1f3f8;
-  color: #58607a;
-  border-color: #d7dbe8;
-}
-
-.progress-track {
-  width: 100%;
-  height: 8px;
-  border-radius: 999px;
   background: #eef2fb;
   overflow: hidden;
 }

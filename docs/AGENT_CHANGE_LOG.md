@@ -2,6 +2,32 @@
 
 ## 2026-08-21
 
+### LOG-20260821-002
+- Agent Role: 00-implementation-manager
+- Task ID: N/A (test framework backlog import)
+- What Changed:
+  - Added 60 planning-only test framework tasks across 13 epics to `/project/tasks.json`.
+  - Preserved source task references, requested role labels, epic grouping, and all dependency references; linked the first dependency structurally where the current task model permits one dependency.
+  - Added an idempotent PowerShell importer for repeatable backlog loading.
+- Files Changed:
+  - `/project/tasks.json`
+  - `/scripts/import-test-framework-backlog.ps1`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- Commit / Version Ref: pending
+- Rationale:
+  - Make the supplied Aisina test strategy work items assignable and visible in the existing portal task workflow without starting implementation.
+- Alternatives Considered:
+  - Import only the stated total of 51: rejected because the supplied epic tables contain 60 distinct task rows.
+  - Create a second task store: rejected because `/project/tasks.json` is the portal's existing source of truth.
+- Risk Impact: Low (planning data and repeatable import tooling only; task status remains Backlog).
+- Validation:
+  - Confirmed 60 unique strategy references, valid owner keys, valid structural dependencies, and the expected counts across all 13 epics.
+  - A second importer run added zero tasks; Python successfully parsed all 62 total task records as BOM-free UTF-8 JSON.
+- Rollback Plan:
+  - Remove tasks tagged `test-framework` from `/project/tasks.json` and delete the importer.
+- Human Approval Required: No (planning-only backlog data; no implementation or production behavior).
+- Handoff Target: 32-test-manager
+
 ### LOG-20260821-001
 - Agent Role: 04-frontend-engineer
 - Task ID: N/A (direct portal navigation request)
@@ -16,6 +42,9 @@
   - Added a bounded, read-only table-content API with identifier allow-listing and sensitive-column redaction.
   - Split the Postgres Viewer into AISENA and application tabs with selectable tables and responsive row/column rendering.
   - Added a history-aware Back control to all portal pages, preserving browser-managed form and scroll context with Overview as the direct-entry fallback.
+  - Added Splunk and Dynatrace log viewer pages with query, refresh, connection state, event count, and responsive event tables.
+  - Added server-side read-only vendor query adapters so credentials remain outside browser code; missing integrations return explicit `not_configured` states.
+  - Expanded all 22 portal pages to the same 17-item navigation including both observability viewers.
 - Files Changed:
   - `/services/capabilities_site/index.html`
   - `/services/capabilities_site/styles.css`
@@ -35,6 +64,7 @@
   - Deployed browser check rendered 55 PostgreSQL tables; portal, proxied table endpoint, and API health each returned HTTP 200 after optional-service cleanup.
   - API checks confirmed one AISENA table, 54 application tables, bounded row responses, and 404 rejection for unknown table names.
   - Browser checks confirmed both table tabs and contents at desktop/mobile sizes; Back navigation restored form text and scroll position.
+  - Focused API tests passed for credential-free Splunk and Dynatrace states; deployed endpoints/pages returned HTTP 200 with no credential fields.
 - Rollback Plan:
   - Revert this stylesheet change to restore the previous top navigation layout.
 - Human Approval Required: No (local presentation-only change).
