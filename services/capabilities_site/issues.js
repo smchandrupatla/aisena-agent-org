@@ -95,7 +95,7 @@ function initDialog() {
   ["issueTitle", "issueDescription", "issueMitigation"].forEach((id) => document.getElementById(id).addEventListener("input", updateEscalationWarning));
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const payload = { title: document.getElementById("issueTitle").value.trim(), description: document.getElementById("issueDescription").value.trim(), severity: document.getElementById("issueSeverity").value, owner: document.getElementById("issueOwner").value, mitigation: document.getElementById("issueMitigation").value.trim(), related_task: document.getElementById("issueRelatedTask").value.trim(), escalation_flag: escalation.checked };
+    const payload = { title: document.getElementById("issueTitle").value.trim(), description: document.getElementById("issueDescription").value.trim(), severity: document.getElementById("issueSeverity").value, owner: document.getElementById("issueOwner").value, mitigation: document.getElementById("issueMitigation").value.trim(), related_task: document.getElementById("issueRelatedTask").value.trim(), app_label: document.getElementById("issueAppLabel").value.trim() || null, escalation_flag: escalation.checked };
     if (!payload.title) return;
     try {
       const response = await fetch(`${API_BASE}/api/issues`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });

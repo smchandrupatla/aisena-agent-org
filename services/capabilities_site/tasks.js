@@ -31,6 +31,7 @@ function getFiltersFromUrl() {
     owner: params.get("owner") || "",
     status: params.get("status") || "",
     priority: params.get("priority") || "",
+    app_label: params.get("app_label") || "",
   };
 }
 
@@ -40,6 +41,7 @@ function setFiltersInUrl(filters) {
   if (filters.owner) params.set("owner", filters.owner);
   if (filters.status) params.set("status", filters.status);
   if (filters.priority) params.set("priority", filters.priority);
+  if (filters.app_label) params.set("app_label", filters.app_label);
   const query = params.toString();
   const newUrl = `${window.location.pathname}${query ? `?${query}` : ""}`;
   window.history.replaceState({}, "", newUrl);
@@ -51,6 +53,7 @@ function readFiltersFromForm() {
     owner: document.getElementById("filterOwner").value,
     status: document.getElementById("filterStatus").value,
     priority: document.getElementById("filterPriority").value,
+    app_label: document.getElementById("filterAppLabel").value,
   };
 }
 
@@ -64,6 +67,7 @@ function applyFilters(tasks, filters) {
     if (filters.owner && task.owner !== filters.owner) return false;
     if (filters.status && task.status !== filters.status) return false;
     if (filters.priority && task.priority !== filters.priority) return false;
+    if (filters.app_label && (task.app_label || "") !== filters.app_label) return false;
     return true;
   });
 }
@@ -84,7 +88,7 @@ function renderTasks() {
   const filtered = applyFilters(tasksCache, filters);
 
   if (!filtered.length) {
-    body.innerHTML = `<tr class="empty-row"><td colspan="6">No tasks match this view. Use "Add task in backlog" to create one.</td></tr>`;
+    body.innerHTML = `<tr class="empty-row"><td colspan="7">No tasks match this view. Use "Add task in backlog" to create one.</td></tr>`;
     return;
   }
 
@@ -92,6 +96,7 @@ function renderTasks() {
     .map(
       (task) => `<tr data-task-id="${task.id}">
         <td><a class="task-link" href="task.html?id=${encodeURIComponent(task.id)}">${task.id} ${task.title}</a></td>
+        <td>${task.app_label || "-"}</td>
         <td>${ownerLabel(task.owner)}</td>
         <td><span class="pill">${task.status}</span></td>
         <td>${task.priority}</td>
@@ -127,6 +132,7 @@ function populateFilterSelects() {
   const ownerSelect = document.getElementById("filterOwner");
   const statusSelect = document.getElementById("filterStatus");
   const prioritySelect = document.getElementById("filterPriority");
+  const appLabelSelect = document.getElementById("filterAppLabel");
 
   const ownerOptions = agentsCache
     .map((agent) => `<option value="${agent.key}">${agent.name}</option>`)
@@ -135,15 +141,20 @@ function populateFilterSelects() {
   statusSelect.innerHTML = `<option value="">All Statuses</option>${TASK_STATUSES.map((s) => `<option value="${s}">${s}</option>`).join("")}`;
   prioritySelect.innerHTML = `<option value="">All Priorities</option>${TASK_PRIORITIES.map((p) => `<option value="${p}">${p}</option>`).join("")}`;
 
+  // Populate app label filter from distinct labels in tasks
+  const labels = [...new Set(tasksCache.map((t) => t.app_label).filter(Boolean))].sort();
+  appLabelSelect.innerHTML = `<option value="">All App Labels</option>${labels.map((l) => `<option value="${l}">${l}</option>`).join("")}`;
+
   const filters = getFiltersFromUrl();
   document.getElementById("filterText").value = filters.q;
   ownerSelect.value = filters.owner;
   statusSelect.value = filters.status;
   prioritySelect.value = filters.priority;
+  appLabelSelect.value = filters.app_label;
 }
 
 function initFilterBar() {
-  ["filterText", "filterOwner", "filterStatus", "filterPriority"].forEach((id) => {
+  ["filterText", "filterOwner", "filterStatus", "filterPriority", "filterAppLabel"].forEach((id) => {
     document.getElementById(id).addEventListener("input", renderTasks);
     document.getElementById(id).addEventListener("change", renderTasks);
   });
@@ -152,6 +163,7 @@ function initFilterBar() {
     document.getElementById("filterOwner").value = "";
     document.getElementById("filterStatus").value = "";
     document.getElementById("filterPriority").value = "";
+    document.getElementById("filterAppLabel").value = "";
     renderTasks();
   });
 }
@@ -204,6 +216,7 @@ function initTaskDialog() {
       dependency: document.getElementById("taskDependency").value || null,
       next_checkpoint: document.getElementById("taskCheckpoint").value.trim(),
       tags,
+      app_label: document.getElementById("taskAppLabel").value.trim() || null,
     };
 
     try {

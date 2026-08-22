@@ -44,8 +44,9 @@ def import_tasks(conn):
                 """
                 INSERT INTO aisena_tasks
                     (id, title, description, owner, status, priority, dependency,
-                     next_checkpoint, tags, comments, activity_log, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                     next_checkpoint, tags, comments, activity_log, app_label,
+                     created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (id) DO UPDATE SET
                     title = EXCLUDED.title,
                     description = EXCLUDED.description,
@@ -57,6 +58,7 @@ def import_tasks(conn):
                     tags = EXCLUDED.tags,
                     comments = EXCLUDED.comments,
                     activity_log = EXCLUDED.activity_log,
+                    app_label = EXCLUDED.app_label,
                     updated_at = EXCLUDED.updated_at
                 """,
                 (
@@ -71,6 +73,7 @@ def import_tasks(conn):
                     json.dumps(t.get("tags") or []),
                     json.dumps(t.get("comments") or []),
                     json.dumps(t.get("activity_log") or []),
+                    t.get("app_label"),
                     t.get("created_at"),
                     t.get("updated_at"),
                 ),

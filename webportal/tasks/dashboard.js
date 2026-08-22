@@ -906,3 +906,18 @@ function showToast(message, type = 'info') {
 // ---------------------------------------------------------------------------
 reportsUI.init();
 loadDashboardData(false);
+
+// Add Config menu item to the main dashboard sidebar
+  const nav = document.getElementById('xd-primary-nav');
+  if (nav) {
+    const configItem = document.createElement('li');
+    configItem.className = 'xd-nav-item';
+    configItem.dataset.page = 'config';
+    configItem.innerHTML = '<span class="xd-nav-icon">⚙️</span>Config';
+    const reportsItem = nav.querySelector('[data-page="reports"]');
+    if (reportsItem) {
+      nav.insertBefore(configItem, reportsItem.nextSibling);
+    } else {
+      nav.appendChild(configItem);
+    }
+  }

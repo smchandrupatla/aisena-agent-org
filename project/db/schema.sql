@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS aisena_tasks (
     tags            JSONB NOT NULL DEFAULT '[]'::jsonb,
     comments        JSONB NOT NULL DEFAULT '[]'::jsonb,
     activity_log    JSONB NOT NULL DEFAULT '[]'::jsonb,
+    app_label       VARCHAR(255),
     created_at      TIMESTAMP NOT NULL DEFAULT now(),
     updated_at      TIMESTAMP NOT NULL DEFAULT now()
 );
@@ -35,6 +36,7 @@ CREATE TABLE IF NOT EXISTS aisena_tasks (
 CREATE INDEX IF NOT EXISTS idx_aisena_tasks_status ON aisena_tasks(status);
 CREATE INDEX IF NOT EXISTS idx_aisena_tasks_owner ON aisena_tasks(owner);
 CREATE INDEX IF NOT EXISTS idx_aisena_tasks_dependency ON aisena_tasks(dependency);
+CREATE INDEX IF NOT EXISTS idx_aisena_tasks_app_label ON aisena_tasks(app_label);
 
 CREATE TABLE IF NOT EXISTS aisena_issues (
     id                  VARCHAR(32) PRIMARY KEY,
@@ -47,6 +49,7 @@ CREATE TABLE IF NOT EXISTS aisena_issues (
     decision_needed     TEXT,
     status              VARCHAR(20) NOT NULL DEFAULT 'open',
     github_issue_number INTEGER,
+    app_label           VARCHAR(255),
     created_at          TIMESTAMP NOT NULL DEFAULT now(),
     updated_at          TIMESTAMP NOT NULL DEFAULT now()
 );
@@ -54,6 +57,7 @@ CREATE TABLE IF NOT EXISTS aisena_issues (
 CREATE INDEX IF NOT EXISTS idx_aisena_issues_app_id ON aisena_issues(app_id);
 CREATE INDEX IF NOT EXISTS idx_aisena_issues_status ON aisena_issues(status);
 CREATE INDEX IF NOT EXISTS idx_aisena_issues_task_id ON aisena_issues(task_id);
+CREATE INDEX IF NOT EXISTS idx_aisena_issues_app_label ON aisena_issues(app_label);
 
 -- aisena_agents is the canonical agent directory for the Implementation
 -- Manager workflow (services/api/app.py /api/agents endpoints). It replaces

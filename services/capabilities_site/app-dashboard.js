@@ -1,5 +1,6 @@
-// Tasks & Issues Executive Dashboard
-// Data-driven KPIs, drill-down navigation, hover previews, and report generation.
+// App Dashboard: tracks tasks and issues for a selected app label.
+// Supports label-based filtering, inline label editing, and drill-down navigation.
+// Data sources: /api/tasks?app_label=<label>, /api/issues?app_label=<label>, /api/app-labels
 
 const API_BASE = window.API_BASE_OVERRIDE || '';
 
@@ -27,22 +28,19 @@ const PRIORITY_COLORS = { "Low": "#1f9d68", "Medium": "#f5b544", "High": "#d24b5
 let tasksData = [];
 let issuesData = [];
 let agentsData = [];
+let appLabels = [];
+let selectedAppLabel = '';
 let lastLoadedAt = null;
 
 // ---------------------------------------------------------------------------
-// Navigation: a simple stack so any drill-down can be "backed" out of, and
-// clicking a sidebar item resets to that top-level page.
+// Navigation
 // ---------------------------------------------------------------------------
-const dashNav = {
+const appDashNav = {
   stack: [{ page: 'overview', label: 'Overview' }],
   current() { return this.stack[this.stack.length - 1]; },
   go(page, opts = {}) {
     const entry = { page, label: opts.label || page, ...opts };
     this.stack.push(entry);
-    this.render();
-  },
-  replaceTop(page, opts = {}) {
-    this.stack[this.stack.length - 1] = { page, label: opts.label || page, ...opts };
     this.render();
   },
   goRoot(page, label) {
@@ -76,13 +74,13 @@ const dashNav = {
 function renderBreadcrumb() {
   const el = document.getElementById('xd-breadcrumb');
   el.innerHTML = '';
-  dashNav.stack.forEach((entry, idx) => {
+  appDashNav.stack.forEach((entry, idx) => {
     if (idx > 0) el.appendChild(document.createTextNode(' / '));
     const span = document.createElement('span');
     span.className = 'xd-crumb';
-    span.textContent = idx === 0 ? 'Dashboard' : entry.label;
-    if (idx < dashNav.stack.length - 1) {
-      span.addEventListener('click', () => dashNav.jumpTo(idx));
+    span.textContent = idx === 0 ? 'App Dashboard' : entry.label;
+    if (idx < appDashNav.stack.length - 1) {
+      span.addEventListener('click', () => appDashNav.jumpTo(idx));
     } else {
       span.style.cursor = 'default';
       const b = document.createElement('b');
@@ -97,21 +95,16 @@ function renderBreadcrumb() {
 function dispatchRender(entry) {
   switch (entry.page) {
     case 'overview': renderOverview(); break;
-    case 'tasks': renderTasksPage(entry.filter, entry.filterLabel); break;
-    case 'issues': renderIssuesPage(entry.filter, entry.filterLabel); break;
-    case 'task-detail': renderTaskDetail(entry.id); break;
-    case 'issue-detail': renderIssueDetail(entry.id); break;
-    case 'team': renderTeamPage(); break;
-    case 'team-detail': renderTeamDetail(entry.owner); break;
-    case 'analytics': renderAnalyticsPage(); break;
-    case 'reports': reportsUI.render(); break;
+    case 'tasks': renderTasksPage(); break;
+    case 'issues': renderIssuesPage(); break;
+    case 'labels': renderLabelsPage(); break;
   }
 }
 
 document.getElementById('xd-primary-nav').addEventListener('click', (e) => {
   const item = e.target.closest('.xd-nav-item');
   if (!item) return;
-  dashNav.goRoot(item.dataset.page, item.textContent.trim());
+  appDashNav.goRoot(item.dataset.page, item.textContent.trim());
 });
 
 // ---------------------------------------------------------------------------
@@ -127,28 +120,41 @@ async function fetchJson(path) {
   }
 }
 
-async function loadDashboardData(isRefresh) {
+async function loadAppDashboardData(isRefresh) {
   showLoading(true);
   try {
-    const [tasksResp, issuesResp, agentsResp] = await Promise.all([
-      fetchJson('/api/tasks'),
-      fetchJson('/api/issues'),
+    const [labelsResp, tasksResp, issuesResp, agentsResp] = await Promise.all([
+      fetchJson('/api/app-labels'),
+      fetchJson(selectedAppLabel ? `/api/tasks?app_label=${encodeURIComponent(selectedAppLabel)}` : '/api/tasks'),
+      fetchJson(selectedAppLabel ? `/api/issues?app_label=${encodeURIComponent(selectedAppLabel)}` : '/api/issues'),
       fetchJson('/api/agents'),
     ]);
+
+    appLabels = (labelsResp && Array.isArray(labelsResp.app_labels)) ? labelsResp.app_labels : [];
     tasksData = (tasksResp && Array.isArray(tasksResp.tasks)) ? tasksResp.tasks : [];
     issuesData = Array.isArray(issuesResp) ? issuesResp : (issuesResp && Array.isArray(issuesResp.issues) ? issuesResp.issues : []);
     agentsData = (agentsResp && Array.isArray(agentsResp.agents)) ? agentsResp.agents : [];
     lastLoadedAt = new Date();
+
     document.getElementById('nav-count-tasks').textContent = tasksData.length;
     document.getElementById('nav-count-issues').textContent = issuesData.length;
     updateSidebarProgress();
-    dashNav.render();
+    populateLabelSelector();
+    appDashNav.render();
     if (isRefresh) showToast('Dashboard refreshed', 'success');
   } catch (err) {
     showToast('Failed to load dashboard data', 'error');
   } finally {
     showLoading(false);
   }
+}
+
+function populateLabelSelector() {
+  const select = document.getElementById('appLabelSelect');
+  if (!select) return;
+  const current = selectedAppLabel;
+  select.innerHTML = '<option value="">All apps</option>' + appLabels.map(l => `<option value="${l}">${l}</option>`).join('');
+  select.value = current;
 }
 
 function updateSidebarProgress() {
@@ -159,6 +165,14 @@ function updateSidebarProgress() {
   document.getElementById('sidebar-progress-fill').style.width = `${pct}%`;
   document.getElementById('sidebar-progress-caption').textContent = `${done} of ${total} tasks done`;
 }
+
+// ---------------------------------------------------------------------------
+// Label selector change handler
+// ---------------------------------------------------------------------------
+document.getElementById('appLabelSelect').addEventListener('change', (e) => {
+  selectedAppLabel = e.target.value;
+  loadAppDashboardData(false);
+});
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -205,30 +219,7 @@ function labelHtml(label) {
 }
 
 // ---------------------------------------------------------------------------
-// Tooltip (hover preview)
-// ---------------------------------------------------------------------------
-const tooltip = document.getElementById('xd-tooltip');
-function showTooltip(evt, titleText, items) {
-  let html = `<div class="xd-tt-title">${titleText}</div>`;
-  (items || []).slice(0, 4).forEach(t => { html += `<div class="xd-tt-item">• ${t}</div>`; });
-  if (items && items.length > 4) html += `<div class="xd-tt-item">+${items.length - 4} more…</div>`;
-  tooltip.innerHTML = html;
-  tooltip.classList.add('visible');
-  moveTooltip(evt);
-}
-function moveTooltip(evt) {
-  const pad = 16;
-  let x = evt.clientX + pad;
-  let y = evt.clientY + pad;
-  if (x + 260 > window.innerWidth) x = evt.clientX - 260 - pad;
-  if (y + 120 > window.innerHeight) y = evt.clientY - 120 - pad;
-  tooltip.style.left = `${x}px`;
-  tooltip.style.top = `${y}px`;
-}
-function hideTooltip() { tooltip.classList.remove('visible'); }
-
-// ---------------------------------------------------------------------------
-// Donut chart builder (SVG, per-segment click + hover)
+// Donut chart
 // ---------------------------------------------------------------------------
 function renderDonut(container, legendContainer, segments, opts = {}) {
   container.innerHTML = '';
@@ -255,7 +246,6 @@ function renderDonut(container, legendContainer, segments, opts = {}) {
   svg.appendChild(track);
 
   let cumulative = 0;
-
   segments.forEach(seg => {
     if (seg.value <= 0 || total === 0) return;
     const frac = seg.value / total;
@@ -309,7 +299,7 @@ function renderDonut(container, legendContainer, segments, opts = {}) {
 }
 
 // ---------------------------------------------------------------------------
-// Sparkline (SVG polyline)
+// Sparkline
 // ---------------------------------------------------------------------------
 function buildSparkline(values, color, width = 90, height = 30) {
   const svgNS = 'http://www.w3.org/2000/svg';
@@ -353,7 +343,7 @@ function trendDirection(buckets) {
 }
 
 // ---------------------------------------------------------------------------
-// KPI card builder
+// KPI card
 // ---------------------------------------------------------------------------
 function buildKpiCard({ icon, iconColor, label, value, trend, trendText, sparkValues, sparkColor, onClick }) {
   const card = el('div', 'xd-kpi-card');
@@ -375,7 +365,7 @@ function buildKpiCard({ icon, iconColor, label, value, trend, trendText, sparkVa
 }
 
 // ---------------------------------------------------------------------------
-// Progress bar / stacked bar builders
+// Progress bar
 // ---------------------------------------------------------------------------
 function buildProgressBar(label, count, total, color) {
   const pct = total > 0 ? Math.round((count / total) * 100) : 0;
@@ -387,6 +377,9 @@ function buildProgressBar(label, count, total, color) {
   return wrap;
 }
 
+// ---------------------------------------------------------------------------
+// Stacked bar
+// ---------------------------------------------------------------------------
 function buildStackedBar(segments, onSegmentClick) {
   const total = segments.reduce((s, seg) => s + seg.value, 0);
   const wrap = document.createDocumentFragment();
@@ -415,6 +408,29 @@ function buildStackedBar(segments, onSegmentClick) {
 }
 
 // ---------------------------------------------------------------------------
+// Tooltip
+// ---------------------------------------------------------------------------
+const tooltip = document.getElementById('xd-tooltip');
+function showTooltip(evt, titleText, items) {
+  let html = `<div class="xd-tt-title">${titleText}</div>`;
+  (items || []).slice(0, 4).forEach(t => { html += `<div class="xd-tt-item">• ${t}</div>`; });
+  if (items && items.length > 4) html += `<div class="xd-tt-item">+${items.length - 4} more…</div>`;
+  tooltip.innerHTML = html;
+  tooltip.classList.add('visible');
+  moveTooltip(evt);
+}
+function moveTooltip(evt) {
+  const pad = 16;
+  let x = evt.clientX + pad;
+  let y = evt.clientY + pad;
+  if (x + 260 > window.innerWidth) x = evt.clientX - 260 - pad;
+  if (y + 120 > window.innerHeight) y = evt.clientY - 120 - pad;
+  tooltip.style.left = `${x}px`;
+  tooltip.style.top = `${y}px`;
+}
+function hideTooltip() { tooltip.classList.remove('visible'); }
+
+// ---------------------------------------------------------------------------
 // Overview page
 // ---------------------------------------------------------------------------
 function renderOverview() {
@@ -437,33 +453,33 @@ function renderOverview() {
     icon: '📋', iconColor: 'linear-gradient(135deg,#2363eb,#00a7f5)', label: 'Total tasks', value: totalTasks,
     trend: trendDirection(taskBuckets), trendText: `${taskBuckets.slice(7).reduce((s, b) => s + b.count, 0)} created this week`,
     sparkValues: taskBuckets.map(b => b.count), sparkColor: '#2363eb',
-    onClick: () => dashNav.go('tasks', { label: 'All tasks' }),
+    onClick: () => appDashNav.go('tasks', { label: 'All tasks' }),
   }));
   kpiGrid.appendChild(buildKpiCard({
     icon: '✅', iconColor: 'linear-gradient(135deg,#1f9d68,#14b8a6)', label: 'Completed', value: doneTasks,
     trend: doneTasks > 0 ? 'up' : 'flat', trendText: `${totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0}% completion rate`,
-    onClick: () => dashNav.go('tasks', { label: 'Done', filter: t => t.status === 'Done', filterLabel: 'Done' }),
+    onClick: () => appDashNav.go('tasks', { label: 'Done' }),
   }));
   kpiGrid.appendChild(buildKpiCard({
     icon: '⏳', iconColor: 'linear-gradient(135deg,#7c5cff,#5b3df0)', label: 'In progress', value: inProgressTasks,
     trend: 'flat', trendText: 'Active right now',
-    onClick: () => dashNav.go('tasks', { label: 'In Progress', filter: t => t.status === 'In Progress', filterLabel: 'In Progress' }),
+    onClick: () => appDashNav.go('tasks', { label: 'In Progress' }),
   }));
   kpiGrid.appendChild(buildKpiCard({
     icon: '🚧', iconColor: 'linear-gradient(135deg,#d24b57,#f5b544)', label: 'Blocked', value: blockedTasks,
     trend: blockedTasks > 0 ? 'down' : 'flat', trendText: blockedTasks > 0 ? 'Needs attention' : 'None blocked',
-    onClick: () => dashNav.go('tasks', { label: 'Blocked', filter: t => t.status === 'Blocked', filterLabel: 'Blocked' }),
+    onClick: () => appDashNav.go('tasks', { label: 'Blocked' }),
   }));
   kpiGrid.appendChild(buildKpiCard({
     icon: '⚠️', iconColor: 'linear-gradient(135deg,#f5b544,#d24b57)', label: 'Open issues', value: openIssues,
     trend: trendDirection(issueBuckets), trendText: `${issueBuckets.slice(7).reduce((s, b) => s + b.count, 0)} reported this week`,
     sparkValues: issueBuckets.map(b => b.count), sparkColor: '#d24b57',
-    onClick: () => dashNav.go('issues', { label: 'Open issues', filter: i => i.status !== 'Resolved', filterLabel: 'Open' }),
+    onClick: () => appDashNav.go('issues', { label: 'Open issues' }),
   }));
   kpiGrid.appendChild(buildKpiCard({
     icon: '🚨', iconColor: 'linear-gradient(135deg,#5b3df0,#d24b57)', label: 'Escalations', value: escalations,
     trend: escalations > 0 ? 'down' : 'flat', trendText: escalations > 0 ? 'Requires executive review' : 'No escalations',
-    onClick: () => dashNav.go('issues', { label: 'Escalations', filter: i => i.escalation_flag, filterLabel: 'Escalations' }),
+    onClick: () => appDashNav.go('issues', { label: 'Escalations' }),
   }));
 
   // Task status donut
@@ -473,7 +489,7 @@ function renderOverview() {
   }));
   renderDonut(document.getElementById('task-donut-svg'), document.getElementById('task-donut-legend'), statusSegments, {
     centerLabel: 'Tasks',
-    onSegmentClick: (seg) => dashNav.go('tasks', { label: seg.label, filter: t => t.status === seg.label, filterLabel: seg.label }),
+    onSegmentClick: (seg) => appDashNav.go('tasks', { label: seg.label }),
   });
 
   // Issue severity donut
@@ -483,7 +499,7 @@ function renderOverview() {
   }));
   renderDonut(document.getElementById('issue-donut-svg'), document.getElementById('issue-donut-legend'), severitySegments, {
     centerLabel: 'Issues',
-    onSegmentClick: (seg) => dashNav.go('issues', { label: seg.label, filter: i => i.severity === seg.label, filterLabel: `${seg.label} severity` }),
+    onSegmentClick: (seg) => appDashNav.go('issues', { label: seg.label }),
   });
 
   // Progress bars
@@ -492,7 +508,7 @@ function renderOverview() {
   progressWrap.appendChild(buildProgressBar('Task completion (Done)', doneTasks, totalTasks, '#1f9d68'));
   progressWrap.appendChild(buildProgressBar('Issue resolution (Resolved)', issuesData.filter(i => i.status === 'Resolved').length, totalIssues, '#2363eb'));
 
-  // Recent tasks / issues tables
+  // Recent tasks
   const recentTasks = [...tasksData].sort((a, b) => new Date(b.updated_at || b.created_at || 0) - new Date(a.updated_at || a.created_at || 0)).slice(0, 6);
   const overviewTasksBody = document.getElementById('overview-tasks-body');
   overviewTasksBody.innerHTML = '';
@@ -502,10 +518,10 @@ function renderOverview() {
     tr.addEventListener('mouseenter', (evt) => showTooltip(evt, task.title, [task.description || 'No description', `Next: ${task.next_checkpoint || 'n/a'}`]));
     tr.addEventListener('mousemove', moveTooltip);
     tr.addEventListener('mouseleave', hideTooltip);
-    tr.addEventListener('click', () => dashNav.go('task-detail', { label: task.id, id: task.id }));
     overviewTasksBody.appendChild(tr);
   });
 
+  // Recent issues
   const recentIssues = [...issuesData].sort((a, b) => new Date(b.updated_at || b.created_at || 0) - new Date(a.updated_at || a.created_at || 0)).slice(0, 6);
   const overviewIssuesBody = document.getElementById('overview-issues-body');
   overviewIssuesBody.innerHTML = '';
@@ -515,23 +531,21 @@ function renderOverview() {
     tr.addEventListener('mouseenter', (evt) => showTooltip(evt, issue.title, [issue.description || 'No description', `Mitigation: ${issue.mitigation || 'n/a'}`]));
     tr.addEventListener('mousemove', moveTooltip);
     tr.addEventListener('mouseleave', hideTooltip);
-    tr.addEventListener('click', () => dashNav.go('issue-detail', { label: issue.id, id: issue.id }));
     overviewIssuesBody.appendChild(tr);
   });
 }
 
 // ---------------------------------------------------------------------------
-// Tasks list page (also used for drill-down filtered lists)
+// Tasks page
 // ---------------------------------------------------------------------------
-function renderTasksPage(filterFn, filterLabel) {
-  const list = filterFn ? tasksData.filter(filterFn) : tasksData;
-  document.getElementById('tasks-page-title').textContent = filterLabel ? `Tasks — ${filterLabel}` : 'Tasks';
-  document.getElementById('tasks-page-sub').textContent = filterLabel ? `Showing ${list.length} task(s) filtered by ${filterLabel}.` : `Full list of ${list.length} tracked delivery tasks.`;
+function renderTasksPage() {
+  document.getElementById('tasks-page-title').textContent = selectedAppLabel ? `Tasks — ${selectedAppLabel}` : 'Tasks';
+  document.getElementById('tasks-page-sub').textContent = selectedAppLabel ? `Showing ${tasksData.length} task(s) for app "${selectedAppLabel}".` : `Full list of ${tasksData.length} tracked delivery tasks.`;
 
-  const total = list.length;
-  const done = list.filter(t => t.status === 'Done').length;
-  const inProgress = list.filter(t => t.status === 'In Progress').length;
-  const blocked = list.filter(t => t.status === 'Blocked').length;
+  const total = tasksData.length;
+  const done = tasksData.filter(t => t.status === 'Done').length;
+  const inProgress = tasksData.filter(t => t.status === 'In Progress').length;
+  const blocked = tasksData.filter(t => t.status === 'Blocked').length;
   const kpis = document.getElementById('tasks-kpis');
   kpis.innerHTML = '';
   kpis.appendChild(buildKpiCard({ icon: '📋', iconColor: 'linear-gradient(135deg,#2363eb,#00a7f5)', label: 'Total', value: total, trend: 'flat', trendText: 'in this view' }));
@@ -540,38 +554,36 @@ function renderTasksPage(filterFn, filterLabel) {
   kpis.appendChild(buildKpiCard({ icon: '🚧', iconColor: 'linear-gradient(135deg,#d24b57,#f5b544)', label: 'Blocked', value: blocked, trend: 'flat', trendText: 'blocked' }));
 
   const stackedSegments = TASK_STATUSES.map(status => ({
-    label: status, value: list.filter(t => t.status === status).length, color: STATUS_COLORS[status],
-    previewItems: list.filter(t => t.status === status).slice(0, 4).map(t => `${t.id}: ${t.title}`),
+    label: status, value: tasksData.filter(t => t.status === status).length, color: STATUS_COLORS[status],
+    previewItems: tasksData.filter(t => t.status === status).slice(0, 4).map(t => `${t.id}: ${t.title}`),
   }));
   const stackedBarWrap = document.getElementById('tasks-stacked-bar');
   stackedBarWrap.innerHTML = '';
-  stackedBarWrap.appendChild(buildStackedBar(stackedSegments, (seg) => dashNav.go('tasks', { label: seg.label, filter: t => t.status === seg.label, filterLabel: seg.label })));
+  stackedBarWrap.appendChild(buildStackedBar(stackedSegments, (seg) => appDashNav.go('tasks', { label: seg.label })));
 
   const body = document.getElementById('tasks-body');
   body.innerHTML = '';
-  if (!list.length) { body.innerHTML = `<tr><td colspan="7" class="xd-empty">No tasks match this filter.</td></tr>`; return; }
-  [...list].sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0)).forEach(task => {
+  if (!tasksData.length) { body.innerHTML = `<tr><td colspan="7" class="xd-empty">No tasks match this view.</td></tr>`; return; }
+  [...tasksData].sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0)).forEach(task => {
     const tr = el('tr', '', `<td>${task.id}</td><td><strong>${task.title}</strong></td><td>${labelHtml(task.app_label)}</td><td>${badgeHtml(task.status, STATUS_COLORS[task.status] || '#94a3b8')}</td><td>${badgeHtml(task.priority || 'Medium', PRIORITY_COLORS[task.priority] || '#2363eb')}</td><td>${ownerCellHtml(task.owner)}</td><td>${formatDate(task.updated_at)}</td>`);
     tr.addEventListener('mouseenter', (evt) => showTooltip(evt, task.title, [task.description || 'No description', `Next checkpoint: ${task.next_checkpoint || 'n/a'}`]));
     tr.addEventListener('mousemove', moveTooltip);
     tr.addEventListener('mouseleave', hideTooltip);
-    tr.addEventListener('click', () => dashNav.go('task-detail', { label: task.id, id: task.id }));
     body.appendChild(tr);
   });
 }
 
 // ---------------------------------------------------------------------------
-// Issues list page
+// Issues page
 // ---------------------------------------------------------------------------
-function renderIssuesPage(filterFn, filterLabel) {
-  const list = filterFn ? issuesData.filter(filterFn) : issuesData;
-  document.getElementById('issues-page-title').textContent = filterLabel ? `Issues — ${filterLabel}` : 'Issues';
-  document.getElementById('issues-page-sub').textContent = filterLabel ? `Showing ${list.length} issue(s) filtered by ${filterLabel}.` : `Full list of ${list.length} tracked delivery issues.`;
+function renderIssuesPage() {
+  document.getElementById('issues-page-title').textContent = selectedAppLabel ? `Issues — ${selectedAppLabel}` : 'Issues';
+  document.getElementById('issues-page-sub').textContent = selectedAppLabel ? `Showing ${issuesData.length} issue(s) for app "${selectedAppLabel}".` : `Full list of ${issuesData.length} tracked delivery issues.`;
 
-  const total = list.length;
-  const open = list.filter(i => i.status !== 'Resolved').length;
-  const high = list.filter(i => i.severity === 'High' || i.severity === 'Critical').length;
-  const escalations = list.filter(i => i.escalation_flag).length;
+  const total = issuesData.length;
+  const open = issuesData.filter(i => i.status !== 'Resolved').length;
+  const high = issuesData.filter(i => i.severity === 'High' || i.severity === 'Critical').length;
+  const escalations = issuesData.filter(i => i.escalation_flag).length;
   const kpis = document.getElementById('issues-kpis');
   kpis.innerHTML = '';
   kpis.appendChild(buildKpiCard({ icon: '⚠️', iconColor: 'linear-gradient(135deg,#f5b544,#d24b57)', label: 'Total', value: total, trend: 'flat', trendText: 'in this view' }));
@@ -580,305 +592,119 @@ function renderIssuesPage(filterFn, filterLabel) {
   kpis.appendChild(buildKpiCard({ icon: '🚨', iconColor: 'linear-gradient(135deg,#7c5cff,#5b3df0)', label: 'Escalations', value: escalations, trend: 'flat', trendText: 'flagged' }));
 
   const stackedSegments = ['Critical', 'High', 'Medium', 'Low'].map(sev => ({
-    label: sev, value: list.filter(i => i.severity === sev).length, color: SEVERITY_COLORS[sev],
-    previewItems: list.filter(i => i.severity === sev).slice(0, 4).map(i => `${i.id}: ${i.title}`),
+    label: sev, value: issuesData.filter(i => i.severity === sev).length, color: SEVERITY_COLORS[sev],
+    previewItems: issuesData.filter(i => i.severity === sev).slice(0, 4).map(i => `${i.id}: ${i.title}`),
   }));
   const stackedBarWrap = document.getElementById('issues-stacked-bar');
   stackedBarWrap.innerHTML = '';
-  stackedBarWrap.appendChild(buildStackedBar(stackedSegments, (seg) => dashNav.go('issues', { label: seg.label, filter: i => i.severity === seg.label, filterLabel: `${seg.label} severity` })));
+  stackedBarWrap.appendChild(buildStackedBar(stackedSegments, (seg) => appDashNav.go('issues', { label: seg.label })));
 
   const body = document.getElementById('issues-body');
   body.innerHTML = '';
-  if (!list.length) { body.innerHTML = `<tr><td colspan="7" class="xd-empty">No issues match this filter.</td></tr>`; return; }
-  [...list].sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0)).forEach(issue => {
+  if (!issuesData.length) { body.innerHTML = `<tr><td colspan="7" class="xd-empty">No issues match this view.</td></tr>`; return; }
+  [...issuesData].sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0)).forEach(issue => {
     const tr = el('tr', '', `<td>${issue.id}</td><td><strong>${issue.title}</strong></td><td>${labelHtml(issue.app_label)}</td><td>${badgeHtml(issue.severity, SEVERITY_COLORS[issue.severity] || '#94a3b8')}</td><td>${badgeHtml(issue.status, STATUS_COLORS[issue.status] || '#94a3b8')}</td><td>${ownerCellHtml(issue.owner)}</td><td>${formatDate(issue.updated_at)}</td>`);
     tr.addEventListener('mouseenter', (evt) => showTooltip(evt, issue.title, [issue.description || 'No description', `Mitigation: ${issue.mitigation || 'n/a'}`]));
     tr.addEventListener('mousemove', moveTooltip);
     tr.addEventListener('mouseleave', hideTooltip);
-    tr.addEventListener('click', () => dashNav.go('issue-detail', { label: issue.id, id: issue.id }));
     body.appendChild(tr);
   });
 }
 
 // ---------------------------------------------------------------------------
-// Detail pages
+// Labels page
 // ---------------------------------------------------------------------------
-function renderDetailFields(container, rows) {
+function renderLabelsPage() {
+  const container = document.getElementById('labels-list');
   container.innerHTML = '';
-  rows.forEach(([label, value]) => {
-    const row = el('div', 'xd-detail-row', `<span>${label}</span><span>${value}</span>`);
+  if (!appLabels.length) {
+    container.innerHTML = `<div class="xd-empty">No app labels found yet. Add one below.</div>`;
+    return;
+  }
+  appLabels.forEach(label => {
+    const count = tasksData.filter(t => t.app_label === label).length + issuesData.filter(i => i.app_label === label).length;
+    const row = el('div', 'xd-label-row', '');
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:var(--bg-soft);margin-bottom:8px;';
+    row.innerHTML = `
+      <span style="font-weight:600;">${label}</span>
+      <span style="font-size:12px;color:var(--ink-soft);">${count} item(s)</span>
+      <div style="display:flex;gap:8px;">
+        <button class="xd-btn xd-btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="renameLabel('${label}')">✏️ Rename</button>
+        <button class="xd-btn xd-btn-secondary" style="padding:6px 12px;font-size:12px;" onclick="filterByLabel('${label}')">🔍 Filter</button>
+      </div>
+    `;
     container.appendChild(row);
   });
 }
-function renderTimeline(container, entries) {
-  container.innerHTML = '';
-  if (!entries || !entries.length) { container.innerHTML = `<li class="xd-empty" style="border:none;padding-left:0;">No activity recorded.</li>`; return; }
-  [...entries].reverse().forEach(entry => {
-    const li = el('li', '', `<div class="xd-timeline-time">${formatDateTime(entry.timestamp)} · ${entry.actor || 'system'}</div><div class="xd-timeline-text">${entry.details || entry.action || ''}</div>`);
-    container.appendChild(li);
-  });
-}
 
-function renderTaskDetail(id) {
-  const task = tasksData.find(t => t.id === id);
-  if (!task) { document.getElementById('task-detail-title').textContent = 'Task not found'; return; }
-  document.getElementById('task-detail-title').textContent = task.title;
-  document.getElementById('task-detail-sub').innerHTML = `${task.id} &nbsp;·&nbsp; ${badgeHtml(task.status, STATUS_COLORS[task.status] || '#94a3b8')} &nbsp;${badgeHtml(task.priority || 'Medium', PRIORITY_COLORS[task.priority] || '#2363eb')}`;
-  renderDetailFields(document.getElementById('task-detail-fields'), [
-    ['Description', task.description || '—'],
-    ['Owner', task.owner || 'Unassigned'],
-    ['App label', labelHtml(task.app_label)],
-    ['Dependency', task.dependency || '—'],
-    ['Next checkpoint', task.next_checkpoint || '—'],
-    ['Tags', (task.tags || []).map(t => `<span class="xd-pill">${t}</span>`).join(' ') || '—'],
-    ['Created', formatDateTime(task.created_at)],
-    ['Updated', formatDateTime(task.updated_at)],
-  ]);
-  renderTimeline(document.getElementById('task-detail-timeline'), task.activity_log);
-}
-
-function renderIssueDetail(id) {
-  const issue = issuesData.find(i => i.id === id);
-  if (!issue) { document.getElementById('issue-detail-title').textContent = 'Issue not found'; return; }
-  document.getElementById('issue-detail-title').textContent = issue.title;
-  document.getElementById('issue-detail-sub').innerHTML = `${issue.id} &nbsp;·&nbsp; ${badgeHtml(issue.severity, SEVERITY_COLORS[issue.severity] || '#94a3b8')} &nbsp;${badgeHtml(issue.status, STATUS_COLORS[issue.status] || '#94a3b8')}`;
-  renderDetailFields(document.getElementById('issue-detail-fields'), [
-    ['Description', issue.description || '—'],
-    ['Owner', issue.owner || 'Unassigned'],
-    ['App label', labelHtml(issue.app_label)],
-    ['Mitigation', issue.mitigation || '—'],
-    ['Escalation required', issue.escalation_flag ? 'Yes' : 'No'],
-    ['Related task', issue.related_task || '—'],
-    ['Created', formatDateTime(issue.created_at)],
-    ['Updated', formatDateTime(issue.updated_at)],
-  ]);
-  renderTimeline(document.getElementById('issue-detail-timeline'), issue.activity_log);
-}
-
-// ---------------------------------------------------------------------------
-// Team page
-// ---------------------------------------------------------------------------
-function ownerStats() {
-  const stats = {};
-  tasksData.forEach(t => {
-    const owner = t.owner || 'Unassigned';
-    stats[owner] = stats[owner] || { assigned: 0, done: 0, issues: 0 };
-    stats[owner].assigned++;
-    if (t.status === 'Done') stats[owner].done++;
-  });
-  issuesData.forEach(i => {
-    const owner = i.owner || 'Unassigned';
-    stats[owner] = stats[owner] || { assigned: 0, done: 0, issues: 0 };
-    stats[owner].issues++;
-  });
-  return stats;
-}
-
-function renderTeamPage() {
-  const stats = ownerStats();
-  const body = document.getElementById('team-body');
-  body.innerHTML = '';
-  const owners = Object.keys(stats);
-  if (!owners.length) { body.innerHTML = `<tr><td colspan="5" class="xd-empty">No owners found.</td></tr>`; return; }
-  owners.sort((a, b) => stats[b].assigned - stats[a].assigned).forEach(owner => {
-    const s = stats[owner];
-    const pct = s.assigned > 0 ? Math.round((s.done / s.assigned) * 100) : 0;
-    const tr = el('tr', '', `<td>${ownerCellHtml(owner)}</td><td>${s.assigned}</td><td>${s.done}</td><td>${s.issues}</td><td style="min-width:160px;"><div class="xd-progress-track" style="margin-top:4px;"><div class="xd-progress-fill" style="width:${pct}%;background:${pct > 66 ? '#1f9d68' : pct > 33 ? '#f5b544' : '#d24b57'}"></div></div><small style="color:var(--ink-soft)">${pct}%</small></td>`);
-    tr.addEventListener('click', () => dashNav.go('team-detail', { label: owner, owner }));
-    body.appendChild(tr);
-  });
-}
-
-function renderTeamDetail(owner) {
-  document.getElementById('team-detail-title').textContent = owner;
-  const ownerTasks = tasksData.filter(t => (t.owner || 'Unassigned') === owner);
-  const ownerIssues = issuesData.filter(i => (i.owner || 'Unassigned') === owner);
-  document.getElementById('team-detail-sub').textContent = `${ownerTasks.length} task(s), ${ownerIssues.length} issue(s) assigned.`;
-
-  const tasksBody = document.getElementById('team-detail-tasks');
-  tasksBody.innerHTML = ownerTasks.length ? '' : `<tr><td colspan="3" class="xd-empty">No tasks.</td></tr>`;
-  ownerTasks.forEach(task => {
-    const tr = el('tr', '', `<td>${task.id}</td><td>${task.title}</td><td>${badgeHtml(task.status, STATUS_COLORS[task.status] || '#94a3b8')}</td>`);
-    tr.addEventListener('click', () => dashNav.go('task-detail', { label: task.id, id: task.id }));
-    tasksBody.appendChild(tr);
-  });
-
-  const issuesBody = document.getElementById('team-detail-issues');
-  issuesBody.innerHTML = ownerIssues.length ? '' : `<tr><td colspan="3" class="xd-empty">No issues.</td></tr>`;
-  ownerIssues.forEach(issue => {
-    const tr = el('tr', '', `<td>${issue.id}</td><td>${issue.title}</td><td>${badgeHtml(issue.severity, SEVERITY_COLORS[issue.severity] || '#94a3b8')}</td>`);
-    tr.addEventListener('click', () => dashNav.go('issue-detail', { label: issue.id, id: issue.id }));
-    issuesBody.appendChild(tr);
-  });
-}
-
-// ---------------------------------------------------------------------------
-// Analytics page
-// ---------------------------------------------------------------------------
-function renderAnalyticsPage() {
-  const totalTasks = tasksData.length;
-  const doneTasks = tasksData.filter(t => t.status === 'Done').length;
-  const totalIssues = issuesData.length;
-  const resolvedIssues = issuesData.filter(i => i.status === 'Resolved').length;
-  const completionRate = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
-  const resolutionRate = totalIssues > 0 ? Math.round((resolvedIssues / totalIssues) * 100) : 0;
-
-  const kpis = document.getElementById('analytics-kpis');
-  kpis.innerHTML = '';
-  kpis.appendChild(buildKpiCard({ icon: '🎯', iconColor: 'linear-gradient(135deg,#1f9d68,#14b8a6)', label: 'Task completion rate', value: `${completionRate}%`, trend: 'flat', trendText: `${doneTasks}/${totalTasks} done` }));
-  kpis.appendChild(buildKpiCard({ icon: '🛠️', iconColor: 'linear-gradient(135deg,#2363eb,#00a7f5)', label: 'Issue resolution rate', value: `${resolutionRate}%`, trend: 'flat', trendText: `${resolvedIssues}/${totalIssues} resolved` }));
-  const ownersCount = new Set(tasksData.map(t => t.owner).filter(Boolean)).size;
-  kpis.appendChild(buildKpiCard({ icon: '👥', iconColor: 'linear-gradient(135deg,#7c5cff,#5b3df0)', label: 'Active owners', value: ownersCount, trend: 'flat', trendText: 'contributing' }));
-  const escalations = issuesData.filter(i => i.escalation_flag).length;
-  kpis.appendChild(buildKpiCard({ icon: '🚨', iconColor: 'linear-gradient(135deg,#d24b57,#f5b544)', label: 'Escalations', value: escalations, trend: escalations > 0 ? 'down' : 'flat', trendText: 'flagged for review' }));
-
-  const taskBuckets = dailyBuckets(tasksData);
-  const issueBuckets = dailyBuckets(issuesData);
-  const taskTrendWrap = document.getElementById('analytics-tasks-trend');
-  taskTrendWrap.innerHTML = '';
-  taskTrendWrap.appendChild(buildSparkline(taskBuckets.map(b => b.count), '#2363eb', 520, 120));
-  const issueTrendWrap = document.getElementById('analytics-issues-trend');
-  issueTrendWrap.innerHTML = '';
-  issueTrendWrap.appendChild(buildSparkline(issueBuckets.map(b => b.count), '#d24b57', 520, 120));
-
-  const stats = ownerStats();
-  const teamBarsWrap = document.getElementById('analytics-team-bars');
-  teamBarsWrap.innerHTML = '';
-  const owners = Object.keys(stats).sort((a, b) => stats[b].assigned - stats[a].assigned).slice(0, 8);
-  if (!owners.length) teamBarsWrap.innerHTML = `<div class="xd-empty">No owner data yet.</div>`;
-  owners.forEach(owner => {
-    const s = stats[owner];
-    const bar = buildProgressBar(owner, s.done, s.assigned, s.assigned > 0 && (s.done / s.assigned) > 0.5 ? '#1f9d68' : '#f5b544');
-    bar.style.cursor = 'pointer';
-    bar.addEventListener('click', () => dashNav.go('team-detail', { label: owner, owner }));
-    teamBarsWrap.appendChild(bar);
-  });
-}
-
-// ---------------------------------------------------------------------------
-// Reports
-// ---------------------------------------------------------------------------
-const reportsUI = {
-  type: 'executive',
-  init() {
-    document.getElementById('report-type-selector').addEventListener('click', (e) => {
-      const item = e.target.closest('.xd-report-type');
-      if (!item) return;
-      document.querySelectorAll('.xd-report-type').forEach(t => t.classList.remove('active'));
-      item.classList.add('active');
-      this.type = item.dataset.type;
-      this.render();
+function renameLabel(oldLabel) {
+  const newLabel = prompt('Enter the new name for this app label:', oldLabel);
+  if (!newLabel || newLabel.trim() === oldLabel) return;
+  const trimmed = newLabel.trim();
+  showLoading(true);
+  // Rename app_label on all matching tasks
+  fetch(`${API_BASE}/api/tasks`, { cache: 'no-store' })
+    .then(r => r.json())
+    .then(data => {
+      const tasks = (data && Array.isArray(data.tasks)) ? data.tasks : [];
+      const updates = tasks
+        .filter(t => t.app_label === oldLabel)
+        .map(t => fetch(`${API_BASE}/api/tasks/${encodeURIComponent(t.id)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ app_label: trimmed, actor: 'user' }),
+        }).then(r => r.ok));
+      return Promise.all(updates);
+    })
+    .then(() => {
+      // Rename app_label on all matching issues
+      return fetch(`${API_BASE}/api/issues`, { cache: 'no-store' })
+        .then(r => r.json())
+        .then(data => {
+          const issues = Array.isArray(data) ? data : (data && Array.isArray(data.issues) ? data.issues : []);
+          const updates = issues
+            .filter(i => i.app_label === oldLabel)
+            .map(i => fetch(`${API_BASE}/api/issues/${encodeURIComponent(i.id)}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ app_label: trimmed }),
+            }).then(r => r.ok));
+          return Promise.all(updates);
+        });
+    })
+    .then(() => {
+      showLoading(false);
+      showToast(`Label renamed from "${oldLabel}" to "${trimmed}"`, 'success');
+      loadAppDashboardData(false);
+    })
+    .catch(err => {
+      showLoading(false);
+      showToast(`Failed to rename label: ${err.message}`, 'error');
     });
-  },
-  render() {
-    const container = document.getElementById('report-preview');
-    const now = new Date();
-    const totalTasks = tasksData.length;
-    const doneTasks = tasksData.filter(t => t.status === 'Done').length;
-    const totalIssues = issuesData.length;
-    const resolvedIssues = issuesData.filter(i => i.status === 'Resolved').length;
-    const escalations = issuesData.filter(i => i.escalation_flag).length;
-
-    let html = `<div class="xd-report-meta">Generated ${formatDateTime(now.toISOString())} by AISENA Dashboard</div>`;
-
-    if (this.type === 'executive') {
-      html += `<h2>Executive Summary</h2>`;
-      html += `<div class="xd-report-kpis">
-        <div class="xd-report-kpi"><b>${totalTasks}</b>Total tasks</div>
-        <div class="xd-report-kpi"><b>${totalTasks > 0 ? Math.round(doneTasks / totalTasks * 100) : 0}%</b>Task completion</div>
-        <div class="xd-report-kpi"><b>${totalIssues}</b>Total issues</div>
-        <div class="xd-report-kpi"><b>${totalIssues > 0 ? Math.round(resolvedIssues / totalIssues * 100) : 0}%</b>Issue resolution</div>
-        <div class="xd-report-kpi"><b>${escalations}</b>Escalations</div>
-      </div>`;
-      html += `<h3>Task status breakdown</h3>` + reportTable(TASK_STATUSES.map(s => [s, tasksData.filter(t => t.status === s).length]), ['Status', 'Count']);
-      html += `<h3>Issue severity breakdown</h3>` + reportTable(['Critical', 'High', 'Medium', 'Low'].map(s => [s, issuesData.filter(i => i.severity === s).length]), ['Severity', 'Count']);
-    } else if (this.type === 'tasks') {
-      html += `<h2>Task Report</h2>`;
-      html += reportTable(tasksData.map(t => [t.id, t.title, t.status, t.priority, t.owner || '—']), ['ID', 'Title', 'Status', 'Priority', 'Owner']);
-    } else if (this.type === 'issues') {
-      html += `<h2>Issue Report</h2>`;
-      html += reportTable(issuesData.map(i => [i.id, i.title, i.severity, i.status, i.owner || '—']), ['ID', 'Title', 'Severity', 'Status', 'Owner']);
-    } else if (this.type === 'team') {
-      html += `<h2>Team Report</h2>`;
-      const stats = ownerStats();
-      html += reportTable(Object.keys(stats).map(owner => [owner, stats[owner].assigned, stats[owner].done, stats[owner].issues]), ['Owner', 'Tasks assigned', 'Tasks done', 'Issues owned']);
-    }
-    container.innerHTML = html;
-  },
-  print() {
-    this.render();
-    window.print();
-  },
-  exportCSV() {
-    let rows = [];
-    if (this.type === 'tasks' || this.type === 'executive') {
-      rows = [['ID', 'Title', 'Status', 'Priority', 'Owner'], ...tasksData.map(t => [t.id, t.title, t.status, t.priority, t.owner || ''])];
-    } else if (this.type === 'issues') {
-      rows = [['ID', 'Title', 'Severity', 'Status', 'Owner'], ...issuesData.map(i => [i.id, i.title, i.severity, i.status, i.owner || ''])];
-    } else if (this.type === 'team') {
-      const stats = ownerStats();
-      rows = [['Owner', 'Tasks assigned', 'Tasks done', 'Issues owned'], ...Object.keys(stats).map(o => [o, stats[o].assigned, stats[o].done, stats[o].issues])];
-    }
-    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-    downloadBlob(csv, `${this.type}-report-${Date.now()}.csv`, 'text/csv');
-    showToast('CSV export downloaded', 'success');
-  },
-  exportJSON() {
-    const payload = { generatedAt: new Date().toISOString(), type: this.type, tasks: tasksData, issues: issuesData };
-    downloadBlob(JSON.stringify(payload, null, 2), `${this.type}-report-${Date.now()}.json`, 'application/json');
-    showToast('JSON export downloaded', 'success');
-  },
-};
-
-function reportTable(rows, headers) {
-  let html = `<table class="xd-report-table"><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>`;
-  if (!rows.length) html += `<tr><td colspan="${headers.length}">No data</td></tr>`;
-  rows.forEach(row => { html += `<tr>${row.map(c => `<td>${c}</td>`).join('')}</tr>`; });
-  html += '</tbody></table>';
-  return html;
 }
 
-function downloadBlob(content, filename, mime) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+function filterByLabel(label) {
+  selectedAppLabel = label;
+  document.getElementById('appLabelSelect').value = label;
+  loadAppDashboardData(false);
+  appDashNav.goRoot('overview', 'Overview');
 }
 
-// ---------------------------------------------------------------------------
-// Search
-// ---------------------------------------------------------------------------
-const searchInput = document.getElementById('xd-search-input');
-const searchResults = document.getElementById('xd-search-results');
-searchInput.addEventListener('input', () => {
-  const q = searchInput.value.trim().toLowerCase();
-  if (!q) { searchResults.classList.remove('open'); return; }
-  const taskMatches = tasksData.filter(t => t.id.toLowerCase().includes(q) || t.title.toLowerCase().includes(q)).slice(0, 5);
-  const issueMatches = issuesData.filter(i => i.id.toLowerCase().includes(q) || i.title.toLowerCase().includes(q)).slice(0, 5);
-  searchResults.innerHTML = '';
-  if (!taskMatches.length && !issueMatches.length) {
-    searchResults.innerHTML = `<div class="xd-search-result">No matches found.</div>`;
+function addNewLabel() {
+  const input = document.getElementById('newLabelInput');
+  const name = input.value.trim();
+  if (!name) return;
+  if (appLabels.includes(name)) {
+    showToast(`Label "${name}" already exists`, 'error');
+    return;
   }
-  taskMatches.forEach(task => {
-    const row = el('div', 'xd-search-result', `📋 ${task.title}<small>${task.id} · ${task.status}</small>`);
-    row.addEventListener('click', () => { searchResults.classList.remove('open'); searchInput.value = ''; dashNav.go('task-detail', { label: task.id, id: task.id }); });
-    searchResults.appendChild(row);
-  });
-  issueMatches.forEach(issue => {
-    const row = el('div', 'xd-search-result', `⚠️ ${issue.title}<small>${issue.id} · ${issue.severity}</small>`);
-    row.addEventListener('click', () => { searchResults.classList.remove('open'); searchInput.value = ''; dashNav.go('issue-detail', { label: issue.id, id: issue.id }); });
-    searchResults.appendChild(row);
-  });
-  searchResults.classList.add('open');
-});
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.xd-search')) searchResults.classList.remove('open');
-});
+  appLabels.push(name);
+  appLabels.sort();
+  input.value = '';
+  showToast(`Label "${name}" added`, 'success');
+  renderLabelsPage();
+  populateLabelSelector();
+}
 
 // ---------------------------------------------------------------------------
 // Loading / toast
@@ -910,5 +736,5 @@ function showToast(message, type = 'info') {
 // ---------------------------------------------------------------------------
 // Init
 // ---------------------------------------------------------------------------
-reportsUI.init();
-loadDashboardData(false);
+appDashNav.render();
+loadAppDashboardData(false);

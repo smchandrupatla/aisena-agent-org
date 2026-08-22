@@ -60,7 +60,8 @@ def utc_now_iso():
 
 TASK_COLUMNS = [
     "id", "title", "description", "owner", "status", "priority", "dependency",
-    "next_checkpoint", "tags", "comments", "activity_log", "created_at", "updated_at",
+    "next_checkpoint", "tags", "comments", "activity_log", "app_label",
+    "created_at", "updated_at",
 ]
 
 
@@ -108,8 +109,9 @@ def save_tasks(tasks):
                 """
                 INSERT INTO aisena_tasks
                     (id, title, description, owner, status, priority, dependency,
-                     next_checkpoint, tags, comments, activity_log, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                     next_checkpoint, tags, comments, activity_log, app_label,
+                     created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
                     task.get("id"),
@@ -123,6 +125,7 @@ def save_tasks(tasks):
                     json.dumps(task.get("tags") or []),
                     json.dumps(task.get("comments") or []),
                     json.dumps(task.get("activity_log") or []),
+                    task.get("app_label"),
                     task.get("created_at") or utc_now_iso(),
                     task.get("updated_at") or utc_now_iso(),
                 ),
@@ -1179,7 +1182,7 @@ TASK_STATUSES = ["Backlog", "Planned", "In Progress", "Blocked", "In Review", "D
 TASK_PRIORITIES = ["Low", "Medium", "High", "Critical"]
 TASK_EDITABLE_FIELDS = [
     "title", "description", "owner", "status", "priority",
-    "dependency", "next_checkpoint", "tags",
+    "dependency", "next_checkpoint", "tags", "app_label",
 ]
 
 
@@ -1194,7 +1197,11 @@ def add_task_activity(task, actor, action, details):
 
 @app.route('/api/tasks', methods=['GET'])
 def get_tasks():
-    return jsonify({"tasks": load_tasks()})
+    app_label = request.args.get('app_label')
+    tasks = load_tasks()
+    if app_label:
+        tasks = [t for t in tasks if (t.get('app_label') or '') == app_label]
+    return jsonify({"tasks": tasks})
 
 
 @app.route('/api/tasks', methods=['POST'])
@@ -1221,6 +1228,7 @@ def create_task():
         "dependency": data.get('dependency') or None,
         "next_checkpoint": data.get('next_checkpoint') or '',
         "tags": tags,
+        "app_label": data.get('app_label') or None,
         "created_at": now,
         "updated_at": now,
         "comments": [],
@@ -1326,7 +1334,10 @@ def issue_escalation_required(data):
 
 @app.route('/api/issues', methods=['GET'])
 def get_issues():
+    app_label = request.args.get('app_label')
     issues = load_issues()
+    if app_label:
+        issues = [i for i in issues if (i.get('app_label') or '') == app_label]
     return jsonify(issues)
 
 
@@ -1358,6 +1369,7 @@ def create_issue():
         'mitigation': mitigation,
         'escalation_flag': issue_escalation_required(data),
         'related_task': data.get('related_task') or None,
+        'app_label': data.get('app_label') or None,
         'created_at': timestamp,
         'updated_at': timestamp,
         'comments': [],
@@ -1417,6 +1429,8 @@ def update_issue(issue_id):
         issue['status'] = data['status']
     if 'related_task' in data:
         issue['related_task'] = data['related_task'] or None
+    if 'app_label' in data:
+        issue['app_label'] = data['app_label'] or None
     if any(key in data for key in ('title', 'description', 'mitigation')):
         issue['escalation_flag'] = issue_escalation_required(issue | data)
     for action, details in changes:
@@ -1466,6 +1480,39 @@ def delete_issue(issue_id):
     issues.remove(issue)
     save_issues(issues)
     return jsonify({'message': 'Issue deleted'}), 200
+
+
+@app.route('/api/app-labels', methods=['GET'])
+def get_app_labels():
+    """Return the distinct set of app_label values across tasks and issues."""
+    labels = set()
+    if psycopg2 is not None:
+        conn = psycopg2.connect(DSN)
+        try:
+            cur = conn.cursor()
+            cur.execute("SELECT DISTINCT app_label FROM aisena_tasks WHERE app_label IS NOT NULL ORDER BY app_label")
+            labels.update(row[0] for row in cur.fetchall())
+            cur.execute("SELECT DISTINCT app_label FROM aisena_issues WHERE app_label IS NOT NULL ORDER BY app_label")
+            labels.update(row[0] for row in cur.fetchall())
+            cur.close()
+        finally:
+            conn.close()
+    # Also include labels from the orchestrator app registry
+    apps_path = ROOT / "project" / "orchestrator" / "apps.json"
+    if apps_path.exists():
+        try:
+            apps = json.loads(apps_path.read_text(encoding="utf-8"))
+            for app in apps:
+                if app.get("name"):
+                    labels.add(app["name"])
+        except Exception:
+            pass
+    return jsonify({"app_labels": sorted(labels)})
+
+
+@app.route('/app-dashboard')
+def app_dashboard_page():
+    return send_from_directory('.', 'app-dashboard.html')
 
 
 # ── Deliberation API endpoints ──────────────────────────────────────────

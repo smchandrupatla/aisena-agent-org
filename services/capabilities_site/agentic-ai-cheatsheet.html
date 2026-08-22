@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* ── Cheatsheet-specific overrides ── */
+    /* Ã¢â€â‚¬Ã¢â€â‚¬ Cheatsheet-specific overrides Ã¢â€â‚¬Ã¢â€â‚¬ */
     .steps-row {
       display: flex;
       gap: 10px;
@@ -254,6 +254,7 @@
         <a href="tasks.html">Tasks</a>
         <a href="issues.html">Issues</a>
         <a href="test-dashboard.html">Test Dashboard</a>
+        <a href="app-dashboard.html">App Dashboard</a>
         <a href="postgres-viewer.html">Postgres Viewer</a>
         <a href="kafka-viewer.html">Kafka Viewer</a>
         <a href="splunk-viewer.html">Splunk Viewer</a>
@@ -261,6 +262,7 @@
         <a href="agent-learning.html">Agent Learning</a>
         <a href="workflow.html">Workflow</a>
         <a href="guardrails.html">Guardrails</a>
+        <a href="agents-admin.html">Manage Agents</a>
         <a href="agents-chat.html">Agents + Chat</a>
         <a href="agentic-ai-cheatsheet.html" style="color:var(--brand);font-weight:700;">AI Cheatsheet</a>
       </nav>
@@ -271,7 +273,7 @@
       <section class="hero fade-up delay-1">
         <div class="kicker">The Complete Agentic AI Cheatsheet</div>
         <h1>Build, Deploy &amp; Scale AI Agents That Think, Act &amp; Deliver Results.</h1>
-        <p class="lede">10 steps from your first prompt to a production fleet — covering agent types, the agent loop, tools, architecture, evaluation, guardrails, and more.</p>
+        <p class="lede">10 steps from your first prompt to a production fleet Ã¢â‚¬â€ covering agent types, the agent loop, tools, architecture, evaluation, guardrails, and more.</p>
       </section>
 
       <section class="grid">
@@ -363,7 +365,7 @@
 
         <!-- Agent Loop -->
         <article class="card span-6 fade-up">
-          <h2>Agent Loop — Plan → Reason → Act</h2>
+          <h2>Agent Loop Ã¢â‚¬â€ Plan Ã¢â€ â€™ Reason Ã¢â€ â€™ Act</h2>
           <div class="agent-loop">
             <div class="loop-step">
               <div class="loop-num">STEP 1</div>
@@ -381,9 +383,9 @@
               <p>Call a tool, write output, or delegate to a sub-agent</p>
             </div>
             <div class="loop-observe">
-              <span class="observe-icon">🔁</span>
+              <span class="observe-icon">Ã°Å¸â€Â</span>
               <div>
-                <strong>Observe &amp; Reflect</strong> — check result against goal, update memory, decide: done or loop back to Plan.
+                <strong>Observe &amp; Reflect</strong> Ã¢â‚¬â€ check result against goal, update memory, decide: done or loop back to Plan.
               </div>
             </div>
           </div>
@@ -408,25 +410,25 @@
         <article class="card span-12 fade-up">
           <h2>Agent Architecture</h2>
           <div class="arch-diagram">
-                        ┌──────────────────────────────────────┐
-   User / System ──────►│               AGENT                  │──────► Output
-                        │                                      │
-                        │  ┌──────────────┐  ┌─────────────┐  │
-                        │  │    MEMORY    │  │    TOOLS    │  │
-                        │  │  Short-term  │  │ Web search  │  │
-                        │  │  Long-term   │  │ Code exec   │  │
-                        │  │  Episodic    │  │ APIs / DBs  │  │
-                        │  └──────┬───────┘  └──────┬──────┘  │
-                        │         │                 │         │
-                        │         └────── LLM ───────┘         │
-                        │                  │                   │
-                        └──────────────────┼───────────────────┘
-                                           │
-                                 ┌─────────▼──────────┐
-                                 │    ENVIRONMENT     │
-                                 │  (context, state,  │
-                                 │   external world)  │
-                                 └────────────────────┘</div>
+                        Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â
+   User / System Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€“ÂºÃ¢â€â€š               AGENT                  Ã¢â€â€šÃ¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€“Âº Output
+                        Ã¢â€â€š                                      Ã¢â€â€š
+                        Ã¢â€â€š  Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â  Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â  Ã¢â€â€š
+                        Ã¢â€â€š  Ã¢â€â€š    MEMORY    Ã¢â€â€š  Ã¢â€â€š    TOOLS    Ã¢â€â€š  Ã¢â€â€š
+                        Ã¢â€â€š  Ã¢â€â€š  Short-term  Ã¢â€â€š  Ã¢â€â€š Web search  Ã¢â€â€š  Ã¢â€â€š
+                        Ã¢â€â€š  Ã¢â€â€š  Long-term   Ã¢â€â€š  Ã¢â€â€š Code exec   Ã¢â€â€š  Ã¢â€â€š
+                        Ã¢â€â€š  Ã¢â€â€š  Episodic    Ã¢â€â€š  Ã¢â€â€š APIs / DBs  Ã¢â€â€š  Ã¢â€â€š
+                        Ã¢â€â€š  Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ  Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ  Ã¢â€â€š
+                        Ã¢â€â€š         Ã¢â€â€š                 Ã¢â€â€š         Ã¢â€â€š
+                        Ã¢â€â€š         Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ LLM Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ         Ã¢â€â€š
+                        Ã¢â€â€š                  Ã¢â€â€š                   Ã¢â€â€š
+                        Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â¼Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ
+                                           Ã¢â€â€š
+                                 Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€“Â¼Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â
+                                 Ã¢â€â€š    ENVIRONMENT     Ã¢â€â€š
+                                 Ã¢â€â€š  (context, state,  Ã¢â€â€š
+                                 Ã¢â€â€š   external world)  Ã¢â€â€š
+                                 Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ</div>
         </article>
 
         <!-- Tools & Frameworks -->
@@ -548,9 +550,9 @@
           <div class="pill-list" style="flex-direction:column;align-items:flex-start;gap:8px;">
             <span class="pill">Start small, inside first</span>
             <span class="pill">Define clear goals &amp; success criteria</span>
-            <span class="pill">Use the right tools — don't over-build</span>
+            <span class="pill">Use the right tools Ã¢â‚¬â€ don't over-build</span>
             <span class="pill">Monitor continuously, not just on failure</span>
-            <span class="pill">Validate &amp; test rigorously — evals first</span>
+            <span class="pill">Validate &amp; test rigorously Ã¢â‚¬â€ evals first</span>
             <span class="pill">Optimize &amp; reduce costs at scale</span>
             <span class="pill">Keep humans in the loop for high stakes</span>
           </div>
@@ -560,16 +562,16 @@
         <article class="card span-12 fade-up">
           <h2>Agent Development Checklist</h2>
           <div class="checklist-grid">
-            <div class="check-item"><span class="check-icon">✓</span><span>Define clear goal and success criteria before building</span></div>
-            <div class="check-item"><span class="check-icon">✓</span><span>Choose the right model for the task complexity</span></div>
-            <div class="check-item"><span class="check-icon">✓</span><span>Add tools and validate each one independently</span></div>
-            <div class="check-item"><span class="check-icon">✓</span><span>Handle errors gracefully — retry logic and fallbacks</span></div>
-            <div class="check-item"><span class="check-icon">✓</span><span>Create eval dataset (minimum 20 diverse examples)</span></div>
-            <div class="check-item"><span class="check-icon">✓</span><span>Set up tracing and observability from day one</span></div>
-            <div class="check-item"><span class="check-icon">✓</span><span>Implement guardrails — input validation, output filtering</span></div>
-            <div class="check-item"><span class="check-icon">✓</span><span>Test edge cases — empty inputs, malformed data, timeouts</span></div>
-            <div class="check-item"><span class="check-icon">✓</span><span>Document escalation conditions and human override triggers</span></div>
-            <div class="check-item"><span class="check-icon">✓</span><span>Version-pin all dependencies — model, framework, tools</span></div>
+            <div class="check-item"><span class="check-icon">Ã¢Å“â€œ</span><span>Define clear goal and success criteria before building</span></div>
+            <div class="check-item"><span class="check-icon">Ã¢Å“â€œ</span><span>Choose the right model for the task complexity</span></div>
+            <div class="check-item"><span class="check-icon">Ã¢Å“â€œ</span><span>Add tools and validate each one independently</span></div>
+            <div class="check-item"><span class="check-icon">Ã¢Å“â€œ</span><span>Handle errors gracefully Ã¢â‚¬â€ retry logic and fallbacks</span></div>
+            <div class="check-item"><span class="check-icon">Ã¢Å“â€œ</span><span>Create eval dataset (minimum 20 diverse examples)</span></div>
+            <div class="check-item"><span class="check-icon">Ã¢Å“â€œ</span><span>Set up tracing and observability from day one</span></div>
+            <div class="check-item"><span class="check-icon">Ã¢Å“â€œ</span><span>Implement guardrails Ã¢â‚¬â€ input validation, output filtering</span></div>
+            <div class="check-item"><span class="check-icon">Ã¢Å“â€œ</span><span>Test edge cases Ã¢â‚¬â€ empty inputs, malformed data, timeouts</span></div>
+            <div class="check-item"><span class="check-icon">Ã¢Å“â€œ</span><span>Document escalation conditions and human override triggers</span></div>
+            <div class="check-item"><span class="check-icon">Ã¢Å“â€œ</span><span>Version-pin all dependencies Ã¢â‚¬â€ model, framework, tools</span></div>
           </div>
         </article>
 
@@ -639,22 +641,22 @@
             <div class="agi-level l1">
               <div class="level-num">L1</div>
               <strong>Chatbot</strong>
-              <p>Conversational — GPT-3.5 chat</p>
+              <p>Conversational Ã¢â‚¬â€ GPT-3.5 chat</p>
             </div>
             <div class="agi-level l2">
               <div class="level-num">L2</div>
               <strong>Reasoner</strong>
-              <p>Problem solving — o1, Claude 3.5</p>
+              <p>Problem solving Ã¢â‚¬â€ o1, Claude 3.5</p>
             </div>
             <div class="agi-level l3">
               <div class="level-num">L3</div>
               <strong>Agent</strong>
-              <p>Takes actions — tool-calling GPT-4o</p>
+              <p>Takes actions Ã¢â‚¬â€ tool-calling GPT-4o</p>
             </div>
             <div class="agi-level l4">
               <div class="level-num">L4</div>
               <strong>Innovator</strong>
-              <p>Novel solutions — research agents</p>
+              <p>Novel solutions Ã¢â‚¬â€ research agents</p>
             </div>
             <div class="agi-level l5">
               <div class="level-num">L5</div>
@@ -670,17 +672,17 @@
           <table class="table hsfs-mapping">
             <thead><tr><th>Cheatsheet Concept</th><th>HSFS Implementation</th></tr></thead>
             <tbody>
-              <tr><td>Agent Loop (Plan→Reason→Act)</td><td><code>agents/manager/agent_manager.py</code> — continuous learning loop</td></tr>
+              <tr><td>Agent Loop (PlanÃ¢â€ â€™ReasonÃ¢â€ â€™Act)</td><td><code>agents/manager/agent_manager.py</code> Ã¢â‚¬â€ continuous learning loop</td></tr>
               <tr><td>Memory Stores</td><td>PostgreSQL (structured) + OpenSearch (vector search)</td></tr>
               <tr><td>Multi-Agent Systems</td><td>35 specialized roles with explicit handoffs in <code>project/handoffs/</code></td></tr>
               <tr><td>Observability</td><td>Prometheus metrics <code>:9500</code>, Grafana dashboards, Loki logs</td></tr>
-              <tr><td>Guardrails / Approval Gates</td><td><code>docs/AGENT_OPERATIONS_WIKI.md</code> — gate definitions</td></tr>
+              <tr><td>Guardrails / Approval Gates</td><td><code>docs/AGENT_OPERATIONS_WIKI.md</code> Ã¢â‚¬â€ gate definitions</td></tr>
               <tr><td>Agent Development Checklist</td><td>Per-agent <code>CHECKLIST.md</code> in each agent folder</td></tr>
               <tr><td>Evaluation Metrics</td><td><code>project/governance/metrics-tracker.md</code></td></tr>
               <tr><td>Tool Use</td><td>Flask REST API, Kafka, OpenSearch, PostgreSQL integrations</td></tr>
               <tr><td>Goal-Oriented Agents</td><td>Each <code>AGENT.md</code> defines mission, scope, Definition of Done</td></tr>
-              <tr><td>LLM Providers</td><td>GitHub Copilot CLI runtime (current) — expandable to direct API calls</td></tr>
-              <tr><td>Deployment</td><td>Docker Compose local stack → AWS (Stage 3+ target)</td></tr>
+              <tr><td>LLM Providers</td><td>GitHub Copilot CLI runtime (current) Ã¢â‚¬â€ expandable to direct API calls</td></tr>
+              <tr><td>Deployment</td><td>Docker Compose local stack Ã¢â€ â€™ AWS (Stage 3+ target)</td></tr>
             </tbody>
           </table>
           <div class="pill-list" style="margin-top:14px;">
@@ -692,9 +694,13 @@
 
       </section>
 
-      <p class="footer fade-up">Source: <em>The Complete Agentic AI Cheatsheet</em> — genai.works, August 2026. Applied to HSFS autonomous delivery framework.</p>
+      <p class="footer fade-up">Source: <em>The Complete Agentic AI Cheatsheet</em> Ã¢â‚¬â€ genai.works, August 2026. Applied to HSFS autonomous delivery framework.</p>
     </main>
   </div>
   <script src="script.js"></script>
 </body>
 </html>
+
+
+
+

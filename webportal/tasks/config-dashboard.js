@@ -5,6 +5,7 @@ const API_BASE = window.API_BASE_OVERRIDE || '';
 const CONFIG_ENDPOINT = `${API_BASE}/api/config`;
 
 let configData = {};
+let defaultConfigData = {}; // Store default config for resets
 
 async function loadConfig() {
   try {
@@ -12,6 +13,7 @@ async function loadConfig() {
     if (!response.ok) throw new Error('Network response was not ok');
     const data = await response.json();
     configData = data;
+    defaultConfigData = JSON.parse(JSON.stringify(data)); // Save defaults
     renderConfig();
   } catch (error) {
     console.error('Error loading config:', error);
@@ -19,6 +21,37 @@ async function loadConfig() {
   }
 }
 
+// Validation helper for numeric fields
+function isPositiveInteger(value) {
+  return value !== '' && value !== null && Number.isInteger(Number(value)) && Number(value) > 0;
+}
+
+// Reset a section to its default values
+function resetSection(section) {
+  // Reset General section
+  if (section === 'general') {
+    document.getElementById('appName')?.value = defaultConfigData.configurations[0]?.name || '';
+    document.getElementById('appDescription')?.value = defaultConfigData.configurations[0]?.description || '';
+  }
+  // Reset Features section
+  if (section === 'features') {
+    document.getElementById('featureFlag')?.checked = defaultConfigData.configurations[0]?.settings?.featureFlag || false;
+    document.getElementById('maxItems')?.value = defaultConfigData.configurations[0]?.settings?.maxItems || '';
+    document.getElementById('timeoutSeconds')?.value = defaultConfigData.configurations[0]?.settings?.timeoutSeconds || '';
+  }
+  // Reset Performance section
+  if (section === 'performance') {
+    document.getElementById('maxConcurrent')?.value = defaultConfigData.configurations[1]?.settings?.maxItems || '';
+    document.getElementById('cacheTTL')?.value = defaultConfigData.configurations[1]?.settings?.timeoutSeconds || '';
+  }
+  // Reset Security section
+  if (section === 'security') {
+    document.getElementById('requireAuth')?.checked = defaultConfigData.configurations[1]?.settings?.featureFlag || false;
+    document.getElementById('rateLimit')?.value = defaultConfigData.configurations[1]?.settings?.maxItems || '';
+  }
+}
+
+// Render each configuration section
 function renderConfig() {
   // Populate navigation tabs
   const navItems = document.querySelectorAll('.config-nav-item');
@@ -73,8 +106,70 @@ function renderConfig() {
 
     sectionEl.appendChild(cardGrid);
   });
+
+  // Add Export & Import buttons to the nav container
+  const navButtonsContainer = document.getElementById('configNavButtons');
+  if (navButtonsContainer) {
+    // Export button
+    const exportButton = document.createElement('button');
+    exportButton.id = 'export-config';
+    exportButton.className = 'config-button';
+    exportButton.textContent = 'Export Configuration';
+    exportButton.addEventListener('click', exportProfiles);
+    navButtonsContainer.appendChild(exportButton);
+
+    // Import button
+    const importButton = document.createElement('button');
+    importButton.id = 'import-config';
+    importButton.className = 'config-button';
+    importButton.textContent = 'Import Configuration';
+    importButton.addEventListener('click', () => {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.json';
+      fileInput.onchange = (event) => importProfiles(event);
+      fileInput.click();
+    });
+    navButtonsContainer.appendChild(importButton);
+  }
 }
 
+// Button click handlers for bulk operations
+function exportProfiles() {
+  const json = JSON.stringify(configData, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'config-export.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importProfiles(event) {
+  const input = event.target;
+  if (!input.files || input.files.length === 0) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (imported && imported.configurations) {
+        configData = imported;
+        defaultConfigData = JSON.parse(JSON.stringify(imported));
+        renderConfig();
+        showNotification('Configuration imported successfully', 'success');
+      } else {
+        showNotification('Invalid configuration format', 'error');
+      }
+    } catch (err) {
+      showNotification('Failed to parse JSON', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// Create a general configuration card with Save and Reset buttons
 function createGeneralCard(container) {
   const card = document.createElement('div');
   card.className = 'config-metric-card';
@@ -90,8 +185,32 @@ function createGeneralCard(container) {
     </div>
   `;
   container.appendChild(card);
+
+  // Add Save and Reset buttons
+  const buttonContainer = document.createElement('div');
+  buttonContainer.className = 'config-button-container';
+  const saveButton = document.createElement('button');
+  saveButton.className = 'config-button config-button-secondary';
+  saveButton.textContent = 'Save';
+  saveButton.dataset.section = 'general';
+  saveButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (validateSection('general')) saveConfig('general');
+  });
+  const resetButton = document.createElement('button');
+  resetButton.className = 'config-button config-button-secondary';
+  resetButton.textContent = 'Reset';
+  resetButton.dataset.section = 'general';
+  resetButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    resetSection('general');
+  });
+  buttonContainer.appendChild(saveButton);
+  buttonContainer.appendChild(resetButton);
+  card.appendChild(buttonContainer);
 }
 
+// Create a features configuration card with Save and Reset buttons
 function createFeaturesCard(container) {
   const card = document.createElement('div');
   card.className = 'config-metric-card';
@@ -111,8 +230,32 @@ function createFeaturesCard(container) {
     </div>
   `;
   container.appendChild(card);
+
+  // Add Save and Reset buttons
+  const buttonContainer = document.createElement('div');
+  buttonContainer.className = 'config-button-container';
+  const saveButton = document.createElement('button');
+  saveButton.className = 'config-button config-button-secondary';
+  saveButton.textContent = 'Save';
+  saveButton.dataset.section = 'features';
+  saveButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (validateSection('features')) saveConfig('features');
+  });
+  const resetButton = document.createElement('button');
+  resetButton.className = 'config-button config-button-secondary';
+  resetButton.textContent = 'Reset';
+  resetButton.dataset.section = 'features';
+  resetButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    resetSection('features');
+  });
+  buttonContainer.appendChild(saveButton);
+  buttonContainer.appendChild(resetButton);
+  card.appendChild(buttonContainer);
 }
 
+// Create a performance configuration card with Save and Reset buttons
 function createPerformanceCard(container) {
   const card = document.createElement('div');
   card.className = 'config-metric-card';
@@ -128,8 +271,32 @@ function createPerformanceCard(container) {
     </div>
   `;
   container.appendChild(card);
+
+  // Add Save and Reset buttons
+  const buttonContainer = document.createElement('div');
+  buttonContainer.className = 'config-button-container';
+  const saveButton = document.createElement('button');
+  saveButton.className = 'config-button config-button-secondary';
+  saveButton.textContent = 'Save';
+  saveButton.dataset.section = 'performance';
+  saveButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (validateSection('performance')) saveConfig('performance');
+  });
+  const resetButton = document.createElement('button');
+  resetButton.className = 'config-button config-button-secondary';
+  resetButton.textContent = 'Reset';
+  resetButton.dataset.section = 'performance';
+  resetButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    resetSection('performance');
+  });
+  buttonContainer.appendChild(saveButton);
+  buttonContainer.appendChild(resetButton);
+  card.appendChild(buttonContainer);
 }
 
+// Create a security configuration card with Save and Reset buttons
 function createSecurityCard(container) {
   const card = document.createElement('div');
   card.className = 'config-metric-card';
@@ -145,8 +312,59 @@ function createSecurityCard(container) {
     </div>
   `;
   container.appendChild(card);
+
+  // Add Save and Reset buttons
+  const buttonContainer = document.createElement('div');
+  buttonContainer.className = 'config-button-container';
+  const saveButton = document.createElement('button');
+  saveButton.className = 'config-button config-button-secondary';
+  saveButton.textContent = 'Save';
+  saveButton.dataset.section = 'security';
+  saveButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (validateSection('security')) saveConfig('security');
+  });
+  const resetButton = document.createElement('button');
+  resetButton.className = 'config-button config-button-secondary';
+  resetButton.textContent = 'Reset';
+  resetButton.dataset.section = 'security';
+  resetButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    resetSection('security');
+  });
+  buttonContainer.appendChild(saveButton);
+  buttonContainer.appendChild(resetButton);
+  card.appendChild(buttonContainer);
 }
 
+// Validate numeric inputs for a given section before saving
+function validateSection(section) {
+  // Validate maxItems, timeoutSeconds, etc. based on section
+  const errors = [];
+
+  if (section === 'features' || section === 'performance' || section === 'security') {
+    const maxItems = document.getElementById('maxItems')?.value;
+    if (!isPositiveInteger(maxItems)) errors.push('Max Items must be a positive integer');
+    const timeoutSeconds = document.getElementById('timeoutSeconds')?.value;
+    if (!isPositiveInteger(timeoutSeconds)) errors.push('Timeout must be a positive integer');
+    if (section === 'performance') {
+      const maxConcurrent = document.getElementById('maxConcurrent')?.value;
+      if (!isPositiveInteger(maxConcurrent)) errors.push('Max Concurrent Requests must be a positive integer');
+    }
+    if (section === 'security') {
+      const rateLimit = document.getElementById('rateLimit')?.value;
+      if (!isPositiveInteger(rateLimit)) errors.push('Rate Limit must be a positive integer');
+    }
+  }
+
+  if (errors.length > 0) {
+    showNotification(errors.join(' • '), 'error');
+    return false;
+  }
+  return true;
+}
+
+// Save configuration for a specific section
 function saveConfig(section) {
   // Gather updated values from inputs
   const formData = new FormData();
@@ -207,7 +425,7 @@ function showNotification(message, type) {
   console.log(`${type}: ${message}`);
 }
 
-// Initialize when DOM is ready
+// Initialize the GUI
 document.addEventListener('DOMContentLoaded', () => {
   loadConfig();
   
@@ -216,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
   saveButtons.forEach(button => {
     button.addEventListener('click', () => {
       const section = button.getAttribute('data-section');
-      saveConfig(section);
+      if (validateSection(section)) saveConfig(section);
     });
   });
 });

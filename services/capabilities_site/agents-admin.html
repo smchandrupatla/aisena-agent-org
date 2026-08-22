@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage the agent directory: create, edit, and remove specialist roles backed by the aisena_agents Postgres table.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Manage Agents</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="start-project.html">Create New App</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="test-dashboard.html">Test Dashboard</a>
+        <a href="app-dashboard.html">App Dashboard</a>
+        <a href="postgres-viewer.html">Postgres Viewer</a>
+        <a href="kafka-viewer.html">Kafka Viewer</a>
+        <a href="splunk-viewer.html">Splunk Viewer</a>
+        <a href="dynatrace-viewer.html">Dynatrace Viewer</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-admin.html" class="active">Manage Agents</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+        <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero fade-up">
+        <div class="kicker"><a href="agent-roster.html" style="color: inherit;">&larr; Agent Roster</a></div>
+        <h1>Manage Agents</h1>
+        <p class="lede">
+          Every role's name, focus, prompt, and full <code>AGENT.md</code> definition is stored in the
+          <code>aisena_agents</code> Postgres table. Add, edit, or remove roles here; changes take effect
+          immediately for <a href="agents-chat.html">Agents + Chat</a> and task/issue ownership.
+        </p>
+      </section>
+
+      <section class="grid">
+        <article class="card span-12 fade-up">
+          <h2>Agent Directory</h2>
+          <div class="filter-bar">
+            <input type="text" id="filterText" placeholder="Search name or focus...">
+            <select id="filterGroup"><option value="">All Groups</option></select>
+            <button type="button" class="ghost" id="filterClear">Clear Filters</button>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Agent</th>
+                <th>Group</th>
+                <th>Focus</th>
+                <th>Runner</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="agentsBody">
+            </tbody>
+          </table>
+          <div class="chat-actions" style="margin-top: 14px;">
+            <button type="button" id="quickAddAgent">Add Agent</button>
+          </div>
+        </article>
+
+        <article class="card span-12 fade-up">
+          <div class="notice ok" id="agentsNotice">Edits here update the live agent directory used across the whole site.</div>
+        </article>
+      </section>
+
+      <dialog id="agentDialog">
+        <form id="agentForm">
+          <h3>Add Agent</h3>
+          <label>Name<input type="text" id="agentName" required placeholder="e.g. Data Governance SME"></label>
+          <label>Key<input type="text" id="agentKey" placeholder="lowercase-hyphenated, defaults from name"></label>
+          <label>Group
+            <select id="agentGroup"></select>
+          </label>
+          <label>Focus<textarea id="agentFocus" rows="2" placeholder="One-line role focus"></textarea></label>
+          <label>Chat Prompt<input type="text" id="agentPrompt" placeholder="Default chat prompt suggestion"></label>
+          <div class="chat-actions">
+            <button type="submit" id="agentDialogSave">Save</button>
+            <button type="button" class="ghost" id="agentDialogCancel">Cancel</button>
+          </div>
+        </form>
+      </dialog>
+    </main>
+  </div>
+  <script src="script.js"></script>
+  <script src="agents-admin.js"></script>
+</body>
+</html>
+
+
+
+

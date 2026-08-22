@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="App-specific dashboard for tracking tasks and issues for a selected application, with label-based filtering and inline label editing.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>App Dashboard — Tasks & Issues</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root{
+      --xd-purple:#7c5cff;
+      --xd-purple-dark:#5b3df0;
+      --xd-teal:#14b8a6;
+      --xd-bg:#f4f6fb;
+      --xd-sidebar-w:264px;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:"Inter","Segoe UI",sans-serif;background:var(--xd-bg);color:var(--ink);}
+    a{color:inherit;}
+
+    .xd-app{display:grid;grid-template-columns:var(--xd-sidebar-w) 1fr;min-height:100vh;}
+
+    .xd-sidebar{background:#ffffff;border-right:1px solid var(--line);padding:22px 18px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
+    .xd-brand{display:flex;align-items:center;gap:12px;padding:6px 8px 22px;}
+    .xd-brand-badge{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(145deg,var(--xd-purple),var(--brand-2));box-shadow:0 10px 20px rgba(124,92,255,.35);}
+    .xd-brand-text strong{display:block;font-size:15px;}
+    .xd-brand-text span{font-size:12px;color:var(--ink-soft);}
+
+    .xd-nav{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;}
+    .xd-nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:500;color:var(--ink-soft);transition:background .15s ease,color .15s ease;}
+    .xd-nav-item:hover{background:var(--bg-soft);color:var(--ink);}
+    .xd-nav-item.active{background:linear-gradient(135deg,var(--xd-purple),var(--xd-purple-dark));color:#fff;box-shadow:0 8px 18px rgba(124,92,255,.28);}
+    .xd-nav-icon{font-size:16px;width:20px;text-align:center;}
+    .xd-nav-count{margin-left:auto;font-size:11px;font-weight:700;background:rgba(0,0,0,.06);padding:2px 8px;border-radius:20px;}
+    .xd-nav-item.active .xd-nav-count{background:rgba(255,255,255,.25);color:#fff;}
+
+    .xd-sidebar-section-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin:20px 10px 8px;font-weight:700;}
+
+    .xd-sidebar-footer{margin-top:auto;padding-top:18px;}
+    .xd-mini-progress{background:var(--bg-soft);border-radius:16px;padding:16px;}
+    .xd-mini-progress-title{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+    .xd-mini-progress-value{font-size:20px;font-weight:800;color:var(--ink);}
+    .xd-mini-bar-track{height:8px;border-radius:8px;background:var(--line);overflow:hidden;margin-bottom:6px;}
+    .xd-mini-bar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--xd-purple),var(--brand-2));}
+    .xd-mini-progress-caption{font-size:11px;color:var(--ink-soft);}
+
+    .xd-main{padding:22px 30px 60px;max-width:1400px;width:100%;margin:0 auto;}
+    .xd-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap;}
+    .xd-topbar-left{display:flex;align-items:center;gap:12px;}
+    .xd-back-btn{display:inline-flex;align-items:center;gap:6px;background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);}
+    .xd-back-btn:hover{background:var(--line);}
+    .xd-breadcrumb{font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+    .xd-breadcrumb b{color:var(--ink);font-weight:700;}
+    .xd-breadcrumb .xd-crumb{cursor:pointer;}
+    .xd-breadcrumb .xd-crumb:hover{color:var(--brand);text-decoration:underline;}
+
+    .xd-topbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .xd-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+    .xd-btn-primary{background:linear-gradient(135deg,var(--xd-purple),var(--xd-purple-dark));color:#fff;box-shadow:0 8px 18px rgba(124,92,255,.3);}
+    .xd-btn-primary:hover{transform:translateY(-2px);}
+    .xd-btn-secondary{background:#fff;border:1px solid var(--line);color:var(--ink);}
+    .xd-btn-secondary:hover{background:var(--bg-soft);}
+
+    .xd-label-selector{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px;flex:1;min-width:200px;}
+    .xd-label-selector label{margin:0;font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
+    .xd-label-selector select{flex:1;border:none;outline:none;font-size:13px;font-weight:600;color:var(--ink);background:transparent;}
+    .xd-label-selector select:focus{outline:2px solid var(--xd-purple);outline-offset:2px;border-radius:8px;}
+
+    .xd-section{display:none;}
+    .xd-section.active{display:block;animation:xdFadeIn .25s ease;}
+    @keyframes xdFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+    .xd-page-header{margin-bottom:22px;}
+    .xd-page-header h1{font-size:26px;margin:0 0 6px;font-weight:800;}
+    .xd-page-header p{margin:0;color:var(--ink-soft);font-size:14px;}
+
+    .xd-kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;}
+    .xd-kpi-card{background:#fff;border-radius:18px;border:1px solid var(--line);padding:20px;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;position:relative;overflow:hidden;}
+    .xd-kpi-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-card);}
+    .xd-kpi-top{display:flex;justify-content:space-between;align-items:flex-start;}
+    .xd-kpi-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:17px;color:#fff;}
+    .xd-kpi-label{font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;margin-top:12px;}
+    .xd-kpi-value{font-size:30px;font-weight:800;margin:4px 0 6px;}
+    .xd-kpi-trend{font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:4px;}
+    .xd-kpi-trend.up{color:var(--ok);}
+    .xd-kpi-trend.down{color:var(--warn);}
+    .xd-kpi-trend.flat{color:var(--ink-soft);}
+
+    .xd-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px;}
+    @media (max-width:980px){.xd-grid-2{grid-template-columns:1fr;}}
+
+    .xd-panel{background:#fff;border-radius:18px;border:1px solid var(--line);padding:22px;}
+    .xd-panel-title{font-size:15px;font-weight:700;margin:0 0 4px;}
+    .xd-panel-sub{font-size:12px;color:var(--ink-soft);margin:0 0:16px;}
+
+    .xd-donut-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
+    .xd-donut-center{font-size:22px;font-weight:800;pointer-events:none;}
+    .xd-donut-center small{display:block;font-size:11px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;}
+    .xd-legend{flex:1;min-width:170px;display:flex;flex-direction:column;gap:9px;}
+    .xd-legend-row{display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;padding:6px 8px;border-radius:10px;transition:background .15s ease;}
+    .xd-legend-row:hover{background:var(--bg-soft);}
+    .xd-legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .xd-legend-label{flex:1;color:var(--ink);}
+    .xd-legend-value{font-weight:700;}
+    .xd-legend-pct{color:var(--ink-soft);font-size:11px;width:38px;text-align:right;}
+
+    .xd-progress-block{margin-bottom:16px;}
+    .xd-progress-head{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
+    .xd-progress-head b{font-weight:800;}
+    .xd-progress-track{height:10px;border-radius:8px;background:var(--bg-soft);overflow:hidden;}
+    .xd-progress-fill{height:100%;border-radius:8px;transition:width .5s ease;}
+
+    .xd-stacked-track{display:flex;height:14px;border-radius:8px;overflow:hidden;background:var(--bg-soft);}
+    .xd-stacked-seg{height:100%;cursor:pointer;transition:opacity .15s ease;}
+    .xd-stacked-seg:hover{opacity:.75;}
+    .xd-stacked-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:12px;}
+    .xd-stacked-legend span{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink-soft);}
+    .xd-stacked-legend span:hover{color:var(--ink);}
+    .xd-stacked-legend i{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+    .xd-table-container{background:#fff;border-radius:18px;border:1px solid var(--line);overflow:hidden;}
+    .xd-table{width:100%;border-collapse:collapse;}
+    .xd-table th{background:var(--bg-soft);padding:13px 20px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);border-bottom:1px solid var(--line);}
+    .xd-table td{padding:14px 20px;border-bottom:1px solid var(--line);font-size:13px;}
+    .xd-table tbody tr{cursor:pointer;transition:background .15s ease;}
+    .xd-table tbody tr:hover{background:var(--bg-soft);}
+    .xd-table tbody tr:last-child td{border-bottom:none;}
+    .xd-empty{padding:40px;text-align:center;color:var(--ink-soft);font-size:13px;}
+
+    .xd-badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap;}
+    .xd-pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;background:var(--bg-soft);color:var(--ink-soft);margin:2px 3px 2px 0;}
+    .xd-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--xd-purple),var(--brand-2));color:#fff;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-right:8px;flex-shrink:0;}
+    .xd-owner-cell{display:flex;align-items:center;}
+
+    .xd-label-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;background:var(--bg-soft);color:var(--ink);margin-right:6px;margin-bottom:4px;cursor:pointer;}
+    .xd-label-chip:hover{background:var(--line);}
+    .xd-label-chip.active{background:linear-gradient(135deg,var(--xd-purple),var(--xd-purple-dark));color:#fff;}
+    .xd-label-chip .xd-remove{cursor:pointer;font-weight:700;}
+
+    .xd-toast{position:fixed;top:20px;right:20px;padding:14px 20px;border-radius:12px;font-size:13px;font-weight:600;z-index:600;box-shadow:var(--shadow-card);animation:xdFadeIn .2s ease;}
+    .xd-loading-overlay{position:fixed;inset:0;background:rgba(244,246,251,.7);display:flex;align-items:center;justify-content:center;z-index:400;}
+    .xd-spinner{width:42px;height:42px;border:4px solid var(--line);border-top-color:var(--xd-purple);border-radius:50%;animation:xdspin 1s linear infinite;}
+    @keyframes xdspin{to{transform:rotate(360deg);}}
+  </style>
+</head>
+<body>
+  <div id="xd-tooltip"></div>
+
+  <div class="xd-app">
+    <aside class="xd-sidebar">
+      <div class="xd-brand">
+        <div class="xd-brand-badge">AI</div>
+        <div class="xd-brand-text">
+          <strong>AISENA</strong>
+          <span>App Dashboard</span>
+        </div>
+      </div>
+
+      <ul class="xd-nav" id="xd-primary-nav">
+        <li class="xd-nav-item active" data-page="overview"><span class="xd-nav-icon">📊</span>Overview</li>
+        <li class="xd-nav-item" data-page="tasks"><span class="xd-nav-icon">📋</span>Tasks<span class="xd-nav-count" id="nav-count-tasks">0</span></li>
+        <li class="xd-nav-item" data-page="issues"><span class="xd-nav-icon">⚠️</span>Issues<span class="xd-nav-count" id="nav-count-issues">0</span></li>
+        <li class="xd-nav-item" data-page="labels"><span class="xd-nav-icon">🏷️</span>App Labels</li>
+      </ul>
+
+      <div class="xd-sidebar-footer">
+        <div class="xd-mini-progress">
+          <div class="xd-mini-progress-title">Overall delivery progress</div>
+          <div class="xd-mini-progress-value" id="sidebar-progress-value">0%</div>
+          <div class="xd-mini-bar-track"><div class="xd-mini-bar-fill" id="sidebar-progress-fill" style="width:0%"></div></div>
+          <div class="xd-mini-progress-caption" id="sidebar-progress-caption">0 of 0 tasks done</div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="xd-main">
+      <div class="xd-topbar">
+        <div class="xd-topbar-left">
+          <button class="xd-back-btn" onclick="appDashNav.back()">← Back</button>
+          <div class="xd-breadcrumb" id="xd-breadcrumb"></div>
+        </div>
+        <div class="xd-topbar-right">
+          <button class="xd-btn xd-btn-secondary" onclick="loadAppDashboardData(true)">↻ Refresh</button>
+          <button class="xd-btn xd-btn-primary" onclick="appDashNav.go('labels')">🏷️ Manage Labels</button>
+        </div>
+      </div>
+
+      <!-- OVERVIEW -->
+      <section class="xd-section active" data-view="overview" id="view-overview">
+        <div class="xd-page-header">
+          <h1>App Dashboard</h1>
+          <p>Track tasks and issues for the new application. Filter by app label to isolate work for a specific app. <span class="xd-updated" id="overview-updated"></span></p>
+        </div>
+
+        <div class="xd-label-selector">
+          <label for="appLabelSelect">App label:</label>
+          <select id="appLabelSelect">
+            <option value="">All apps</option>
+          </select>
+        </div>
+
+        <div class="xd-kpi-grid" id="overview-kpis"></div>
+
+        <div class="xd-grid-2">
+          <div class="xd-panel">
+            <div class="xd-panel-title">Task status breakdown</div>
+            <p class="xd-panel-sub">Hover a segment for a quick preview, click to drill into that group.</p>
+            <div class="xd-donut-wrap">
+              <div id="task-donut-svg"></div>
+              <div class="xd-legend" id="task-donut-legend"></div>
+            </div>
+          </div>
+          <div class="xd-panel">
+            <div class="xd-panel-title">Issue severity breakdown</div>
+            <p class="xd-panel-sub">Hover a segment for a quick preview, click to drill into that group.</p>
+            <div class="xd-donut-wrap">
+              <div id="issue-donut-svg"></div>
+              <div class="xd-legend" id="issue-donut-legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="xd-panel" style="margin-bottom:22px;">
+          <div class="xd-panel-title">Delivery progress</div>
+          <p class="xd-panel-sub">Task completion and issue resolution against total volume.</p>
+          <div id="overview-progress-bars"></div>
+        </div>
+
+        <div class="xd-grid-2">
+          <div>
+            <div class="xd-panel-title" style="margin:0 0 10px 4px;">Recent tasks</div>
+            <div class="xd-table-container">
+              <table class="xd-table">
+                <thead><tr><th>Task</th><th>App Label</th><th>Status</th><th>Priority</th><th>Owner</th></tr></thead>
+                <tbody id="overview-tasks-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div>
+            <div class="xd-panel-title" style="margin:0 0 10px 4px;">Recent issues</div>
+            <div class="xd-table-container">
+              <table class="xd-table">
+                <thead><tr><th>Issue</th><th>App Label</th><th>Severity</th><th>Status</th><th>Owner</th></tr></thead>
+                <tbody id="overview-issues-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TASKS -->
+      <section class="xd-section" data-view="tasks" id="view-tasks">
+        <div class="xd-page-header">
+          <h1 id="tasks-page-title">Tasks</h1>
+          <p id="tasks-page-sub">Full list of tracked delivery tasks.</p>
+        </div>
+        <div class="xd-kpi-grid" id="tasks-kpis"></div>
+        <div class="xd-panel" style="margin-bottom:20px;">
+          <div class="xd-panel-title">Status distribution</div>
+          <div id="tasks-stacked-bar"></div>
+        </div>
+        <div class="xd-table-container">
+          <table class="xd-table">
+            <thead><tr><th>ID</th><th>Title</th><th>App Label</th><th>Status</th><th>Priority</th><th>Owner</th><th>Updated</th></tr></thead>
+            <tbody id="tasks-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ISSUES -->
+      <section class="xd-section" data-view="issues" id="view-issues">
+        <div class="xd-page-header">
+          <h1 id="issues-page-title">Issues</h1>
+          <p id="issues-page-sub">Full list of tracked delivery issues.</p>
+        </div>
+        <div class="xd-kpi-grid" id="issues-kpis"></div>
+        <div class="xd-panel" style="margin-bottom:20px;">
+          <div class="xd-panel-title">Severity distribution</div>
+          <div id="issues-stacked-bar"></div>
+        </div>
+        <div class="xd-table-container">
+          <table class="xd-table">
+            <thead><tr><th>ID</th><th>Title</th><th>App Label</th><th>Severity</th><th>Status</th><th>Owner</th><th>Updated</th></tr></thead>
+            <tbody id="issues-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- LABELS -->
+      <section class="xd-section" data-view="labels" id="view-labels">
+        <div class="xd-page-header">
+          <h1>App Labels</h1>
+          <p>Manage app labels used to group tasks and issues. Click a label to filter the dashboard, or use the edit button to rename it.</p>
+        </div>
+        <div class="xd-panel">
+          <div class="xd-panel-title">Existing labels</div>
+          <div id="labels-list" style="margin-top:16px;"></div>
+        </div>
+        <div class="xd-panel" style="margin-top:18px;">
+          <div class="xd-panel-title">Add new label</div>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <input type="text" id="newLabelInput" placeholder="Enter a new app label name..." style="flex:1;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13px;">
+            <button class="xd-btn xd-btn-primary" onclick="addNewLabel()">Add</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app-dashboard.js"></script>
+</body>
+</html>

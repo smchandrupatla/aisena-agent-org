@@ -48,7 +48,8 @@ async function fetchAllTasks() {
 function renderHeader(task) {
   document.getElementById("taskHeading").textContent = `${task.id}: ${task.title}`;
   document.getElementById("taskSubtitle").textContent =
-    `${task.status} • ${task.priority} priority • Owner: ${ownerLabel(task.owner)}`;
+    `${task.status} • ${task.priority} priority • Owner: ${ownerLabel(task.owner)}` +
+    (task.app_label ? ` • App: ${task.app_label}` : '');
   document.getElementById("taskCreatedAt").textContent = formatTimestamp(task.created_at);
   document.getElementById("taskUpdatedAt").textContent = formatTimestamp(task.updated_at);
 }
@@ -78,6 +79,7 @@ function renderFields(task) {
 
   document.getElementById("fieldCheckpoint").value = task.next_checkpoint || "";
   document.getElementById("fieldTags").value = (task.tags || []).join(", ");
+  document.getElementById("fieldAppLabel").value = task.app_label || "";
 }
 
 function renderActivityLog(task) {
@@ -150,6 +152,7 @@ function initFieldsForm() {
       dependency: document.getElementById("fieldDependency").value || null,
       next_checkpoint: document.getElementById("fieldCheckpoint").value.trim(),
       tags,
+      app_label: document.getElementById("fieldAppLabel").value.trim() || null,
       actor: "user",
     };
 

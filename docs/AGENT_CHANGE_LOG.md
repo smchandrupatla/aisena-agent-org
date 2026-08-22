@@ -1,5 +1,35 @@
 # Agent Change Log (Append-Only)
 
+## 2026-08-22
+
+### LOG-20260822-001
+
+- **Entry ID:** LOG-20260822-001
+- **Date:** 2026-08-22
+- **Agent Role:** 00-implementation-manager
+- **Task ID:** TASK-0003 / TASK-0001, TASK-0002, TASK-0067, TASK-0068
+- **What Changed:**
+  - Confirmed the actual AISENA technology stacks by inspecting the repository and recorded the decision in ADR-0005.
+  - Framework/agent-organization services use Python 3 + Flask (`services/api`, `services/orchestrator`, `services/ingestion`, `services/detection`, `agents/manager`).
+  - AISENA HSFS backend microservices use Node.js + TypeScript + Express (`backend/services/*`, `backend/temporal`).
+  - Frontend surfaces use React 18 + TypeScript + Vite (`services/crm-portal`) and vanilla JavaScript/HTML/CSS (`webportal`).
+  - Rejected Java/Spring and Python-for-HSFS alternatives because no Java code exists and the HSFS backend was intentionally aligned with the existing Node.js/Express runtime.
+  - Consolidated four duplicate "Task workflow smoke test" records in `aisena_tasks`: TASK-0001 retained as the canonical smoke test; TASK-0002, TASK-0067, TASK-0068 marked Done with duplicate descriptions and consolidation activity-log entries.
+- **Files Modified:**
+  - `/project/decisions/ADR-0005-aisena-confirmed-technology-stacks.md` (new)
+  - `/scripts/db/consolidate-smoke-test-tasks.sql` (new)
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** pending
+- **Rationale:** Close stack ambiguity that previously listed unconfirmed Java/Spring options and remove duplicate smoke-test artifacts that were created during API workflow validation.
+- **Alternatives Considered:**
+  - Keep Java/Spring as a future backend option in ADR-0005: rejected because no Java source or build files exist in the repository.
+  - Delete duplicate smoke-test tasks: rejected because task deletion requires explicit user approval per Implementation Manager constraints.
+- **Risk Level:** Low (documentation and task-state cleanup only; no runtime or production behavior changed).
+- **Metrics Impact:** Four duplicate tasks reduced to one canonical task; stack decision documented and traceable to repository files.
+- **Rollback Plan:** Delete ADR-0005, revert the four `aisena_tasks` rows to their prior descriptions/statuses, and delete `scripts/db/consolidate-smoke-test-tasks.sql`.
+- **Human Approval Needed:** No
+- **Handoff Target:** 02-solution-architect (stack review), 32-test-manager (smoke-test completion)
+
 ## 2026-08-21
 
 ### LOG-20260821-002
