@@ -54,3 +54,31 @@ CREATE TABLE IF NOT EXISTS aisena_issues (
 CREATE INDEX IF NOT EXISTS idx_aisena_issues_app_id ON aisena_issues(app_id);
 CREATE INDEX IF NOT EXISTS idx_aisena_issues_status ON aisena_issues(status);
 CREATE INDEX IF NOT EXISTS idx_aisena_issues_task_id ON aisena_issues(task_id);
+
+-- aisena_agents is the canonical agent directory for the Implementation
+-- Manager workflow (services/api/app.py /api/agents endpoints). It replaces
+-- the legacy services/capabilities_site/agents.json catalog file. `content`
+-- holds the full AGENT.md markdown body so the web-based agent editor can
+-- read/write role definitions without touching the filesystem. The column
+-- is named `agent_group` (not `group`, a reserved word) but is exposed as
+-- `group` in the JSON API for frontend compatibility.
+CREATE TABLE IF NOT EXISTS aisena_agents (
+    id                    VARCHAR(8) PRIMARY KEY,
+    key                   VARCHAR(255) UNIQUE NOT NULL,
+    folder                VARCHAR(255) NOT NULL,
+    name                  TEXT NOT NULL,
+    agent_group           VARCHAR(255),
+    focus                 TEXT,
+    prompt                TEXT,
+    agent_file            VARCHAR(255),
+    run_command           TEXT,
+    run_command_fallback  TEXT,
+    has_dedicated_runner  BOOLEAN NOT NULL DEFAULT false,
+    content               TEXT,
+    created_at            TIMESTAMP NOT NULL DEFAULT now(),
+    updated_at            TIMESTAMP NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_aisena_agents_key ON aisena_agents(key);
+CREATE INDEX IF NOT EXISTS idx_aisena_agents_group ON aisena_agents(agent_group);
+

@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "id": "app-001",
+      "name": "Sample Application",
+      "description": "Sample application configuration",
+      "settings": {
+        "featureFlag": true,
+        "maxItems": 10,
+        "timeoutSeconds": 30
+      }
+    },
+    {
+      "id": "app-002",
+      "name": "Demo App",
+      "description": "Demo application configuration",
+      "settings": {
+        "featureFlag": false,
+        "maxItems": 5,
+        "timeoutSeconds": 60
+      }
+    }
+  ]
+}

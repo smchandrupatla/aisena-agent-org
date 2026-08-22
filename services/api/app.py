@@ -31,7 +31,6 @@ SPLUNK_INDEX = os.environ.get("SPLUNK_HEC_INDEX", "main")
 DYNATRACE_API_URL = os.environ.get("DYNATRACE_API_URL", "").rstrip("/")
 DYNATRACE_API_TOKEN = os.environ.get("DYNATRACE_API_TOKEN", "")
 ROOT = Path(__file__).resolve().parents[2]
-CATALOG_PATH = ROOT / "services" / "capabilities_site" / "agents.json"
 STATE_PATH = ROOT / "project" / "agent_transcripts.json"
 STATUS_PATH = ROOT / "project" / "agent_status.json"
 LEARNING_SCRIPT = ROOT / "scripts" / "agents" / "record_agent_learning.py"
@@ -262,11 +261,143 @@ def fetch_results(limit=50):
     return results
 
 
+AGENT_COLUMNS = [
+    "id", "key", "folder", "name", "agent_group", "focus", "prompt", "agent_file",
+    "run_command", "run_command_fallback", "has_dedicated_runner", "content",
+    "created_at", "updated_at",
+]
+
+# Maps the JSON/API field name to its aisena_agents column for editable fields.
+AGENT_EDITABLE_FIELDS = {
+    "name": "name",
+    "group": "agent_group",
+    "focus": "focus",
+    "prompt": "prompt",
+    "runCommand": "run_command",
+    "runCommandFallback": "run_command_fallback",
+    "content": "content",
+}
+
+
+def _agent_row_to_dict(row):
+    d = dict(zip(AGENT_COLUMNS, row))
+    return {
+        "id": d["id"],
+        "key": d["key"],
+        "folder": d["folder"],
+        "name": d["name"],
+        "group": d["agent_group"],
+        "focus": d["focus"],
+        "prompt": d["prompt"],
+        "agentFile": d["agent_file"],
+        "runCommand": d["run_command"],
+        "runCommandFallback": d["run_command_fallback"],
+        "hasDedicatedRunner": bool(d["has_dedicated_runner"]),
+        "content": d["content"],
+        "created_at": d["created_at"].isoformat() if d["created_at"] else None,
+        "updated_at": d["updated_at"].isoformat() if d["updated_at"] else None,
+    }
+
+
 def load_agent_catalog():
-    if not CATALOG_PATH.exists():
+    """Load the full agent directory from the aisena_agents table."""
+    if psycopg2 is None:
         return []
-    data = load_json(CATALOG_PATH, [])
-    return data if isinstance(data, list) else []
+    conn = psycopg2.connect(DSN)
+    try:
+        cur = conn.cursor()
+        cur.execute(f"SELECT {', '.join(AGENT_COLUMNS)} FROM aisena_agents ORDER BY id")
+        rows = cur.fetchall()
+        cur.close()
+    finally:
+        conn.close()
+    return [_agent_row_to_dict(row) for row in rows]
+
+
+def next_agent_id(agents):
+    numbers = [int(a["id"]) for a in agents if str(a.get("id") or "").isdigit()]
+    next_num = max(numbers) + 1 if numbers else 0
+    return str(next_num).zfill(2)
+
+
+def create_agent(data):
+    if psycopg2 is None:
+        return None
+    agents = load_agent_catalog()
+    agent_id = data.get("id") or next_agent_id(agents)
+    key = normalize_agent_key(data.get("key") or data.get("name") or agent_id)
+    folder = data.get("folder") or f"{agent_id}-{key}"
+    conn = psycopg2.connect(DSN)
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO aisena_agents
+                (id, key, folder, name, agent_group, focus, prompt, agent_file,
+                 run_command, run_command_fallback, has_dedicated_runner, content)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                agent_id,
+                key,
+                folder,
+                data.get("name") or key,
+                data.get("group") or "Expanded Delivery",
+                data.get("focus") or "",
+                data.get("prompt") or "",
+                f"agents/{folder}/AGENT.md",
+                data.get("runCommand") or f"scripts/agents/run-agent.sh {folder}",
+                data.get("runCommandFallback") or f"scripts/agents/run-agent.sh {folder}",
+                bool(data.get("hasDedicatedRunner")),
+                data.get("content") or "",
+            ),
+        )
+        conn.commit()
+        cur.close()
+    finally:
+        conn.close()
+    return get_agent_by_id(agent_id)
+
+
+def get_agent_by_id(agent_id):
+    return next((a for a in load_agent_catalog() if a.get("id") == agent_id), None)
+
+
+def update_agent(agent_id, data):
+    if psycopg2 is None:
+        return None
+    sets = []
+    values = []
+    for json_key, column in AGENT_EDITABLE_FIELDS.items():
+        if json_key in data:
+            sets.append(f"{column} = %s")
+            values.append(data[json_key])
+    if not sets:
+        return get_agent_by_id(agent_id)
+    sets.append("updated_at = now()")
+    values.append(agent_id)
+    conn = psycopg2.connect(DSN)
+    try:
+        cur = conn.cursor()
+        cur.execute(f"UPDATE aisena_agents SET {', '.join(sets)} WHERE id = %s", values)
+        conn.commit()
+        cur.close()
+    finally:
+        conn.close()
+    return get_agent_by_id(agent_id)
+
+
+def delete_agent(agent_id):
+    if psycopg2 is None:
+        return
+    conn = psycopg2.connect(DSN)
+    try:
+        cur = conn.cursor()
+        cur.execute("DELETE FROM aisena_agents WHERE id = %s", (agent_id,))
+        conn.commit()
+        cur.close()
+    finally:
+        conn.close()
 
 
 def normalize_agent_key(agent_key):
@@ -289,6 +420,9 @@ def find_agent(agent_reference):
 
 
 def get_agent_prompt(agent):
+    content = agent.get("content")
+    if content:
+        return content
     agent_file = ROOT / (agent.get("agentFile") or "")
     if not agent_file.exists():
         return "You are a helpful delivery agent. Keep answers concise and aligned to the project context."
@@ -522,6 +656,45 @@ def get_agents():
             "statusMessage": status.get("message", "Ready"),
         })
     return jsonify({"agents": enriched, "generated_at": utc_now_iso()})
+
+
+@app.route('/api/agents', methods=['POST'])
+def create_agent_endpoint():
+    data = request.get_json(silent=True) or {}
+    name = (data.get('name') or '').strip()
+    if not name:
+        return jsonify({"error": "Name is required"}), 400
+    if find_agent(data.get('key') or name) is not None:
+        return jsonify({"error": "An agent with this key already exists"}), 409
+    agent = create_agent(data)
+    return jsonify({"agent": agent}), 201
+
+
+@app.route('/api/agents/<agent_key>', methods=['GET'])
+def get_agent_detail(agent_key):
+    agent = find_agent(agent_key)
+    if agent is None:
+        return jsonify({"error": "Unknown agent"}), 404
+    return jsonify({"agent": agent})
+
+
+@app.route('/api/agents/<agent_key>', methods=['PUT'])
+def update_agent_endpoint(agent_key):
+    agent = find_agent(agent_key)
+    if agent is None:
+        return jsonify({"error": "Unknown agent"}), 404
+    data = request.get_json(silent=True) or {}
+    updated = update_agent(agent["id"], data)
+    return jsonify({"agent": updated})
+
+
+@app.route('/api/agents/<agent_key>', methods=['DELETE'])
+def delete_agent_endpoint(agent_key):
+    agent = find_agent(agent_key)
+    if agent is None:
+        return jsonify({"error": "Unknown agent"}), 404
+    delete_agent(agent["id"])
+    return jsonify({"message": "Agent deleted"}), 200
 
 
 @app.route('/api/agents/<agent_key>/message', methods=['POST', 'OPTIONS'])

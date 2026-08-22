@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { Kafka, logLevel } from 'kafkajs';
 import dotenv from 'dotenv';
-import winston from 'winston';
+import winston from 'winston'; import path from 'path';
 
 dotenv.config();
 
@@ -36,6 +36,7 @@ const apiLimiter = rateLimit({
 app.use('/api/', apiLimiter);
 
 // --- Kafka Producer ---
+app.use('/config-ui', express.static(path.resolve(__dirname, '../../..', 'webportal', 'tasks')));
 const kafka = new Kafka({
   clientId: 'api-gateway',
   brokers: [process.env.KAFKA_BROKER || 'localhost:9092'],
