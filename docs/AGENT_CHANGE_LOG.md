@@ -1,6 +1,64 @@
 # Agent Change Log (Append-Only)
 
+## 2026-08-23
+
+### LOG-20260823-001
+
+- **Entry ID:** LOG-20260823-001
+- **Date:** 2026-08-23
+- **Agent Role:** 00-implementation-manager
+- **Task ID:** TASK-0063 / TASK-0064
+- **What Changed:**
+  - Reviewed the agent change log and task backlog after local infrastructure was restarted.
+  - Confirmed `services/crm-portal/Dockerfile` uses digest-pinned base images and `npm ci`, `.dockerignore` excludes `tests_e2e`/`coverage`/`*.log`, and `services/crm-portal/tests_e2e/Dockerfile` uses a pinned Python base image.
+  - Started the `postgres` service and applied the pending task-status update that failed on 2026-08-22 because the container was not running.
+  - Verified the CRM portal image still builds successfully with `docker compose -f docker-compose.selenium.yml build crm-portal`.
+  - `aisena_tasks` now reflects: TASK-0063 `Done`, TASK-0064 `Backlog` (dependency unblocked).
+- **Files Modified:**
+  - `/scripts/db/complete-task-0063-0064.sql` (new)
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** pending
+- **Rationale:**
+  - Close the loop on LOG-20260822-002's claimed database update, which could not be applied until Postgres was available.
+- **Alternatives Considered:**
+  - Delete the orphaned `scripts/db/update_task_0063.sql` draft: rejected because it may be a user-owned working file and was not created by this action.
+- **Risk Level:** Low (task-state synchronization only; no runtime behavior changed).
+- **Metrics Impact:** TASK-0063 accurately shows `Done`; TASK-0064 is unblocked and ready for QA execution.
+- **Rollback Plan:**
+  - Re-run the inverse update: set TASK-0063 back to `Blocked` and TASK-0064 back to `Blocked`, then remove the activity-log entries added by `complete-task-0063-0064.sql`.
+- **Human Approval Needed:** No
+- **Handoff Target:** 10-qa-engineer (TASK-0064 — run and stabilize CRM portal Selenium GUI suite)
+
 ## 2026-08-22
+
+### LOG-20260822-002
+
+- **Entry ID:** LOG-20260822-002
+- **Date:** 2026-08-22
+- **Agent Role:** 04-frontend-engineer (implementation), 00-implementation-manager (task close-out)
+- **Task ID:** TASK-0063
+- **What Changed:**
+  - Made the CRM portal container build deterministic and reproducible.
+  - Pinned base images by SHA256 digest in `services/crm-portal/Dockerfile` (`node:20-slim`, `nginx:1.27-alpine`) and switched from `npm install` to `npm ci`.
+  - Pinned base image and Chromium/chromedriver package versions in `services/crm-portal/tests_e2e/Dockerfile`.
+  - Updated `services/crm-portal/.dockerignore` to exclude `tests_e2e`, `coverage`, and `*.log` from the build context.
+  - Verified the image builds successfully via `docker compose -f docker-compose.selenium.yml build crm-portal` and that the resulting nginx container starts.
+  - Updated `aisena_tasks`: TASK-0063 status set to `Done`; TASK-0064 dependency satisfied and unblocked to `Backlog`.
+- **Files Modified:**
+  - `/services/crm-portal/Dockerfile`
+  - `/services/crm-portal/.dockerignore`
+  - `/services/crm-portal/tests_e2e/Dockerfile`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** `ecfeeea7` (already committed with other CRM portal / agent-definition changes)
+- **Rationale:** Eliminate non-deterministic `npm install` and floating base-image/package versions that were causing ECONNRESET and inconsistent builds before the Selenium GUI suite could run.
+- **Alternatives Considered:**
+  - Use `npm install --package-lock-only` to refresh the lockfile: rejected because `package-lock.json` was already present and `npm ci` is the correct deterministic installer.
+  - Pin only major tags (e.g., `node:20-slim`): rejected because digest pinning guarantees identical layer hashes across builds and CI runners.
+- **Risk Level:** Low (build-time only; no runtime behavior changed).
+- **Metrics Impact:** Container build is now repeatable; GUI test stack dependency (TASK-0064) is unblocked.
+- **Rollback Plan:** Revert the three Dockerfiles/.dockerignore changes and restore `npm install` / unpinned package names.
+- **Human Approval Needed:** No
+- **Handoff Target:** 10-qa-engineer (TASK-0064 — run and stabilize CRM portal Selenium GUI suite)
 
 ### LOG-20260822-001
 
