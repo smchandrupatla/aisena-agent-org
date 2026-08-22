@@ -10,6 +10,19 @@ def _next_button(driver):
     return driver.find_element(By.XPATH, "//button[normalize-space(text())='Next']")
 
 
+def _safe_click(driver, element):
+    """Scroll element to the center of the viewport, then click.
+
+    Avoids "element click intercepted" errors from fixed overlays such as the
+    bottom-right FAB by ensuring the target is the topmost element under the
+    pointer before clicking.
+    """
+    driver.execute_script(
+        "arguments[0].scrollIntoView({block: 'center', inline: 'center'});", element
+    )
+    element.click()
+
+
 def test_create_flow_type_step_renders(driver, base_url):
     driver.get(base_url + "/create")
 
@@ -32,9 +45,10 @@ def test_create_flow_select_type_and_advance_to_basics(driver, base_url):
     )
     web_app_card.click()
 
-    WebDriverWait(driver, 10).until(
+    next_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, "//button[normalize-space(text())='Next']"))
-    ).click()
+    )
+    _safe_click(driver, next_button)
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//h2[contains(text(), 'Basics')]"))
