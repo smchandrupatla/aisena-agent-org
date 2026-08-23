@@ -11,6 +11,9 @@ __pycache__/
 
 # Local tooling
 .vscode/*.local.json
+.auto_commit_running
+*.log
+.tmp-android-verify/
 
 # Node/JS artifacts
 node_modules/
