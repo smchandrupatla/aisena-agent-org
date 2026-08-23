@@ -12,9 +12,9 @@ def _next_button(driver):
 
 def _safe_click(driver, element):
     """Scroll an element to the center of the viewport before clicking."""
-        driver.execute_script(
+    driver.execute_script(
         "arguments[0].scrollIntoView({block: 'center', inline: 'center'});", element
-        )
+    )
     element.click()
 
 
