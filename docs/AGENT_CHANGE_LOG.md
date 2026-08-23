@@ -2,6 +2,35 @@
 
 ## 2026-08-23
 
+### LOG-20260823-004
+
+- **Entry ID:** LOG-20260823-004
+- **Date:** 2026-08-23
+- **Agent Role:** 08-devops-engineer / 21-streaming-messaging-infra-sme / 00-implementation-manager
+- **Task ID:** TASK-0013 (full local stack startup) / infrastructure unblock
+- **What Changed:**
+  - Resolved the root `docker-compose.yml` vs `infra/docker-compose.yml` port conflict by stopping the `infra` stack (`docker compose -f infra/docker-compose.yml down`), which freed host ports 2181, 9092, and 9200.
+  - Recreated `zookeeper` and `kafka` containers on the `aisena-agent-org_default` network so they share membership and DNS resolution.
+  - Verified Zookeeper health using the Confluent-whitelisted four-letter word `srvr` (`echo srvr | nc localhost 2181`); only `srvr` is enabled by default in the Confluent image.
+  - Confirmed Kafka establishes a session with Zookeeper, elects broker 1 as controller, and serves the existing `aisena-stage0-events` topic.
+  - Started all remaining root-compose services (`ingestion`, `detection`, `agent-manager`, `prometheus`, `grafana`, `loki`, `redmine`, `apicurio-registry`, `vault`, `opensearch`).
+  - Published a sample event via `services/ingestion/produce.py` and confirmed the detection service consumed it and indexed a result in OpenSearch (`aisena-stage0-screening-results`).
+  - Observed that the backend TypeScript microservices (`backend-*`) also came up alongside the root stack; they report `(health: starting)` and are on the same default network.
+- **Files Modified:**
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** pending
+- **Rationale:**
+  - The duplicate infrastructure definitions in `infra/` and the root `docker-compose.yml` both bind the same standard Zookeeper/Kafka/OpenSearch ports. Only one stack can own these ports on a single Docker host, so the `infra` stack was stopped to unblock the root application stack.
+- **Alternatives Considered:**
+  - Reconfigure the root stack to use different host ports (e.g., 2182/9093/9201): rejected because the downstream services, tests, and documentation all reference the standard ports and the `infra` stack is meant to be the same backing services.
+  - Merge the two compose files into a single definition: rejected as out-of-scope for this unblocker; that would require broader review of the `infra/` folder and its profiles.
+- **Risk Level:** Medium (stops a running `infra` stack; any service still depending exclusively on `infra/` network names will need to be restarted on the root network).
+- **Metrics Impact:** Full root stack starts deterministically; ingestion → Kafka → detection → OpenSearch smoke path works end-to-end.
+- **Rollback Plan:**
+  - Run `docker compose -f docker-compose.yml -p aisena-agent-org down` and restart the `infra/` stack with `docker compose -f infra/docker-compose.yml up -d`.
+- **Human Approval Needed:** No
+- **Handoff Target:** 11-performance-engineer (monitor resource usage with full stack up) / 10-qa-engineer (re-run stage-0 smoke and backend health checks)
+
 ### LOG-20260823-003
 
 - **Entry ID:** LOG-20260823-003
