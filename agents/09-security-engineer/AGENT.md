@@ -81,4 +81,4 @@ Expected interaction with other agents:
 - **Docker**: Docker containerization and Docker Compose local stacks
 - **Aws**: AWS cloud infrastructure (ECS, RDS, S3, Lambda, etc.)
 
-Last-Updated: 2026-08-20T03:46:11.596902Z
+Last-Updated: 2026-08-23T02:40:38.469082Z

@@ -6,6 +6,8 @@ const API_BASE = window.API_BASE_OVERRIDE || '';
 const TASK_STATUSES = ["Backlog", "Planned", "In Progress", "Blocked", "In Review", "Done"];
 const ISSUE_STATUSES = ["Open", "Triaged", "Mitigating", "Monitoring", "Verifying", "Resolved"];
 
+const HISTORY_LOG_KEY = 'aisena_dashboard_history_log';
+
 const STATUS_COLORS = {
   "Backlog": "#94a3b8",
   "Planned": "#00a7f5",
@@ -28,6 +30,262 @@ let tasksData = [];
 let issuesData = [];
 let agentsData = [];
 let lastLoadedAt = null;
+
+// ---------------------------------------------------------------------------
+// History Log: append-only record of orchestration and UI actions.
+// Each entry: { timestamp: ISO-8601 UTC, actor, action, details }
+// ---------------------------------------------------------------------------
+function readHistoryLog() {
+  try {
+    const raw = localStorage.getItem(HISTORY_LOG_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function writeHistoryLog(entries) {
+  try {
+    localStorage.setItem(HISTORY_LOG_KEY, JSON.stringify(entries));
+  } catch (e) {
+    // Ignore storage errors (e.g. private mode)
+  }
+}
+
+function logHistoryAction(action, details, actor = 'dashboard') {
+  const entries = readHistoryLog();
+  entries.push({
+    timestamp: new Date().toISOString(),
+    actor,
+    action,
+    details: details || '',
+  });
+  writeHistoryLog(entries);
+}
+
+function aggregateActivityHistory() {
+  const entries = [];
+  tasksData.forEach(task => {
+    (task.activity_log || []).forEach(entry => {
+      entries.push({
+        timestamp: entry.timestamp || task.updated_at,
+        actor: entry.actor || task.owner || 'system',
+        action: entry.action || 'activity',
+        details: `[${task.id}] ${entry.details || ''}`,
+      });
+    });
+  });
+  issuesData.forEach(issue => {
+    (issue.activity_log || []).forEach(entry => {
+      entries.push({
+        timestamp: entry.timestamp || issue.updated_at,
+        actor: entry.actor || issue.owner || 'system',
+        action: entry.action || 'activity',
+        details: `[${issue.id}] ${entry.details || ''}`,
+      });
+    });
+  });
+  return entries;
+}
+
+function getFullHistoryLog() {
+  return [...aggregateActivityHistory(), ...readHistoryLog()].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+}
+
+// ---------------------------------------------------------------------------
+// Background agent runner UI
+// Provides a manual "kick off" button and polls a status endpoint.
+// ---------------------------------------------------------------------------
+const agentRunner = {
+  current: null,
+  runningTaskId: null,
+  runningIssueId: null,
+  pollingId: null,
+
+  getStatusEl(scope) { return document.getElementById(`${scope}-agent-status`); },
+  getOutputEl(scope) { return document.getElementById(`${scope}-agent-output`); },
+  getRunBtn(scope) { return document.getElementById(`${scope}-run-agent-btn`); },
+
+  setStatus(scope, text, color = '#5b3df0', bg = '#eef2ff') {
+    const el = this.getStatusEl(scope);
+    if (!el) return;
+    el.textContent = text;
+    el.style.color = color;
+    el.style.background = bg;
+  },
+
+  appendOutput(scope, line) {
+    const out = this.getOutputEl(scope);
+    if (!out) return;
+    out.style.display = 'block';
+    out.textContent += `[${new Date().toISOString()}] ${line}\n`;
+    out.scrollTop = out.scrollHeight;
+  },
+
+  clearOutput(scope) {
+    const out = this.getOutputEl(scope);
+    if (!out) return;
+    out.textContent = '';
+    out.style.display = 'none';
+  },
+
+  async start(scope) {
+    if (this.current) {
+      showToast(`Agent already running (${this.current}). Cancel first or wait.`, 'info');
+      return;
+    }
+    this.current = scope;
+    this.clearOutput(scope);
+    this.setStatus(scope, 'Starting…', '#d97706', '#fff7ed');
+    this.getRunBtn(scope).disabled = true;
+    this.appendOutput(scope, `Manual start requested for ${scope} agent.`);
+    logHistoryAction('agent_started', `User started the ${scope} agent from the portal.`, 'user');
+
+    try {
+      const resp = await fetch(`${API_BASE}/api/agent/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scope }),
+      });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      this.appendOutput(scope, `Agent accepted job: ${data.job_id || 'unknown'}`);
+      this.setStatus(scope, 'Running', '#1f9d68', '#ecfdf5');
+      this.startPolling(scope);
+    } catch (err) {
+      this.appendOutput(scope, `Failed to start agent: ${err.message || err}`);
+      this.setStatus(scope, 'Failed to start', '#d24b57', '#fef2f2');
+      this.getRunBtn(scope).disabled = false;
+      this.current = null;
+      logHistoryAction('agent_start_failed', `User attempt to start ${scope} agent failed: ${err.message || err}.`, 'user');
+    }
+  },
+
+  async runTask(taskId) {
+    if (this.current) {
+      showToast(`Agent already running. Cancel first or wait.`, 'info');
+      return;
+    }
+    const task = tasksData.find(t => t.id === taskId);
+    if (!task || task.status === 'Done') {
+      showToast(`Cannot run agent for completed task ${taskId}.`, 'info');
+      return;
+    }
+    this.current = 'tasks';
+    this.runningTaskId = taskId;
+    this.clearOutput('tasks');
+    this.setStatus('tasks', 'Starting…', '#d97706', '#fff7ed');
+    this.appendOutput('tasks', `Manual start requested for task ${taskId}.`);
+    logHistoryAction('agent_started', `User started the implementation agent for task ${taskId}.`, 'user');
+
+    try {
+      const resp = await fetch(`${API_BASE}/api/agent/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scope: 'tasks', task_id: taskId }),
+      });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      this.appendOutput('tasks', `Agent accepted job: ${data.job_id || 'unknown'}`);
+      this.setStatus('tasks', 'Running', '#1f9d68', '#ecfdf5');
+      this.startPolling('tasks');
+    } catch (err) {
+      this.appendOutput('tasks', `Failed to start agent: ${err.message || err}`);
+      this.setStatus('tasks', 'Failed to start', '#d24b57', '#fef2f2');
+      this.current = null;
+      this.runningTaskId = null;
+      logHistoryAction('agent_start_failed', `User attempt to start agent for task ${taskId} failed: ${err.message || err}.`, 'user');
+    }
+  },
+
+  async runIssue(issueId) {
+    if (this.current) {
+      showToast(`Agent already running. Cancel first or wait.`, 'info');
+      return;
+    }
+    const issue = issuesData.find(i => i.id === issueId);
+    if (!issue || issue.status === 'Resolved') {
+      showToast(`Cannot run agent for resolved issue ${issueId}.`, 'info');
+      return;
+    }
+    this.current = 'issues';
+    this.runningIssueId = issueId;
+    this.clearOutput('issues');
+    this.setStatus('issues', 'Starting…', '#d97706', '#fff7ed');
+    this.appendOutput('issues', `Manual start requested for issue ${issueId}.`);
+    logHistoryAction('agent_started', `User started the remediation agent for issue ${issueId}.`, 'user');
+
+    try {
+      const resp = await fetch(`${API_BASE}/api/agent/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scope: 'issues', issue_id: issueId }),
+      });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      this.appendOutput('issues', `Agent accepted job: ${data.job_id || 'unknown'}`);
+      this.setStatus('issues', 'Running', '#1f9d68', '#ecfdf5');
+      this.startPolling('issues');
+    } catch (err) {
+      this.appendOutput('issues', `Failed to start agent: ${err.message || err}`);
+      this.setStatus('issues', 'Failed to start', '#d24b57', '#fef2f2');
+      this.current = null;
+      this.runningIssueId = null;
+      logHistoryAction('agent_start_failed', `User attempt to start agent for issue ${issueId} failed: ${err.message || err}.`, 'user');
+    }
+  },
+
+  async cancel() {
+    if (!this.current) {
+      showToast('No agent is currently running.', 'info');
+      return;
+    }
+    const scope = this.current;
+    const taskId = this.runningTaskId;
+    const issueId = this.runningIssueId;
+    this.appendOutput(scope, 'Cancel requested by user.');
+    try {
+      const resp = await fetch(`${API_BASE}/api/agent/cancel`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scope, task_id: taskId, issue_id: issueId }) });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      this.appendOutput(scope, 'Cancel signal sent.');
+      this.setStatus(scope, 'Cancelling…', '#d97706', '#fff7ed');
+      logHistoryAction('agent_cancelled', `User cancelled the running ${scope} agent${taskId ? ` for task ${taskId}` : ''}${issueId ? ` for issue ${issueId}` : ''}.`, 'user');
+    } catch (err) {
+      this.appendOutput(scope, `Cancel failed: ${err.message || err}`);
+    }
+  },
+
+  startPolling(scope) {
+    if (this.pollingId) clearInterval(this.pollingId);
+    this.pollingId = setInterval(() => this.poll(scope), 3000);
+  },
+
+  async poll(scope) {
+    try {
+      const data = await fetchJson(`/api/agent/status?scope=${encodeURIComponent(scope)}`);
+      if (!data) return;
+      const statusText = data.status || 'Running';
+      const isTerminal = ['completed', 'failed', 'cancelled', 'idle'].includes(statusText.toLowerCase());
+      this.setStatus(scope, statusText, isTerminal ? '#5b3df0' : '#1f9d68', isTerminal ? '#eef2ff' : '#ecfdf5');
+      if (data.updates && data.updates.length) {
+        data.updates.forEach(u => this.appendOutput(scope, `${u.actor || 'agent'}: ${u.action}${u.details ? ` — ${u.details}` : ''}`));
+      }
+      if (isTerminal) {
+        clearInterval(this.pollingId);
+        this.pollingId = null;
+        this.getRunBtn(scope).disabled = false;
+        this.current = null;
+        this.runningTaskId = null;
+        this.runningIssueId = null;
+        this.appendOutput(scope, `Agent finished with status: ${statusText}`);
+        logHistoryAction('agent_finished', `${scope} agent finished with status ${statusText}.`, 'agent');
+        loadDashboardData(true);
+      }
+    } catch (err) {
+      // ignore polling errors
+    }
+  },
+};
 
 // ---------------------------------------------------------------------------
 // Navigation: a simple stack so any drill-down can be "backed" out of, and
@@ -105,13 +363,23 @@ function dispatchRender(entry) {
     case 'team-detail': renderTeamDetail(entry.owner); break;
     case 'analytics': renderAnalyticsPage(); break;
     case 'reports': reportsUI.render(); break;
+    case 'history': renderHistoryPage(); break;
+  }
+  if (entry.page !== 'history') {
+    logHistoryAction('viewed', `Rendered ${entry.page} page${entry.id ? ` (${entry.id})` : ''}.`, 'dashboard');
+  }
+  // Reset agent runner UI on page switch to avoid stale "Running" labels.
+  if (entry.page === 'tasks' || entry.page === 'issues') {
+    agentRunner.setStatus(entry.page, agentRunner.current === entry.page ? 'Running' : 'Idle');
   }
 }
 
 document.getElementById('xd-primary-nav').addEventListener('click', (e) => {
   const item = e.target.closest('.xd-nav-item');
   if (!item) return;
-  dashNav.goRoot(item.dataset.page, item.textContent.trim());
+  const page = item.dataset.page;
+  logHistoryAction('navigated', `User navigated to ${page} page.`, 'user');
+  dashNav.goRoot(page, item.textContent.trim());
 });
 
 // ---------------------------------------------------------------------------
@@ -143,8 +411,10 @@ async function loadDashboardData(isRefresh) {
     document.getElementById('nav-count-issues').textContent = issuesData.length;
     updateSidebarProgress();
     dashNav.render();
+    logHistoryAction(isRefresh ? 'refreshed' : 'loaded', `Dashboard data ${isRefresh ? 'refreshed' : 'loaded'}: ${tasksData.length} tasks, ${issuesData.length} issues.`, 'dashboard');
     if (isRefresh) showToast('Dashboard refreshed', 'success');
   } catch (err) {
+    logHistoryAction('load_failed', `Failed to load dashboard data: ${err.message || err}.`, 'dashboard');
     showToast('Failed to load dashboard data', 'error');
   } finally {
     showLoading(false);
@@ -547,7 +817,11 @@ function renderTasksPage(filterFn, filterLabel) {
   body.innerHTML = '';
   if (!list.length) { body.innerHTML = `<tr><td colspan="6" class="xd-empty">No tasks match this filter.</td></tr>`; return; }
   [...list].sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0)).forEach(task => {
-    const tr = el('tr', '', `<td>${task.id}</td><td><strong>${task.title}</strong></td><td>${badgeHtml(task.status, STATUS_COLORS[task.status] || '#94a3b8')}</td><td>${badgeHtml(task.priority || 'Medium', PRIORITY_COLORS[task.priority] || '#2363eb')}</td><td>${ownerCellHtml(task.owner)}</td><td>${formatDate(task.updated_at)}</td>`);
+    const isDone = task.status === 'Done';
+    const isRunning = agentRunner.current === 'tasks' && agentRunner.runningTaskId === task.id;
+    const btnLabel = isRunning ? '⏹ Cancel' : (isDone ? '✅ Done' : '▶ Run');
+    const btnDisabled = isDone || isRunning;
+    const tr = el('tr', '', `<td>${task.id}</td><td><strong>${task.title}</strong></td><td>${badgeHtml(task.status, STATUS_COLORS[task.status] || '#94a3b8')}</td><td>${badgeHtml(task.priority || 'Medium', PRIORITY_COLORS[task.priority] || '#2363eb')}</td><td>${ownerCellHtml(task.owner)}</td><td>${formatDate(task.updated_at)}</td><td><button class="xd-btn ${isDone ? 'xd-btn-secondary' : 'xd-btn-primary'}" style="padding:6px 12px;font-size:11px;" onclick="agentRunner.runTask('${task.id}')" ${btnDisabled ? 'disabled' : ''}>${btnLabel}</button></td>`);
     tr.addEventListener('mouseenter', (evt) => showTooltip(evt, task.title, [task.description || 'No description', `Next checkpoint: ${task.next_checkpoint || 'n/a'}`]));
     tr.addEventListener('mousemove', moveTooltip);
     tr.addEventListener('mouseleave', hideTooltip);
@@ -587,7 +861,11 @@ function renderIssuesPage(filterFn, filterLabel) {
   body.innerHTML = '';
   if (!list.length) { body.innerHTML = `<tr><td colspan="6" class="xd-empty">No issues match this filter.</td></tr>`; return; }
   [...list].sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0)).forEach(issue => {
-    const tr = el('tr', '', `<td>${issue.id}</td><td><strong>${issue.title}</strong></td><td>${badgeHtml(issue.severity, SEVERITY_COLORS[issue.severity] || '#94a3b8')}</td><td>${badgeHtml(issue.status, STATUS_COLORS[issue.status] || '#94a3b8')}</td><td>${ownerCellHtml(issue.owner)}</td><td>${formatDate(issue.updated_at)}</td>`);
+    const isResolved = issue.status === 'Resolved';
+    const isRunning = agentRunner.current === 'issues' && agentRunner.runningIssueId === issue.id;
+    const btnLabel = isRunning ? '⏹ Cancel' : (isResolved ? '✅ Resolved' : '▶ Run');
+    const btnDisabled = isResolved || isRunning;
+    const tr = el('tr', '', `<td>${issue.id}</td><td><strong>${issue.title}</strong></td><td>${badgeHtml(issue.severity, SEVERITY_COLORS[issue.severity] || '#94a3b8')}</td><td>${badgeHtml(issue.status, STATUS_COLORS[issue.status] || '#94a3b8')}</td><td>${ownerCellHtml(issue.owner)}</td><td>${formatDate(issue.updated_at)}</td><td><button class="xd-btn ${isResolved ? 'xd-btn-secondary' : 'xd-btn-primary'}" style="padding:6px 12px;font-size:11px;" onclick="agentRunner.runIssue('${issue.id}')" ${btnDisabled ? 'disabled' : ''}>${btnLabel}</button></td>`);
     tr.addEventListener('mouseenter', (evt) => showTooltip(evt, issue.title, [issue.description || 'No description', `Mitigation: ${issue.mitigation || 'n/a'}`]));
     tr.addEventListener('mousemove', moveTooltip);
     tr.addEventListener('mouseleave', hideTooltip);
@@ -597,6 +875,24 @@ function renderIssuesPage(filterFn, filterLabel) {
 }
 
 // ---------------------------------------------------------------------------
+// History Log page
+// ---------------------------------------------------------------------------
+function renderHistoryPage() {
+  const body = document.getElementById('history-body');
+  body.innerHTML = '';
+  const entries = getFullHistoryLog().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  if (!entries.length) {
+    body.innerHTML = `<tr><td colspan="4" class="xd-empty">No history recorded yet.</td></tr>`;
+    return;
+  }
+  entries.forEach(entry => {
+    const ts = new Date(entry.timestamp);
+    const tsText = isNaN(ts) ? entry.timestamp || 'N/A' : ts.toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, ' UTC');
+    const tr = el('tr', '', `<td>${tsText}</td><td>${entry.actor || 'system'}</td><td>${entry.action || '—'}</td><td>${entry.details || ''}</td>`);
+    body.appendChild(tr);
+  });
+}
+
 // Detail pages
 // ---------------------------------------------------------------------------
 function renderDetailFields(container, rows) {

@@ -1,7 +1,43 @@
 {
-  "04-frontend-engineer": {
-    "learned_at": "2026-08-20T03:46:20.967376Z",
+  "26-backend-ingestion-streaming": {
+    "learned_at": "2026-08-23T02:48:03.321004Z",
     "count": 8,
+    "accuracy": null,
+    "model": null
+  },
+  "21-streaming-messaging-infra-sme": {
+    "learned_at": "2026-08-23T02:49:03.740018Z",
+    "count": 9,
+    "accuracy": null,
+    "model": null
+  },
+  "32-test-manager": {
+    "learned_at": "2026-08-23T02:49:11.636795Z",
+    "count": 9,
+    "accuracy": null,
+    "model": null
+  },
+  "04-frontend-engineer": {
+    "learned_at": "2026-08-23T02:50:57.500701Z",
+    "count": 9,
+    "accuracy": null,
+    "model": null
+  },
+  "05-backend-engineer": {
+    "learned_at": "2026-08-23T02:50:30.082644Z",
+    "count": 9,
+    "accuracy": null,
+    "model": null
+  },
+  "12-documentation-engineer": {
+    "learned_at": "2026-08-23T02:48:52.064597Z",
+    "count": 9,
+    "accuracy": null,
+    "model": null
+  },
+  "24-case-management-ux-sme": {
+    "learned_at": "2026-08-23T02:48:48.439082Z",
+    "count": 9,
     "accuracy": null,
     "model": null
   }

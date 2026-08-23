@@ -196,6 +196,8 @@
   @keyframes xdspin{to{transform:rotate(360deg);}}
 
   .xd-toast{position:fixed;top:20px;right:20px;padding:14px 20px;border-radius:12px;font-size:13px;font-weight:600;z-index:600;box-shadow:var(--shadow-card);animation:xdFadeIn .2s ease;}
+  .xd-agent-output{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:14px 16px;font-family:"JetBrains Mono",monospace;font-size:12px;line-height:1.6;max-height:260px;overflow-y:auto;white-space:pre-wrap;}
+  .xd-agent-output:empty{display:none;}
 </style>
 </head>
 <body>
@@ -215,9 +217,10 @@
         <li class="xd-nav-item active" data-page="overview"><span class="xd-nav-icon">📊</span>Overview</li>
   <li class="xd-nav-item" data-page="dashboard"><span class="xd-nav-icon">📊</span>Dashboard</li>
         <li class="xd-nav-item" data-page="analytics"><span class="xd-nav-icon">📈</span>Analytics</li>
-        <li class="xd-nav-item" data-page="team"><span class="xd-nav-icon">👥</span>Team</li>
-        <li class="xd-nav-item" data-page="config"><span class="xd-nav-icon">⚙️</span>Config</li>
+        <li class="xd-nav-item" data-page="team"><span class="xd-nav-icon">👥</span>Team</li>        <li class="xd-nav-item" data-page="tasks"><span class="xd-nav-icon">📋</span>Tasks</li>
+        <li class="xd-nav-item" data-page="issues"><span class="xd-nav-icon">⚠️</span>Issues</li>        <li class="xd-nav-item" data-page="config"><span class="xd-nav-icon">⚙️</span>Config</li>
         <li class="xd-nav-item" data-page="reports"><span class="xd-nav-icon">🧾</span>Reports</li>
+        <li class="xd-nav-item" data-page="history"><span class="xd-nav-icon">📜</span>History</li>
       </ul>
 
       <div class="xd-sidebar-footer">
@@ -308,6 +311,16 @@
           <h1 id="tasks-page-title">Tasks</h1>
           <p id="tasks-page-sub">Full list of tracked delivery tasks.</p>
         </div>
+        <div class="xd-panel" style="margin-bottom:20px;">
+          <div class="xd-panel-title">Agent execution</div>
+          <p class="xd-panel-sub">Start the implementation agent to process eligible tasks in the background. Status updates appear below and in the History Log.</p>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <button class="xd-btn xd-btn-primary" id="tasks-run-agent-btn" onclick="agentRunner.start('tasks')">▶ Run Implementation Agent</button>
+            <button class="xd-btn xd-btn-secondary" onclick="agentRunner.cancel()">⏹ Cancel</button>
+            <span id="tasks-agent-status" class="xd-pill" style="background:#eef2ff;color:#5b3df0;font-weight:700;">Idle</span>
+          </div>
+          <div id="tasks-agent-output" class="xd-agent-output" style="margin-top:14px;display:none;"></div>
+        </div>
         <div class="xd-kpi-grid" id="tasks-kpis"></div>
         <div class="xd-panel" style="margin-bottom:20px;">
           <div class="xd-panel-title">Status distribution</div>
@@ -315,7 +328,7 @@
         </div>
         <div class="xd-table-container">
           <table class="xd-table">
-            <thead><tr><th>ID</th><th>Title</th><th>Status</th><th>Priority</th><th>Owner</th><th>Updated</th></tr></thead>
+            <thead><tr><th>ID</th><th>Title</th><th>Status</th><th>Priority</th><th>Owner</th><th>Updated</th><th>Action</th></tr></thead>
             <tbody id="tasks-body"></tbody>
           </table>
         </div>
@@ -327,6 +340,16 @@
           <h1 id="issues-page-title">Issues</h1>
           <p id="issues-page-sub">Full list of tracked delivery issues.</p>
         </div>
+        <div class="xd-panel" style="margin-bottom:20px;">
+          <div class="xd-panel-title">Agent execution</div>
+          <p class="xd-panel-sub">Start the remediation agent to resolve eligible issues in the background. Status updates appear below and in the History Log.</p>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <button class="xd-btn xd-btn-primary" id="issues-run-agent-btn" onclick="agentRunner.start('issues')">▶ Run Remediation Agent</button>
+            <button class="xd-btn xd-btn-secondary" onclick="agentRunner.cancel()">⏹ Cancel</button>
+            <span id="issues-agent-status" class="xd-pill" style="background:#eef2ff;color:#5b3df0;font-weight:700;">Idle</span>
+          </div>
+          <div id="issues-agent-output" class="xd-agent-output" style="margin-top:14px;display:none;"></div>
+        </div>
         <div class="xd-kpi-grid" id="issues-kpis"></div>
         <div class="xd-panel" style="margin-bottom:20px;">
           <div class="xd-panel-title">Severity distribution</div>
@@ -334,7 +357,7 @@
         </div>
         <div class="xd-table-container">
           <table class="xd-table">
-            <thead><tr><th>ID</th><th>Title</th><th>Severity</th><th>Status</th><th>Owner</th><th>Updated</th></tr></thead>
+            <thead><tr><th>ID</th><th>Title</th><th>Severity</th><th>Status</th><th>Owner</th><th>Updated</th><th>Action</th></tr></thead>
             <tbody id="issues-body"></tbody>
           </table>
         </div>
@@ -454,6 +477,20 @@
           <button class="xd-btn xd-btn-secondary" onclick="reportsUI.exportJSON()">⬇ Export JSON</button>
         </div>
         <div id="report-preview"></div>
+      </section>
+
+      <!-- HISTORY LOG -->
+      <section class="xd-section" data-view="history" id="view-history">
+        <div class="xd-page-header">
+          <h1>History Log</h1>
+          <p>Append-only record of orchestration and dashboard actions with date and timestamp.</p>
+        </div>
+        <div class="xd-table-container">
+          <table class="xd-table">
+            <thead><tr><th>Timestamp (UTC)</th><th>Agent / Role</th><th>Action</th><th>Details</th></tr></thead>
+            <tbody id="history-body"></tbody>
+          </table>
+        </div>
       </section>
     </main>
   </div>
