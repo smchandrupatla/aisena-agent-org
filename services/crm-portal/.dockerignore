@@ -1,6 +1,0 @@
-node_modules
-dist
-.git
-tests_e2e
-coverage
-*.log
