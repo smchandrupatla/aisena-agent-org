@@ -2,6 +2,39 @@
 
 ## 2026-08-23
 
+### LOG-20260823-003
+
+- **Entry ID:** LOG-20260823-003
+- **Date:** 2026-08-23
+- **Agent Role:** 00-implementation-manager / 08-devops-engineer
+- **Task ID:** TASK-0013 (Orchestrator service) / infrastructure unblock
+- **What Changed:**
+  - Diagnosed the full `docker-compose.yml` startup failure: the `orchestrator` service build was stalling while transferring a large build context caused by missing `.dockerignore` exclusions for `node_modules`, `dist`, `build`, `.venv`, log files, and the `.tmp-android-verify` scratch directory.
+  - Expanded the root `.dockerignore` to exclude:
+    - `.git/`, `**/node_modules/`, `**/dist/`, `**/build/`, `**/__pycache__/`, `**/*.pyc`
+    - `.vscode/`, `memories/`, `.tmp-android-verify/`, `**/.venv/`, `**/venv/`
+    - `**/*.log`, `selenium-test-output*.log`, `orchestrator-build.log`
+  - Added a service-level `services/orchestrator/.dockerignore` for extra isolation.
+  - Verified the orchestrator image now builds successfully via both `docker build -f services/orchestrator/Dockerfile -t orchestrator-test .` and `docker compose -f docker-compose.yml up -d --no-deps --build orchestrator`.
+  - Ran the orchestrator unit tests inside the built image: **19/19 passed**.
+  - Confirmed the running container responds on `http://localhost:5100/orchestrator/apps` with HTTP 200 and an empty app list.
+  - Documented the separate infrastructure conflict: the `infra/` project's `zookeeper`/`kafka`/`opensearch` containers are already bound to the same host ports (2181, 9092, 9200), so `docker compose -f docker-compose.yml up` cannot bind the root stack's equivalent services without stopping the `infra` stack first.
+- **Files Modified:**
+  - `/.dockerignore`
+  - `/services/orchestrator/.dockerignore` (new)
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** pending
+- **Rationale:**
+  - Restore the ability to build and start the Orchestrator service locally; the original `forwarding Ping: no such job` BuildKit error was a transient symptom of an oversized build context rather than a Dockerfile defect.
+- **Alternatives Considered:**
+  - Refactor the Dockerfile to use a slimmer context: rejected because the service needs the root-level `agents/` and `project/` directories; `.dockerignore` is the correct lever.
+- **Risk Level:** Low (build-context optimization only; no runtime behavior changed).
+- **Metrics Impact:** Orchestrator container builds and starts deterministically; full-stack startup remains blocked only by the pre-existing `infra` stack port conflict.
+- **Rollback Plan:**
+  - Revert the `.dockerignore` changes and delete `services/orchestrator/.dockerignore`.
+- **Human Approval Needed:** No
+- **Handoff Target:** 08-devops-engineer (resolve `infra` vs root compose port conflict before full local stack startup)
+
 ### LOG-20260823-002
 
 - **Entry ID:** LOG-20260823-002

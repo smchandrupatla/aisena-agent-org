@@ -1,6 +1,14 @@
 .git/
 **/node_modules/
+**/dist/
+**/build/
 **/__pycache__/
 **/*.pyc
 .vscode/
 memories/
+.tmp-android-verify/
+**/.venv/
+**/venv/
+**/*.log
+selenium-test-output*.log
+orchestrator-build.log
