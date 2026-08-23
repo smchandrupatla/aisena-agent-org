@@ -1,7 +1,26 @@
 {
-  "34-technical-writer": {
-    "learned_at": "2026-08-23T07:17:59.291672Z",
+  "09-security-engineer": {
+    "learned_at": "2026-08-23T07:20:37.099544Z",
     "count": 9,
     "accuracy": null,
     "model": null
   },
+  "01-business-analyst": {
+    "learned_at": "2026-08-23T07:20:39.985082Z",
+    "count": 9,
+    "accuracy": null,
+    "model": null
+  },
+  "36-implementation-pattern-specialist": {
+    "learned_at": "2026-08-23T07:20:41.065413Z",
+    "count": 9,
+    "accuracy": null,
+    "model": null
+  },
+  "00-implementation-manager": {
+    "learned_at": "2026-08-23T07:20:41.324620Z",
+    "count": 9,
+    "accuracy": null,
+    "model": null
+  }
+}
