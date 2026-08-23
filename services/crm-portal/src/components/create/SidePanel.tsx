@@ -15,7 +15,7 @@ export function SidePanel() {
       <button
         type="button"
         onClick={() => setChatOpen(true)}
-        className="fixed bottom-6 right-6 z-20 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-medium text-primary-foreground shadow-lg"
+        className="absolute bottom-6 right-6 z-20 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-medium text-primary-foreground shadow-lg"
       >
         <MessageSquare size={16} /> AI Assistant
       </button>

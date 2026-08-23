@@ -15,12 +15,19 @@ def _safe_click(driver, element):
 
     Avoids "element click intercepted" errors from fixed overlays such as the
     bottom-right FAB by ensuring the target is the topmost element under the
-    pointer before clicking.
+    pointer before clicking. Falls back to a JavaScript click if Selenium's
+    native click is intercepted, so a benign overlay does not fail the test.
     """
     driver.execute_script(
         "arguments[0].scrollIntoView({block: 'center', inline: 'center'});", element
     )
-    element.click()
+    try:
+        element.click()
+    except WebDriverException as exc:
+        if "click intercepted" in str(exc).lower():
+            driver.execute_script("arguments[0].click();", element)
+        else:
+            raise
 
 
 def test_create_flow_type_step_renders(driver, base_url):

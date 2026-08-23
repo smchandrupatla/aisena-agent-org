@@ -94,7 +94,9 @@ export function CreateProjectPage() {
             />
           )}
         </div>
-        <SidePanel />
+        <div className="relative w-[360px] shrink-0">
+          <SidePanel />
+        </div>
       </div>
     </div>
   )
