@@ -1,5 +1,320 @@
 [
   {
+    "id": "ISSUE-0011",
+    "title": "Issue workflow smoke test",
+    "description": "Production impact must be reviewed",
+    "severity": "High",
+    "owner": "implementation-manager",
+    "status": "Open",
+    "mitigation": "Validate the workflow",
+    "escalation_flag": true,
+    "related_task": null,
+    "app_label": null,
+    "created_at": "2026-08-24T07:24:32.918804+00:00",
+    "updated_at": "2026-08-24T07:24:32.957313+00:00",
+    "comments": [
+      {
+        "author": "QA",
+        "text": "Comment added",
+        "timestamp": "2026-08-24T07:24:32.957256+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "actor": "user",
+        "action": "created",
+        "details": "Issue workflow smoke test reported",
+        "timestamp": "2026-08-24T07:24:32.919211+00:00"
+      },
+      {
+        "actor": "QA",
+        "action": "comment_added",
+        "details": "QA added a comment",
+        "timestamp": "2026-08-24T07:24:32.957303+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ISSUE-0010",
+    "title": "Issue workflow smoke test",
+    "description": "Production impact must be reviewed",
+    "severity": "High",
+    "owner": "implementation-manager",
+    "status": "Open",
+    "mitigation": "Validate the workflow",
+    "escalation_flag": true,
+    "related_task": null,
+    "app_label": null,
+    "created_at": "2026-08-24T07:24:08.033710+00:00",
+    "updated_at": "2026-08-24T07:24:08.105810+00:00",
+    "comments": [
+      {
+        "author": "QA",
+        "text": "Comment added",
+        "timestamp": "2026-08-24T07:24:08.105760+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "actor": "user",
+        "action": "created",
+        "details": "Issue workflow smoke test reported",
+        "timestamp": "2026-08-24T07:24:08.033774+00:00"
+      },
+      {
+        "actor": "QA",
+        "action": "comment_added",
+        "details": "QA added a comment",
+        "timestamp": "2026-08-24T07:24:08.105798+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ISSUE-0009",
+    "title": "Issue workflow smoke test",
+    "description": "Production impact must be reviewed",
+    "severity": "High",
+    "owner": "implementation-manager",
+    "status": "Open",
+    "mitigation": "Validate the workflow",
+    "escalation_flag": true,
+    "related_task": null,
+    "app_label": null,
+    "created_at": "2026-08-24T07:20:22.397873+00:00",
+    "updated_at": "2026-08-24T07:20:22.433706+00:00",
+    "comments": [
+      {
+        "author": "QA",
+        "text": "Comment added",
+        "timestamp": "2026-08-24T07:20:22.433590+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "actor": "user",
+        "action": "created",
+        "details": "Issue workflow smoke test reported",
+        "timestamp": "2026-08-24T07:20:22.398166+00:00"
+      },
+      {
+        "actor": "QA",
+        "action": "comment_added",
+        "details": "QA added a comment",
+        "timestamp": "2026-08-24T07:20:22.433671+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ISSUE-0008",
+    "title": "Issue workflow smoke test",
+    "description": "Production impact must be reviewed",
+    "severity": "High",
+    "owner": "implementation-manager",
+    "status": "Open",
+    "mitigation": "Validate the workflow",
+    "escalation_flag": true,
+    "related_task": null,
+    "app_label": null,
+    "created_at": "2026-08-24T07:11:35.357212+00:00",
+    "updated_at": "2026-08-24T07:11:35.396152+00:00",
+    "comments": [
+      {
+        "author": "QA",
+        "text": "Comment added",
+        "timestamp": "2026-08-24T07:11:35.396076+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "actor": "user",
+        "action": "created",
+        "details": "Issue workflow smoke test reported",
+        "timestamp": "2026-08-24T07:11:35.357519+00:00"
+      },
+      {
+        "actor": "QA",
+        "action": "comment_added",
+        "details": "QA added a comment",
+        "timestamp": "2026-08-24T07:11:35.396129+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ISSUE-0007",
+    "title": "Issue workflow smoke test",
+    "description": "Production impact must be reviewed",
+    "severity": "High",
+    "owner": "implementation-manager",
+    "status": "Open",
+    "mitigation": "Validate the workflow",
+    "escalation_flag": true,
+    "related_task": null,
+    "app_label": null,
+    "created_at": "2026-08-24T04:31:38.035351+00:00",
+    "updated_at": "2026-08-24T04:31:38.060363+00:00",
+    "comments": [
+      {
+        "author": "QA",
+        "text": "Comment added",
+        "timestamp": "2026-08-24T04:31:38.060317+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "actor": "user",
+        "action": "created",
+        "details": "Issue workflow smoke test reported",
+        "timestamp": "2026-08-24T04:31:38.035401+00:00"
+      },
+      {
+        "actor": "QA",
+        "action": "comment_added",
+        "details": "QA added a comment",
+        "timestamp": "2026-08-24T04:31:38.060351+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ISSUE-0006",
+    "title": "Issue workflow smoke test",
+    "description": "Production impact must be reviewed",
+    "severity": "High",
+    "owner": "implementation-manager",
+    "status": "Open",
+    "mitigation": "Validate the workflow",
+    "escalation_flag": true,
+    "related_task": null,
+    "app_label": null,
+    "created_at": "2026-08-24T04:29:29.493267+00:00",
+    "updated_at": "2026-08-24T04:29:29.602367+00:00",
+    "comments": [
+      {
+        "author": "QA",
+        "text": "Comment added",
+        "timestamp": "2026-08-24T04:29:29.602318+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "actor": "user",
+        "action": "created",
+        "details": "Issue workflow smoke test reported",
+        "timestamp": "2026-08-24T04:29:29.493381+00:00"
+      },
+      {
+        "actor": "QA",
+        "action": "comment_added",
+        "details": "QA added a comment",
+        "timestamp": "2026-08-24T04:29:29.602356+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ISSUE-0005",
+    "title": "Issue workflow smoke test",
+    "description": "Production impact must be reviewed",
+    "severity": "High",
+    "owner": "implementation-manager",
+    "status": "Open",
+    "mitigation": "Validate the workflow",
+    "escalation_flag": true,
+    "related_task": null,
+    "app_label": null,
+    "created_at": "2026-08-24T04:26:44.570658+00:00",
+    "updated_at": "2026-08-24T04:26:44.613947+00:00",
+    "comments": [
+      {
+        "author": "QA",
+        "text": "Comment added",
+        "timestamp": "2026-08-24T04:26:44.613877+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "actor": "user",
+        "action": "created",
+        "details": "Issue workflow smoke test reported",
+        "timestamp": "2026-08-24T04:26:44.570731+00:00"
+      },
+      {
+        "actor": "QA",
+        "action": "comment_added",
+        "details": "QA added a comment",
+        "timestamp": "2026-08-24T04:26:44.613939+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ISSUE-0004",
+    "title": "Issue workflow smoke test",
+    "description": "Production impact must be reviewed",
+    "severity": "High",
+    "owner": "implementation-manager",
+    "status": "Open",
+    "mitigation": "Validate the workflow",
+    "escalation_flag": true,
+    "related_task": null,
+    "app_label": null,
+    "created_at": "2026-08-24T04:24:50.804089+00:00",
+    "updated_at": "2026-08-24T04:24:50.844217+00:00",
+    "comments": [
+      {
+        "author": "QA",
+        "text": "Comment added",
+        "timestamp": "2026-08-24T04:24:50.844159+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "actor": "user",
+        "action": "created",
+        "details": "Issue workflow smoke test reported",
+        "timestamp": "2026-08-24T04:24:50.804170+00:00"
+      },
+      {
+        "actor": "QA",
+        "action": "comment_added",
+        "details": "QA added a comment",
+        "timestamp": "2026-08-24T04:24:50.844202+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ISSUE-0003",
+    "title": "Issue workflow smoke test",
+    "description": "Production impact must be reviewed",
+    "severity": "High",
+    "owner": "implementation-manager",
+    "status": "Open",
+    "mitigation": "Validate the workflow",
+    "escalation_flag": true,
+    "related_task": null,
+    "app_label": null,
+    "created_at": "2026-08-24T04:23:02.459413+00:00",
+    "updated_at": "2026-08-24T04:23:02.502905+00:00",
+    "comments": [
+      {
+        "author": "QA",
+        "text": "Comment added",
+        "timestamp": "2026-08-24T04:23:02.502852+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "actor": "user",
+        "action": "created",
+        "details": "Issue workflow smoke test reported",
+        "timestamp": "2026-08-24T04:23:02.459469+00:00"
+      },
+      {
+        "actor": "QA",
+        "action": "comment_added",
+        "details": "QA added a comment",
+        "timestamp": "2026-08-24T04:23:02.502894+00:00"
+      }
+    ]
+  },
+  {
     "id": "ISSUE-0002",
     "title": "Issue workflow smoke test",
     "description": "Production impact must be reviewed",

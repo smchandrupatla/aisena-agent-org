@@ -43,7 +43,10 @@
 
     <main>
       <section class="hero fade-up">
-        <div class="kicker"><a href="tasks.html" style="color: inherit;">&larr; Back to Tasks</a></div>
+        <div class="kicker" style="display:flex; gap:12px; align-items:center;">
+        <a href="tasks.html" style="color: inherit;">&larr; Back</a>
+        <a href="#" onclick="history.back(); return false;" style="color: inherit;">Next &rarr;</a>
+      </div>
         <h1 id="taskHeading">Loading task&hellip;</h1>
         <p class="lede" id="taskSubtitle"></p>
       </section>
@@ -144,6 +147,10 @@
   <script src="task.js"></script>
 </body>
 </html>
+
+
+
+
 
 
 

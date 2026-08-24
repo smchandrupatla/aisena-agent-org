@@ -125,6 +125,7 @@ services:
       dockerfile: services/api/Dockerfile
     environment:
       - POSTGRES_DSN=host=postgres dbname=aisena user=aisena password=aisena_pw
+      - PROMPT_ALLOW_LOCAL_AUTH=true
       - COPILOT_GITHUB_TOKEN=${COPILOT_GITHUB_TOKEN:-}
       - SPLUNK_API_URL=${SPLUNK_API_URL:-https://splunk:8089}
       - SPLUNK_USERNAME=${SPLUNK_USERNAME:-admin}

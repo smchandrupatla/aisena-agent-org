@@ -168,3 +168,100 @@ CREATE TABLE IF NOT EXISTS aisena_task_upload_audit (
 
 CREATE INDEX IF NOT EXISTS idx_aisena_task_upload_audit_task_id
     ON aisena_task_upload_audit(task_id);
+
+-- Prompt Library identity is deliberately scoped to the library until the
+-- wider portal adopts a shared identity provider. Deployments can map their
+-- authenticated identity header to these records; local development uses the
+-- seeded administrator below.
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE IF NOT EXISTS aisena_users (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email       VARCHAR(320) UNIQUE NOT NULL,
+    display_name TEXT NOT NULL,
+    role        VARCHAR(20) NOT NULL DEFAULT 'viewer',
+    active      BOOLEAN NOT NULL DEFAULT true,
+    created_at  TIMESTAMP NOT NULL DEFAULT now(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT now(),
+    CONSTRAINT aisena_users_role_check CHECK (role IN ('viewer', 'editor', 'admin'))
+);
+
+INSERT INTO aisena_users (id, email, display_name, role)
+VALUES ('00000000-0000-4000-8000-000000000001', 'local-admin@aisena.local', 'Local Administrator', 'admin')
+ON CONFLICT (id) DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS aisena_prompts (
+    id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    prompt_code       VARCHAR(32) UNIQUE NOT NULL,
+    title             VARCHAR(255) NOT NULL,
+    description       TEXT,
+    prompt_text       TEXT NOT NULL,
+    category          VARCHAR(120),
+    status            VARCHAR(20) NOT NULL DEFAULT 'Draft',
+    owner_user_id     UUID NOT NULL REFERENCES aisena_users(id),
+    assignee_agent_id VARCHAR(8) REFERENCES aisena_agents(id) ON DELETE SET NULL,
+    version           INTEGER NOT NULL DEFAULT 1,
+    usage_count       INTEGER NOT NULL DEFAULT 0,
+    created_at        TIMESTAMP NOT NULL DEFAULT now(),
+    updated_at        TIMESTAMP NOT NULL DEFAULT now(),
+    archived_at       TIMESTAMP,
+    deleted_at        TIMESTAMP,
+    CONSTRAINT aisena_prompts_status_check CHECK (status IN ('Draft', 'Active', 'Archived')),
+    CONSTRAINT aisena_prompts_version_check CHECK (version > 0),
+    CONSTRAINT aisena_prompts_usage_count_check CHECK (usage_count >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS aisena_prompt_tags (
+    id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name       VARCHAR(80) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_aisena_prompt_tags_name
+    ON aisena_prompt_tags (lower(name));
+
+CREATE TABLE IF NOT EXISTS aisena_prompt_tag_links (
+    prompt_id UUID NOT NULL REFERENCES aisena_prompts(id) ON DELETE CASCADE,
+    tag_id    UUID NOT NULL REFERENCES aisena_prompt_tags(id) ON DELETE CASCADE,
+    PRIMARY KEY (prompt_id, tag_id)
+);
+
+CREATE TABLE IF NOT EXISTS aisena_prompt_versions (
+    id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    prompt_id          UUID NOT NULL REFERENCES aisena_prompts(id) ON DELETE CASCADE,
+    version            INTEGER NOT NULL,
+    title              VARCHAR(255) NOT NULL,
+    description        TEXT,
+    prompt_text        TEXT NOT NULL,
+    category           VARCHAR(120),
+    status             VARCHAR(20) NOT NULL,
+    assignee_agent_id  VARCHAR(8) REFERENCES aisena_agents(id) ON DELETE SET NULL,
+    changed_by_user_id UUID NOT NULL REFERENCES aisena_users(id),
+    change_summary     TEXT NOT NULL,
+    created_at         TIMESTAMP NOT NULL DEFAULT now(),
+    UNIQUE (prompt_id, version)
+);
+
+CREATE TABLE IF NOT EXISTS aisena_prompt_audit (
+    id          BIGSERIAL PRIMARY KEY,
+    prompt_id   UUID NOT NULL,
+    prompt_code VARCHAR(32) NOT NULL,
+    user_id     UUID NOT NULL REFERENCES aisena_users(id),
+    action      VARCHAR(40) NOT NULL,
+    changes     JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at  TIMESTAMP NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_aisena_prompts_status ON aisena_prompts(status) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_aisena_prompts_owner ON aisena_prompts(owner_user_id) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_aisena_prompts_assignee ON aisena_prompts(assignee_agent_id) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_aisena_prompts_updated ON aisena_prompts(updated_at DESC) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_aisena_prompts_search ON aisena_prompts USING gin (
+    to_tsvector('simple', coalesce(title, '') || ' ' || coalesce(description, '') || ' ' ||
+        coalesce(prompt_text, '') || ' ' || coalesce(category, ''))
+) WHERE deleted_at IS NULL;
+CREATE INDEX IF NOT EXISTS idx_aisena_prompt_tag_links_tag ON aisena_prompt_tag_links(tag_id);
+CREATE INDEX IF NOT EXISTS idx_aisena_prompt_versions_prompt ON aisena_prompt_versions(prompt_id, version DESC);
+CREATE INDEX IF NOT EXISTS idx_aisena_prompt_audit_prompt ON aisena_prompt_audit(prompt_id, created_at DESC);
+

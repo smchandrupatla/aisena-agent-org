@@ -13,6 +13,7 @@ from urllib import request as urlrequest
 
 from flask import Flask, Response, jsonify, request, send_from_directory
 
+from prompt_api import prompt_api
 from task_upload import build_preview, parse_upload, template_csv
 
 try:
@@ -23,6 +24,7 @@ except Exception:  # pragma: no cover - DB is optional in tests
     sql = None
 
 app = Flask(__name__)
+app.register_blueprint(prompt_api)
 
 DSN = os.environ.get('POSTGRES_DSN', "host=localhost dbname=aisena user=aisena password=aisena_pw")
 SENSITIVE_COLUMN_PATTERN = re.compile(r"(?:password|passwd|secret|token|api_key|credential|salt)", re.IGNORECASE)
@@ -732,17 +734,23 @@ def send_agent_message(agent_key):
     if not isinstance(tool_actions, list):
         tool_actions = [str(tool_actions)]
 
+    result, status_code = execute_agent_message(agent_key, message, tool_actions)
+    return jsonify(result), status_code
+
+
+def execute_agent_message(agent_key, message, tool_actions=None):
+    tool_actions = tool_actions or []
     if not message.strip():
-        return jsonify({"error": "A message is required."}), 400
+        return {"error": "A message is required."}, 400
 
     agent = find_agent(agent_key)
     if agent is None:
-        return jsonify({"error": f"Unknown agent: {agent_key}"}), 404
+        return {"error": f"Unknown agent: {agent_key}"}, 404
 
     allowed, guardrail_response = enforce_guardrails(agent_key, message, tool_actions)
     if not allowed:
         set_agent_status(agent.get("key"), "blocked", guardrail_response)
-        return jsonify({"reply": guardrail_response, "status": "blocked", "status_message": guardrail_response}), 200
+        return {"reply": guardrail_response, "status": "blocked", "status_message": guardrail_response}, 200
 
     set_agent_status(agent.get("key"), "busy", "Generating response...")
     transcript = load_transcript(agent.get("key"))
@@ -761,13 +769,15 @@ def send_agent_message(agent_key):
     save_transcript(agent.get("key"), transcript)
     set_agent_status(agent.get("key"), "ready", "Ready for the next prompt")
 
-    return jsonify({
+    return {
         "reply": response_text,
         "status": "ready",
         "status_message": "Ready for the next prompt",
         "tool_log": tool_actions,
         "transcript_length": len(transcript),
-    })
+        "agent": agent.get("key"),
+        "agent_name": agent.get("name"),
+    }, 200
 
 
 @app.route('/api/agents/cross-check', methods=['POST', 'OPTIONS'])
@@ -1681,7 +1691,7 @@ def app_dashboard_page():
     return send_from_directory('.', 'app-dashboard.html')
 
 
-# ?????? Deliberation API endpoints ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+# ── Deliberation API endpoints ──────────────────────────────────────────
 
 _AGENTS_MANAGER = ROOT / "agents" / "manager"
 import sys as _sys

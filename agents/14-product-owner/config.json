@@ -1,9 +1,0 @@
-{
-  "alpha": 0.0001,
-  "data_window": 50,
-  "skills": [
-    "foundations.git",
-    "agent_skills.prompt_engineering",
-    "agent_skills.multi_agent_systems"
-  ]
-}

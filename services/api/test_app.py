@@ -1,8 +1,10 @@
 import json
 import unittest
 from unittest.mock import MagicMock, patch
+from uuid import uuid4
 
 import app as app_module
+import prompt_api as prompt_api_module
 from app import app
 
 
@@ -24,6 +26,39 @@ class AgentApiTests(unittest.TestCase):
         if response.status_code == 200:
             payload = response.get_json()
             self.assertIn('reply', payload)
+
+    def test_deliberation_create_list_and_execute_workflow(self):
+        planned = {
+            'id': 'DEL-TEST',
+            'status': 'PLANNED',
+            'project': {'name': 'AISENA Agent Organization'},
+            'plan': {'tasks': [{'id': 'TASK-001', 'title': 'Coordinate delivery'}]},
+            'execution_progress': {},
+        }
+        started = {**planned, 'status': 'IN_PROGRESS'}
+
+        with patch.object(app_module, 'DELIBERATION_AVAILABLE', True), \
+                patch.object(app_module, 'deliberate', return_value=planned) as deliberate_mock, \
+                patch.object(app_module, 'list_deliberations', return_value=[{
+                    'id': 'DEL-TEST', 'project_name': 'AISENA Agent Organization',
+                    'status': 'PLANNED', 'task_count': 1,
+                }]), \
+                patch.object(app_module, 'start_execution', return_value=started):
+            create_response = self.client.post('/api/deliberations', json={
+                'name': 'AISENA Agent Organization',
+                'type': 'platform',
+                'description': 'Coordinate delivery for the current project.',
+            })
+            list_response = self.client.get('/api/deliberations')
+            execute_response = self.client.post('/api/deliberations/DEL-TEST/execute')
+
+        self.assertEqual(create_response.status_code, 201)
+        self.assertEqual(create_response.get_json()['status'], 'PLANNED')
+        deliberate_mock.assert_called_once()
+        self.assertEqual(list_response.status_code, 200)
+        self.assertEqual(list_response.get_json()['deliberations'][0]['task_count'], 1)
+        self.assertEqual(execute_response.status_code, 200)
+        self.assertEqual(execute_response.get_json()['status'], 'IN_PROGRESS')
 
     def test_cross_check_returns_review_context(self):
         response = self.client.post('/api/agents/cross-check', json={
@@ -173,6 +208,132 @@ class AgentApiTests(unittest.TestCase):
         self.assertEqual(payload['application_tables'], ['projects', 'users'])
         connection.close.assert_called_once()
 
+class PromptApiTests(unittest.TestCase):
+    def setUp(self):
+        app.config['TESTING'] = True
+        self.client = app.test_client()
+        self.created_ids = []
+        self.created_user_ids = []
+        self.original_local_auth = prompt_api_module.ALLOW_LOCAL_AUTH
+        prompt_api_module.ALLOW_LOCAL_AUTH = True
 
-if __name__ == '__main__':
-    unittest.main()
+    def tearDown(self):
+        prompt_api_module.ALLOW_LOCAL_AUTH = self.original_local_auth
+        if app_module.psycopg2 is None:
+            return
+        connection = app_module.psycopg2.connect(app_module.DSN)
+        try:
+            cursor = connection.cursor()
+            if self.created_ids:
+                cursor.execute("DELETE FROM aisena_prompt_audit WHERE prompt_id = ANY(%s::uuid[])", (self.created_ids,))
+                cursor.execute("DELETE FROM aisena_prompts WHERE id = ANY(%s::uuid[])", (self.created_ids,))
+            if self.created_user_ids:
+                cursor.execute("DELETE FROM aisena_users WHERE id = ANY(%s::uuid[])", (self.created_user_ids,))
+            connection.commit()
+            cursor.close()
+        finally:
+            connection.close()
+
+    def test_prompt_end_to_end_lifecycle(self):
+        marker = uuid4().hex
+        prompt_text = "Role: reviewer\n\nKeep   these spaces.\n<script>alert('no')</script>"
+        create = self.client.post('/api/prompts', json={
+            'title': f'Prompt API lifecycle test {marker}',
+            'description': f'Searchable lifecycle fixture {marker}',
+            'prompt_text': prompt_text,
+            'category': 'Quality',
+            'tags': ['Regression', 'API'],
+            'status': 'Active',
+            'assignee_agent_id': '10',
+        })
+        self.assertEqual(create.status_code, 201, create.get_data(as_text=True))
+        prompt = create.get_json()['prompt']
+        self.created_ids.append(prompt['id'])
+        self.assertRegex(prompt['prompt_code'], r'^PROMPT-\d{6}$')
+        self.assertEqual(prompt['prompt_text'], prompt_text)
+        self.assertEqual(prompt['version'], 1)
+        self.assertEqual(prompt['usage_count'], 0)
+
+        listed = self.client.get('/api/prompts', query_string={
+            'q': marker, 'status': 'Active', 'tag': 'api',
+            'sort': 'title', 'direction': 'asc', 'page': 1, 'per_page': 5,
+        })
+        self.assertEqual(listed.status_code, 200, listed.get_data(as_text=True))
+        self.assertEqual(listed.get_json()['pagination']['total'], 1)
+
+        updated_text = prompt_text + "\nFinal line"
+        updated = self.client.put(f"/api/prompts/{prompt['id']}", json={
+            'title': prompt['title'], 'description': prompt['description'],
+            'prompt_text': updated_text, 'category': prompt['category'],
+            'tags': prompt['tags'], 'status': prompt['status'],
+            'assignee_agent_id': prompt['assignee_agent_id'],
+            'change_summary': 'Append final instruction',
+        })
+        self.assertEqual(updated.status_code, 200, updated.get_data(as_text=True))
+        self.assertEqual(updated.get_json()['prompt']['version'], 2)
+
+        versions = self.client.get(f"/api/prompts/{prompt['id']}/versions")
+        self.assertEqual([item['version'] for item in versions.get_json()['versions']], [2, 1])
+        compared = self.client.get(f"/api/prompts/{prompt['id']}/versions/compare?from=1&to=2")
+        self.assertEqual(compared.get_json()['changed_fields'], ['prompt_text'])
+
+        copied = self.client.post(f"/api/prompts/{prompt['id']}/copy")
+        self.assertEqual(copied.get_json()['prompt_text'], updated_text)
+        self.assertEqual(copied.get_json()['usage_count'], 1)
+
+        duplicated = self.client.post(f"/api/prompts/{prompt['id']}/duplicate")
+        self.assertEqual(duplicated.status_code, 201, duplicated.get_data(as_text=True))
+        duplicate = duplicated.get_json()['prompt']
+        self.created_ids.append(duplicate['id'])
+        self.assertTrue(duplicate['title'].endswith(' Copy'))
+        self.assertEqual(duplicate['version'], 1)
+        self.assertEqual(duplicate['usage_count'], 0)
+
+        archived = self.client.post(f"/api/prompts/{prompt['id']}/archive")
+        self.assertEqual(archived.get_json()['prompt']['status'], 'Archived')
+        restored = self.client.post(f"/api/prompts/{prompt['id']}/restore")
+        self.assertEqual(restored.get_json()['prompt']['status'], 'Draft')
+        version_restored = self.client.post(f"/api/prompts/{prompt['id']}/versions/1/restore")
+        self.assertEqual(version_restored.get_json()['prompt']['prompt_text'], prompt_text)
+        self.assertEqual(version_restored.get_json()['prompt']['version'], 5)
+
+        deleted = self.client.delete(f"/api/prompts/{prompt['id']}")
+        self.assertEqual(deleted.status_code, 200)
+        self.assertEqual(self.client.get(f"/api/prompts/{prompt['id']}").status_code, 404)
+
+        connection = app_module.psycopg2.connect(app_module.DSN)
+        try:
+            cursor = connection.cursor()
+            cursor.execute("SELECT action FROM aisena_prompt_audit WHERE prompt_id = %s", (prompt['id'],))
+            actions = {row[0] for row in cursor.fetchall()}
+            cursor.close()
+        finally:
+            connection.close()
+        self.assertTrue({'created', 'updated', 'copied', 'duplicated', 'archived', 'restored', 'version_restored', 'deleted'}.issubset(actions))
+
+    def test_prompt_api_requires_an_authenticated_identity(self):
+        with patch.object(prompt_api_module, 'ALLOW_LOCAL_AUTH', False):
+            response = self.client.get('/api/prompts')
+        self.assertEqual(response.status_code, 401)
+
+    def test_authenticated_viewer_cannot_create_prompt(self):
+        user_id = str(uuid4())
+        self.created_user_ids.append(user_id)
+        connection = app_module.psycopg2.connect(app_module.DSN)
+        try:
+            cursor = connection.cursor()
+            cursor.execute(
+                "INSERT INTO aisena_users (id, email, display_name, role) VALUES (%s, %s, %s, 'viewer')",
+                (user_id, f"viewer-{user_id}@example.test", "Prompt Viewer"),
+            )
+            connection.commit()
+            cursor.close()
+        finally:
+            connection.close()
+
+        response = self.client.post('/api/prompts', headers={'X-User-Id': user_id}, json={
+            'title': 'Forbidden prompt', 'prompt_text': 'Must not be created',
+        })
+
+        self.assertEqual(response.status_code, 403)
+

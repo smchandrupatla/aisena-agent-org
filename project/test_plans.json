@@ -94,5 +94,113 @@
     ],
     "created_at": "2026-08-20T11:26:16.675293+00:00",
     "updated_at": "2026-08-20T11:26:16.997528+00:00"
+  },
+  {
+    "id": "PLAN-0009",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-24T04:23:01.342236+00:00",
+    "updated_at": "2026-08-24T04:23:01.414842+00:00"
+  },
+  {
+    "id": "PLAN-0010",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-24T04:24:50.041728+00:00",
+    "updated_at": "2026-08-24T04:24:50.077371+00:00"
+  },
+  {
+    "id": "PLAN-0011",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-24T04:26:43.956369+00:00",
+    "updated_at": "2026-08-24T04:26:43.993577+00:00"
+  },
+  {
+    "id": "PLAN-0012",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-24T04:29:28.749417+00:00",
+    "updated_at": "2026-08-24T04:29:28.822588+00:00"
+  },
+  {
+    "id": "PLAN-0013",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-24T04:31:37.653223+00:00",
+    "updated_at": "2026-08-24T04:31:37.679642+00:00"
+  },
+  {
+    "id": "PLAN-0014",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-24T07:11:34.762505+00:00",
+    "updated_at": "2026-08-24T07:11:34.805131+00:00"
+  },
+  {
+    "id": "PLAN-0015",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-24T07:20:21.741876+00:00",
+    "updated_at": "2026-08-24T07:20:21.780202+00:00"
+  },
+  {
+    "id": "PLAN-0016",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-24T07:24:07.065790+00:00",
+    "updated_at": "2026-08-24T07:24:07.141831+00:00"
+  },
+  {
+    "id": "PLAN-0017",
+    "title": "Smoke test plan",
+    "description": "",
+    "owner": "qa-engineer",
+    "status": "Active",
+    "suites": [
+      "smoke-suite"
+    ],
+    "created_at": "2026-08-24T07:24:32.294923+00:00",
+    "updated_at": "2026-08-24T07:24:32.350368+00:00"
   }
 ]

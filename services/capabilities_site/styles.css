@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --bg: #f2f5fb;
   --bg-soft: #e9eef8;
   --ink: #101a2d;
@@ -392,6 +392,108 @@ h1 {
   margin-top: 7px;
   margin-bottom: 4px;
   color: var(--ink);
+}
+
+.coordination-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.coordination-form {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(180px, 1fr) auto;
+  align-items: end;
+  gap: 14px;
+  margin: 20px 0 14px;
+}
+
+.coordination-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.coordination-form .coordination-description {
+  grid-column: 1 / -1;
+}
+
+.coordination-form input,
+.coordination-form select,
+.coordination-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.coordination-result {
+  margin-top: 16px;
+}
+
+.coordination-summary,
+.coordination-phases {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.coordination-summary > div,
+.coordination-phase {
+  min-width: 0;
+  border: 1px solid #d7e2f6;
+  border-radius: 8px;
+  padding: 12px;
+  background: #f9fcff;
+}
+
+.coordination-summary strong,
+.coordination-summary span,
+.coordination-phase strong,
+.coordination-phase span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.coordination-summary span,
+.coordination-phase span {
+  margin-top: 5px;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.coordination-phases {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: 10px;
+}
+
+.coordination-table-wrap {
+  overflow-x: auto;
+}
+
+@media (max-width: 900px) {
+  .coordination-form,
+  .coordination-summary,
+  .coordination-phases {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .coordination-form button {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 620px) {
+  .coordination-heading {
+    display: grid;
+  }
+
+  .coordination-form,
+  .coordination-summary,
+  .coordination-phases {
+    grid-template-columns: 1fr;
+  }
 }
 
 .table {
@@ -1605,3 +1707,5 @@ dialog label {
     grid-template-columns: 1fr;
   }
 }
+
+

@@ -1,4 +1,4 @@
-// Task detail page: editable standard fields, activity log, comment thread, and a
+﻿// Task detail page: editable standard fields, activity log, comment thread, and a
 // per-task AI chat that reuses the shared /api/agents/:agentId/message backend.
 const TASK_STATUSES = ["Backlog", "Planned", "In Progress", "Blocked", "In Review", "Done"];
 const TASK_PRIORITIES = ["Low", "Medium", "High", "Critical"];
@@ -48,8 +48,8 @@ async function fetchAllTasks() {
 function renderHeader(task) {
   document.getElementById("taskHeading").textContent = `${task.id}: ${task.title}`;
   document.getElementById("taskSubtitle").textContent =
-    `${task.status} • ${task.priority} priority • Owner: ${ownerLabel(task.owner)}` +
-    (task.app_label ? ` • App: ${task.app_label}` : '');
+    `${task.status} Ã¢â‚¬Â¢ ${task.priority} priority Ã¢â‚¬Â¢ Owner: ${ownerLabel(task.owner)}` +
+    (task.app_label ? ` Ã¢â‚¬Â¢ App: ${task.app_label}` : '');
   document.getElementById("taskCreatedAt").textContent = formatTimestamp(task.created_at);
   document.getElementById("taskUpdatedAt").textContent = formatTimestamp(task.updated_at);
 }
@@ -92,7 +92,7 @@ function renderActivityLog(task) {
   root.innerHTML = entries
     .map(
       (entry) => `<div class="activity-entry">
-        <time>${formatTimestamp(entry.timestamp)} • ${entry.actor || "system"}</time>
+        <time>${formatTimestamp(entry.timestamp)} Ã¢â‚¬Â¢ ${entry.actor || "system"}</time>
         ${entry.details || entry.action}
       </div>`
     )
@@ -371,3 +371,6 @@ async function initTaskPage() {
 }
 
 initTaskPage();
+
+
+

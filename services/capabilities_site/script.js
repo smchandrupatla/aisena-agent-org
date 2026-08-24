@@ -1,11 +1,25 @@
 // Same-origin: server.js proxies /api, /health, /results, /self-learning to the backend.
 const API_BASE = window.API_BASE_OVERRIDE || "";
 
+function ensurePromptNavigation() {
+  document.querySelectorAll("nav").forEach((nav) => {
+    if (nav.querySelector('a[href="/prompts"], a[href="prompts"]')) return;
+    const link = document.createElement("a");
+    link.href = "/prompts";
+    link.textContent = "Prompt Library";
+    const issues = Array.from(nav.querySelectorAll("a")).find((item) => (item.getAttribute("href") || "").includes("issues"));
+    if (issues) issues.insertAdjacentElement("afterend", link);
+    else nav.appendChild(link);
+  });
+}
+
 function setActiveNav() {
+  ensurePromptNavigation();
   const path = window.location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll("nav a").forEach((link) => {
     const href = link.getAttribute("href");
-    if (href === path) {
+    const isPromptRoute = href === "/prompts" && window.location.pathname.startsWith("/prompts");
+    if (href === path || isPromptRoute) {
       link.classList.add("active");
       link.setAttribute("aria-current", "page");
     } else {

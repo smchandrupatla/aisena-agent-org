@@ -35,6 +35,8 @@ function serveStatic(req, res) {
 
   if (parsedUrl.pathname === '/') {
     filePath = join(PUBLIC_DIR, 'index.html');
+  } else if (/^\/prompts(?:\/|$)/.test(parsedUrl.pathname)) {
+    filePath = join(PUBLIC_DIR, 'prompts.html');
   }
 
   if (!filePath) {
