@@ -84,6 +84,55 @@ Sample JSON → Ingestion (`produce.py`) → Kafka topic `aisena-stage0-events` 
 
 ## Key Conventions
 
+### Development Practices
+
+#### Before Writing Code
+
+- Read the existing code in the area being changed before adding code. Match established patterns, naming conventions, formatting, and file structure unless there is a clear reason to deviate; explain any deviation.
+- When a requirement is ambiguous or underspecified, state the assumption explicitly and proceed with a sensible default without inventing additional scope.
+- For non-trivial work, including new modules, schema changes, and cross-cutting changes, briefly outline the approach before implementation.
+
+#### Code Quality and Architecture
+
+- Prefer clear, maintainable code over cleverness. Keep functions small and single-purpose.
+- Do not add dead code, commented-out blocks, or TODOs without an owner or ticket reference.
+- Avoid premature abstraction. Prefer limited duplication until a stable shared abstraction is evident.
+- Keep changes within existing module boundaries, state-management patterns, and data flows unless a refactor is explicitly requested.
+- Separate business logic from presentation and framework-specific integration code.
+- Flag architectural inconsistencies outside the requested scope rather than silently fixing them.
+- Do not mix refactoring and behavior changes in the same commit.
+
+#### Correctness and Testing
+
+- Every code or behavior change requires corresponding tests, including relevant edge cases, empty or null inputs, and boundary conditions.
+- For bug fixes, first add a test that reproduces the defect, then implement the fix and confirm the test passes.
+- If the touched code has no test suite, add minimal coverage rather than skipping tests.
+- Run the full regression suite after every code change. If it fails, fix the failure or report it as a blocker; do not claim completion.
+- For money, risk scoring, sanctions, fraud, and other decision-critical logic, use explicit, auditable rules and add extra coverage.
+
+#### Error Handling and Security
+
+- Fail loudly and specifically. Do not silently catch or swallow exceptions, and avoid generic error messages.
+- Validate input at system boundaries and log enough non-sensitive context to diagnose production issues.
+- Never hardcode secrets, API keys, or credentials. Use environment variables or a secret manager and check changes for sensitive data before committing.
+- Escape or sanitize rendered user input, and parameterize database queries.
+- Treat authentication, authorization, permissions, and data-access changes as high risk and call them out explicitly.
+
+#### Documentation and Performance
+
+- Give public functions and APIs concise documentation covering behavior, parameters, return values, and non-obvious side effects.
+- Update setup and run documentation when configuration, execution, or deployment changes.
+- Document complex business rules in plain language near the implementation.
+- Avoid obvious inefficiencies such as N+1 queries, unnecessary rerenders, and unbounded loops over large data sets without prematurely optimizing.
+- For user-facing work, implement appropriate loading, empty, and failure states as well as the success path.
+
+#### Completion Reporting
+
+- Before completion, review the diff for focus, correctness, accidental scope, and sensitive data.
+- State explicitly whether the full regression suite passed. If it could not run, explain the blocker and treat the task as incomplete.
+- Summarize what changed and why in plain language, including assumptions, excluded scope, and recommended follow-up work.
+- Follow the repository-specific validation, change-log, approval, commit, and deployment requirements below in addition to these practices.
+
 ### Completion Workflow
 
 - For every completed change, validate the affected behavior, commit only the files changed for the task, and deploy the resulting artifact before reporting completion.

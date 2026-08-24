@@ -1,5 +1,35 @@
 # Agent Change Log (Append-Only)
 
+## 2026-08-24
+
+### LOG-20260824-003
+
+- **Entry ID:** LOG-20260824-003
+- **Date:** 2026-08-24
+- **Agent Role:** 12-documentation-engineer
+- **Task ID:** Workspace development practices instructions
+- **What Changed:**
+  - Added workspace-wide development practices covering implementation planning, code quality, architecture, testing, error handling, security, documentation, performance, and completion reporting.
+  - Kept the existing AISENA validation, approval, change-log, commit, and deployment workflow authoritative and additive.
+- **Files Modified:**
+  - `/.github/copilot-instructions.md`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** pending
+- **Rationale:**
+  - Development agents need consistent, explicit expectations for readable code, regression coverage, secure boundaries, focused changes, and transparent completion reports.
+- **Alternatives Considered:**
+  - Create a file-scoped instruction: rejected because these practices apply to engineering work across the repository.
+  - Store the rules only in a user profile: rejected because the selected scope is workspace-shared guidance.
+- **Risk Level:** Low (instruction and documentation only; no runtime behavior changes).
+- **Metrics Impact:** None.
+- **Validation:**
+  - VS Code reported no diagnostics in the updated instruction file.
+  - Full runtime regression suite not applicable because the change affects instructions and documentation only.
+- **Rollback Plan:**
+  - Revert the development-practices section and this change-log entry.
+- **Human Approval Needed:** No
+- **Handoff Target:** 00-implementation-manager
+
 ## 2026-08-23
 
 ### LOG-20260823-004
