@@ -2,6 +2,39 @@
 
 ## 2026-08-24
 
+### LOG-20260824-001
+
+- **Entry ID:** LOG-20260824-001
+- **Date:** 2026-08-24
+- **Agent Role:** 08-devops-engineer / 05-backend-engineer
+- **Task ID:** Portal PostgreSQL table viewer repair
+- **What Changed:**
+  - Added the API and capabilities portal to `infra/docker-compose.yml`, placing both services on the same Compose network as PostgreSQL.
+  - Configured the API to resolve PostgreSQL through the `postgres` service name and the portal proxy to resolve the API through the `api` service name.
+  - Added regression coverage for the `/db-tables` AISENA/application table grouping contract consumed by the portal.
+- **Files Modified:**
+  - `/infra/docker-compose.yml`
+  - `/services/api/test_app.py`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** pending
+- **Rationale:**
+  - The deployed PostgreSQL container was attached to `infra_default`, while a manually started API container was isolated on Docker's default bridge and the portal container was absent. The portal therefore could not reach a backend capable of querying PostgreSQL.
+- **Alternatives Considered:**
+  - Hard-code the running PostgreSQL container name or IP in the API: rejected because container names and addresses are deployment-specific and bypass Compose service discovery.
+  - Run the API with `host.docker.internal`: rejected because it introduces host-routing dependence and does not repair portal-to-API discovery.
+- **Risk Level:** Low (adds two application services to the existing local infrastructure topology without replacing the PostgreSQL volume).
+- **Metrics Impact:** Portal and API gain deterministic service discovery on the existing infrastructure network.
+- **Validation:**
+  - Compose configuration validation passed.
+  - Focused `/db-tables` regression test passed in both the test image and deployed API container.
+  - Deployed API and portal proxy each returned 55 tables: 1 AISENA table and 54 application tables.
+  - Deployed portal proxy returned 14 columns and the available row from `aisena_tasks`.
+  - PostgreSQL viewer page returned HTTP 200 from `http://localhost:8081/postgres-viewer.html`.
+- **Rollback Plan:**
+  - Remove the `api` and `capabilities-site` services from `infra/docker-compose.yml` and redeploy the infrastructure stack.
+- **Human Approval Needed:** No
+- **Handoff Target:** 10-qa-engineer
+
 ### LOG-20260824-003
 
 - **Entry ID:** LOG-20260824-003

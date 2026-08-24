@@ -12,6 +12,39 @@ services:
     ports:
       - "5432:5432"
 
+  api:
+    build:
+      context: ..
+      dockerfile: services/api/Dockerfile
+    environment:
+      - POSTGRES_DSN=host=postgres dbname=aisena user=aisena password=aisena_pw
+      - COPILOT_GITHUB_TOKEN=${COPILOT_GITHUB_TOKEN:-}
+      - SPLUNK_API_URL=${SPLUNK_API_URL:-https://splunk:8089}
+      - SPLUNK_USERNAME=${SPLUNK_USERNAME:-admin}
+      - SPLUNK_PASSWORD=${SPLUNK_PASSWORD:-}
+      - SPLUNK_HEC_INDEX=${SPLUNK_HEC_INDEX:-main}
+      - DYNATRACE_API_URL=${DYNATRACE_API_URL:-}
+      - DYNATRACE_API_TOKEN=${DYNATRACE_API_TOKEN:-}
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  capabilities-site:
+    build:
+      context: ../services/capabilities_site
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=/api
+      - API_BASE_URL=http://api:5000
+    ports:
+      - "8081:3000"
+    depends_on:
+      - api
+    restart: unless-stopped
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
     environment:

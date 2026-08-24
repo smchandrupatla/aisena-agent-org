@@ -1,6 +1,6 @@
 import json
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import app as app_module
 from app import app
@@ -155,6 +155,23 @@ class AgentApiTests(unittest.TestCase):
         self.assertEqual(payload['status'], 'not_configured')
         self.assertEqual(payload['events'], [])
         self.assertNotIn('token', payload)
+
+    def test_db_tables_groups_aisena_and_application_tables(self):
+        connection = MagicMock()
+        connection.cursor.return_value.fetchall.return_value = [
+            ('aisena_tasks',),
+            ('projects',),
+            ('users',),
+        ]
+
+        with patch.object(app_module.psycopg2, 'connect', return_value=connection):
+            response = self.client.get('/db-tables')
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertEqual(payload['aisena_tables'], ['aisena_tasks'])
+        self.assertEqual(payload['application_tables'], ['projects', 'users'])
+        connection.close.assert_called_once()
 
 
 if __name__ == '__main__':
