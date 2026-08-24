@@ -1,8 +1,8 @@
 // Task workflow: fetches tasks and the live agent directory from the API, renders a
 // filterable list (state synced to the URL query string), and wires the add-task
 // dialog + quick actions. Single source of truth: /api/tasks and /api/agents.
-const TASK_STATUSES = ["Backlog", "Planned", "In Progress", "Blocked", "In Review", "Done"];
-const TASK_PRIORITIES = ["Low", "Medium", "High", "Critical"];
+const TASK_STATUSES = ["To Do", "Backlog", "Planned", "In Progress", "Blocked", "In Review", "Done"];
+const TASK_PRIORITIES = ["Low", "Medium", "High", "Urgent", "Critical"];
 
 let tasksCache = [];
 let agentsCache = [];
@@ -238,6 +238,186 @@ function initTaskDialog() {
   });
 }
 
+function initTaskUploadDialog() {
+  const dialog = document.getElementById("taskUploadDialog");
+  const form = document.getElementById("taskUploadForm");
+  const fileInput = document.getElementById("taskUploadFile");
+  const uploaderInput = document.getElementById("taskUploadUser");
+  const notice = document.getElementById("taskUploadNotice");
+  const previewPanel = document.getElementById("taskUploadPreviewPanel");
+  const previewBody = document.getElementById("taskUploadPreviewBody");
+  const summary = document.getElementById("taskUploadSummary");
+  const confirmButton = document.getElementById("taskUploadConfirm");
+  const results = document.getElementById("taskUploadResults");
+  if (!dialog || !form) return;
+
+  let previewRows = [];
+  let uploadFilename = "";
+
+  const escapeHtml = (value) => String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+  const resetDialog = () => {
+    form.reset();
+    uploaderInput.value = "Portal User";
+    previewRows = [];
+    uploadFilename = "";
+    previewPanel.hidden = true;
+    results.hidden = true;
+    results.replaceChildren();
+    notice.textContent = "Choose a CSV or XLSX file to validate before importing.";
+    notice.className = "notice";
+  };
+
+  const closeDialog = () => {
+    dialog.close();
+    resetDialog();
+  };
+
+  const agentIsEligible = (agent) => {
+    return agent.active !== false
+      && agent.available !== false
+      && ["ready", "available"].includes(agent.status || "ready");
+  };
+
+  const ownerOptions = (row) => {
+    const options = agentsCache.map((agent) => {
+      const selected = agent.key === row.owner ? " selected" : "";
+      const eligible = agentIsEligible(agent);
+      const suffix = eligible ? "" : " (not eligible)";
+      return `<option value="${escapeHtml(agent.key)}"${selected}>${escapeHtml(agent.name)}${suffix}</option>`;
+    }).join("");
+    return `<option value=""${row.owner ? "" : " selected"}>Unassigned</option>${options}`;
+  };
+
+  const renderPreview = () => {
+    const counts = {
+      total: previewRows.length,
+      valid: previewRows.filter((row) => !row.errors.length && !row.duplicate).length,
+      rejected: previewRows.filter((row) => row.errors.length).length,
+      duplicates: previewRows.filter((row) => row.duplicate).length,
+      assignmentRequired: previewRows.filter((row) => row.assignment_required).length,
+    };
+    summary.innerHTML = [
+      `<span>${counts.total} rows</span>`,
+      `<span>${counts.valid} ready</span>`,
+      `<span>${counts.duplicates} duplicate warnings</span>`,
+      `<span>${counts.rejected} rejected</span>`,
+      `<span>${counts.assignmentRequired} assignment required</span>`,
+    ].join("");
+    confirmButton.disabled = counts.valid === 0;
+
+    previewBody.innerHTML = previewRows.map((row, index) => {
+      const messages = [
+        ...row.errors.map((message) => `<span class="upload-row-message">${escapeHtml(message)}</span>`),
+        ...row.warnings.map((message) => `<span class="upload-row-message warning">${escapeHtml(message)}</span>`),
+      ].join("");
+      const rowClass = row.errors.length ? "row-error" : row.warnings.length ? "row-warning" : "";
+      return `<tr class="${rowClass}">
+        <td>${row.row_number}</td>
+        <td><strong>${escapeHtml(row.title || "Untitled")}</strong><br>${escapeHtml(row.description || "No description")}</td>
+        <td>${escapeHtml(row.priority)}</td>
+        <td>${escapeHtml(row.status)}</td>
+        <td>${escapeHtml(row.dependency || "None")}<br>${escapeHtml(row.next_checkpoint || "No checkpoint")}</td>
+        <td>${escapeHtml(row.app_label || "No app label")}<br>${escapeHtml((row.tags || []).join("; ") || "No tags")}</td>
+        <td><select class="upload-owner" data-row-index="${index}">${ownerOptions(row)}</select></td>
+        <td>${messages || "Ready"}</td>
+      </tr>`;
+    }).join("");
+
+    previewBody.querySelectorAll(".upload-owner").forEach((select) => {
+      select.addEventListener("change", () => {
+        const row = previewRows[Number(select.dataset.rowIndex)];
+        row.owner = select.value;
+        row.assignment_method = "manual";
+        row.errors = row.errors.filter((message) => !message.startsWith("Owner"));
+        row.warnings = row.warnings.filter((message) => !message.startsWith("Assignment Required"));
+        const agent = agentsCache.find((candidate) => candidate.key === select.value);
+        if (!agent) {
+          row.assignment_required = true;
+          row.warnings.push("Assignment Required: no agent is selected.");
+        } else if (!agentIsEligible(agent)) {
+          row.assignment_required = false;
+          row.errors.push("Owner must be active and available.");
+        } else {
+          row.assignment_required = false;
+        }
+        renderPreview();
+      });
+    });
+  };
+
+  document.getElementById("uploadTasksButton")?.addEventListener("click", () => {
+    resetDialog();
+    dialog.showModal();
+  });
+  document.getElementById("taskUploadCancel")?.addEventListener("click", closeDialog);
+  document.getElementById("taskUploadCancelPreview")?.addEventListener("click", closeDialog);
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const file = fileInput.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    notice.textContent = "Validating New Task fields and calculating assignments...";
+    notice.className = "notice";
+    try {
+      const response = await fetch(`${API_BASE}/api/tasks/upload/preview`, { method: "POST", body: formData });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Preview failed");
+      previewRows = payload.rows;
+      uploadFilename = payload.filename;
+      renderPreview();
+      previewPanel.hidden = false;
+      results.hidden = true;
+      notice.textContent = "Review validation messages and assignments before confirming the import.";
+      notice.className = payload.valid ? "notice ok" : "notice warn";
+    } catch (error) {
+      previewPanel.hidden = true;
+      notice.textContent = `Could not preview tasks: ${error.message}`;
+      notice.className = "notice warn";
+    }
+  });
+
+  confirmButton.addEventListener("click", async () => {
+    confirmButton.disabled = true;
+    notice.textContent = "Importing validated tasks...";
+    try {
+      const response = await fetch(`${API_BASE}/api/tasks/upload/import`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rows: previewRows, filename: uploadFilename, uploader: uploaderInput.value.trim() || "Portal User" }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "Import failed");
+      const createdItems = payload.created.map((item) => `<li><strong>${escapeHtml(item.task_id)}</strong> ${escapeHtml(item.title)} — ${escapeHtml(ownerLabel(item.assigned_agent))} (${escapeHtml(item.assignment_method)})</li>`).join("");
+      const rejectedItems = payload.rejected.map((item) => `<li>Row ${item.row_number}: ${escapeHtml(item.title)} — ${escapeHtml(item.errors.join(" "))}</li>`).join("");
+      const skippedItems = payload.skipped.map((item) => `<li>Row ${item.row_number}: ${escapeHtml(item.title)} — ${escapeHtml(item.reason)}</li>`).join("");
+      results.innerHTML = `<h4>Import Results</h4>
+        <div class="upload-summary"><span>${payload.totals.created} created</span><span>${payload.totals.skipped} skipped</span><span>${payload.totals.rejected} rejected</span></div>
+        ${createdItems ? `<h5>Created tasks</h5><ul class="upload-results-list">${createdItems}</ul>` : ""}
+        ${skippedItems ? `<h5>Skipped tasks</h5><ul class="upload-results-list">${skippedItems}</ul>` : ""}
+        ${rejectedItems ? `<h5>Rejected tasks</h5><ul class="upload-results-list">${rejectedItems}</ul>` : ""}`;
+      results.hidden = false;
+      previewPanel.hidden = true;
+      notice.textContent = "Import complete. Results and generated task IDs are shown below.";
+      notice.className = "notice ok";
+      tasksCache = await fetchTasks();
+      populateFilterSelects();
+      renderTasks();
+    } catch (error) {
+      confirmButton.disabled = false;
+      notice.textContent = `Could not import tasks: ${error.message}`;
+      notice.className = "notice warn";
+    }
+  });
+}
+
 function initQuickPickActions() {
   const dialog = document.getElementById("quickPickDialog");
   const form = document.getElementById("quickPickForm");
@@ -287,6 +467,7 @@ async function initTasksPage() {
   populateFilterSelects();
   initFilterBar();
   initTaskDialog();
+  initTaskUploadDialog();
   initQuickPickActions();
   renderTasks();
 }

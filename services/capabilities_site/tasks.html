@@ -92,7 +92,8 @@
         <article class="card span-6 fade-up">
           <h3>Quick Actions</h3>
           <div class="pill-list">
-            <button type="button" class="pill" id="quickAddTask">Add task in backlog</button>
+            <button type="button" class="pill" id="quickAddTask">Add Task</button>
+            <button type="button" class="pill" id="uploadTasksButton">Upload Tasks</button>
             <button type="button" class="pill" id="quickAssignOwner">Assign owner</button>
             <button type="button" class="pill" id="quickSetDependency">Set dependency</button>
             <button type="button" class="pill" id="quickLogHandoff">Log handoff</button>
@@ -130,6 +131,71 @@
             <button type="submit" id="taskDialogSave">Save</button>
             <button type="button" class="ghost" id="taskDialogCancel">Cancel</button>
           </div>
+        </form>
+      </dialog>
+
+      <dialog id="taskUploadDialog" class="upload-dialog">
+        <form id="taskUploadForm">
+          <div class="upload-heading">
+            <div>
+              <div class="kicker">Bulk Import</div>
+              <h3>Upload Tasks</h3>
+            </div>
+            <a class="ghost upload-template-link" href="/api/tasks/upload/template" download>Download Template</a>
+          </div>
+          <div id="taskUploadNotice" class="notice">Choose a CSV or XLSX file to validate before importing.</div>
+          <section class="upload-format-guide" aria-labelledby="taskUploadFormatTitle">
+            <div>
+              <h4 id="taskUploadFormatTitle">File format</h4>
+              <p>Use a UTF-8 CSV or XLSX file up to 5 MB. Keep every header below in this exact order; only <strong>title</strong> requires a value.</p>
+            </div>
+            <code>title,description,owner,status,priority,dependency,next_checkpoint,tags,app_label</code>
+            <div class="upload-format-rules">
+              <span><strong>Owner:</strong> agent key or name; leave blank for automatic assignment</span>
+              <span><strong>Status:</strong> To Do, Backlog, Planned, In Progress, Blocked, In Review, or Done</span>
+              <span><strong>Priority:</strong> Low, Medium, High, Urgent, or Critical</span>
+              <span><strong>Dependency:</strong> existing task ID, for example TASK-000001</span>
+              <span><strong>Tags:</strong> separate values with semicolons; commas are also accepted in quoted CSV cells</span>
+              <span><strong>Task ID:</strong> do not add this column; IDs are generated during import</span>
+            </div>
+          </section>
+          <div class="upload-file-row">
+            <label>Task file
+              <input type="file" id="taskUploadFile" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
+            </label>
+            <label>Uploader
+              <input type="text" id="taskUploadUser" value="Portal User" required>
+            </label>
+          </div>
+          <div class="chat-actions upload-initial-actions">
+            <button type="submit" id="taskUploadPreview">Validate Preview</button>
+            <button type="button" class="ghost" id="taskUploadCancel">Cancel</button>
+          </div>
+          <section id="taskUploadPreviewPanel" class="upload-preview" hidden>
+            <div id="taskUploadSummary" class="upload-summary"></div>
+            <div class="upload-table-wrap">
+              <table class="table upload-preview-table">
+                <thead>
+                  <tr>
+                    <th>Row</th>
+                    <th>Task</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Dependency / Checkpoint</th>
+                    <th>App / Tags</th>
+                    <th>Owner</th>
+                    <th>Validation</th>
+                  </tr>
+                </thead>
+                <tbody id="taskUploadPreviewBody"></tbody>
+              </table>
+            </div>
+            <div class="chat-actions">
+              <button type="button" id="taskUploadConfirm">Confirm Import</button>
+              <button type="button" class="ghost" id="taskUploadCancelPreview">Cancel</button>
+            </div>
+          </section>
+          <section id="taskUploadResults" class="upload-results" hidden></section>
         </form>
       </dialog>
 

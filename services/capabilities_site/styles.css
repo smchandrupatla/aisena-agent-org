@@ -768,6 +768,156 @@ dialog label {
   color: var(--ink-soft);
 }
 
+.upload-dialog {
+  max-width: min(1180px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+}
+
+.upload-heading,
+.upload-file-row,
+.upload-summary {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.upload-heading h3 {
+  margin: 3px 0 0;
+}
+
+.upload-template-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.upload-file-row label {
+  flex: 1;
+}
+
+.upload-format-guide {
+  display: grid;
+  gap: 10px;
+  padding: 14px 0;
+  border-block: 1px solid #d7e2f6;
+}
+
+.upload-format-guide h4,
+.upload-format-guide p {
+  margin: 0;
+}
+
+.upload-format-guide p {
+  margin-top: 4px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.upload-format-guide code {
+  overflow-x: auto;
+  padding: 10px 12px;
+  border: 1px solid #cfdcf7;
+  background: #f7faff;
+  color: var(--ink);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.upload-format-rules {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 18px;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.upload-preview {
+  display: grid;
+  gap: 14px;
+}
+
+.upload-preview[hidden],
+.upload-results[hidden] {
+  display: none;
+}
+
+.upload-summary {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.upload-summary span {
+  border: 1px solid #cfdcf7;
+  border-radius: 6px;
+  padding: 7px 10px;
+  background: #f7faff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.upload-table-wrap {
+  max-height: 390px;
+  overflow: auto;
+  border: 1px solid #d7e2f6;
+}
+
+.upload-preview-table {
+  min-width: 1100px;
+}
+
+.upload-preview-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.upload-preview-table td {
+  vertical-align: top;
+  font-size: 12px;
+}
+
+.upload-preview-table tr.row-error td {
+  background: #fff1f2;
+}
+
+.upload-preview-table tr.row-warning td {
+  background: #fff9e9;
+}
+
+.upload-row-message {
+  display: block;
+  margin-bottom: 4px;
+  color: #8d2834;
+}
+
+.upload-row-message.warning {
+  color: #7f5a19;
+}
+
+.upload-results {
+  border-top: 1px solid #d7e2f6;
+  padding-top: 14px;
+}
+
+.upload-results-list {
+  margin: 10px 0 0;
+  padding-left: 20px;
+}
+
+@media (max-width: 700px) {
+  .upload-heading,
+  .upload-file-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
 .footer {
   margin-top: 24px;
   font-size: 13px;

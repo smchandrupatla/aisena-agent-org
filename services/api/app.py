@@ -11,7 +11,9 @@ from urllib import error as urlerror
 from urllib import parse as urlparse
 from urllib import request as urlrequest
 
-from flask import Flask, jsonify, request, send_from_directory, send_from_directory, send_from_directory
+from flask import Flask, Response, jsonify, request, send_from_directory
+
+from task_upload import build_preview, parse_upload, template_csv
 
 try:
     import psycopg2
@@ -50,7 +52,7 @@ ALLOWED_TOOLS = [
 def add_cors_headers(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-User-Id, X-Authenticated-User"
     return response
 
 
@@ -61,6 +63,9 @@ def utc_now_iso():
 TASK_COLUMNS = [
     "id", "title", "description", "owner", "status", "priority", "dependency",
     "next_checkpoint", "tags", "comments", "activity_log", "app_label",
+    "due_date", "required_capabilities", "external_reference",
+    "assignment_required", "assignment_method", "upload_filename", "uploaded_by",
+    "uploaded_at",
     "created_at", "updated_at",
 ]
 
@@ -85,7 +90,7 @@ def load_tasks():
         conn.close()
     tasks = [_task_row_to_dict(row) for row in rows]
     for task in tasks:
-        for key in ("created_at", "updated_at"):
+        for key in ("due_date", "uploaded_at", "created_at", "updated_at"):
             if task.get(key) is not None:
                 task[key] = task[key].isoformat()
     return tasks
@@ -110,8 +115,11 @@ def save_tasks(tasks):
                 INSERT INTO aisena_tasks
                     (id, title, description, owner, status, priority, dependency,
                      next_checkpoint, tags, comments, activity_log, app_label,
-                     created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                     due_date, required_capabilities, external_reference,
+                     assignment_required, assignment_method, upload_filename,
+                     uploaded_by, uploaded_at, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
                     task.get("id"),
@@ -126,6 +134,14 @@ def save_tasks(tasks):
                     json.dumps(task.get("comments") or []),
                     json.dumps(task.get("activity_log") or []),
                     task.get("app_label"),
+                    task.get("due_date"),
+                    json.dumps(task.get("required_capabilities") or []),
+                    task.get("external_reference"),
+                    bool(task.get("assignment_required")),
+                    task.get("assignment_method"),
+                    task.get("upload_filename"),
+                    task.get("uploaded_by"),
+                    task.get("uploaded_at"),
                     task.get("created_at") or utc_now_iso(),
                     task.get("updated_at") or utc_now_iso(),
                 ),
@@ -140,9 +156,9 @@ def save_tasks(tasks):
 
 
 def next_task_id(tasks):
-    numbers = [int(t["id"].replace("TASK-", "")) for t in tasks if t["id"].startswith("TASK-")]
+    numbers = [int(str(t["id"]).replace("TASK-", "")) for t in tasks if str(t["id"]).startswith("TASK-")]
     next_num = max(numbers) + 1 if numbers else 1
-    return f"TASK-{str(next_num).zfill(4)}"
+    return f"TASK-{str(next_num).zfill(6)}"
 
 
 def get_task_by_id(tasks, task_id):
@@ -267,6 +283,7 @@ def fetch_results(limit=50):
 AGENT_COLUMNS = [
     "id", "key", "folder", "name", "agent_group", "focus", "prompt", "agent_file",
     "run_command", "run_command_fallback", "has_dedicated_runner", "content",
+    "active", "available", "capabilities", "last_assigned_at",
     "created_at", "updated_at",
 ]
 
@@ -297,6 +314,10 @@ def _agent_row_to_dict(row):
         "runCommandFallback": d["run_command_fallback"],
         "hasDedicatedRunner": bool(d["has_dedicated_runner"]),
         "content": d["content"],
+        "active": bool(d["active"]),
+        "available": bool(d["available"]),
+        "capabilities": d["capabilities"] or [],
+        "last_assigned_at": d["last_assigned_at"].isoformat() if d["last_assigned_at"] else None,
         "created_at": d["created_at"].isoformat() if d["created_at"] else None,
         "updated_at": d["updated_at"].isoformat() if d["updated_at"] else None,
     }
@@ -1178,8 +1199,8 @@ def test_dashboard_page():
 
 
 # Task API endpoints
-TASK_STATUSES = ["Backlog", "Planned", "In Progress", "Blocked", "In Review", "Done"]
-TASK_PRIORITIES = ["Low", "Medium", "High", "Critical"]
+TASK_STATUSES = ["To Do", "Backlog", "Planned", "In Progress", "Blocked", "In Review", "Done"]
+TASK_PRIORITIES = ["Low", "Medium", "High", "Urgent", "Critical"]
 TASK_EDITABLE_FIELDS = [
     "title", "description", "owner", "status", "priority",
     "dependency", "next_checkpoint", "tags", "app_label",
@@ -1193,6 +1214,151 @@ def add_task_activity(task, actor, action, details):
         "action": action,
         "details": details,
     })
+
+
+def assignment_agents():
+    agents = load_agent_catalog()
+    for agent in agents:
+        agent["runtime_available"] = get_agent_status(agent.get("key")).get("status", "ready") in {"ready", "available"}
+    return agents
+
+
+@app.route('/api/tasks/upload/template', methods=['GET'])
+def download_task_upload_template():
+    return Response(
+        template_csv(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": "attachment; filename=aisena-task-upload-template.csv"},
+    )
+
+
+@app.route('/api/tasks/upload/preview', methods=['POST'])
+def preview_task_upload():
+    upload = request.files.get("file")
+    if upload is None or not upload.filename:
+        return jsonify({"error": "Choose a CSV or XLSX file."}), 400
+    try:
+        rows = parse_upload(upload)
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    preview = build_preview(rows, load_tasks(), assignment_agents())
+    return jsonify({
+        "filename": upload.filename,
+        "rows": preview,
+        "valid": not any(row["errors"] for row in preview),
+        "summary": {
+            "total": len(preview),
+            "valid": sum(not row["errors"] for row in preview),
+            "rejected": sum(bool(row["errors"]) for row in preview),
+            "duplicates": sum(bool(row["duplicate"]) for row in preview),
+            "assignment_required": sum(bool(row["assignment_required"]) for row in preview),
+        },
+    })
+
+
+@app.route('/api/tasks/upload/import', methods=['POST'])
+def import_task_upload():
+    payload = request.get_json(silent=True) or {}
+    submitted_rows = payload.get("rows")
+    filename = str(payload.get("filename") or "").strip()
+    uploader = str(payload.get("uploader") or "Portal User").strip()
+    if not isinstance(submitted_rows, list) or not submitted_rows:
+        return jsonify({"error": "Preview rows are required."}), 400
+    if not filename:
+        return jsonify({"error": "Upload filename is required."}), 400
+
+    rows_for_validation = []
+    for row in submitted_rows:
+        candidate = dict(row)
+        if candidate.get("assignment_method") == "automatic":
+            candidate["owner"] = ""
+        rows_for_validation.append(candidate)
+
+    conn = psycopg2.connect(DSN)
+    created = []
+    skipped = []
+    rejected = []
+    try:
+        cur = conn.cursor()
+        cur.execute("LOCK TABLE aisena_tasks IN EXCLUSIVE MODE")
+        cur.execute(f"SELECT {', '.join(TASK_COLUMNS)} FROM aisena_tasks ORDER BY created_at DESC")
+        existing_tasks = [_task_row_to_dict(row) for row in cur.fetchall()]
+        preview = build_preview(rows_for_validation, existing_tasks, assignment_agents())
+        task_numbers = [
+            int(str(task["id"]).replace("TASK-", ""))
+            for task in existing_tasks
+            if re.fullmatch(r"TASK-[0-9]+", str(task.get("id") or ""))
+        ]
+        next_number = max(task_numbers, default=0)
+        now = utc_now_iso()
+
+        for row in preview:
+            if row["errors"]:
+                rejected.append({"row_number": row["row_number"], "title": row["title"], "errors": row["errors"]})
+                continue
+            if row["duplicate"]:
+                skipped.append({"row_number": row["row_number"], "title": row["title"], "reason": "Duplicate title."})
+                continue
+
+            next_number += 1
+            task_id = f"TASK-{next_number:06d}"
+            assigned_agent = row["owner"] or None
+            assignment_method = row["assignment_method"] if assigned_agent else "unassigned"
+            activity_log = [{
+                "timestamp": now,
+                "actor": uploader,
+                "action": "uploaded",
+                "details": f"Imported from {filename}; assignment method: {assignment_method}; assigned agent: {assigned_agent or 'none'}",
+            }]
+            cur.execute(
+                """
+                INSERT INTO aisena_tasks
+                    (id, title, description, owner, status, priority, dependency,
+                     next_checkpoint, tags, comments, activity_log, app_label,
+                     assignment_required, assignment_method, upload_filename,
+                     uploaded_by, uploaded_at, created_at, updated_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, '[]'::jsonb,
+                        %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    task_id, row["title"], row["description"], assigned_agent,
+                    row["status"], row["priority"], row["dependency"],
+                    row["next_checkpoint"], json.dumps(row["tags"]),
+                    json.dumps(activity_log), row["app_label"], row["assignment_required"],
+                    assignment_method, filename, uploader, now, now, now,
+                ),
+            )
+            cur.execute(
+                """
+                INSERT INTO aisena_task_upload_audit
+                    (upload_filename, uploader, uploaded_at, task_id, assignment_method, assigned_agent)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                """,
+                (filename, uploader, now, task_id, assignment_method, assigned_agent),
+            )
+            if assigned_agent:
+                cur.execute("UPDATE aisena_agents SET last_assigned_at = %s WHERE key = %s", (now, assigned_agent))
+            created.append({
+                "task_id": task_id,
+                "title": row["title"],
+                "assigned_agent": assigned_agent,
+                "assignment_method": assignment_method,
+                "assignment_required": row["assignment_required"],
+            })
+        conn.commit()
+        cur.close()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+
+    return jsonify({
+        "created": created,
+        "skipped": skipped,
+        "rejected": rejected,
+        "totals": {"created": len(created), "skipped": len(skipped), "rejected": len(rejected)},
+    }), 201 if created else 200
 
 
 @app.route('/api/tasks', methods=['GET'])
@@ -1515,7 +1681,7 @@ def app_dashboard_page():
     return send_from_directory('.', 'app-dashboard.html')
 
 
-# ── Deliberation API endpoints ──────────────────────────────────────────
+# ?????? Deliberation API endpoints ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
 
 _AGENTS_MANAGER = ROOT / "agents" / "manager"
 import sys as _sys

@@ -15,6 +15,7 @@ Environment:
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 
 import psycopg2
@@ -43,12 +44,30 @@ def import_agents(conn):
             agent_file = a.get("agentFile") or ""
             content_path = ROOT / agent_file if agent_file else None
             content = content_path.read_text(encoding="utf-8") if content_path and content_path.exists() else None
+            config_path = ROOT / "agents" / (a.get("folder") or "") / "config.json"
+            try:
+                config = json.loads(config_path.read_text(encoding="utf-8")) if config_path.exists() else {}
+            except (OSError, json.JSONDecodeError):
+                config = {}
+            capability_text = " ".join([
+                a.get("key") or "",
+                a.get("name") or "",
+                a.get("focus") or "",
+                " ".join(config.get("skills") or []),
+                " ".join(item.get("name", "") for item in config.get("learned_capabilities") or [] if item.get("status") == "active"),
+            ])
+            capabilities = sorted({
+                token.lower()
+                for token in re.findall(r"[a-zA-Z][a-zA-Z0-9_-]+", capability_text)
+                if len(token) > 2
+            })
             cur.execute(
                 """
                 INSERT INTO aisena_agents
                     (id, key, folder, name, agent_group, focus, prompt, agent_file,
-                     run_command, run_command_fallback, has_dedicated_runner, content)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                     run_command, run_command_fallback, has_dedicated_runner, content,
+                     active, available, capabilities)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, true, true, %s)
                 ON CONFLICT (id) DO UPDATE SET
                     key = EXCLUDED.key,
                     folder = EXCLUDED.folder,
@@ -61,6 +80,7 @@ def import_agents(conn):
                     run_command_fallback = EXCLUDED.run_command_fallback,
                     has_dedicated_runner = EXCLUDED.has_dedicated_runner,
                     content = EXCLUDED.content,
+                    capabilities = EXCLUDED.capabilities,
                     updated_at = now()
                 """,
                 (
@@ -76,6 +96,7 @@ def import_agents(conn):
                     a.get("runCommandFallback"),
                     bool(a.get("hasDedicatedRunner")),
                     content,
+                    json.dumps(capabilities),
                 ),
             )
             count += 1

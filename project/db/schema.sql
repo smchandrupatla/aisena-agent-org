@@ -33,10 +33,75 @@ CREATE TABLE IF NOT EXISTS aisena_tasks (
     updated_at      TIMESTAMP NOT NULL DEFAULT now()
 );
 
+-- Upgrade early/local task tables that predate the canonical string ID and
+-- JSONB schema without discarding their rows.
+ALTER TABLE aisena_tasks DROP CONSTRAINT IF EXISTS aisena_tasks_dependency_fkey;
+ALTER TABLE aisena_tasks ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE aisena_tasks ALTER COLUMN id TYPE VARCHAR(32) USING (
+    CASE
+        WHEN id::text ~ '^TASK-[0-9]+$' THEN id::text
+        WHEN id::text ~ '^[0-9]+$' THEN 'TASK-' || lpad(id::text, 6, '0')
+        ELSE id::text
+    END
+);
+ALTER TABLE aisena_tasks ALTER COLUMN title TYPE TEXT USING title::text;
+ALTER TABLE aisena_tasks ALTER COLUMN owner TYPE VARCHAR(255) USING owner::text;
+ALTER TABLE aisena_tasks ALTER COLUMN priority TYPE VARCHAR(20) USING priority::text;
+ALTER TABLE aisena_tasks ALTER COLUMN dependency TYPE VARCHAR(32) USING (
+    CASE
+        WHEN dependency::text ~ '^TASK-[0-9]+$' THEN dependency::text
+        WHEN dependency::text ~ '^[0-9]+$' THEN 'TASK-' || lpad(dependency::text, 6, '0')
+        ELSE NULLIF(dependency::text, '')
+    END
+);
+ALTER TABLE aisena_tasks ALTER COLUMN next_checkpoint TYPE TEXT USING next_checkpoint::text;
+ALTER TABLE aisena_tasks ALTER COLUMN tags TYPE JSONB USING (
+    CASE
+        WHEN tags IS NULL OR btrim(tags::text) = '' THEN '[]'::jsonb
+        WHEN tags::text ~ '^\s*\[' THEN tags::text::jsonb
+        ELSE to_jsonb(string_to_array(tags::text, ','))
+    END
+);
+ALTER TABLE aisena_tasks ALTER COLUMN comments TYPE JSONB USING (
+    CASE
+        WHEN comments IS NULL OR btrim(comments::text) = '' THEN '[]'::jsonb
+        WHEN comments::text ~ '^\s*\[' THEN comments::text::jsonb
+        ELSE jsonb_build_array(comments::text)
+    END
+);
+ALTER TABLE aisena_tasks ALTER COLUMN activity_log TYPE JSONB USING (
+    CASE
+        WHEN activity_log IS NULL OR btrim(activity_log::text) = '' THEN '[]'::jsonb
+        WHEN activity_log::text ~ '^\s*\[' THEN activity_log::text::jsonb
+        ELSE jsonb_build_array(activity_log::text)
+    END
+);
+ALTER TABLE aisena_tasks ALTER COLUMN app_label TYPE VARCHAR(255) USING app_label::text;
+ALTER TABLE aisena_tasks ALTER COLUMN title SET NOT NULL;
+ALTER TABLE aisena_tasks ALTER COLUMN status SET DEFAULT 'Backlog';
+ALTER TABLE aisena_tasks ALTER COLUMN priority SET DEFAULT 'Medium';
+ALTER TABLE aisena_tasks ALTER COLUMN tags SET DEFAULT '[]'::jsonb;
+ALTER TABLE aisena_tasks ALTER COLUMN comments SET DEFAULT '[]'::jsonb;
+ALTER TABLE aisena_tasks ALTER COLUMN activity_log SET DEFAULT '[]'::jsonb;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS due_date DATE;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS required_capabilities JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS external_reference TEXT;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS assignment_required BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS assignment_method VARCHAR(32);
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS upload_filename TEXT;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS uploaded_by TEXT;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS uploaded_at TIMESTAMP;
+ALTER TABLE aisena_tasks ADD CONSTRAINT aisena_tasks_dependency_fkey
+    FOREIGN KEY (dependency) REFERENCES aisena_tasks(id) ON DELETE SET NULL
+    DEFERRABLE INITIALLY DEFERRED;
+
 CREATE INDEX IF NOT EXISTS idx_aisena_tasks_status ON aisena_tasks(status);
 CREATE INDEX IF NOT EXISTS idx_aisena_tasks_owner ON aisena_tasks(owner);
 CREATE INDEX IF NOT EXISTS idx_aisena_tasks_dependency ON aisena_tasks(dependency);
 CREATE INDEX IF NOT EXISTS idx_aisena_tasks_app_label ON aisena_tasks(app_label);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_aisena_tasks_external_reference
+    ON aisena_tasks (lower(external_reference))
+    WHERE external_reference IS NOT NULL AND btrim(external_reference) <> '';
 
 CREATE TABLE IF NOT EXISTS aisena_issues (
     id                  VARCHAR(32) PRIMARY KEY,
@@ -83,6 +148,23 @@ CREATE TABLE IF NOT EXISTS aisena_agents (
     updated_at            TIMESTAMP NOT NULL DEFAULT now()
 );
 
+ALTER TABLE aisena_agents ADD COLUMN IF NOT EXISTS active BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE aisena_agents ADD COLUMN IF NOT EXISTS available BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE aisena_agents ADD COLUMN IF NOT EXISTS capabilities JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE aisena_agents ADD COLUMN IF NOT EXISTS last_assigned_at TIMESTAMP;
+
 CREATE INDEX IF NOT EXISTS idx_aisena_agents_key ON aisena_agents(key);
 CREATE INDEX IF NOT EXISTS idx_aisena_agents_group ON aisena_agents(agent_group);
 
+CREATE TABLE IF NOT EXISTS aisena_task_upload_audit (
+    id                BIGSERIAL PRIMARY KEY,
+    upload_filename   TEXT NOT NULL,
+    uploader          TEXT NOT NULL,
+    uploaded_at       TIMESTAMP NOT NULL DEFAULT now(),
+    task_id           VARCHAR(32) NOT NULL REFERENCES aisena_tasks(id) ON DELETE CASCADE,
+    assignment_method VARCHAR(32) NOT NULL,
+    assigned_agent    VARCHAR(255)
+);
+
+CREATE INDEX IF NOT EXISTS idx_aisena_task_upload_audit_task_id
+    ON aisena_task_upload_audit(task_id);

@@ -10,4 +10,4 @@ RUN pip3 install --no-cache-dir --break-system-packages -r /workspace/services/a
 COPY . /workspace
 ENV PYTHONUNBUFFERED=1
 EXPOSE 5000
-CMD ["python3", "services/api/app.py"]
+CMD ["sh", "-c", "until python3 scripts/db/init_agents_db.py --import; do echo 'Waiting for PostgreSQL migration...'; sleep 2; done; exec python3 services/api/app.py"]

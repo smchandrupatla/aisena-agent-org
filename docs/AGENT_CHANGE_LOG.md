@@ -35,6 +35,47 @@
 - **Human Approval Needed:** No
 - **Handoff Target:** 10-qa-engineer
 
+### LOG-20260824-002
+
+- **Entry ID:** LOG-20260824-002
+- **Date:** 2026-08-24
+- **Agent Role:** 04-frontend-engineer / 05-backend-engineer / 06-database-engineer
+- **Task ID:** Upload Tasks feature
+- **What Changed:**
+  - Added CSV/XLSX task templates, server-side preview validation, duplicate detection, automatic/manual assignment, and transactional import endpoints.
+  - Migrated the legacy task schema without data loss, added upload audit metadata, and seeded agent availability and capabilities used by assignment.
+  - Added the Tasks-page upload dialog with editable preview, row messages, import results, and responsive desktop/mobile behavior.
+- **Files Modified:**
+  - `/project/db/schema.sql`
+  - `/scripts/db/init_agents_db.py`
+  - `/services/api/Dockerfile`
+  - `/services/api/app.py`
+  - `/services/api/requirements.txt`
+  - `/services/api/task_upload.py`
+  - `/services/api/test_app.py`
+  - `/services/capabilities_site/styles.css`
+  - `/services/capabilities_site/tasks.html`
+  - `/services/capabilities_site/tasks.js`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** pending
+- **Rationale:**
+  - Bulk task intake needed a reviewable workflow that keeps validation, identifiers, assignment decisions, duplicate handling, and audit data under server control.
+- **Alternatives Considered:**
+  - Import rows directly in the browser: rejected because it would expose assignment and identifier rules to client manipulation and could not guarantee atomic writes.
+  - Allocate identifiers from the current maximum without a lock: rejected because concurrent imports could allocate duplicate task IDs.
+- **Risk Level:** Medium (extends the canonical task schema and introduces bulk writes, mitigated by idempotent migration, row validation, exclusive ID allocation, and transactional import).
+- **Metrics Impact:** Adds upload audit counts for accepted, duplicate, rejected, and assignment-required rows; no observability regressions identified.
+- **Validation:**
+  - API suite passed 21/21 tests inside the deployed API image.
+  - JavaScript syntax check and editor diagnostics passed.
+  - Live smoke imported an assigned task, skipped a duplicate, rejected an invalid row, and persisted audit metadata; smoke data was removed afterward.
+  - Live browser preview produced one ready row assigned to `technical-writer`, enabled confirmation, and remained usable on desktop and a 390x844 mobile viewport without importing the fixture.
+  - API and capabilities portal images were rebuilt and deployed through `infra/docker-compose.yml`.
+- **Rollback Plan:**
+  - Redeploy the previous API and portal images; leave additive database columns and audit tables in place to avoid destructive rollback, or remove them only after confirming no upload records must be retained.
+- **Human Approval Needed:** No
+- **Handoff Target:** 10-qa-engineer
+
 ### LOG-20260824-003
 
 - **Entry ID:** LOG-20260824-003
@@ -62,6 +103,85 @@
   - Revert the development-practices section and this change-log entry.
 - **Human Approval Needed:** No
 - **Handoff Target:** 00-implementation-manager
+
+### LOG-20260824-004
+
+- **Entry ID:** LOG-20260824-004
+- **Date:** 2026-08-24
+- **Agent Role:** 04-frontend-engineer / 05-backend-engineer / 06-database-engineer / 09-security-engineer
+- **Task ID:** Prompt Library
+- **What Changed:**
+  - Added authenticated Prompt Library CRUD, search, filters, sorting, pagination, copy/use tracking, duplication, archive/restore, soft deletion, version comparison/restoration, and permission-aware responses.
+  - Added idempotent PostgreSQL tables, relationships, constraints, indexes, seeded local identity, normalized tags, immutable version snapshots, and append-only prompt audit events.
+  - Added responsive `/prompts` list, create, detail, edit, and version-history routes using the existing portal design system, escaped plain-text rendering, shared navigation, confirmations, and light/dark support.
+- **Files Modified:**
+  - `/project/db/schema.sql`
+  - `/services/api/prompt_api.py`
+  - `/services/api/app.py`
+  - `/services/api/test_app.py`
+  - `/services/capabilities_site/prompts.html`
+  - `/services/capabilities_site/prompts.js`
+  - `/services/capabilities_site/prompts.css`
+  - `/services/capabilities_site/server.js`
+  - `/services/capabilities_site/script.js`
+  - `/docker-compose.yml`
+  - `/infra/docker-compose.yml`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** blocked: unrelated unmerged index entry at `services/crm-portal/tests_e2e/test_create_project_flow.py`
+- **Rationale:**
+  - Prompts required a first-class, durable, searchable, versioned library tied to canonical users and agents rather than static files or browser storage.
+- **Alternatives Considered:**
+  - Store prompts as JSON or localStorage: rejected because it cannot provide transactional codes, relational permissions, safe concurrent updates, durable audit history, or server-side search.
+  - Add a separate frontend application: rejected because Prompt Library is part of the existing AISENA portal and must reuse its navigation and design system.
+- **Risk Level:** Medium (new authenticated write APIs and schema; mitigated by parameterized SQL, closed-by-default authentication, owner/admin authorization, soft deletion, immutable versions, audit events, and idempotent migrations).
+- **Metrics Impact:** Adds prompt usage counts and queryable audit events for create, update, copy, duplicate, archive, restore, version restore, and delete operations.
+- **Validation:**
+  - Canonical schema executed successfully twice against the live PostgreSQL database.
+  - Prompt API tests passed 3/3, including the complete lifecycle, exact multiline/XSS-like text preservation, audit action coverage, unauthenticated rejection, and viewer-role denial.
+  - Full API suite passed 22/22 in the final concurrent worktree state.
+  - Compose configuration and JavaScript syntax checks passed; editor diagnostics reported no errors.
+  - Live browser acceptance verified create, edit, compare, restore-as-new-version, escaped prompt text, clean routes, navigation, and zero horizontal overflow at 1440x900 and 390x844.
+  - API and capabilities portal images were rebuilt and deployed through `infra/docker-compose.yml`; live health, authenticated session, and `/prompts` returned HTTP 200.
+- **Rollback Plan:**
+  - Redeploy the previous API and portal images. Leave additive Prompt Library tables in place to preserve records and history, or remove them only after an approved data-retention review.
+- **Human Approval Needed:** No
+- **Handoff Target:** 10-qa-engineer
+
+### LOG-20260824-005
+
+- **Entry ID:** LOG-20260824-005
+- **Date:** 2026-08-24
+- **Agent Role:** 04-frontend-engineer / 05-backend-engineer
+- **Task ID:** Upload Tasks field alignment
+- **What Changed:**
+  - Aligned CSV/XLSX uploads with the New Task fields: `title`, `description`, `owner`, `status`, `priority`, `dependency`, `next_checkpoint`, `tags`, and `app_label`.
+  - Added owner and dependency validation, automatic assignment when owner is blank, New Task status/priority options, and persistence for dependency, checkpoint, tags, and app label.
+  - Added visible file-format guidance, exact headers, accepted values, separators, limits, and task-ID rules to the Upload Tasks dialog.
+- **Files Modified:**
+  - `/services/api/task_upload.py`
+  - `/services/api/app.py`
+  - `/services/api/test_app.py`
+  - `/services/capabilities_site/tasks.html`
+  - `/services/capabilities_site/tasks.js`
+  - `/services/capabilities_site/styles.css`
+  - `/docs/AGENT_CHANGE_LOG.md`
+- **Commit Ref:** pending
+- **Rationale:**
+  - Users need one consistent task definition whether they create a task individually or import a file, with enough on-screen guidance to prepare a valid upload without external documentation.
+- **Alternatives Considered:**
+  - Keep upload-only due-date, capability, and external-reference columns: rejected because those fields are not available in the New Task form and made the two creation paths inconsistent.
+- **Risk Level:** Low (narrows the upload contract to existing editable task fields; server-side preview and transactional import remain in place).
+- **Metrics Impact:** None.
+- **Validation:**
+  - Full API suite passed 22/22; JavaScript syntax, editor diagnostics, and whitespace checks passed.
+  - Rebuilt and deployed the API and capabilities portal; live template and Tasks page returned HTTP 200 with the exact nine-column header and guidance.
+  - Live browser preview accepted Critical/Planned values, app label, checkpoint, comma-separated tags, and automatic owner assignment with zero rejects.
+  - Live import persisted all aligned fields; generated task and audit test data were removed afterward.
+  - Dialog geometry remained within the viewport at 1024x768 and 390x844 with internal vertical scrolling and no horizontal overflow.
+- **Rollback Plan:**
+  - Restore the previous upload template/parser, import mapping, preview columns, and dialog markup, then rebuild the API and portal; no schema rollback is required.
+- **Human Approval Needed:** No
+- **Handoff Target:** 10-qa-engineer
 
 ## 2026-08-23
 
@@ -1013,6 +1133,7 @@ Critic output format: append a LOG entry to this file with prefix CRITIC-<task>-
 ## 2026-08-15 — Delivery Model Decision
 
 ### LOG-20260815-002
+
 - Entry ID: LOG-20260815-002
 - Date: 2026-08-15
 - Agent Role: Implementation Manager
