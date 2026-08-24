@@ -16,7 +16,7 @@
   - `/infra/docker-compose.yml`
   - `/services/api/test_app.py`
   - `/docs/AGENT_CHANGE_LOG.md`
-- **Commit Ref:** pending
+- **Commit Ref:** `b3020018`
 - **Rationale:**
   - The deployed PostgreSQL container was attached to `infra_default`, while a manually started API container was isolated on Docker's default bridge and the portal container was absent. The portal therefore could not reach a backend capable of querying PostgreSQL.
 - **Alternatives Considered:**
@@ -52,12 +52,12 @@
   - `/services/api/app.py`
   - `/services/api/requirements.txt`
   - `/services/api/task_upload.py`
-  - `/services/api/test_app.py`
+  - `/services/api/test_task_upload.py`
   - `/services/capabilities_site/styles.css`
   - `/services/capabilities_site/tasks.html`
   - `/services/capabilities_site/tasks.js`
   - `/docs/AGENT_CHANGE_LOG.md`
-- **Commit Ref:** pending
+- **Commit Ref:** `57d59f19`
 - **Rationale:**
   - Bulk task intake needed a reviewable workflow that keeps validation, identifiers, assignment decisions, duplicate handling, and audit data under server control.
 - **Alternatives Considered:**
@@ -160,12 +160,12 @@
 - **Files Modified:**
   - `/services/api/task_upload.py`
   - `/services/api/app.py`
-  - `/services/api/test_app.py`
+  - `/services/api/test_task_upload.py`
   - `/services/capabilities_site/tasks.html`
   - `/services/capabilities_site/tasks.js`
   - `/services/capabilities_site/styles.css`
   - `/docs/AGENT_CHANGE_LOG.md`
-- **Commit Ref:** pending
+- **Commit Ref:** `57d59f19`
 - **Rationale:**
   - Users need one consistent task definition whether they create a task individually or import a file, with enough on-screen guidance to prepare a valid upload without external documentation.
 - **Alternatives Considered:**
