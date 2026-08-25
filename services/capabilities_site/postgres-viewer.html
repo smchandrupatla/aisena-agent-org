@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Postgres Viewer</title>
+  <title>Postgres Viewer - AISENA</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
         <div class="brand-title"><strong>Autonomous Delivery Shop</strong>Capability Portfolio</div>
       </div>
       <div class="github-info">
-        <span class="github-icon">Ã°Å¸Ââ„¢</span>
+        <span class="github-icon">🐙</span>
         <span class="github-name">aisena-agent-org</span>
       </div>
       <nav>
@@ -31,7 +31,7 @@
         <a href="issues.html">Issues</a>
         <a href="test-dashboard.html">Test Dashboard</a>
         <a href="app-dashboard.html">App Dashboard</a>
-        <a href="postgres-viewer.html">Postgres Viewer</a>
+        <a href="postgres-viewer.html" class="active" aria-current="page">Postgres Viewer</a>
         <a href="kafka-viewer.html">Kafka Viewer</a>
         <a href="splunk-viewer.html">Splunk Viewer</a>
         <a href="dynatrace-viewer.html">Dynatrace Viewer</a>
@@ -40,43 +40,166 @@
         <a href="guardrails.html">Guardrails</a>
         <a href="agents-admin.html">Manage Agents</a>
         <a href="agents-chat.html">Agents + Chat</a>
-              <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+        <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
       </nav>
     </header>
 
     <main>
       <section class="hero fade-up">
         <div class="kicker">PostgreSQL Database Viewer</div>
-        <h1>View Database Tables</h1>
-        <p class="lede">Explore the structure and contents of the AISENA PostgreSQL database.</p>
+        <h1>Postgres Viewer</h1>
+        <p class="lede">Explore, search, sort, filter, and export PostgreSQL database tables with a modern, accessible interface.</p>
       </section>
 
       <section class="grid">
-        <article class="card span-12 fade-up">
+        <!-- Table Selector Panel -->
+        <article class="card span-4 fade-up">
           <h2>Database Tables</h2>
           <div class="db-tabs" role="tablist" aria-label="Database table groups">
             <button id="aisenaTablesTab" class="db-tab active" type="button" role="tab" aria-selected="true" aria-controls="aisenaTablesPanel">AISENA Tables</button>
             <button id="applicationTablesTab" class="db-tab" type="button" role="tab" aria-selected="false" aria-controls="applicationTablesPanel">Application Tables</button>
           </div>
-          <div class="db-browser">
-            <div id="tablesContainer" class="db-table-selector">
-              <section id="aisenaTablesPanel" role="tabpanel" aria-labelledby="aisenaTablesTab">
-                <p>Loading tables...</p>
-              </section>
-              <section id="applicationTablesPanel" role="tabpanel" aria-labelledby="applicationTablesTab" hidden></section>
-            </div>
-            <section class="db-table-content" aria-live="polite">
-              <div class="db-content-heading">
-                <div>
-                  <div class="kicker db-kicker">Table Content</div>
-                  <h3 id="selectedTableName">Select a table</h3>
-                </div>
-                <span id="selectedTableCount" class="status-badge">0 rows</span>
-              </div>
-              <div id="tableDataContainer" class="table-data-container">
-                <p>Select a table to view up to 100 rows.</p>
-              </div>
+          <div id="tablesContainer" class="db-table-selector">
+            <section id="aisenaTablesPanel" role="tabpanel" aria-labelledby="aisenaTablesTab">
+              <p class="loading-message">Loading tables...</p>
             </section>
+            <section id="applicationTablesPanel" role="tabpanel" aria-labelledby="applicationTablesTab" hidden></section>
+          </div>
+        </article>
+
+        <!-- Table Viewer Panel -->
+        <article class="card span-8 fade-up">
+          <div class="db-content-heading">
+            <div>
+              <div class="kicker db-kicker">Table Content</div>
+              <h3 id="selectedTableName">Select a table</h3>
+            </div>
+            <span id="selectedTableCount" class="status-badge">0 rows</span>
+          </div>
+
+          <!-- Controls Bar -->
+          <div class="controls-bar" role="search" aria-label="Table controls">
+            <div class="controls-row">
+              <div class="search-wrapper">
+                <label for="searchInput" class="visually-hidden">Search table data</label>
+                <input 
+                  type="search" 
+                  id="searchInput" 
+                  class="search-input" 
+                  placeholder="Search all columns..." 
+                  aria-describedby="searchHint"
+                  autocomplete="off"
+                >
+                <span id="searchHint" class="visually-hidden">Type to filter table rows across all columns. Press Escape to clear.</span>
+                <button type="button" id="clearSearch" class="clear-search-btn" aria-label="Clear search" hidden>✕</button>
+              </div>
+              
+              <div class="controls-group">
+                <label for="pageSizeSelect" class="visually-hidden">Rows per page</label>
+                <select id="pageSizeSelect" class="page-size-select" aria-label="Rows per page">
+                  <option value="10">10 per page</option>
+                  <option value="25" selected>25 per page</option>
+                  <option value="50">50 per page</option>
+                  <option value="100">100 per page</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="controls-row">
+              <div class="columns-visibility" role="group" aria-label="Column visibility">
+                <button type="button" id="columnsToggle" class="columns-toggle-btn" aria-expanded="false" aria-controls="columnsToggles" aria-label="Toggle column visibility">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M4 4h16v16H4z"/>
+                    <path d="M4 12h16"/>
+                    <path d="M12 4v16"/>
+                  </svg>
+                  <span>Columns</span>
+                  <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
+                <div id="columnsToggles" class="columns-dropdown" role="menu" hidden>
+                  <!-- Column toggles rendered here -->
+                </div>
+              </div>
+              
+              <div class="controls-group export-group">
+                <button type="button" id="exportCsv" class="export-btn" aria-label="Export as CSV">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  CSV
+                </button>
+                <button type="button" id="exportJson" class="export-btn" aria-label="Export as JSON">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                  JSON
+                </button>
+                <button type="button" id="exportXlsx" class="export-btn" aria-label="Export as XLSX">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                  XLSX
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div id="tableDataContainer" class="table-data-container" role="region" aria-label="Table data" tabindex="0">
+            <div id="loadingOverlay" class="loading-overlay" hidden>
+              <div class="loading-spinner"></div>
+              <span>Loading table data...</span>
+            </div>
+            
+            <table id="dataTable" class="table db-data-table" role="grid">
+              <thead id="tableHead" role="rowgroup">
+                <tr role="row">
+                  <th scope="col" role="columnheader">
+                    <input type="checkbox" id="selectAll" aria-label="Select all visible rows">
+                  </th>
+                  <!-- Data columns rendered dynamically -->
+                </tr>
+              </thead>
+              <tbody id="tableBody" role="rowgroup">
+                <tr>
+                  <td colspan="100" style="text-align:center; padding:40px; color:var(--ink-soft, #4d5d78);">
+                    Select a table to view data
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Selection Summary -->
+          <div id="selectionSummary" class="selection-summary" aria-live="polite" hidden></div>
+
+          <!-- Pagination -->
+          <div id="paginationContainer" class="pagination-bar" role="navigation" aria-label="Pagination">
+            <button type="button" id="prevPage" class="pagination-btn" aria-label="Previous page" disabled>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"/>
+              </svg>
+              <span>Previous</span>
+            </button>
+            <div id="pageInfo" class="page-info" aria-live="polite">Page 1 of 1 (0–0 of 0)</div>
+            <button type="button" id="nextPage" class="pagination-btn" aria-label="Next page" disabled>
+              <span>Next</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
           </div>
         </article>
       </section>
@@ -87,7 +210,7 @@
     </main>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>
 

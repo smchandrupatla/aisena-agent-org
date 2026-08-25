@@ -215,10 +215,12 @@ class PromptApiTests(unittest.TestCase):
         self.created_ids = []
         self.created_user_ids = []
         self.original_local_auth = prompt_api_module.ALLOW_LOCAL_AUTH
+        self.original_prompt_executor = prompt_api_module._prompt_executor
         prompt_api_module.ALLOW_LOCAL_AUTH = True
 
     def tearDown(self):
         prompt_api_module.ALLOW_LOCAL_AUTH = self.original_local_auth
+        prompt_api_module._prompt_executor = self.original_prompt_executor
         if app_module.psycopg2 is None:
             return
         connection = app_module.psycopg2.connect(app_module.DSN)
@@ -337,3 +339,62 @@ class PromptApiTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 403)
 
+    def test_prompt_run_executes_assigned_agent_and_counts_only_success(self):
+        marker = uuid4().hex
+        created = self.client.post('/api/prompts', json={
+            'title': f'Runnable prompt {marker}', 'prompt_text': 'Execute this exact prompt',
+            'assignee_agent_id': '10',
+        }).get_json()['prompt']
+        self.created_ids.append(created['id'])
+
+        calls = []
+
+        def successful_executor(agent_id, prompt_text, tool_actions):
+            calls.append((agent_id, prompt_text, tool_actions))
+            return {'status': 'ready', 'reply': 'Execution complete', 'agent_name': 'QA Engineer'}, 200
+
+        prompt_api_module.configure_prompt_executor(successful_executor)
+        response = self.client.post(f"/api/prompts/{created['id']}/run")
+
+        self.assertEqual(response.status_code, 200)
+        result = response.get_json()['result']
+        self.assertEqual(result['status'], 'ready')
+        self.assertEqual(result['reply'], 'Execution complete')
+        self.assertEqual(result['usage_count'], 1)
+        self.assertEqual(calls, [('10', 'Execute this exact prompt', [])])
+
+        prompt_api_module.configure_prompt_executor(
+            lambda *_: ({'status': 'blocked', 'reply': 'Guardrail blocked execution'}, 200)
+        )
+        batch = self.client.post('/api/prompts/run', json={'prompt_ids': [created['id']]})
+
+        self.assertEqual(batch.status_code, 200)
+        self.assertEqual(batch.get_json()['summary'], {'selected': 1, 'succeeded': 0, 'failed': 1})
+        detail = self.client.get(f"/api/prompts/{created['id']}").get_json()['prompt']
+        self.assertEqual(detail['usage_count'], 1)
+
+        connection = app_module.psycopg2.connect(app_module.DSN)
+        try:
+            cursor = connection.cursor()
+            cursor.execute("SELECT action FROM aisena_prompt_audit WHERE prompt_id = %s", (created['id'],))
+            actions = [row[0] for row in cursor.fetchall()]
+            cursor.close()
+        finally:
+            connection.close()
+        self.assertIn('executed', actions)
+        self.assertIn('execution_blocked', actions)
+
+    def test_prompt_run_requires_an_assigned_agent(self):
+        created = self.client.post('/api/prompts', json={
+            'title': f'Unassigned prompt {uuid4().hex}', 'prompt_text': 'Cannot run yet',
+        }).get_json()['prompt']
+        self.created_ids.append(created['id'])
+
+        response = self.client.post(f"/api/prompts/{created['id']}/run")
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('Assign an agent', response.get_json()['result']['error'])
+
+
+if __name__ == '__main__':
+    unittest.main()

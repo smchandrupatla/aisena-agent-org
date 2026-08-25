@@ -13,7 +13,7 @@ from urllib import request as urlrequest
 
 from flask import Flask, Response, jsonify, request, send_from_directory
 
-from prompt_api import prompt_api
+from prompt_api import configure_prompt_executor, prompt_api
 from task_upload import build_preview, parse_upload, template_csv
 
 try:
@@ -778,6 +778,9 @@ def execute_agent_message(agent_key, message, tool_actions=None):
         "agent": agent.get("key"),
         "agent_name": agent.get("name"),
     }, 200
+
+
+configure_prompt_executor(execute_agent_message)
 
 
 @app.route('/api/agents/cross-check', methods=['POST', 'OPTIONS'])
