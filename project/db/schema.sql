@@ -91,6 +91,7 @@ ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS assignment_method VARCHAR(32);
 ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS upload_filename TEXT;
 ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS uploaded_by TEXT;
 ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS uploaded_at TIMESTAMP;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS subtasks JSONB NOT NULL DEFAULT '[]'::jsonb;
 ALTER TABLE aisena_tasks ADD CONSTRAINT aisena_tasks_dependency_fkey
     FOREIGN KEY (dependency) REFERENCES aisena_tasks(id) ON DELETE SET NULL
     DEFERRABLE INITIALLY DEFERRED;

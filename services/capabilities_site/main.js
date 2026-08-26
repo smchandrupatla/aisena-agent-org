@@ -52,13 +52,24 @@ const elements = {
   pageInfo: null,
   selectAllCheckbox: null,
   columnsToggles: null,
+  columnsToggleList: null,
+  columnsToggleButton: null,
+  columnsShowAll: null,
+  columnsHideAll: null,
   csvButton: null,
   jsonButton: null,
   xlsxButton: null,
   selectionSummary: null,
   tableName: null,
   tableCount: null,
-  loadingOverlay: null
+  loadingOverlay: null,
+  aisenaTab: null,
+  applicationTab: null,
+  aisenaPanel: null,
+  applicationPanel: null,
+  clearSearchButton: null,
+  jumpToPageForm: null,
+  jumpToPageInput: null
 };
 
 /**
@@ -106,6 +117,10 @@ function cacheElements() {
   elements.pageInfo = document.getElementById('pageInfo');
   elements.selectAllCheckbox = document.getElementById('selectAll');
   elements.columnsToggles = document.getElementById('columnsToggles');
+  elements.columnsToggleList = document.getElementById('columnsToggleList');
+  elements.columnsToggleButton = document.getElementById('columnsToggle');
+  elements.columnsShowAll = document.getElementById('columnsShowAll');
+  elements.columnsHideAll = document.getElementById('columnsHideAll');
   elements.csvButton = document.getElementById('exportCsv');
   elements.jsonButton = document.getElementById('exportJson');
   elements.xlsxButton = document.getElementById('exportXlsx');
@@ -113,6 +128,13 @@ function cacheElements() {
   elements.tableName = document.getElementById('selectedTableName');
   elements.tableCount = document.getElementById('selectedTableCount');
   elements.loadingOverlay = document.getElementById('loadingOverlay');
+  elements.aisenaTab = document.getElementById('aisenaTablesTab');
+  elements.applicationTab = document.getElementById('applicationTablesTab');
+  elements.aisenaPanel = document.getElementById('aisenaTablesPanel');
+  elements.applicationPanel = document.getElementById('applicationTablesPanel');
+  elements.clearSearchButton = document.getElementById('clearSearch');
+  elements.jumpToPageForm = document.getElementById('jumpToPageForm');
+  elements.jumpToPageInput = document.getElementById('jumpToPageInput');
 }
 
 /**
@@ -129,15 +151,7 @@ async function loadData() {
       state.currentTable = window.__POSTGRES_DATA__.table;
       updateTableInfo();
     } else {
-      // Fetch from API - get available tables first
-      const tablesResponse = await fetch('/db-tables');
-      const tablesData = await tablesResponse.json();
-      
-      if (tablesData.tables?.length) {
-        // Load first table by default
-        const firstTable = tablesData.aisena_tables?.[0] || tablesData.tables[0];
-        await loadTable(firstTable);
-      }
+      await loadTablesList();
     }
   } catch (error) {
     console.error('Failed to load data:', error);
@@ -145,6 +159,90 @@ async function loadData() {
   } finally {
     showLoading(false);
   }
+}
+
+/**
+ * Fetch table names grouped by AISENA / application and render the selector panel + tabs
+ */
+async function loadTablesList() {
+  if (!elements.aisenaPanel || !elements.applicationPanel) return;
+
+  try {
+    const response = await fetch('/db-tables');
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to load tables');
+    }
+
+    const aisenaTables = Array.isArray(data.aisena_tables) ? data.aisena_tables : [];
+    const applicationTables = Array.isArray(data.application_tables) ? data.application_tables : [];
+
+    renderTableGroup(elements.aisenaPanel, aisenaTables, 'No AISENA tables found.');
+    renderTableGroup(elements.applicationPanel, applicationTables, 'No application tables found.');
+
+    wireTableTabs();
+
+    const firstButton = elements.aisenaPanel.querySelector('.db-table-button') || elements.applicationPanel.querySelector('.db-table-button');
+    if (firstButton) {
+      firstButton.click();
+    }
+  } catch (error) {
+    console.error('Failed to load tables list:', error);
+    elements.aisenaPanel.innerHTML = `<p class="notice error">Could not load database tables: ${escapeHtml(error.message)}</p>`;
+  }
+}
+
+/**
+ * Render a group of table selector buttons into a panel
+ * @param {HTMLElement} panel - Panel element to render into
+ * @param {Array<string>} tables - Table names
+ * @param {string} emptyMessage - Message to show when there are no tables
+ */
+function renderTableGroup(panel, tables, emptyMessage) {
+  if (!panel) return;
+
+  if (!tables.length) {
+    panel.innerHTML = `<p class="notice">${escapeHtml(emptyMessage)}</p>`;
+    return;
+  }
+
+  const list = document.createElement('div');
+  list.className = 'db-table-list';
+  tables.forEach(tableName => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'db-table-button';
+    button.textContent = tableName;
+    button.addEventListener('click', () => {
+      document.querySelectorAll('.db-table-button.active').forEach(item => item.classList.remove('active'));
+      button.classList.add('active');
+      loadTable(tableName);
+    });
+    list.appendChild(button);
+  });
+  panel.replaceChildren(list);
+}
+
+/**
+ * Wire the AISENA / Application table tab toggles
+ */
+function wireTableTabs() {
+  if (!elements.aisenaTab || !elements.applicationTab || elements.aisenaTab.dataset.wired) return;
+  elements.aisenaTab.dataset.wired = 'true';
+  elements.applicationTab.dataset.wired = 'true';
+
+  const activate = (activeTab, activePanel, inactiveTab, inactivePanel) => {
+    activeTab.classList.add('active');
+    activeTab.setAttribute('aria-selected', 'true');
+    activePanel.hidden = false;
+    inactiveTab.classList.remove('active');
+    inactiveTab.setAttribute('aria-selected', 'false');
+    inactivePanel.hidden = true;
+  };
+
+  elements.aisenaTab.addEventListener('click', () => activate(elements.aisenaTab, elements.aisenaPanel, elements.applicationTab, elements.applicationPanel));
+  elements.applicationTab.addEventListener('click', () => activate(elements.applicationTab, elements.applicationPanel, elements.aisenaTab, elements.aisenaPanel));
 }
 
 /**
@@ -262,6 +360,7 @@ function initializeModules() {
       state.hiddenColumns = new Set(state.columns.filter(c => !visibleColumns.includes(c)));
     }
   });
+  modules.columns.init(state.columns, elements.columnsToggleList, elements.table);
 
   // UI module
   modules.ui = createUI();
@@ -284,10 +383,60 @@ function initializeModules() {
     elements.xlsxButton.addEventListener('click', () => handleExport('xlsx'));
   }
 
-  // Table selector buttons (if present)
-  document.querySelectorAll('.db-table-button').forEach(button => {
-    button.addEventListener('click', () => loadTable(button.textContent.trim()));
-  });
+  // Columns dropdown open/close
+  if (elements.columnsToggleButton && elements.columnsToggles) {
+    elements.columnsToggleButton.addEventListener('click', () => {
+      const isOpen = !elements.columnsToggles.hidden;
+      elements.columnsToggles.hidden = isOpen;
+      elements.columnsToggleButton.setAttribute('aria-expanded', String(!isOpen));
+    });
+    document.addEventListener('click', (event) => {
+      if (elements.columnsToggles.hidden) return;
+      if (elements.columnsToggles.contains(event.target) || elements.columnsToggleButton.contains(event.target)) return;
+      elements.columnsToggles.hidden = true;
+      elements.columnsToggleButton.setAttribute('aria-expanded', 'false');
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !elements.columnsToggles.hidden) {
+        elements.columnsToggles.hidden = true;
+        elements.columnsToggleButton.setAttribute('aria-expanded', 'false');
+        elements.columnsToggleButton.focus();
+      }
+    });
+  }
+  if (elements.columnsShowAll) {
+    elements.columnsShowAll.addEventListener('click', () => modules.columns.showAll());
+  }
+  if (elements.columnsHideAll) {
+    elements.columnsHideAll.addEventListener('click', () => modules.columns.hideAll());
+  }
+
+  // Clear search button
+  if (elements.clearSearchButton && elements.searchInput) {
+    const toggleClearButton = () => {
+      elements.clearSearchButton.hidden = elements.searchInput.value.length === 0;
+    };
+    elements.searchInput.addEventListener('input', toggleClearButton);
+    elements.clearSearchButton.addEventListener('click', () => {
+      modules.search.clearSearch();
+      toggleClearButton();
+    });
+    toggleClearButton();
+  }
+
+  // Jump to page
+  if (elements.jumpToPageForm && elements.jumpToPageInput) {
+    elements.jumpToPageForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const requested = parseInt(elements.jumpToPageInput.value, 10);
+      if (Number.isFinite(requested)) {
+        const { totalPages } = modules.pagination.getState();
+        const clamped = Math.min(Math.max(requested, 1), Math.max(totalPages, 1));
+        modules.pagination.goToPage(clamped);
+        elements.jumpToPageInput.value = '';
+      }
+    });
+  }
 }
 
 /**
@@ -415,10 +564,13 @@ function renderTableRows(data) {
   if (!elements.tbody) return;
 
   if (!data.length) {
+    const message = !state.currentTable
+      ? 'Select a table to view data'
+      : (state.search ? 'No results found' : 'This table contains no rows');
     elements.tbody.innerHTML = `
       <tr>
-        <td colspan="${state.columns.length + 1}" style="text-align:center; padding:40px; color:var(--ink-soft, #4d5d78);">
-          No data to display
+        <td colspan="${state.columns.length + 1}" class="empty-state-cell">
+          ${message}
         </td>
       </tr>
     `;
@@ -501,7 +653,7 @@ function updateSelectionSummary() {
  * Handle export button clicks
  * @param {string} format - Export format
  */
-function handleExport(format) {
+async function handleExport(format) {
   const selectedRows = modules.selection?.getSelectedRows(state.filteredData) || [];
   const dataToExport = selectedRows.length > 0 ? selectedRows : state.filteredData;
   const visibleColumns = modules.columns?.getVisibleColumns() || state.columns;
@@ -511,7 +663,7 @@ function handleExport(format) {
     return;
   }
 
-  modules.export?.exportData(format, dataToExport, visibleColumns);
+  await modules.export?.exportData(format, dataToExport, visibleColumns);
   modules.ui?.showToast(`Exported ${dataToExport.length} row${dataToExport.length !== 1 ? 's' : ''} as ${format.toUpperCase()}`);
 }
 
@@ -546,7 +698,7 @@ function showError(message) {
 function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
-  return div.innerHTML;
+  return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 /**

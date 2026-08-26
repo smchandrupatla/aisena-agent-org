@@ -10,8 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="task.css">
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="site-wrap">
     <header class="topbar fade-up">
       <div class="brand">
@@ -41,14 +43,23 @@
       </nav>
     </header>
 
-    <main>
+    <main id="main-content">
       <section class="hero fade-up">
         <div class="kicker" style="display:flex; gap:12px; align-items:center;">
         <a href="tasks.html" style="color: inherit;">&larr; Back</a>
         <a href="#" onclick="history.back(); return false;" style="color: inherit;">Next &rarr;</a>
       </div>
-        <h1 id="taskHeading">Loading task&hellip;</h1>
-        <p class="lede" id="taskSubtitle"></p>
+        <div class="task-heading-row">
+          <div>
+            <h1 id="taskHeading">Loading task&hellip;</h1>
+            <p class="lede" id="taskSubtitle"></p>
+          </div>
+          <div class="model-selector" role="group" aria-label="Copilot model selection">
+            <label for="modelSelect">Copilot model</label>
+            <select id="modelSelect" aria-describedby="modelInfo"></select>
+            <span id="modelInfo" class="model-info"></span>
+          </div>
+        </div>
       </section>
 
       <section class="grid">
@@ -57,7 +68,10 @@
         </article>
 
         <article class="card span-8 fade-up" id="taskFieldsCard">
-          <h2>Task Fields</h2>
+          <div class="card-heading-row">
+            <h2>Task Fields</h2>
+            <button type="button" id="copyTaskJson" class="ghost">Copy Task JSON</button>
+          </div>
           <form id="taskFieldsForm" class="detail-grid">
             <div class="field-group span-full">
               <label for="fieldTitle">Title</label>
@@ -102,18 +116,101 @@
           </div>
           <div class="detail-save-row">
             <button type="button" id="saveTaskFields">Save Changes</button>
+            <button type="button" id="completeTaskBtn" class="ghost">Mark Complete</button>
             <span class="save-status" id="taskSaveStatus"></span>
           </div>
         </article>
 
-        <article class="card span-4 fade-up" id="activityCard">
-          <h3>Activity Log</h3>
+        <article class="card span-4 fade-up" id="actionPanelCard">
+          <h3>Copilot Actions</h3>
+          <div class="action-panel">
+            <label for="actionSelect">Action</label>
+            <select id="actionSelect"></select>
+            <label for="actionInstructions">Instructions (optional)</label>
+            <textarea id="actionInstructions" rows="3" placeholder="Add extra context or constraints for the action..."></textarea>
+            <button type="button" id="runActionBtn" class="run-action-btn">Run Action</button>
+            <span class="save-status" id="actionStatus"></span>
+          </div>
+          <div class="output-panel">
+            <h4>Result</h4>
+            <pre id="actionOutput" class="action-output" tabindex="0"></pre>
+            <div class="output-actions">
+              <button type="button" id="applyOutputBtn" class="ghost" disabled>Apply to Task</button>
+              <button type="button" id="saveCommentBtn" class="ghost" disabled>Add as Comment</button>
+              <button type="button" id="copyOutputBtn" class="ghost" disabled>Copy</button>
+              <button type="button" id="regenerateBtn" class="ghost" disabled>Regenerate</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card span-12 fade-up" id="activityCard">
+          <div class="card-heading-row">
+            <h3>Activity Log</h3>
+            <label class="visually-hidden" for="activitySortSelect">Sort activity log</label>
+            <select id="activitySortSelect" class="page-size-select">
+              <option value="desc">Newest first</option>
+              <option value="asc">Oldest first</option>
+            </select>
+          </div>
           <div class="activity-log" id="activityLog"></div>
         </article>
 
-        <article class="card span-12 fade-up" id="commentsCard">
+        <article class="card span-6 fade-up" id="subtasksCard">
+          <div class="card-heading-row">
+            <h3>Subtasks</h3>
+            <span class="selection-summary" id="subtaskSelectionSummary" hidden></span>
+          </div>
+          <div class="controls-row">
+            <input type="search" id="subtaskSearch" class="search-input" placeholder="Search subtasks..." aria-label="Search subtasks">
+            <div class="controls-group">
+              <button type="button" id="subtaskBulkComplete" class="ghost">Bulk complete</button>
+              <button type="button" id="subtaskBulkDelete" class="ghost">Bulk delete</button>
+            </div>
+          </div>
+          <div class="table-data-container">
+            <table id="subtasksTable" class="table">
+              <thead>
+                <tr>
+                  <th scope="col"><input type="checkbox" id="subtaskSelectAll" aria-label="Select all subtasks"></th>
+                  <th scope="col" data-column="title">Title</th>
+                  <th scope="col" data-column="done">Status</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="subtasksBody"></tbody>
+            </table>
+          </div>
+          <div id="subtasksPagination" class="pagination-bar">
+            <button type="button" id="subtaskPrevPage" class="pagination-btn" disabled>Previous</button>
+            <div id="subtaskPageInfo" class="page-info">Page 1 of 1 (0-0 of 0)</div>
+            <button type="button" id="subtaskNextPage" class="pagination-btn" disabled>Next</button>
+            <select id="subtaskPageSize" class="page-size-select" aria-label="Subtasks per page"></select>
+          </div>
+          <form id="subtaskAddForm" class="comment-form">
+            <input type="text" id="subtaskAddInput" placeholder="Add a subtask..." required>
+            <div class="comment-form-row">
+              <button type="submit">Add Subtask</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="card span-6 fade-up" id="commentsCard">
           <h3>Comment Thread</h3>
+          <div class="controls-row">
+            <input type="search" id="commentSearch" class="search-input" placeholder="Search comments..." aria-label="Search comments">
+            <select id="commentSortSelect" class="page-size-select" aria-label="Sort comments">
+              <option value="timestamp:desc">Newest first</option>
+              <option value="timestamp:asc">Oldest first</option>
+              <option value="author:asc">Author A-Z</option>
+            </select>
+          </div>
           <div class="comment-thread" id="commentThread"></div>
+          <div id="commentsPagination" class="pagination-bar">
+            <button type="button" id="commentPrevPage" class="pagination-btn" disabled>Previous</button>
+            <div id="commentPageInfo" class="page-info">Page 1 of 1 (0-0 of 0)</div>
+            <button type="button" id="commentNextPage" class="pagination-btn" disabled>Next</button>
+            <select id="commentPageSize" class="page-size-select" aria-label="Comments per page"></select>
+          </div>
           <form class="comment-form" id="commentForm">
             <textarea id="commentText" rows="2" placeholder="Add a comment..." required></textarea>
             <div class="comment-form-row">
@@ -144,13 +241,9 @@
     </main>
   </div>
   <script src="script.js"></script>
-  <script src="task.js"></script>
+  <script type="module" src="task.js"></script>
 </body>
 </html>
-
-
-
-
 
 
 

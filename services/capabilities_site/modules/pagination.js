@@ -180,6 +180,7 @@ export function createPagination(options = {}) {
     paginate,
     goToPage,
     getState,
+    updatePagination,
     reset,
     destroy
   };

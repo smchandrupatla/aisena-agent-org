@@ -1,0 +1,127 @@
+/* Task Detail page — Copilot Action panel, model selector, and layout additions.
+   Shared table/search/pagination styling lives in styles.css. */
+
+.task-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.model-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 240px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.model-selector label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.model-selector select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  background: var(--panel);
+  color: var(--ink);
+}
+
+.model-info {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.card-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.action-panel {
+  display: grid;
+  gap: 8px;
+}
+
+.action-panel label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.action-panel select,
+.action-panel textarea {
+  width: 100%;
+}
+
+.run-action-btn {
+  justify-self: start;
+}
+
+.output-panel {
+  margin-top: 16px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.output-panel h4 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.action-output {
+  min-height: 90px;
+  max-height: 320px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: var(--ink);
+}
+
+.output-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.subtask-done {
+  text-decoration: line-through;
+  color: var(--ink-soft);
+}
+
+.comment-copy-btn {
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+@media (max-width: 700px) {
+  .task-heading-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .model-selector {
+    min-width: 0;
+  }
+}

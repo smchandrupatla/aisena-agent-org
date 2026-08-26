@@ -20,6 +20,8 @@ COPY --from=builder /app/*.html ./
 COPY --from=builder /app/*.js ./
 COPY --from=builder /app/*.css ./
 COPY --from=builder /app/*.json ./
+COPY --from=builder /app/*.svg ./
+COPY --from=builder /app/modules/ ./modules/
 COPY --from=builder /app/word-templates/ ./word-templates/
 
 USER nextjs

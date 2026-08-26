@@ -97,9 +97,9 @@ export function createSort(options = {}) {
       const valA = a[column];
       const valB = b[column];
 
-      // Handle null/undefined values
-      if (valA === null || valA === undefined) return 1 * multiplier;
-      if (valB === null || valB === undefined) return -1 * multiplier;
+      // Null/undefined values always sort to the end, regardless of direction
+      if (valA === null || valA === undefined) return valB === null || valB === undefined ? 0 : 1;
+      if (valB === null || valB === undefined) return -1;
 
       // Compare based on type
       let comparison = 0;

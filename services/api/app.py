@@ -4,6 +4,7 @@ import os
 import re
 import ssl
 import subprocess
+import uuid
 from base64 import b64encode
 from datetime import datetime, timezone
 from pathlib import Path
@@ -64,7 +65,7 @@ def utc_now_iso():
 
 TASK_COLUMNS = [
     "id", "title", "description", "owner", "status", "priority", "dependency",
-    "next_checkpoint", "tags", "comments", "activity_log", "app_label",
+    "next_checkpoint", "tags", "comments", "activity_log", "subtasks", "app_label",
     "due_date", "required_capabilities", "external_reference",
     "assignment_required", "assignment_method", "upload_filename", "uploaded_by",
     "uploaded_at",
@@ -116,11 +117,10 @@ def save_tasks(tasks):
                 """
                 INSERT INTO aisena_tasks
                     (id, title, description, owner, status, priority, dependency,
-                     next_checkpoint, tags, comments, activity_log, app_label,
-                     due_date, required_capabilities, external_reference,
+                     next_checkpoint, tags, comments, activity_log, subtasks, app_label,
                      assignment_required, assignment_method, upload_filename,
                      uploaded_by, uploaded_at, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                         %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
@@ -135,11 +135,9 @@ def save_tasks(tasks):
                     json.dumps(task.get("tags") or []),
                     json.dumps(task.get("comments") or []),
                     json.dumps(task.get("activity_log") or []),
+                    json.dumps(task.get("subtasks") or []),
                     task.get("app_label"),
-                    task.get("due_date"),
-                    json.dumps(task.get("required_capabilities") or []),
-                    task.get("external_reference"),
-                    bool(task.get("assignment_required")),
+                    task.get("assignment_required"),
                     task.get("assignment_method"),
                     task.get("upload_filename"),
                     task.get("uploaded_by"),
@@ -1412,6 +1410,7 @@ def create_task():
         "updated_at": now,
         "comments": [],
         "activity_log": [],
+        "subtasks": [],
     }
     add_task_activity(new_task, actor, "created", f"Task created with status {status}")
     tasks.insert(0, new_task)
@@ -1493,6 +1492,170 @@ def add_task_comment(task_id):
     task['updated_at'] = utc_now_iso()
     save_tasks(tasks)
     return jsonify({"task": task}), 201
+
+
+@app.route('/api/tasks/<task_id>/subtasks', methods=['POST'])
+def add_task_subtask(task_id):
+    data = request.get_json(silent=True) or {}
+    title = (data.get('title') or '').strip()
+    if not title:
+        return jsonify({"error": "Subtask title is required"}), 400
+
+    tasks = load_tasks()
+    task = get_task_by_id(tasks, task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    actor = data.get('actor') or 'user'
+    subtask = {
+        "id": f"sub-{uuid.uuid4().hex[:10]}",
+        "title": title,
+        "done": False,
+        "created_at": utc_now_iso(),
+    }
+    task.setdefault('subtasks', []).append(subtask)
+    add_task_activity(task, actor, "subtask_added", f"{actor} added subtask '{title}'")
+    task['updated_at'] = utc_now_iso()
+    save_tasks(tasks)
+    return jsonify({"task": task}), 201
+
+
+@app.route('/api/tasks/<task_id>/subtasks', methods=['PUT'])
+def replace_task_subtasks(task_id):
+    """Bulk update the subtask list (used for reordering, bulk-complete, bulk-delete)."""
+    data = request.get_json(silent=True) or {}
+    subtasks = data.get('subtasks')
+    if not isinstance(subtasks, list):
+        return jsonify({"error": "subtasks must be a list"}), 400
+
+    tasks = load_tasks()
+    task = get_task_by_id(tasks, task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    actor = data.get('actor') or 'user'
+    before_count = len(task.get('subtasks') or [])
+    task['subtasks'] = subtasks
+    add_task_activity(task, actor, "subtasks_updated", f"{actor} updated subtasks ({before_count} -> {len(subtasks)})")
+    task['updated_at'] = utc_now_iso()
+    save_tasks(tasks)
+    return jsonify({"task": task})
+
+
+# --- Copilot Actions: model registry + action execution ---------------------
+#
+# NOTE: this repo does not hold per-provider API keys/billing, so "model
+# selection" here is a curated, static registry used for UI/UX and traceability
+# (recorded on every action + activity log entry) rather than a live routing
+# layer to different vendor APIs. Execution always goes through the same
+# local `copilot` CLI / fallback heuristic used by run_copilot_message.
+COPILOT_MODELS = [
+    {"id": "copilot-free", "name": "Copilot Free", "provider": "GitHub Copilot", "cost": "free", "latency": "fast",
+     "description": "Default local Copilot CLI session. No external billing."},
+    {"id": "gpt-4o-mini-free", "name": "GPT-4o mini (Free tier)", "provider": "OpenAI", "cost": "free", "latency": "fast",
+     "description": "Free-tier-sized model, good for quick summaries and field updates."},
+    {"id": "gemini-flash-free", "name": "Gemini 1.5 Flash (Free)", "provider": "Google", "cost": "free", "latency": "fast",
+     "description": "Free, low-latency model tuned for short structured outputs."},
+    {"id": "gpt-4o", "name": "GPT-4o", "provider": "OpenAI", "cost": "paid", "latency": "medium",
+     "description": "Higher-quality reasoning for complex subtasks/test generation."},
+    {"id": "claude-3-5-sonnet", "name": "Claude 3.5 Sonnet", "provider": "Anthropic", "cost": "paid", "latency": "medium",
+     "description": "Strong at code generation and documentation."},
+]
+
+COPILOT_ACTIONS = {
+    "generate_summary": "Summarize the current state of this task in 3-5 sentences for a status update.",
+    "generate_acceptance_criteria": "Write clear, testable acceptance criteria for this task as a bullet list.",
+    "generate_subtasks": "Break this task into 3-7 concrete subtasks. Reply with one subtask title per line, no numbering.",
+    "explain_task": "Explain what this task is asking for and why it matters, in plain language.",
+    "suggest_next_steps": "Suggest the next 2-4 concrete steps to move this task forward.",
+    "generate_code_snippet": "Generate a short, relevant code snippet that would help implement this task. Use a fenced code block.",
+    "generate_test_cases": "Write a list of test cases (as bullet points) that would validate this task is complete.",
+    "generate_documentation": "Write short user-facing documentation describing the outcome of this task.",
+    "convert_to_story": "Rewrite this task's title and description as a user story in the form 'As a <user>, I want <goal>, so that <benefit>'.",
+    "convert_to_bug": "Rewrite this task's title and description as a bug report with Steps to Reproduce, Expected, and Actual sections.",
+    "convert_to_epic": "Rewrite this task's title and description as an epic with a short list of candidate child stories.",
+}
+
+
+def build_task_action_prompt(task, action, instructions):
+    base_instruction = COPILOT_ACTIONS.get(action)
+    if not base_instruction:
+        return None
+
+    comments = "\n".join(
+        f"- [{c.get('timestamp')}] {c.get('author')}: {c.get('text')}" for c in (task.get('comments') or [])
+    ) or "None"
+    subtasks = "\n".join(
+        f"- [{'x' if s.get('done') else ' '}] {s.get('title')}" for s in (task.get('subtasks') or [])
+    ) or "None"
+
+    context = f"""Task {task.get('id')}: {task.get('title')}
+Status: {task.get('status')} | Priority: {task.get('priority')} | Owner: {task.get('owner') or 'Unassigned'}
+Description: {task.get('description') or 'None'}
+
+Subtasks:
+{subtasks}
+
+Comments:
+{comments}"""
+
+    extra = f"\n\nAdditional instructions from the user: {instructions.strip()}" if instructions and instructions.strip() else ""
+    return f"{context}\n\nRequested action: {base_instruction}{extra}\n\nReply in plain text, no markdown fences unless a code block is explicitly requested."
+
+
+@app.route('/api/models', methods=['GET'])
+def list_copilot_models():
+    return jsonify({"models": COPILOT_MODELS})
+
+
+@app.route('/api/copilot/action', methods=['POST', 'OPTIONS'])
+def run_copilot_action():
+    if request.method == 'OPTIONS':
+        return ('', 204)
+
+    payload = request.get_json(silent=True) or {}
+    task_id = payload.get('task_id')
+    action = payload.get('action')
+    model_id = payload.get('model') or COPILOT_MODELS[0]['id']
+    instructions = payload.get('instructions') or ''
+    agent_key = payload.get('agent')
+
+    if action not in COPILOT_ACTIONS:
+        return jsonify({"error": f"Unknown action: {action}"}), 400
+
+    tasks = load_tasks()
+    task = get_task_by_id(tasks, task_id) if task_id else None
+    if task_id and not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    model = next((m for m in COPILOT_MODELS if m['id'] == model_id), None)
+    if not model:
+        return jsonify({"error": f"Unknown model: {model_id}"}), 400
+
+    agent = find_agent(agent_key) if agent_key else find_agent(task.get('owner')) if task else None
+    if agent is None:
+        agent = {"key": "implementation-manager", "name": "Implementation Manager"}
+
+    prompt = build_task_action_prompt(task, action, instructions) if task else \
+        f"{COPILOT_ACTIONS[action]}{(' ' + instructions.strip()) if instructions.strip() else ''}"
+
+    output = run_copilot_message(agent, prompt, load_transcript(agent.get('key')))
+
+    if task:
+        add_task_activity(
+            task, agent.get('name', agent.get('key')), "copilot_action",
+            f"Ran '{action}' using {model['name']} ({model['cost']})",
+        )
+        save_tasks(tasks)
+
+    return jsonify({
+        "action": action,
+        "model": model,
+        "agent": agent.get('key'),
+        "output": output,
+        "timestamp": utc_now_iso(),
+        "task": task,
+    })
 
 
 # Issue API endpoints

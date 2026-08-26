@@ -6,6 +6,11 @@ Write-Host "Starting AISENA Docker deployment..."
 # Change to infra directory
 Set-Location "c:\GitHub\aisena-agent-org\infra"
 
+# Add Docker Desktop binary to PATH for this session
+$env:Path += ";C:\Program Files\Docker\Docker\resources\bin"
+Write-Host "Docker binary path added. Verifying..."
+(Get-Command docker -ErrorAction SilentlyContinue).Source | ForEach-Object { Write-Host "docker found at: $_" }
+
 # Stop any existing services
 Write-Host "Stopping existing Docker services..."
 docker compose down 2>$null

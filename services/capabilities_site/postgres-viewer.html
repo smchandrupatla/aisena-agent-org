@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="site-wrap">
     <header class="topbar fade-up">
       <div class="brand">
@@ -44,7 +45,7 @@
       </nav>
     </header>
 
-    <main>
+    <main id="main-content">
       <section class="hero fade-up">
         <div class="kicker">PostgreSQL Database Viewer</div>
         <h1>Postgres Viewer</h1>
@@ -119,7 +120,11 @@
                   </svg>
                 </button>
                 <div id="columnsToggles" class="columns-dropdown" role="menu" hidden>
-                  <!-- Column toggles rendered here -->
+                  <div class="columns-dropdown-actions">
+                    <button type="button" id="columnsShowAll" class="columns-bulk-btn">Show all</button>
+                    <button type="button" id="columnsHideAll" class="columns-bulk-btn">Hide all</button>
+                  </div>
+                  <div id="columnsToggleList" class="columns-dropdown-list"></div>
                 </div>
               </div>
               
@@ -200,6 +205,11 @@
                 <path d="M9 18l6-6-6-6"/>
               </svg>
             </button>
+            <form id="jumpToPageForm" class="jump-to-page">
+              <label for="jumpToPageInput">Go to page</label>
+              <input type="number" id="jumpToPageInput" min="1" step="1" inputmode="numeric" aria-label="Jump to page number">
+              <button type="submit" class="pagination-btn">Go</button>
+            </form>
           </div>
         </article>
       </section>

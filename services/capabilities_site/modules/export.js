@@ -64,6 +64,43 @@ export function createExport() {
     return toCsv(data, columns);
   }
 
+  let sheetJsPromise = null;
+
+  /**
+   * Lazily load the SheetJS library from CDN (only once)
+   * @returns {Promise<Object>} Resolves to the global XLSX object
+   */
+  function loadSheetJs() {
+    if (window.XLSX) return Promise.resolve(window.XLSX);
+    if (sheetJsPromise) return sheetJsPromise;
+
+    sheetJsPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+      script.crossOrigin = 'anonymous';
+      script.onload = () => resolve(window.XLSX);
+      script.onerror = () => reject(new Error('Failed to load XLSX library'));
+      document.head.appendChild(script);
+    });
+
+    return sheetJsPromise;
+  }
+
+  /**
+   * Build a real XLSX binary workbook from tabular data
+   * @param {Array<Object>} data - Data to export
+   * @param {Array<string>} columns - Column names
+   * @returns {Promise<ArrayBuffer>} XLSX file contents
+   */
+  async function buildXlsxWorkbook(data, columns) {
+    const XLSX = await loadSheetJs();
+    const rows = data.map(row => columns.map(col => (row[col] === null || row[col] === undefined) ? '' : row[col]));
+    const sheet = XLSX.utils.aoa_to_sheet([columns, ...rows]);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, sheet, 'Export');
+    return XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+  }
+
   /**
    * Download file
    * @param {string} content - File content
@@ -104,14 +141,20 @@ export function createExport() {
   }
 
   /**
-   * Export data as XLSX (CSV-based)
+   * Export data as XLSX (real binary workbook via SheetJS, falls back to CSV if the library can't load)
    * @param {Array<Object>} data - Data to export
    * @param {Array<string>} columns - Column names
    * @param {string} filename - Filename (default: export.xlsx)
    */
-  function exportXlsx(data, columns, filename = 'export.xlsx') {
-    const csv = toXlsx(data, columns);
-    download(csv, filename, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8;');
+  async function exportXlsx(data, columns, filename = 'export.xlsx') {
+    try {
+      const buffer = await buildXlsxWorkbook(data, columns);
+      download(buffer, filename, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    } catch (error) {
+      console.warn('XLSX export fell back to CSV:', error);
+      const csv = toXlsx(data, columns);
+      download(csv, filename.replace(/\.xlsx$/, '.csv'), 'text/csv;charset=utf-8;');
+    }
   }
 
   /**
@@ -121,7 +164,7 @@ export function createExport() {
    * @param {Array<string>} columns - Column names
    * @param {string} filename - Filename
    */
-  function exportData(format, data, columns, filename) {
+  async function exportData(format, data, columns, filename) {
     const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
     const defaultName = `postgres-export-${timestamp}`;
     
@@ -133,7 +176,7 @@ export function createExport() {
         exportJson(data, filename || `${defaultName}.json`);
         break;
       case 'xlsx':
-        exportXlsx(data, columns, filename || `${defaultName}.xlsx`);
+        await exportXlsx(data, columns, filename || `${defaultName}.xlsx`);
         break;
       default:
         console.warn(`Unknown export format: ${format}`);

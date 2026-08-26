@@ -17,6 +17,15 @@ PROMPT_STATUSES = {"Draft", "Active", "Archived"}
 EDITABLE_STATUSES = {"Draft", "Active"}
 IMPORTANT_FIELDS = ("title", "description", "prompt_text", "category", "status", "assignee_agent_id")
 
+_prompt_executor = None
+
+
+def configure_prompt_executor(executor):
+    """Register the callback (agent_key, message, tool_actions) -> (result, status_code)
+    used to run a prompt's text against its assigned agent."""
+    global _prompt_executor
+    _prompt_executor = executor
+
 PROMPT_SELECT = """
     SELECT p.id, p.prompt_code, p.title, p.description, p.prompt_text, p.category,
            p.status, p.owner_user_id, owner.display_name AS owner_name,

@@ -1,5 +1,10 @@
 ﻿// Task detail page: editable standard fields, activity log, comment thread, and a
 // per-task AI chat that reuses the shared /api/agents/:agentId/message backend.
+import { createModelSelector } from './modules/task-model-selector.js';
+import { createActions } from './modules/task-actions.js';
+import { createSubtasks } from './modules/task-subtasks.js';
+import { createComments } from './modules/task-comments.js';
+
 const TASK_STATUSES = ["Backlog", "Planned", "In Progress", "Blocked", "In Review", "Done"];
 const TASK_PRIORITIES = ["Low", "Medium", "High", "Critical"];
 
@@ -10,6 +15,30 @@ const focusField = params.get("focus");
 let agentsCache = [];
 let allTasksCache = [];
 let currentTask = null;
+let activitySortDirection = "desc";
+
+const modelSelector = createModelSelector();
+const subtasksController = createSubtasks({
+  getTaskId: () => taskId,
+  onChanged: (task) => { currentTask = task; renderHeader(currentTask); renderActivityLog(currentTask); },
+});
+const commentsController = createComments({ formatTimestamp });
+const actionsController = createActions({
+  getModel: () => modelSelector.getSelectedModel(),
+  getTaskId: () => taskId,
+  getAgentKey: () => currentTask?.owner || document.getElementById("chatAgentSelect")?.value,
+  onApplyDescription: async (text) => {
+    const field = document.getElementById("fieldDescription");
+    field.value = field.value ? `${field.value}\n\n${text}` : text;
+    await saveTaskFieldsFromForm();
+  },
+  onApplyNextCheckpoint: async (text) => {
+    document.getElementById("fieldCheckpoint").value = text.trim().slice(0, 280);
+    await saveTaskFieldsFromForm();
+  },
+  onApplySubtasks: async (titles) => subtasksController.addMany(titles),
+  onSaveAsComment: async (text) => postComment("Copilot Action", text),
+});
 
 function ownerLabel(ownerKey) {
   if (!ownerKey) return "Unassigned";
@@ -48,8 +77,8 @@ async function fetchAllTasks() {
 function renderHeader(task) {
   document.getElementById("taskHeading").textContent = `${task.id}: ${task.title}`;
   document.getElementById("taskSubtitle").textContent =
-    `${task.status} Ã¢â‚¬Â¢ ${task.priority} priority Ã¢â‚¬Â¢ Owner: ${ownerLabel(task.owner)}` +
-    (task.app_label ? ` Ã¢â‚¬Â¢ App: ${task.app_label}` : '');
+    `${task.status} • ${task.priority} priority • Owner: ${ownerLabel(task.owner)}` +
+    (task.app_label ? ` • App: ${task.app_label}` : '');
   document.getElementById("taskCreatedAt").textContent = formatTimestamp(task.created_at);
   document.getElementById("taskUpdatedAt").textContent = formatTimestamp(task.updated_at);
 }
@@ -84,7 +113,8 @@ function renderFields(task) {
 
 function renderActivityLog(task) {
   const root = document.getElementById("activityLog");
-  const entries = (task.activity_log || []).slice().reverse();
+  let entries = (task.activity_log || []).slice();
+  entries = activitySortDirection === "asc" ? entries : entries.reverse();
   if (!entries.length) {
     root.innerHTML = `<p style="color: var(--ink-soft); font-size: 13px;">No activity yet.</p>`;
     return;
@@ -92,7 +122,7 @@ function renderActivityLog(task) {
   root.innerHTML = entries
     .map(
       (entry) => `<div class="activity-entry">
-        <time>${formatTimestamp(entry.timestamp)} Ã¢â‚¬Â¢ ${entry.actor || "system"}</time>
+        <time>${formatTimestamp(entry.timestamp)} • ${entry.actor || "system"}</time>
         ${entry.details || entry.action}
       </div>`
     )
@@ -100,27 +130,13 @@ function renderActivityLog(task) {
 }
 
 function renderComments(task) {
-  const root = document.getElementById("commentThread");
-  const comments = task.comments || [];
-  if (!comments.length) {
-    root.innerHTML = `<p style="color: var(--ink-soft); font-size: 13px;">No comments yet. Be the first to add one.</p>`;
-    return;
-  }
-  root.innerHTML = comments
-    .map(
-      (c) => `<div class="comment-entry">
-        <div class="comment-meta"><span>${c.author || "User"}</span><span>${formatTimestamp(c.timestamp)}</span></div>
-        <p>${escapeHtml(c.text)}</p>
-      </div>`
-    )
-    .join("");
-  root.scrollTop = root.scrollHeight;
+  commentsController.setData(task.comments || []);
 }
 
 function escapeHtml(text) {
   const div = document.createElement("div");
   div.textContent = text || "";
-  return div.innerHTML;
+  return div.innerHTML.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 async function reloadTask() {
@@ -134,49 +150,62 @@ async function reloadTask() {
 
 function initFieldsForm() {
   const saveBtn = document.getElementById("saveTaskFields");
-  const statusEl = document.getElementById("taskSaveStatus");
+  saveBtn.addEventListener("click", () => saveTaskFieldsFromForm());
 
-  saveBtn.addEventListener("click", async () => {
-    const tags = document
-      .getElementById("fieldTags")
-      .value.split(",")
-      .map((t) => t.trim())
-      .filter(Boolean);
-
-    const payload = {
-      title: document.getElementById("fieldTitle").value.trim(),
-      description: document.getElementById("fieldDescription").value.trim(),
-      owner: document.getElementById("fieldOwner").value,
-      status: document.getElementById("fieldStatus").value,
-      priority: document.getElementById("fieldPriority").value,
-      dependency: document.getElementById("fieldDependency").value || null,
-      next_checkpoint: document.getElementById("fieldCheckpoint").value.trim(),
-      tags,
-      app_label: document.getElementById("fieldAppLabel").value.trim() || null,
-      actor: "user",
-    };
-
-    statusEl.textContent = "Saving...";
-    statusEl.classList.remove("ok");
-    try {
-      const response = await fetch(`${API_BASE}/api/tasks/${encodeURIComponent(taskId)}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Save failed");
-      currentTask = result.task;
-      renderHeader(currentTask);
-      renderActivityLog(currentTask);
-      const ownerSelect = document.getElementById("chatAgentSelect");
-      if (ownerSelect) populateChatAgentSelect();
-      statusEl.textContent = "Saved.";
-      statusEl.classList.add("ok");
-    } catch (err) {
-      statusEl.textContent = `Save failed: ${err.message}`;
-    }
+  document.getElementById("completeTaskBtn")?.addEventListener("click", async () => {
+    document.getElementById("fieldStatus").value = "Done";
+    await saveTaskFieldsFromForm();
   });
+
+  document.getElementById("copyTaskJson")?.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(JSON.stringify(currentTask, null, 2));
+    const statusEl = document.getElementById("taskSaveStatus");
+    statusEl.textContent = "Task JSON copied.";
+    statusEl.classList.add("ok");
+  });
+}
+
+async function saveTaskFieldsFromForm() {
+  const statusEl = document.getElementById("taskSaveStatus");
+  const tags = document
+    .getElementById("fieldTags")
+    .value.split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+
+  const payload = {
+    title: document.getElementById("fieldTitle").value.trim(),
+    description: document.getElementById("fieldDescription").value.trim(),
+    owner: document.getElementById("fieldOwner").value,
+    status: document.getElementById("fieldStatus").value,
+    priority: document.getElementById("fieldPriority").value,
+    dependency: document.getElementById("fieldDependency").value || null,
+    next_checkpoint: document.getElementById("fieldCheckpoint").value.trim(),
+    tags,
+    app_label: document.getElementById("fieldAppLabel").value.trim() || null,
+    actor: "user",
+  };
+
+  statusEl.textContent = "Saving...";
+  statusEl.classList.remove("ok");
+  try {
+    const response = await fetch(`${API_BASE}/api/tasks/${encodeURIComponent(taskId)}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Save failed");
+    currentTask = result.task;
+    renderHeader(currentTask);
+    renderActivityLog(currentTask);
+    const ownerSelect = document.getElementById("chatAgentSelect");
+    if (ownerSelect) populateChatAgentSelect();
+    statusEl.textContent = "Saved.";
+    statusEl.classList.add("ok");
+  } catch (err) {
+    statusEl.textContent = `Save failed: ${err.message}`;
+  }
 }
 
 function initCommentForm() {
@@ -346,6 +375,8 @@ async function initTaskPage() {
     document.getElementById("taskFieldsCard").style.display = "none";
     document.getElementById("activityCard").style.display = "none";
     document.getElementById("commentsCard").style.display = "none";
+    document.getElementById("subtasksCard").style.display = "none";
+    document.getElementById("actionPanelCard").style.display = "none";
     document.getElementById("chatCard").style.display = "none";
     return;
   }
@@ -360,14 +391,78 @@ async function initTaskPage() {
     document.getElementById("taskFieldsCard").style.display = "none";
     document.getElementById("activityCard").style.display = "none";
     document.getElementById("commentsCard").style.display = "none";
+    document.getElementById("subtasksCard").style.display = "none";
+    document.getElementById("actionPanelCard").style.display = "none";
     document.getElementById("chatCard").style.display = "none";
     return;
   }
 
   initFieldsForm();
   initCommentForm();
+  initSubtasks();
+  initComments();
+  initActions();
+  initActivitySort();
+  await modelSelector.init(document.getElementById("modelSelect"), document.getElementById("modelInfo"));
   initChat();
   applyFocusParam();
+}
+
+function initSubtasks() {
+  subtasksController.init({
+    tbody: document.getElementById("subtasksBody"),
+    searchInput: document.getElementById("subtaskSearch"),
+    selectAllCheckbox: document.getElementById("subtaskSelectAll"),
+    bulkCompleteButton: document.getElementById("subtaskBulkComplete"),
+    bulkDeleteButton: document.getElementById("subtaskBulkDelete"),
+    selectionSummary: document.getElementById("subtaskSelectionSummary"),
+    addForm: document.getElementById("subtaskAddForm"),
+    addInput: document.getElementById("subtaskAddInput"),
+    paginationContainer: document.getElementById("subtasksPagination"),
+    prevButton: document.getElementById("subtaskPrevPage"),
+    nextButton: document.getElementById("subtaskNextPage"),
+    pageInfo: document.getElementById("subtaskPageInfo"),
+    pageSizeSelect: document.getElementById("subtaskPageSize"),
+  });
+  subtasksController.setData(currentTask.subtasks || []);
+}
+
+function initComments() {
+  commentsController.init({
+    list: document.getElementById("commentThread"),
+    searchInput: document.getElementById("commentSearch"),
+    sortSelect: document.getElementById("commentSortSelect"),
+    paginationContainer: document.getElementById("commentsPagination"),
+    prevButton: document.getElementById("commentPrevPage"),
+    nextButton: document.getElementById("commentNextPage"),
+    pageInfo: document.getElementById("commentPageInfo"),
+    pageSizeSelect: document.getElementById("commentPageSize"),
+  });
+  commentsController.setData(currentTask.comments || []);
+}
+
+function initActions() {
+  actionsController.init({
+    actionSelect: document.getElementById("actionSelect"),
+    instructionsInput: document.getElementById("actionInstructions"),
+    runButton: document.getElementById("runActionBtn"),
+    statusEl: document.getElementById("actionStatus"),
+    outputEl: document.getElementById("actionOutput"),
+    applyButton: document.getElementById("applyOutputBtn"),
+    saveCommentButton: document.getElementById("saveCommentBtn"),
+    copyButton: document.getElementById("copyOutputBtn"),
+    regenerateButton: document.getElementById("regenerateBtn"),
+  });
+}
+
+function initActivitySort() {
+  const select = document.getElementById("activitySortSelect");
+  if (!select) return;
+  select.value = activitySortDirection;
+  select.addEventListener("change", () => {
+    activitySortDirection = select.value;
+    renderActivityLog(currentTask);
+  });
 }
 
 initTaskPage();
