@@ -22,6 +22,9 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Restore app.py from base64 parts if PLACEHOLDER
+        run: python3 scripts/restore_api_app.py
+
       - name: Reject PLACEHOLDER or truncated services/api/app.py
         run: |
           set -euo pipefail
@@ -51,6 +54,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Restore app.py from base64 parts if PLACEHOLDER
+        run: python3 scripts/restore_api_app.py
 
       - name: Set up Python
         uses: actions/setup-python@v5
