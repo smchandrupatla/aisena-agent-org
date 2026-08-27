@@ -82,10 +82,13 @@ aisena-agent-org/
 ├── project/          # Architecture and project docs
 ├── samples/          # Example workflows / demos
 ├── scripts/          # Utility and maintenance scripts
-├── services/         # API, orchestrator, CRM portal, etc.
-├── tests/            # Feature-health regression suite
+├── services/         # API, orchestrator, capabilities site, etc.
+├── tests/            # Feature-health + Selenium GUI suites
+│   ├── test_feature_health.py
+│   └── gui/          # Selenium screen tests for all HTML pages
 ├── webportal/        # Web portal frontend
 ├── docker-compose.yml
+├── docker-compose.selenium.yml
 └── README.md
 ```
 
@@ -96,22 +99,46 @@ aisena-agent-org/
 Continuous Integration runs on **every push to `main` and every pull request**:
 
 - Python unit tests (API, orchestrator, eventing, agent scripts)
-- **Feature-health regression suite** (`tests/test_feature_health.py`) — validates structure, API pure logic, eventing, orchestrator modules, compose services, and health-check utilities
+- **Feature-health regression suite** (`tests/test_feature_health.py`)
+- **Selenium HTML screen suite** (`tests/gui`) — opens every `capabilities_site` HTML page and asserts the screen loads
 - CRM portal tests and production build
 - Event schema validation
-- Docker Compose config validation
+- Docker Compose config validation (including Selenium stack)
 
 Workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
 
 ### Run the feature-health suite locally
 
 ```bash
-# Install API deps (Flask, etc.)
 pip install -r services/api/requirements.txt -r services/orchestrator/requirements.txt
-
-# From repository root
 python -m unittest tests.test_feature_health -v
 ```
+
+### Run Selenium GUI screen tests
+
+**Recommended (Docker — matches CI):**
+
+```bash
+# Linux/macOS
+./scripts/run-gui-tests.sh
+
+# Windows PowerShell
+./scripts/run-gui-tests.ps1
+
+# Or manually:
+docker compose -f docker-compose.selenium.yml up --build --abort-on-container-exit --exit-code-from gui-tests
+docker compose -f docker-compose.selenium.yml down -v
+```
+
+**Local (Chrome + static server):**
+
+```bash
+pip install -r tests/gui/requirements.txt
+# Requires Google Chrome / Chromium installed
+pytest -v tests/gui/test_html_screens.py
+```
+
+The suite discovers every `services/capabilities_site/*.html` page and runs one screen smoke test per page (load, body visible, readyState complete).
 
 ---
 
