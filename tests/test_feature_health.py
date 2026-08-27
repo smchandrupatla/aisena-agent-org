@@ -10,8 +10,8 @@ or Postgres required).
 from __future__ import annotations
 
 import ast
+import importlib
 import importlib.util
-import os
 import re
 import sys
 import tempfile
@@ -92,7 +92,6 @@ class DockerComposeFeatureHealthTests(unittest.TestCase):
     def test_compose_declares_core_services(self):
         missing = []
         for service in self.EXPECTED_SERVICES:
-            # YAML service keys appear as "  service_name:" under services:
             pattern = re.compile(rf"^\s{{2}}{re.escape(service)}:\s*$", re.MULTILINE)
             if not pattern.search(self.compose_text):
                 missing.append(service)
@@ -113,7 +112,6 @@ class ApiPureLogicHealthTests(unittest.TestCase):
         api_dir = ROOT / "services" / "api"
         if str(api_dir) not in sys.path:
             sys.path.insert(0, str(api_dir))
-        # Import after path setup; Flask app may load without DB.
         cls.app_module = importlib.import_module("app")
 
     def test_health_endpoint_returns_ok(self):
@@ -212,11 +210,8 @@ class EventingFeatureHealthTests(unittest.TestCase):
     """Validate event framework feature health."""
 
     def test_event_framework_module_importable(self):
-        eventing_dir = ROOT / "services" / "eventing"
         if str(ROOT) not in sys.path:
             sys.path.insert(0, str(ROOT))
-        if str(eventing_dir.parent) not in sys.path:
-            sys.path.insert(0, str(eventing_dir.parent))
         from services.eventing.framework import EventBuilder, EventValidationError  # noqa: F401
 
         self.assertTrue(callable(EventBuilder))
@@ -257,7 +252,6 @@ class OrchestratorFeatureHealthTests(unittest.TestCase):
     """Validate orchestrator modules remain healthy and importable."""
 
     def test_orchestrator_modules_parse(self):
-        """Syntax-check key orchestrator modules without executing side effects."""
         modules = [
             "services/orchestrator/orchestrator.py",
             "services/orchestrator/capability_registry.py",
@@ -332,8 +326,9 @@ class HealthCheckUtilityTests(unittest.TestCase):
         module = _load_module("test_service_health_script", path)
         self.assertTrue(hasattr(module, "ServiceHealthChecker"))
         checker = module.ServiceHealthChecker()
-        self.assertIn("api" not in checker.services or True, [True])  # structure exists
         self.assertGreaterEqual(len(checker.services), 5)
+        self.assertIn("postgres", checker.services)
+        self.assertIn("kafka", checker.services)
 
 
 class CiRegressionWiringTests(unittest.TestCase):
@@ -342,7 +337,7 @@ class CiRegressionWiringTests(unittest.TestCase):
     def test_ci_workflow_includes_feature_health_suite(self):
         ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
         self.assertIn("test_feature_health", ci)
-        self.assertIn("feature-health", ci.lower() + ci)
+        self.assertIn("Feature-health regression suite", ci)
 
 
 class IssueAndTaskJsonHelpersTests(unittest.TestCase):
