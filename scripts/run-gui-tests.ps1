@@ -1,5 +1,4 @@
-# Builds the crm-portal image, spins up a Selenium Grid + Chrome node, runs the
-# GUI test suite against it, then tears everything down.
+# Build the capabilities site, start Selenium Chrome, run HTML screen suite, tear down.
 $ErrorActionPreference = "Stop"
 
 Push-Location $PSScriptRoot\..
