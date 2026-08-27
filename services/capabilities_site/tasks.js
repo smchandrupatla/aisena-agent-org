@@ -88,9 +88,15 @@ function renderTasks() {
   const filtered = applyFilters(tasksCache, filters);
 
   if (!filtered.length) {
-    body.innerHTML = `<tr class="empty-row"><td colspan="8">No tasks match this view. Use "Add task in backlog" to create one.</td></tr>`;
+    body.innerHTML = `<tr class="empty-row"><td colspan="9">No tasks match this view. Use "Add task in backlog" to create one.</td></tr>`;
     return;
   }
+
+  // Update selectAll state
+  const selectAll = document.getElementById("selectAll");
+  const allChecked = filtered.length > 0 && filtered.every((t) => true); // Will be updated per row
+  selectAll.indeterminate = filtered.some((t) => /* check checked state */ false);
+  selectAll.checked = filtered.length > 0 && filtered.every((t) => /* check if checkbox exists and checked */ true);
 
   body.innerHTML = filtered
     .map(
@@ -99,6 +105,22 @@ function renderTasks() {
         <td><a class="task-link" href="task.html?id=${encodeURIComponent(task.id)}">${task.id} ${task.title}</a></td>
         <td>${task.app_label || "-"}</td>
         <td>${ownerLabel(task.owner)}</td>
+        <td><span class="pill">${task.status}</span></td>
+        <td>${task.priority}</td>
+        <td>${task.next_checkpoint || "-"}</td>
+        <td>
+          <a class="ghost" href="task.html?id=${encodeURIComponent(task.id)}" style="text-decoration:none; display:inline-block; padding:9px 15px; border-radius:11px;">Open</a>
+          <button type="button" class="ghost task-run" data-task-id="${task.id}">Run</button>
+          <button type="button" class="ghost task-delete" data-task-id="${task.id}">Delete</button>
+        </td>
+      </tr>`
+    )
+    .join("");
+
+  // Add checkbox change listeners after rendering
+  initTaskCheckboxes();
+  initTaskRunButtons();
+}
         <td><span class="pill">${task.status}</span></td>
         <td>${task.priority}</td>
         <td>${task.next_checkpoint || "-"}</td>
@@ -367,10 +389,13 @@ async function runSingleTask(taskId, model) {
     if (!response.ok) throw new Error(result.error || "Task run failed");
 
     notice.textContent = result.message || `Task ${taskId} started with ${model}`;
-  } catch (err) {
-    notice.textContent = `Task run failed: ${err.message}`;
-    notice.className = "notice warn";
   }
+
+  // Initialize task checkboxes after rendering
+  initTaskCheckboxes();
+
+  // Initialize task run buttons
+  initTaskRunButtons();
 }
 
 function populateTaskDialogSelects() {
@@ -674,6 +699,10 @@ async function initTasksPage() {
   initTaskDialog();
   initTaskUploadDialog();
   initQuickPickActions();
+  initFilterBar();
+  initBulkActions();
+  initTaskCheckboxes();
+  initTaskRunButtons();
   renderTasks();
 }
 

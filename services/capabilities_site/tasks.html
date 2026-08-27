@@ -98,41 +98,99 @@
             <tbody id="tasksBody">
             </tbody>
           </table>
-          <div id="bulkActions" class="bulk-actions" style="display: none;">
-            <button type="button" class="pill" id="bulkRunBtn">Run Selected</button>
-            <button type="button" class="pill" id="bulkDeleteBtn">Delete Selected</button>
-          </div>
         </article>
 
       <dialog id="taskRunDialog">
         <form id="taskRunForm">
-          <h3>Run Task</h3>
+          <h3>Run Action for Task #<span id="runTaskId">?</span></h3>
+          <label>Action
+            <select id="runActionSelect" required>
+              <option value="">Select Action...</option>
+              <option value="generate_summary">Generate Summary</option>
+              <option value="update_status">Update Status</option>
+              <option value="complete_task">Complete Task</option>
+              <option value="add_comment">Add Comment</option>
+              <option value="generate_subtasks">Generate Subtasks</option>
+              <option value="suggest_next_steps">Suggest Next Steps</option>
+            </select>
+          </label>
           <label>Model
-            <select id="taskModelSelect" required>
+            <select id="runModelSelect" required>
               <option value="">Select Model...</option>
             </select>
           </label>
+          <label>Instructions
+            <textarea id="runInstructions" rows="3" placeholder="Optional: Provide custom instructions for the action"></textarea>
+          </label>
+          <div class="output-panel" id="outputPanel" hidden>
+            <h4>Output</h4>
+            <pre id="outputResult"></pre>
+          </div>
           <div class="chat-actions">
-            <button type="submit" id="taskRunConfirm">Run</button>
-            <button type="button" class="ghost" id="taskRunCancel">Cancel</button>
+            <button type="submit" id="runConfirm">Apply</button>
+            <button type="button" class="ghost" id="runCancel">Cancel</button>
+            <button type="button" class="ghost" id="addComment">Add as Comment</button>
+            <button type="button" class="ghost" id="copyOutput">Copy</button>
+            <button type="button" class="ghost" id="regenerate">Regenerate</button>
           </div>
         </form>
       </dialog>
 
       <dialog id="bulkRunDialog">
         <form id="bulkRunForm">
-          <h3>Bulk Run Tasks</h3>
+          <h3>Run Bulk Action</h3>
+          <label>Action
+            <select id="bulkActionSelect" required>
+              <option value="">Select Action...</option>
+              <option value="generate_summary">Generate Summary</option>
+              <option value="update_status">Update Status</option>
+              <option value="complete_task">Complete Tasks</option>
+              <option value="add_comment">Add Comment</option>
+              <option value="generate_subtasks">Generate Subtasks</option>
+              <option value="suggest_next_steps">Suggest Next Steps</option>
+            </select>
+          </label>
           <label>Model
             <select id="bulkModelSelect" required>
               <option value="">Select Model...</option>
             </select>
           </label>
+          <label>Instructions
+            <textarea id="bulkInstructions" rows="3" placeholder="Optional: Provide custom instructions for the action"></textarea>
+          </label>
           <div class="chat-actions">
-            <button type="submit" id="bulkRunConfirm">Run Selected</button>
+            <button type="submit" id="bulkRunConfirm">Run</button>
             <button type="button" class="ghost" id="bulkRunCancel">Cancel</button>
           </div>
         </form>
       </dialog>
+
+      <dialog id="bulkActionDialog">
+        <form id="bulkActionForm">
+          <h3>Bulk Action Results</h3>
+          <div id="bulkActionResults" hidden>
+            <p>Processing...</p>
+          </div>
+          <button type="button" class="ghost" id="bulkActionClose">Close</button>
+        </form>
+      </dialog>
+
+      <div id="bulkToolbar" class="bulk-toolbar" style="display: none;">
+        <div class="bulk-actions">
+          <button type="button" class="pill" id="bulkSummaryBtn">Bulk Generate Summary</button>
+          <button type="button" class="pill" id="bulkStatusBtn">Bulk Update Status</button>
+          <button type="button" class="pill" id="bulkCompleteBtn">Bulk Complete Tasks</button>
+          <button type="button" class="pill" id="bulkCommentBtn">Bulk Add Comment</button>
+          <button type="button" class="pill" id="bulkSubtasksBtn">Bulk Generate Subtasks</button>
+          <button type="button" class="pill" id="bulkNextStepsBtn">Bulk Suggest Next Steps</button>
+        </div>
+        <div class="bulk-model-selector">
+          <label>Model: <span id="selectedModel">Select Model</span></label>
+          <select id="bulkModelSelect">
+            <option value="">Select Model...</option>
+          </select>
+        </div>
+      </div>
 
         
 

@@ -315,7 +315,7 @@ async function loadTable(tableName) {
     state.rowCountEstimate = countEstimate;
     state.countStatus = countStatus;
 
-    const response = await fetch(`/db-tables/${encodeURIComponent(tableName)}?limit=5000`);
+    const response = await fetch(`/db-tables/${encodeURIComponent(tableName)}?limit=${state.pageSize || 25}&offset=0`);
     const data = await response.json();
 
     if (!response.ok) {
