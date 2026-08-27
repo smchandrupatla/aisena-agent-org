@@ -1,3 +1,102 @@
 [
-  {"id": "TASK-0001", "title": "temp"}
+    {
+        "id": "TASK-0001",
+        "title": "Complete Robolectric Test Suite",
+        "description": "Finalize Robolectric rendering test implementation and run complete test suite against real Android SDK",
+        "status": "in-progress",
+        "owner": "qa-engineer",
+        "priority": "High",
+        "next_checkpoint": "Run Robolectric + plain unit test suite against real Android SDK",
+        "tags": ["robolectric", "android", "testing", "gui"],
+        "created_at": "2026-08-21T00:00:00Z",
+        "updated_at": "2026-08-21T00:00:00Z",
+        "activity_log": [
+            {
+                "timestamp": "2026-08-21T00:00:00Z",
+                "actor": "qa-engineer",
+                "action": "created",
+                "details": "Robolectric test suite task created"
+            }
+        ]
+    },
+    {
+        "id": "TASK-0002",
+        "title": "Resolve Docker Desktop Issues for Robolectric",
+        "description": "Document and resolve Docker Desktop state issues preventing Robolectric test execution",
+        "status": "in-progress",
+        "owner": "devops-engineer",
+        "priority": "High",
+        "next_checkpoint": "Document Docker Desktop resolution for Robolectric testing",
+        "tags": ["docker", "robolectric", "infrastructure", "troubleshooting"],
+        "created_at": "2026-08-21T00:00:00Z",
+        "updated_at": "2026-08-21T00:00:00Z",
+        "activity_log": [
+            {
+                "timestamp": "2026-08-21T00:00:00Z",
+                "actor": "devops-engineer",
+                "action": "created",
+                "details": "Docker Desktop resolution task created"
+            }
+        ]
+    },
+    {
+        "id": "TASK-0003",
+        "title": "Update Repository Memory with Robolectric Findings",
+        "description": "Update project memory with lessons learned from Robolectric testing implementation and Docker Desktop resolution",
+        "status": "in-progress",
+        "owner": "documentation-engineer",
+        "priority": "Medium",
+        "next_checkpoint": "Update repo memory with Robolectric findings",
+        "tags": ["memory", "documentation", "robolectric", "lessons-learned"],
+        "created_at": "2026-08-21T00:00:00Z",
+        "updated_at": "2026-08-21T00:00:00Z",
+        "activity_log": [
+            {
+                "timestamp": "2026-08-21T00:00:00Z",
+                "actor": "documentation-engineer",
+                "action": "created",
+                "details": "Repository memory update task created"
+            }
+        ]
+    },
+    {
+        "id": "TASK-0004",
+        "title": "Clean Up Verification Scaffolding",
+        "description": "Remove temporary build scripts and cache files used for verification",
+        "status": "in-progress",
+        "owner": "devops-engineer",
+        "priority": "Medium",
+        "next_checkpoint": "Clean up verification scaffolding (build script, cache)",
+        "tags": ["cleanup", "scaffolding", "maintenance"],
+        "created_at": "2026-08-21T00:00:00Z",
+        "updated_at": "2026-08-21T00:00:00Z",
+        "activity_log": [
+            {
+                "timestamp": "2026-08-21T00:00:00Z",
+                "actor": "devops-engineer",
+                "action": "created",
+                "details": "Verification scaffolding cleanup task created"
+            }
+        ]
+    },
+    {
+        "id": "TASK-0005",
+        "title": "Create Task Log Entries for Remaining Work",
+        "description": "Create comprehensive task log entries for all remaining implementation work after self-test demonstrations",
+        "status": "completed",
+        "owner": "implementation-manager",
+        "priority": "High",
+        "next_checkpoint": "Task logging completed for remaining work",
+        "tags": ["task-logging", "implementation", "workflow"],
+        "created_at": "2026-08-21T00:00:00Z",
+        "updated_at": "2026-08-21T00:00:00Z",
+        "activity_log": [
+            {
+                "timestamp": "2026-08-21T00:00:00Z",
+                "actor": "implementation-manager",
+                "action": "created",
+                "details": "Task log entries creation task completed"
+            }
+        ]
+    }
 ]
