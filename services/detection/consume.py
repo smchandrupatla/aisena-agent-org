@@ -4,14 +4,34 @@ import time
 import os
 import logging
 from kafka import KafkaConsumer
+from kafka.errors import NoBrokersAvailable
 import psycopg2
 import requests
 
 TOPIC = os.environ.get('KAFKA_TOPIC', 'aisena-stage0-events')
 BOOTSTRAP = os.environ.get('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
+CONNECT_RETRIES = int(os.environ.get('KAFKA_CONNECT_RETRIES', '10'))
+CONNECT_BACKOFF_SECONDS = float(os.environ.get('KAFKA_CONNECT_BACKOFF_SECONDS', '2'))
 
 POSTGRES_DSN = os.environ.get('POSTGRES_DSN', "host=localhost dbname=aisena user=aisena password=aisena_pw")
 OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL', 'http://localhost:9200')
+
+
+def build_consumer():
+    """Create a KafkaConsumer, retrying with backoff while the broker
+    is still starting up (common under docker-compose)."""
+    last_err = None
+    for attempt in range(1, CONNECT_RETRIES + 1):
+        try:
+            return KafkaConsumer(TOPIC, bootstrap_servers=BOOTSTRAP,
+                                  value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+                                  auto_offset_reset='earliest', enable_auto_commit=True)
+        except NoBrokersAvailable as e:
+            last_err = e
+            logging.warning('Kafka broker not available yet (attempt %d/%d): %s',
+                             attempt, CONNECT_RETRIES, e)
+            time.sleep(CONNECT_BACKOFF_SECONDS)
+    raise RuntimeError(f'Could not connect to Kafka at {BOOTSTRAP} after {CONNECT_RETRIES} attempts') from last_err
 
 CREATE_TABLE_SQL = '''
 CREATE TABLE IF NOT EXISTS aisena_screening_results (
@@ -82,9 +102,7 @@ def simple_rule(event):
 
 def main():
     logging.basicConfig(level=logging.INFO)
-    consumer = KafkaConsumer(TOPIC, bootstrap_servers=BOOTSTRAP,
-                             value_deserializer=lambda m: json.loads(m.decode('utf-8')),
-                             auto_offset_reset='earliest', enable_auto_commit=True)
+    consumer = build_consumer()
     logging.info('Consumer listening on %s', TOPIC)
     for msg in consumer:
         event = msg.value

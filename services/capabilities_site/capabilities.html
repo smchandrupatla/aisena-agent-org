@@ -237,6 +237,51 @@
           </div>
         </article>
 
+        <!-- Job Execution section -->
+        <article class="card span-12 fade-up">
+          <h2>Job Execution</h2>
+          <p>Trigger Copilot-powered jobs that interact with the workspace, agent registry, assigned tasks, and OpenRouter model selection.</p>
+          
+          <div class="job-execution-controls">
+            <!-- Model Selector -->
+            <div class="form-group">
+              <label for="modelSelector">Model Selector</label>
+              <select id="modelSelector" class="form-select">
+                <option value="">Select a model...</option>
+              </select>
+            </div>
+            
+            <!-- Job Selector -->
+            <div class="form-group">
+              <label for="jobSelector">Job Selector</label>
+              <select id="jobSelector" class="form-select">
+                <option value="">Select a job...</option>
+                <option value="workspace.rebuild.deploy">Workspace Build & Deploy</option>
+                <option value="agent.invoke">Invoke Agent from Registry</option>
+                <option value="agent.autocomplete.task">Assigned Task Auto‑Completion</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="jobInstructions">Instruction Input</label>
+            <textarea id="jobInstructions" class="form-textarea" rows="3" placeholder="Enter instructions for the selected job..."></textarea>
+          </div>
+          
+          <button id="runJobBtn" class="btn btn-primary">Run Job</button>
+          
+          <div id="jobOutput" class="output-panel" style="display: none; margin-top: 20px; max-height: 300px; overflow-y: auto; border: 1px solid var(--line); border-radius: var(--radius-md); padding: 16px; background: var(--panel);">
+            <h4>Output</h4>
+            <p>Job output will appear here.</p>
+          </div>
+          
+          <div style="margin-top: 12px;">
+            <button id="applyChangesBtn" class="btn btn-secondary" style="display: none;">Apply Changes</button>
+            <button id="copyOutputBtn" class="btn btn-secondary" style="display: none;">Copy Output</button>
+            <button id="regenerateBtn" class="btn btn-secondary" style="display: none;">Regenerate</button>
+          </div>
+        </article>
+        
         <article class="card span-12 fade-up">
           <h2>Agent network</h2>
           <p>All configured roles in this workspace participate in a coordinated delivery model with role-specific responsibilities.</p>

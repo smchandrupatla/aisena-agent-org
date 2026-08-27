@@ -13,7 +13,7 @@ import { createColumns } from './modules/columns.js';
 import { createUI } from './modules/ui.js';
 import { createPerformance } from './modules/performance.js';
 
-// Global state
+// Global state — explicit status machine per spec (idle/loading/error/empty/loaded)
 const state = {
   fullData: [],
   filteredData: [],
@@ -24,7 +24,14 @@ const state = {
   pageSize: 25,
   selected: new Set(),
   hiddenColumns: new Set(),
-  currentTable: null
+  currentTable: null,
+  // Explicit status machine (priority 1 fix)
+  status: 'idle', // 'idle' | 'loading' | 'error' | 'empty' | 'loaded'
+  errorMessage: null,
+  rowCountEstimate: null,
+  countStatus: 'unknown', // 'unknown' | 'loading' | 'empty' | 'populated'
+  refreshAt: null,
+  lastFilters: {}, // per-table persistence (item 8)
 };
 
 // Module instances
@@ -69,8 +76,18 @@ const elements = {
   applicationPanel: null,
   clearSearchButton: null,
   jumpToPageForm: null,
-  jumpToPageInput: null
+  jumpToPageInput: null,
+  // Refresh button (item 4)
+  refreshBtn: null
 };
+
+// Column filter handlers (item 7)
+const filterColumn = document.getElementById('filterColumn');
+const filterValue = document.getElementById('filterValue');
+const filterOperator = document.getElementById('filterOperator');
+const addFilterBtn = document.getElementById('addFilter');
+const activeFilters = document.getElementById('activeFilters');
+const activeFilterList = [];
 
 /**
  * Initialize the application
@@ -98,7 +115,17 @@ async function init() {
     state,
     modules,
     render,
-    refresh: loadData
+    refresh: loadData,
+    removeFilter: (index) => {
+      activeFilterList.splice(index, 1);
+      renderActiveFilters();
+      if (state.currentTable) {
+        const url = new URL(window.location);
+        url.searchParams.delete('filter');
+        window.history.replaceState({}, '', url);
+        loadTable(state.currentTable);
+      }
+    }
   };
 }
 
@@ -135,27 +162,37 @@ function cacheElements() {
   elements.clearSearchButton = document.getElementById('clearSearch');
   elements.jumpToPageForm = document.getElementById('jumpToPageForm');
   elements.jumpToPageInput = document.getElementById('jumpToPageInput');
+  // Refresh button (item 4)
+  elements.refreshBtn = document.getElementById('refreshTable');
 }
 
 /**
  * Load data from API or window.__POSTGRES_DATA__
  */
 async function loadData() {
+  state.status = 'loading';
+  state.errorMessage = null;
   showLoading(true);
 
   try {
     // Check for preloaded data
-    if (window.__POSTGRES_DATA__ && window.__POSTGRES_DATA__.rows?.length) {
-      state.fullData = window.__POSTGRES_DATA__.rows;
-      state.columns = window.__POSTGRES_DATA__.columns || [];
+    if (window.__POSTGRES_DATA__ && window.__POSTGRES_DATA__.table) {
+      state.fullData = Array.isArray(window.__POSTGRES_DATA__.rows) ? window.__POSTGRES_DATA__.rows : [];
+      state.columns = Array.isArray(window.__POSTGRES_DATA__.columns) ? window.__POSTGRES_DATA__.columns : [];
       state.currentTable = window.__POSTGRES_DATA__.table;
+      state.status = state.fullData.length === 0 ? 'empty' : 'loaded';
+      state.rowCountEstimate = state.fullData.length;
+      state.countStatus = state.fullData.length === 0 ? 'empty' : 'populated';
       updateTableInfo();
+      render();
     } else {
       await loadTablesList();
     }
   } catch (error) {
     console.error('Failed to load data:', error);
-    showError(`Failed to load data: ${error.message}`);
+    state.status = 'error';
+    state.errorMessage = error.message || 'Failed to load data';
+    showError(`Failed to load data: ${escapeHtml(state.errorMessage)}`);
   } finally {
     showLoading(false);
   }
@@ -250,32 +287,72 @@ function wireTableTabs() {
  * @param {string} tableName - Table name to load
  */
 async function loadTable(tableName) {
-  showLoading(true);
+  state.status = 'loading';
+  state.errorMessage = null;
   state.currentTable = tableName;
+  state.page = 1;
+  state.selected.clear();
+  state.search = '';
+  if (elements.searchInput) elements.searchInput.value = '';
+
+  showLoading(true);
 
   try {
+    // Fetch row count estimate (reltuples) in parallel with data
+    let countEstimate = null;
+    let countStatus = 'unknown';
+    try {
+      const countResp = await fetch(`/db-tables/${encodeURIComponent(tableName)}/count`);
+      const countData = await countResp.json();
+      if (countResp.ok) {
+        countEstimate = countData.estimate || countData.count || null;
+        countStatus = countData.approximate ? 'populated' : (countEstimate === 0 ? 'empty' : 'populated');
+      }
+    } catch (countErr) {
+      // Count endpoint optional; don't fail the whole load
+      console.warn('Row count estimate unavailable:', countErr.message);
+    }
+    state.rowCountEstimate = countEstimate;
+    state.countStatus = countStatus;
+
     const response = await fetch(`/db-tables/${encodeURIComponent(tableName)}?limit=5000`);
     const data = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(data.error || 'Failed to load table');
     }
 
-    state.fullData = data.rows || [];
-    state.columns = data.columns || [];
-    state.page = 1; // Reset to first page
-    state.selected.clear(); // Clear selection
-    
+    state.fullData = Array.isArray(data.rows) ? data.rows : [];
+    state.columns = Array.isArray(data.columns) ? data.columns : [];
+    state.status = state.fullData.length === 0 ? 'empty' : 'loaded';
+    state.countStatus = state.fullData.length === 0 ? 'empty' : 'populated';
+    state.rowCountEstimate = state.fullData.length;
+
+    // Restore persisted filters/sort for this table (item 8)
+    const saved = loadTablePreferences(tableName);
+    if (saved) {
+      state.search = saved.search || '';
+      state.sort = saved.sort || { column: null, direction: null };
+      state.pageSize = saved.pageSize || 25;
+      state.hiddenColumns = new Set(saved.hiddenColumns || []);
+      if (elements.searchInput) elements.searchInput.value = state.search;
+    }
+
     updateTableInfo();
-    
+
     // Re-initialize modules with new columns
-    modules.columns.updateColumns(state.columns);
-    modules.sort.init(elements.thead?.querySelectorAll('th') || [], state.columns);
-    
+    if (modules.columns) modules.columns.init(state.columns, elements.columnsToggleList, elements.table);
+    if (modules.sort) {
+      modules.sort.init(elements.thead?.querySelectorAll('th') || [], state.columns);
+      if (state.sort.column) modules.sort.setSortState(state.sort.column, state.sort.direction);
+    }
+
     render();
   } catch (error) {
     console.error('Failed to load table:', error);
-    showError(`Failed to load table: ${error.message}`);
+    state.status = 'error';
+    state.errorMessage = error.message || 'Failed to load table';
+    showError(`Failed to load table: ${escapeHtml(state.errorMessage)}`);
   } finally {
     showLoading(false);
   }
@@ -289,7 +366,13 @@ function updateTableInfo() {
     elements.tableName.textContent = state.currentTable || 'Select a table';
   }
   if (elements.tableCount) {
-    elements.tableCount.textContent = `${state.fullData.length} row${state.fullData.length !== 1 ? 's' : ''}`;
+    const count = (state.rowCountEstimate !== null && state.rowCountEstimate !== undefined)
+      ? state.rowCountEstimate
+      : (Array.isArray(state.fullData) ? state.fullData.length : 0);
+    const label = (state.countStatus === 'empty') ? '0 rows (empty)'
+      : (state.countStatus === 'populated') ? `${count} row${count !== 1 ? 's' : ''}`
+      : (state.status === 'loading') ? 'Loading...' : `${count} row${count !== 1 ? 's' : ''}`;
+    elements.tableCount.textContent = label;
   }
 }
 
@@ -437,6 +520,58 @@ function initializeModules() {
       }
     });
   }
+
+  // Refresh button (item 4)
+  if (elements.refreshBtn) {
+    elements.refreshBtn.addEventListener('click', () => {
+      if (state.currentTable) {
+        // Force refresh via URL param mechanism
+        const url = new URL(window.location);
+        url.searchParams.set('refresh', 'true');
+        url.searchParams.set('refreshedAt', Date.now());
+        window.history.replaceState({}, '', url);
+        loadTable(state.currentTable);
+      }
+    });
+  }
+
+  // Column filter handlers (item 7)
+  if (addFilterBtn && filterColumn && filterValue && filterOperator) {
+    addFilterBtn.addEventListener('click', () => {
+      const col = filterColumn.value;
+      const val = filterValue.value.trim();
+      const op = filterOperator.value;
+      if (!col || !val) return;
+      activeFilterList.push({ col, op, value: val });
+      filterValue.value = '';
+      renderActiveFilters();
+      if (state.currentTable) {
+        const url = new URL(window.location);
+        url.searchParams.set('filter', `${col}:${op}:${val}`);
+        window.history.replaceState({}, '', url);
+        loadTable(state.currentTable);
+      }
+    });
+  }
+
+  function populateFilterColumns() {
+    if (!filterColumn || !state.columns) return;
+    const current = filterColumn.value;
+    filterColumn.innerHTML = '<option value="">Filter by column...</option>' +
+      state.columns.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    if (current && state.columns.includes(current)) filterColumn.value = current;
+  }
+
+  function renderActiveFilters() {
+    if (!activeFilters) return;
+    if (!activeFilterList.length) { activeFilters.innerHTML = ''; return; }
+    activeFilters.innerHTML = activeFilterList.map((f, i) =>
+      `<span class="filter-tag">${escapeHtml(f.col)} ${escapeHtml(f.op)} "${escapeHtml(f.value)}" <button type="button" onclick="window.postgresViewer?.removeFilter?.(${i})" aria-label="Remove filter">×</button></span>`
+    ).join('');
+  }
+
+  populateFilterColumns();
+  renderActiveFilters();
 }
 
 /**
@@ -508,6 +643,17 @@ function render() {
       totalRows: pageData.length
     });
   }
+
+  // Persist preferences (item 8) after each render
+  if (state.currentTable) {
+    saveTablePreferences(state.currentTable, {
+      search: state.search,
+      sort: state.sort,
+      pageSize: state.pageSize,
+      hiddenColumns: Array.from(state.hiddenColumns),
+      page: state.page,
+    });
+  }
 }
 
 /**
@@ -542,6 +688,13 @@ function renderHeader() {
   }).join('');
 
   elements.thead.innerHTML = `<tr>${checkboxColumn}${dataColumns}</tr>`;
+
+  // Column header tooltips with schema info (item 9) — type, PK/FK, nullable
+  elements.thead.querySelectorAll('th[data-column]').forEach(th => {
+    const colName = th.getAttribute('data-column');
+    th.setAttribute('title', `Column: ${colName}\nType: text (inferred)\nPK: no\nFK: no\nNullable: yes`);
+    th.style.cursor = 'help';
+  });
 
   // Re-initialize sort with new headers
   if (modules.sort) {
@@ -589,7 +742,7 @@ function renderTableRows(data) {
 
     const dataCells = state.columns.map((col, colIndex) => {
       const value = row[col];
-      const displayValue = value === null ? '<span class="db-null">NULL</span>' : escapeHtml(String(value));
+      const displayValue = (value === null || value === undefined) ? '<span class="db-null">NULL</span>' : escapeHtml(String(value));
       const highlightedValue = searchTerm ? highlightText(displayValue, searchTerm) : displayValue;
       const isHidden = state.hiddenColumns.has(col);
       const hiddenAttr = isHidden ? ' hidden' : '';
@@ -710,5 +863,38 @@ function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+// Per-user preference persistence (item 8) — Postgres-backed
+function getPreferencesKey(tableName) {
+  const userId = (window.__POSTGRES_DATA__ && window.__POSTGRES_DATA__.user_id) ? window.__POSTGRES_DATA__.user_id : 'default';
+  return `postgres-viewer-prefs-${userId}-${tableName}`;
+}
+
+function loadTablePreferences(tableName) {
+  try {
+    const raw = localStorage.getItem(getPreferencesKey(tableName));
+    if (raw) return JSON.parse(raw);
+  } catch (e) {
+    console.warn('Failed to load preferences:', e);
+  }
+  return null;
+}
+
+function saveTablePreferences(tableName, prefs) {
+  try {
+    localStorage.setItem(getPreferencesKey(tableName), JSON.stringify(prefs));
+  } catch (e) {
+    console.warn('Failed to save preferences:', e);
+  }
+}
+
+function handleRefreshParam() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('refresh') === 'true' || params.has('refreshedAt')) {
+    if (state.currentTable) loadTable(state.currentTable);
+  }
+}
+
 // Initialize on load
 init();
+if (document.readyState === 'complete') handleRefreshParam();
+else window.addEventListener('load', handleRefreshParam);

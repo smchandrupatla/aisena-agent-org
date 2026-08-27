@@ -12,5 +12,6 @@ fi
 echo "Sample event payload:"
 cat "$EVENT_FILE"
 
-echo "\nStage 0 ingestion is currently a placeholder."
-echo "Once runtime is available, this should publish the event to Kafka topic aisena-stage0-events."
+echo ""
+echo "Publishing to Kafka via services/ingestion/produce.py ..."
+python3 "$ROOT_DIR/services/ingestion/produce.py" --file "$EVENT_FILE" "$@"

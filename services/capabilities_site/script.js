@@ -459,6 +459,36 @@ function initObservabilityViewers() {
 // Initialize modern features when DOM is ready
 document.addEventListener('DOMContentLoaded', initModernFeatures);
 
+// Top-level await/dynamic import needs an async scope since this file is a classic (non-module) script;
+// a bare top-level `await import(...)` is a SyntaxError here that silently kills the whole file's execution
+// (including the nav injection and initModernFeatures above), so this must stay wrapped and defensive.
+(async () => {
+  try {
+    if (document.getElementById('runJobBtn')) {
+      const { default: JobExecution } = await import('./modules/job-execution.js');
+      window.jobExecution = new JobExecution();
+    }
+  } catch (error) {
+    console.error('Job Execution module failed to initialize:', error);
+  }
+
+  try {
+    if (document.getElementById('modelSelector')) {
+      const { default: ModelSelector } = await import('./modules/model-selector.js');
+      window.modelSelector = new ModelSelector();
+    }
+  } catch (error) {
+    console.error('Model Selector module failed to initialize:', error);
+  }
+
+  try {
+    const { default: CopilotActions } = await import('./modules/copilot-actions.js');
+    window.copilotActions = new CopilotActions();
+  } catch (error) {
+    console.error('Copilot Actions module failed to initialize:', error);
+  }
+})();
+
 function updateStatusBadge(agentKey, status, label) {
   const badge = document.getElementById("chatAgentStatus");
   if (!badge) {

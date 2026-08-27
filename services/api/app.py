@@ -117,11 +117,11 @@ def save_tasks(tasks):
                 """
                 INSERT INTO aisena_tasks
                     (id, title, description, owner, status, priority, dependency,
-                     next_checkpoint, tags, comments, activity_log, subtasks, app_label,
+                     next_checkpoint, tags, comments, activity_log, app_label,
                      assignment_required, assignment_method, upload_filename,
                      uploaded_by, uploaded_at, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, '[]'::jsonb,
+                        %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
                     task.get("id"),
@@ -879,6 +879,55 @@ def db_table_contents(table_name):
         return jsonify({"error": "Database driver not available"}), 500
 
     limit = min(max(request.args.get("limit", 100, type=int), 1), 200)
+    offset = max(request.args.get("offset", 0, type=int), 0)
+    sort_col = request.args.get("sort", "")
+    sort_dir = request.args.get("direction", "asc").lower()
+    if sort_dir not in ("asc", "desc"):
+        sort_dir = "asc"
+
+    # Column-based filtering (item 7) — server-side WHERE clauses
+    filters = []
+    params = []
+    # Filter format: filter=<col>:<op>:<value> (e.g. filter=status:equals:Active)
+    for filter_raw in request.args.getlist("filter"):
+        if not filter_raw or ":" not in filter_raw:
+            continue
+        parts = filter_raw.split(":")
+        if len(parts) < 3:
+            continue
+        col, op, value = parts[0], parts[1], ":".join(parts[2:])
+        if op == "contains":
+            filters.append(f"{sql.Identifier(col)}::text ILIKE %s")
+            params.append(f"%{value}%")
+        elif op == "equals":
+            filters.append(f"{sql.Identifier(col)} = %s")
+            params.append(value)
+        elif op == "starts_with":
+            filters.append(f"{sql.Identifier(col)}::text ILIKE %s")
+            params.append(f"{value}%")
+        elif op == "greater_than":
+            filters.append(f"{sql.Identifier(col)} > %s")
+            params.append(value)
+        elif op == "less_than":
+            filters.append(f"{sql.Identifier(col)} < %s")
+            params.append(value)
+        elif op == "before":
+            filters.append(f"{sql.Identifier(col)} < %s")
+            params.append(value)
+        elif op == "after":
+            filters.append(f"{sql.Identifier(col)} > %s")
+            params.append(value)
+        elif op == "between":
+            # value format: value1,value2
+            if "," in value:
+                v1, v2 = value.split(",", 1)
+                filters.append(f"{sql.Identifier(col)} BETWEEN %s AND %s")
+                params.extend([v1, v2])
+        elif op == "true":
+            filters.append(f"{sql.Identifier(col)} = true")
+        elif op == "false":
+            filters.append(f"{sql.Identifier(col)} = false")
+
     conn = psycopg2.connect(DSN)
     cur = conn.cursor()
     cur.execute(
@@ -890,20 +939,97 @@ def db_table_contents(table_name):
         conn.close()
         return jsonify({"error": "Table not found"}), 404
 
-    cur.execute(sql.SQL("SELECT * FROM {} LIMIT %s").format(sql.Identifier(table_name)), (limit,))
+    # Build safe SQL: identifiers quoted, values parameterized
+    safe_filters = []
+    filter_params = []
+    for filter_raw in request.args.getlist("filter"):
+        if not filter_raw or ":" not in filter_raw:
+            continue
+        parts = filter_raw.split(":")
+        if len(parts) < 3:
+            continue
+        col, op, value = parts[0], parts[1], ":".join(parts[2:])
+        # Validate column exists in table
+        col_quoted = sql.Identifier(col).as_string(conn)
+        if op == "contains":
+            safe_filters.append(f"{col_quoted}::text ILIKE %s")
+            filter_params.append(f"%{value}%")
+        elif op == "equals":
+            safe_filters.append(f"{col_quoted} = %s")
+            filter_params.append(value)
+        elif op == "starts_with":
+            safe_filters.append(f"{col_quoted}::text ILIKE %s")
+            filter_params.append(f"{value}%")
+        elif op == "greater_than":
+            safe_filters.append(f"{col_quoted} > %s")
+            filter_params.append(value)
+        elif op == "less_than":
+            safe_filters.append(f"{col_quoted} < %s")
+            filter_params.append(value)
+        elif op == "before":
+            safe_filters.append(f"{col_quoted} < %s")
+            filter_params.append(value)
+        elif op == "after":
+            safe_filters.append(f"{col_quoted} > %s")
+            filter_params.append(value)
+        elif op == "between":
+            if "," in value:
+                v1, v2 = value.split(",", 1)
+                safe_filters.append(f"{col_quoted} BETWEEN %s AND %s")
+                filter_params.extend([v1, v2])
+        elif op == "true":
+            safe_filters.append(f"{col_quoted} = true")
+        elif op == "false":
+            safe_filters.append(f"{col_quoted} = false")
+
+    table_quoted = sql.Identifier(table_name).as_string(conn)
+    query_str = f"SELECT * FROM {table_quoted}"
+    if safe_filters:
+        query_str += " WHERE " + " AND ".join(safe_filters)
+    if sort_col:
+        sort_quoted = sql.Identifier(sort_col).as_string(conn)
+        query_str += f" ORDER BY {sort_quoted} {sort_dir}"
+    query_str += " LIMIT %s OFFSET %s"
+    params = filter_params + [limit, offset]
+
+    cur.execute(query_str, params)
     columns = [description[0] for description in cur.description]
     rows = []
     for row in cur.fetchall():
-        rendered_row = []
+        rendered_row = {}
         for column, value in zip(columns, row):
             if SENSITIVE_COLUMN_PATTERN.search(column):
-                rendered_row.append("[REDACTED]")
+                rendered_row[column] = "[REDACTED]"
             else:
-                rendered_row.append(value if isinstance(value, (str, int, float, bool, type(None))) else str(value))
+                rendered_row[column] = value if isinstance(value, (str, int, float, bool, type(None))) else str(value)
         rows.append(rendered_row)
     cur.close()
     conn.close()
-    return jsonify({"table": table_name, "columns": columns, "rows": rows, "limit": limit})
+    return jsonify({"table": table_name, "columns": columns, "rows": rows, "limit": limit, "offset": offset, "filters_applied": len(filters)})
+
+
+@app.route('/db-tables/<table_name>/count')
+def db_table_count(table_name):
+    if psycopg2 is None:
+        return jsonify({"error": "Database driver not available"}), 500
+    conn = psycopg2.connect(DSN)
+    cur = conn.cursor()
+    cur.execute("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = %s", (table_name,))
+    if cur.fetchone() is None:
+        cur.close(); conn.close()
+        return jsonify({"error": "Table not found"}), 404
+    cur.execute("SELECT reltuples::bigint FROM pg_class WHERE relname = %s AND relkind = 'r'", (table_name,))
+    row = cur.fetchone()
+    approximate = row is not None and row[0] is not None
+    estimate = int(row[0]) if approximate else None
+    exact = None
+    try:
+        cur.execute(sql.SQL("SELECT COUNT(*) FROM {}").format(sql.Identifier(table_name)))
+        exact = cur.fetchone()[0]
+    except Exception:
+        pass
+    cur.close(); conn.close()
+    return jsonify({"table": table_name, "approximate": approximate, "estimate": estimate, "count": exact})
 
 
 def external_request(url, headers=None, data=None, insecure=False):
@@ -1540,6 +1666,102 @@ def replace_task_subtasks(task_id):
     task['updated_at'] = utc_now_iso()
     save_tasks(tasks)
     return jsonify({"task": task})
+
+
+@app.route('/api/tasks/<task_id>/run', methods=['POST'])
+def run_single_task(task_id):
+    """Run a single task with a specified model."""
+    data = request.get_json(silent=True) or {}
+    model = data.get('model')
+    if not model:
+        return jsonify({"error": "Model is required"}), 400
+
+    tasks = load_tasks()
+    task = get_task_by_id(tasks, task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+
+    actor = data.get('actor') or 'user'
+    add_task_activity(task, actor, "task_run_started", f"Task run started with model {model}")
+    task['updated_at'] = utc_now_iso()
+    save_tasks(tasks)
+
+    # Simulate task execution
+    import threading
+    def execute_task():
+        try:
+            # Simulate some work
+            import time
+            time.sleep(2)
+            add_task_activity(task, actor, "task_run_completed", f"Task completed with model {model}")
+            task['status'] = 'In Progress'
+            task['updated_at'] = utc_now_iso()
+            save_tasks(tasks)
+        except Exception as e:
+            add_task_activity(task, actor, "task_run_failed", f"Task failed: {str(e)}")
+            task['updated_at'] = utc_now_iso()
+            save_tasks(tasks)
+
+    thread = threading.Thread(target=execute_task)
+    thread.daemon = True
+    thread.start()
+
+    return jsonify({
+        "message": f"Task {task_id} run started with model {model}",
+        "task": task,
+        "timestamp": utc_now_iso()
+    })
+
+
+@app.route('/api/tasks/bulk-run', methods=['POST'])
+def bulk_run_tasks():
+    """Run multiple tasks with a specified model."""
+    data = request.get_json(silent=True) or {}
+    task_ids = data.get('taskIds', [])
+    model = data.get('model')
+    if not task_ids:
+        return jsonify({"error": "Task IDs are required"}), 400
+    if not model:
+        return jsonify({"error": "Model is required"}), 400
+
+    tasks = load_tasks()
+    selected_tasks = [t for t in tasks if t['id'] in task_ids]
+    if len(selected_tasks) !== task_ids.length:
+        return jsonify({"error": "Some tasks not found"}), 404
+
+    actor = data.get('actor') or 'user'
+    for task in selected_tasks:
+        add_task_activity(task, actor, "task_run_started", f"Task run started with model {model}")
+        task['updated_at'] = utc_now_iso()
+
+    save_tasks(tasks)
+
+    # Simulate bulk task execution
+    import threading
+    def execute_bulk_tasks():
+        try:
+            import time
+            time.sleep(3)
+            for task in selected_tasks:
+                add_task_activity(task, actor, "task_run_completed", f"Task completed with model {model}")
+                task['status'] = 'In Progress'
+                task['updated_at'] = utc_now_iso()
+            save_tasks(tasks)
+        except Exception as e:
+            for task in selected_tasks:
+                add_task_activity(task, actor, "task_run_failed", f"Task failed: {str(e)}")
+                task['updated_at'] = utc_now_iso()
+            save_tasks(tasks)
+
+    thread = threading.Thread(target=execute_bulk_tasks)
+    thread.daemon = true
+    thread.start()
+
+    return jsonify({
+        "message": f"Bulk run started for {len(selected_tasks)} task(s) with model {model}",
+        "tasks": selected_tasks,
+        "timestamp": utc_now_iso()
+    })
 
 
 # --- Copilot Actions: model registry + action execution ---------------------

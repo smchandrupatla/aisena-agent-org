@@ -1,46 +1,64 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "docker-build",
-			"label": "docker-build",
-			"platform": "node",
-			"dockerBuild": {
-				"dockerfile": "${workspaceFolder}/backend/temporal/Dockerfile",
-				"context": "${workspaceFolder}/backend/temporal",
-				"pull": true
-			},
-			"node": {
-				"package": "${workspaceFolder}/backend/temporal/package.json"
-			}
-		},
-		{
-			"type": "docker-run",
-			"label": "docker-run: release",
-			"dependsOn": [
-				"docker-build"
-			],
-			"platform": "node",
-			"node": {
-				"package": "${workspaceFolder}/backend/temporal/package.json"
-			}
-		},
-		{
-			"type": "docker-run",
-			"label": "docker-run: debug",
-			"dependsOn": [
-				"docker-build"
-			],
-			"dockerRun": {
-				"env": {
-					"DEBUG": "*",
-					"NODE_ENV": "development"
-				}
-			},
-			"node": {
-				"package": "${workspaceFolder}/backend/temporal/package.json",
-				"enableDebugging": true
-			}
-		}
-	]
+"version": "2.0.0",
+"tasks": [
+{
+"type": "docker-build",
+"label": "docker-build",
+"platform": "node",
+"dockerBuild": {
+"dockerfile": "/backend/temporal/Dockerfile",
+"context": "/backend/temporal",
+"pull": true
+},
+"node": {
+"package": "/backend/temporal/package.json"
+}
+},
+{
+"type": "docker-run",
+"label": "docker-run: release",
+"dependsOn": [
+"docker-build"
+],
+"platform": "node",
+"node": {
+"package": "/backend/temporal/package.json"
+}
+},
+{
+"type": "docker-run",
+"label": "docker-run: debug",
+"dependsOn": [
+"docker-build"
+],
+"dockerRun": {
+"env": {
+"DEBUG": "*",
+"NODE_ENV": "development"
+}
+},
+"node": {
+"package": "/backend/temporal/package.json",
+"enableDebugging": true
+}
+},
+{
+"type": "docker-run",
+"label": "docker-run: capabilities-site",
+"dependsOn": [],
+"platform": "node",
+"dockerRun": {
+"portBindings": {
+"3000/tcp": [
+{
+"hostPort": "3001"
+}
+]
+}
+},
+"node": {
+"package": "/services/capabilities_site/package.json"
+}
+}
+]
 }

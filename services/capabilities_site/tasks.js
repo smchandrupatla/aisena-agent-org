@@ -88,13 +88,14 @@ function renderTasks() {
   const filtered = applyFilters(tasksCache, filters);
 
   if (!filtered.length) {
-    body.innerHTML = `<tr class="empty-row"><td colspan="7">No tasks match this view. Use "Add task in backlog" to create one.</td></tr>`;
+    body.innerHTML = `<tr class="empty-row"><td colspan="8">No tasks match this view. Use "Add task in backlog" to create one.</td></tr>`;
     return;
   }
 
   body.innerHTML = filtered
     .map(
       (task) => `<tr data-task-id="${task.id}">
+        <td><input type="checkbox" class="task-checkbox" data-task-id="${task.id}"></td>
         <td><a class="task-link" href="task.html?id=${encodeURIComponent(task.id)}">${task.id} ${task.title}</a></td>
         <td>${task.app_label || "-"}</td>
         <td>${ownerLabel(task.owner)}</td>
@@ -103,6 +104,7 @@ function renderTasks() {
         <td>${task.next_checkpoint || "-"}</td>
         <td>
           <a class="ghost" href="task.html?id=${encodeURIComponent(task.id)}" style="text-decoration:none; display:inline-block; padding:9px 15px; border-radius:11px;">Open</a>
+          <button type="button" class="ghost task-run" data-task-id="${task.id}">Run</button>
           <button type="button" class="ghost task-delete" data-task-id="${task.id}">Delete</button>
         </td>
       </tr>`
@@ -166,6 +168,209 @@ function initFilterBar() {
     document.getElementById("filterAppLabel").value = "";
     renderTasks();
   });
+}
+
+function initBulkActions() {
+  const selectAllCheckbox = document.getElementById("selectAll");
+  const bulkActions = document.getElementById("bulkActions");
+  const bulkRunBtn = document.getElementById("bulkRunBtn");
+  const bulkDeleteBtn = document.getElementById("bulkDeleteBtn");
+  const taskCheckboxes = document.querySelectorAll(".task-checkbox");
+
+  if (!selectAllCheckbox || !bulkActions) return;
+
+  selectAllCheckbox.addEventListener("change", () => {
+    taskCheckboxes.forEach((checkbox) => {
+      checkbox.checked = selectAllCheckbox.checked;
+    });
+    updateBulkActionsVisibility();
+  });
+
+  taskCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      const allChecked = Array.from(taskCheckboxes).every((cb) => cb.checked);
+      const someChecked = Array.from(taskCheckboxes).some((cb) => cb.checked);
+      selectAllCheckbox.checked = allChecked;
+      selectAllCheckbox.indeterminate = someChecked && !allChecked;
+      updateBulkActionsVisibility();
+    });
+  });
+
+  bulkRunBtn?.addEventListener("click", () => showBulkRunDialog());
+  bulkDeleteBtn?.addEventListener("click", () => bulkDeleteTasks());
+}
+
+function updateBulkActionsVisibility() {
+  const selectedCount = document.querySelectorAll(".task-checkbox:checked").length;
+  const bulkActions = document.getElementById("bulkActions");
+  if (bulkActions) {
+    bulkActions.style.display = selectedCount > 0 ? "flex" : "none";
+  }
+}
+
+function showBulkRunDialog() {
+  const selectedTasks = Array.from(document.querySelectorAll(".task-checkbox:checked"))
+    .map((cb) => cb.closest("tr").dataset.taskId);
+
+  const dialog = document.getElementById("bulkRunDialog");
+  const modelSelect = document.getElementById("bulkModelSelect");
+  const confirmBtn = document.getElementById("bulkRunConfirm");
+
+  if (!dialog || !modelSelect) return;
+
+  dialog.showModal();
+
+  modelSelect.innerHTML = `
+    <option value="">Select Model...</option>
+    <optgroup label="Free Models">
+      <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+      <option value="claude-3-haiku">Claude 3 Haiku</option>
+      <option value="llama-2-7b">Llama 2 7B</option>
+    </optgroup>
+    <optgroup label="Paid Models">
+      <option value="gpt-4">GPT-4</option>
+      <option value="claude-3-opus">Claude 3 Opus</option>
+      <option value="gpt-4-turbo">GPT-4 Turbo</option>
+      <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+    </optgroup>
+  `;
+
+  confirmBtn.disabled = true;
+
+  modelSelect.addEventListener("change", () => {
+    confirmBtn.disabled = !modelSelect.value;
+  });
+
+  document.getElementById("bulkRunCancel")?.addEventListener("click", () => dialog.close());
+
+  confirmBtn.addEventListener("click", async () => {
+    const model = modelSelect.value;
+    dialog.close();
+    await bulkRunTasks(selectedTasks, model);
+  });
+}
+
+async function bulkRunTasks(taskIds, model) {
+  const notice = document.getElementById("tasksNotice");
+  try {
+    notice.textContent = `Running ${taskIds.length} task(s) with ${model}...`;
+    notice.className = "notice ok";
+
+    const response = await fetch(`${API_BASE}/api/tasks/bulk-run`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ taskIds, model }),
+    });
+
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Bulk run failed");
+
+    notice.textContent = result.message || `${taskIds.length} task(s) started with ${model}`;
+    tasksCache = tasksCache.filter((t) => !taskIds.includes(t.id));
+    renderTasks();
+  } catch (err) {
+    notice.textContent = `Bulk run failed: ${err.message}`;
+    notice.className = "notice warn";
+  }
+}
+
+async function bulkDeleteTasks() {
+  const selectedTasks = Array.from(document.querySelectorAll(".task-checkbox:checked"))
+    .map((cb) => cb.closest("tr").dataset.taskId);
+
+  if (!selectedTasks.length) return;
+
+  if (!window.confirm(`Delete ${selectedTasks.length} task(s)?`)) return;
+
+  const notice = document.getElementById("tasksNotice");
+  try {
+    notice.textContent = `Deleting ${selectedTasks.length} task(s)...`;
+    notice.className = "notice warn";
+
+    for (const taskId of selectedTasks) {
+      const response = await fetch(`${API_BASE}/api/tasks/${encodeURIComponent(taskId)}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error(`Failed to delete task ${taskId}`);
+    }
+
+    tasksCache = tasksCache.filter((t) => !selectedTasks.includes(t.id));
+    notice.textContent = `${selectedTasks.length} task(s) deleted.`;
+    renderTasks();
+  } catch (err) {
+    notice.textContent = `Bulk delete failed: ${err.message}`;
+    notice.className = "notice warn";
+  }
+}
+
+function initTaskRun() {
+  document.querySelectorAll(".task-run").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      const taskId = e.currentTarget.dataset.taskId;
+      showTaskRunDialog(taskId);
+    });
+  });
+}
+
+function showTaskRunDialog(taskId) {
+  const dialog = document.getElementById("taskRunDialog");
+  const modelSelect = document.getElementById("taskModelSelect");
+  const confirmBtn = document.getElementById("taskRunConfirm");
+
+  if (!dialog || !modelSelect) return;
+
+  dialog.showModal();
+
+  modelSelect.innerHTML = `
+    <option value="">Select Model...</option>
+    <optgroup label="Free Models">
+      <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+      <option value="claude-3-haiku">Claude 3 Haiku</option>
+      <option value="llama-2-7b">Llama 2 7B</option>
+    </optgroup>
+    <optgroup label="Paid Models">
+      <option value="gpt-4">GPT-4</option>
+      <option value="claude-3-opus">Claude 3 Opus</option>
+      <option value="gpt-4-turbo">GPT-4 Turbo</option>
+      <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+    </optgroup>
+  `;
+
+  confirmBtn.disabled = true;
+
+  modelSelect.addEventListener("change", () => {
+    confirmBtn.disabled = !modelSelect.value;
+  });
+
+  document.getElementById("taskRunCancel")?.addEventListener("click", () => dialog.close());
+
+  confirmBtn.addEventListener("click", async () => {
+    const model = modelSelect.value;
+    dialog.close();
+    await runSingleTask(taskId, model);
+  });
+}
+
+async function runSingleTask(taskId, model) {
+  const notice = document.getElementById("tasksNotice");
+  try {
+    notice.textContent = `Running task ${taskId} with ${model}...`;
+    notice.className = "notice ok";
+
+    const response = await fetch(`${API_BASE}/api/tasks/${encodeURIComponent(taskId)}/run`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model }),
+    });
+
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Task run failed");
+
+    notice.textContent = result.message || `Task ${taskId} started with ${model}`;
+  } catch (err) {
+    notice.textContent = `Task run failed: ${err.message}`;
+    notice.className = "notice warn";
+  }
 }
 
 function populateTaskDialogSelects() {

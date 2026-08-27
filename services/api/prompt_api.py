@@ -550,3 +550,77 @@ def restore_prompt_version(prompt_id, version):
         _record_version(cursor, restored, user["id"], f"Restored version {version}")
         _audit(cursor, restored, user["id"], "version_restored", {"restored_version": version, "new_version": new_version})
         return jsonify({"prompt": _serialize(restored)})
+
+
+def _execute_prompt(cursor, prompt, user, tool_actions):
+    """Run prompt_text against its assigned agent via the configured executor;
+    returns (result_dict, http_status)."""
+    if not prompt["assignee_agent_id"]:
+        return {"error": "Assign an agent to this prompt before running it."}, 400
+    if _prompt_executor is None:
+        return {"error": "No prompt executor is configured."}, 503
+    reply_payload, _executor_status = _prompt_executor(prompt["assignee_agent_id"], prompt["prompt_text"], tool_actions)
+    status = reply_payload.get("status", "error")
+    success = status == "ready"
+    if success:
+        cursor.execute("UPDATE aisena_prompts SET usage_count=usage_count+1 WHERE id=%s", (prompt["id"],))
+        prompt["usage_count"] += 1
+    _audit(cursor, prompt, user["id"], "executed" if success else "execution_blocked", {"status": status})
+    result = {
+        "status": status,
+        "reply": reply_payload.get("reply", ""),
+        "prompt_code": prompt["prompt_code"],
+        "agent_key": prompt["assignee_agent_id"],
+        "executed_text_preview": prompt["prompt_text"][:280],
+        "usage_count": prompt["usage_count"],
+    }
+    return result, 200
+
+
+@prompt_api.route("/api/prompts/<uuid:prompt_id>/run", methods=["POST"])
+def run_prompt(prompt_id):
+    data = request.get_json(silent=True) or {}
+    tool_actions = data.get("tool_actions") or []
+    with _connection() as conn, conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        user = _current_user(cursor)
+        error = _auth_error(user)
+        if error:
+            return error
+        prompt = _get_prompt(cursor, prompt_id, for_update=True)
+        if not prompt:
+            return jsonify({"error": "Prompt not found"}), 404
+        result, status_code = _execute_prompt(cursor, prompt, user, tool_actions)
+        return jsonify({"result": result}), status_code
+
+
+@prompt_api.route("/api/prompts/run", methods=["POST"])
+def run_prompts_batch():
+    data = request.get_json(silent=True) or {}
+    prompt_ids = data.get("prompt_ids")
+    tool_actions = data.get("tool_actions") or []
+    if not isinstance(prompt_ids, list) or not prompt_ids:
+        return jsonify({"error": "prompt_ids must be a non-empty array"}), 400
+    with _connection() as conn, conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        user = _current_user(cursor)
+        error = _auth_error(user)
+        if error:
+            return error
+        succeeded = 0
+        failed = 0
+        results = []
+        for prompt_id in prompt_ids:
+            prompt = _get_prompt(cursor, prompt_id, for_update=True)
+            if not prompt:
+                failed += 1
+                results.append({"prompt_id": prompt_id, "error": "Prompt not found"})
+                continue
+            result, status_code = _execute_prompt(cursor, prompt, user, tool_actions)
+            results.append({"prompt_id": prompt_id, **result})
+            if status_code == 200 and result.get("status") == "ready":
+                succeeded += 1
+            else:
+                failed += 1
+        return jsonify({
+            "summary": {"selected": len(prompt_ids), "succeeded": succeeded, "failed": failed},
+            "results": results,
+        })

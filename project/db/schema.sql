@@ -92,6 +92,17 @@ ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS upload_filename TEXT;
 ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS uploaded_by TEXT;
 ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS uploaded_at TIMESTAMP;
 ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS subtasks JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS type VARCHAR(20);
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS severity VARCHAR(20);
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS use_case VARCHAR(32);
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS component VARCHAR(255);
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS file_path TEXT;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS discovered_by VARCHAR(255);
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS source VARCHAR(40);
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS labels JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS estimated_effort VARCHAR(2);
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS related_task_ids JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE aisena_tasks ADD COLUMN IF NOT EXISTS last_confirmed_at TIMESTAMP;
 ALTER TABLE aisena_tasks ADD CONSTRAINT aisena_tasks_dependency_fkey
     FOREIGN KEY (dependency) REFERENCES aisena_tasks(id) ON DELETE SET NULL
     DEFERRABLE INITIALLY DEFERRED;
@@ -103,6 +114,9 @@ CREATE INDEX IF NOT EXISTS idx_aisena_tasks_app_label ON aisena_tasks(app_label)
 CREATE UNIQUE INDEX IF NOT EXISTS idx_aisena_tasks_external_reference
     ON aisena_tasks (lower(external_reference))
     WHERE external_reference IS NOT NULL AND btrim(external_reference) <> '';
+CREATE INDEX IF NOT EXISTS idx_aisena_tasks_self_learning
+    ON aisena_tasks (source, lower(title))
+    WHERE source = 'agent_self_learn';
 
 CREATE TABLE IF NOT EXISTS aisena_issues (
     id                  VARCHAR(32) PRIMARY KEY,
@@ -116,14 +130,42 @@ CREATE TABLE IF NOT EXISTS aisena_issues (
     status              VARCHAR(20) NOT NULL DEFAULT 'open',
     github_issue_number INTEGER,
     app_label           VARCHAR(255),
+    type                VARCHAR(20),
+    severity            VARCHAR(20),
+    priority            VARCHAR(20),
+    use_case            VARCHAR(32),
+    component           VARCHAR(255),
+    file_path           TEXT,
+    discovered_by       VARCHAR(255),
+    source              VARCHAR(40),
+    labels              JSONB NOT NULL DEFAULT '[]'::jsonb,
+    estimated_effort   VARCHAR(2),
+    related_task_ids   JSONB NOT NULL DEFAULT '[]'::jsonb,
+    last_confirmed_at  TIMESTAMP,
     created_at          TIMESTAMP NOT NULL DEFAULT now(),
     updated_at          TIMESTAMP NOT NULL DEFAULT now()
 );
+
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS type VARCHAR(20);
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS severity VARCHAR(20);
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS priority VARCHAR(20);
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS use_case VARCHAR(32);
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS component VARCHAR(255);
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS file_path TEXT;
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS discovered_by VARCHAR(255);
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS source VARCHAR(40);
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS labels JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS estimated_effort VARCHAR(2);
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS related_task_ids JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE aisena_issues ADD COLUMN IF NOT EXISTS last_confirmed_at TIMESTAMP;
 
 CREATE INDEX IF NOT EXISTS idx_aisena_issues_app_id ON aisena_issues(app_id);
 CREATE INDEX IF NOT EXISTS idx_aisena_issues_status ON aisena_issues(status);
 CREATE INDEX IF NOT EXISTS idx_aisena_issues_task_id ON aisena_issues(task_id);
 CREATE INDEX IF NOT EXISTS idx_aisena_issues_app_label ON aisena_issues(app_label);
+CREATE INDEX IF NOT EXISTS idx_aisena_issues_self_learning
+    ON aisena_issues (source, lower(title))
+    WHERE source = 'agent_self_learn';
 
 -- aisena_agents is the canonical agent directory for the Implementation
 -- Manager workflow (services/api/app.py /api/agents endpoints). It replaces
@@ -265,4 +307,16 @@ CREATE INDEX IF NOT EXISTS idx_aisena_prompts_search ON aisena_prompts USING gin
 CREATE INDEX IF NOT EXISTS idx_aisena_prompt_tag_links_tag ON aisena_prompt_tag_links(tag_id);
 CREATE INDEX IF NOT EXISTS idx_aisena_prompt_versions_prompt ON aisena_prompt_versions(prompt_id, version DESC);
 CREATE INDEX IF NOT EXISTS idx_aisena_prompt_audit_prompt ON aisena_prompt_audit(prompt_id, created_at DESC);
+
+-- Per-user viewer preferences (item 8) — persisted per table for filter/sort/column state
+CREATE TABLE IF NOT EXISTS aisena_viewer_preferences (
+    id              BIGSERIAL PRIMARY KEY,
+    user_id         UUID NOT NULL REFERENCES aisena_users(id) ON DELETE CASCADE,
+    table_name      VARCHAR(255) NOT NULL,
+    preferences     JSONB NOT NULL DEFAULT '{}'::jsonb,
+    updated_at      TIMESTAMP NOT NULL DEFAULT now(),
+    UNIQUE (user_id, table_name)
+);
+CREATE INDEX IF NOT EXISTS idx_aisena_viewer_prefs_user ON aisena_viewer_preferences(user_id);
+CREATE INDEX IF NOT EXISTS idx_aisena_viewer_prefs_table ON aisena_viewer_preferences(table_name);
 
