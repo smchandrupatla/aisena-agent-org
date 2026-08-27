@@ -1,4 +1,11 @@
-# Selenium GUI tests for AISENA HTML screens (capabilities_site).
+# Selenium GUI tests for AISENA (capabilities_site).
+#
+# Coverage:
+#   - Screen smoke for every HTML page
+#   - Top-bar navigation and in-page links
+#   - Tasks / Issues dialogs, filters, quick actions
+#   - Agents chat + cross-check controls
+#   - Observability viewer toolbars
 #
 # Usage:
 #   docker compose -f docker-compose.selenium.yml up --build --abort-on-container-exit --exit-code-from gui-tests
@@ -7,11 +14,6 @@
 # Or via helper:
 #   ./scripts/run-gui-tests.sh
 #   ./scripts/run-gui-tests.ps1
-#
-# Stack:
-#   capabilities-site  - Node portal server for services/capabilities_site
-#   selenium           - Selenium standalone Chrome
-#   gui-tests          - pytest + Selenium screen suite (tests/gui)
 
 name: aisena-gui-tests
 
@@ -50,4 +52,4 @@ services:
         condition: service_started
       selenium:
         condition: service_healthy
-    command: ["pytest", "-v", "--tb=short", "tests/gui/test_html_screens.py"]
+    command: ["pytest", "-v", "--tb=short", "tests/gui"]
