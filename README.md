@@ -83,6 +83,7 @@ aisena-agent-org/
 ├── samples/          # Example workflows / demos
 ├── scripts/          # Utility and maintenance scripts
 ├── services/         # API, orchestrator, CRM portal, etc.
+├── tests/            # Feature-health regression suite
 ├── webportal/        # Web portal frontend
 ├── docker-compose.yml
 └── README.md
@@ -90,16 +91,27 @@ aisena-agent-org/
 
 ---
 
-## CI
+## CI / regression
 
-Continuous Integration runs on every push to `main` and on pull requests:
+Continuous Integration runs on **every push to `main` and every pull request**:
 
 - Python unit tests (API, orchestrator, eventing, agent scripts)
+- **Feature-health regression suite** (`tests/test_feature_health.py`) — validates structure, API pure logic, eventing, orchestrator modules, compose services, and health-check utilities
 - CRM portal tests and production build
 - Event schema validation
 - Docker Compose config validation
 
 Workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+
+### Run the feature-health suite locally
+
+```bash
+# Install API deps (Flask, etc.)
+pip install -r services/api/requirements.txt -r services/orchestrator/requirements.txt
+
+# From repository root
+python -m unittest tests.test_feature_health -v
+```
 
 ---
 
