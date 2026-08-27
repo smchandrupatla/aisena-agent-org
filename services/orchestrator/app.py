@@ -25,6 +25,13 @@ def add_cors_headers(response):
     return response
 
 
+@app.route("/", defaults={"path": ""}, methods=["OPTIONS"])
+@app.route("/<path:path>", methods=["OPTIONS"])
+def cors_preflight(path):
+    """Answer CORS preflight for any path so browsers can call the orchestrator API."""
+    return ("", 204)
+
+
 @app.route("/orchestrator/apps", methods=["GET"])
 def list_apps():
     return jsonify({"apps": engine.apps.list_apps()})
@@ -73,7 +80,26 @@ def get_history(app_id):
         history = engine.get_app_history(app_id)
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 404
-    return jsonify({"history": history})
+    return jsonify(history)
+
+
+@app.route("/orchestrator/apps/<app_id>/interoperability", methods=["GET"])
+def get_interoperability(app_id):
+    try:
+        result = engine.get_interoperability(app_id)
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 404
+    return jsonify(result)
+
+
+@app.route("/orchestrator/apps/<app_id>/workstreams", methods=["GET"])
+def list_workstreams(app_id):
+    return jsonify({"workstreams": engine.list_workstreams(app_id)})
+
+
+@app.route("/orchestrator/apps/<app_id>/tickets", methods=["GET"])
+def list_app_tickets(app_id):
+    return jsonify({"tickets": engine.tickets.list_tickets(app_id=app_id)})
 
 
 @app.route("/orchestrator/tickets", methods=["GET"])
@@ -95,11 +121,81 @@ def resolve_ticket(ticket_id):
     return jsonify({"ticket": ticket})
 
 
+@app.route("/orchestrator/apps/<app_id>/tickets", methods=["POST"])
+def create_ticket(app_id):
+    payload = request.get_json(force=True) or {}
+    try:
+        ticket = engine.create_ticket(
+            app_id,
+            title=payload.get("title", ""),
+            description=payload.get("description", ""),
+            attempted=payload.get("attempted", ""),
+            why_blocked=payload.get("why_blocked", ""),
+            decision_needed=payload.get("decision_needed", ""),
+        )
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 404
+    return jsonify({"ticket": ticket}), 201
+
+
+@app.route("/orchestrator/apps/<app_id>/handoffs", methods=["GET"])
+def list_handoffs(app_id):
+    return jsonify({"handoffs": engine.handoffs.list_handoffs(app_id)})
+
+
+@app.route("/orchestrator/apps/<app_id>/handoffs/<handoff_id>/acknowledge", methods=["POST"])
+def acknowledge_handoff(app_id, handoff_id):
+    handoff = engine.handoffs.acknowledge_handoff(app_id, handoff_id)
+    if not handoff:
+        return jsonify({"error": "not found"}), 404
+    return jsonify({"handoff": handoff})
+
+
+@app.route("/orchestrator/apps/<app_id>/artifacts", methods=["GET"])
+def list_artifacts(app_id):
+    return jsonify({"artifacts": engine.artifacts.list_artifacts(app_id)})
+
+
+@app.route("/orchestrator/apps/<app_id>/workstreams/<workstream_id>/artifacts", methods=["POST"])
+def submit_artifact(app_id, workstream_id):
+    payload = request.get_json(force=True) or {}
+    try:
+        artifact = engine.submit_artifact(
+            app_id, workstream_id,
+            title=payload.get("title", ""),
+            description=payload.get("description", ""),
+            produced_by=payload.get("produced_by"),
+        )
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 404
+    return jsonify({"artifact": artifact}), 201
+
+
+@app.route("/orchestrator/apps/<app_id>/artifacts/<artifact_id>/reviews", methods=["GET"])
+def list_reviews(app_id, artifact_id):
+    return jsonify({"reviews": engine.reviews.list_reviews(app_id, artifact_id)})
+
+
+@app.route("/orchestrator/apps/<app_id>/artifacts/<artifact_id>/reviews", methods=["POST"])
+def submit_review(app_id, artifact_id):
+    payload = request.get_json(force=True) or {}
+    try:
+        result = engine.review_artifact(
+            app_id, artifact_id,
+            reviewer=payload.get("reviewer", ""),
+            verdict=payload.get("verdict", ""),
+            comments=payload.get("comments", ""),
+        )
+    except ValueError as exc:
+        status = 400 if "verdict" in str(exc).lower() else 404
+        return jsonify({"error": str(exc)}), status
+    return jsonify(result), 201
+
+
 @app.route("/orchestrator/health", methods=["GET"])
 def health():
     return jsonify({"ok": True, "service": "orchestrator"})
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", "5100"))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5100)))

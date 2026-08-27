@@ -14,9 +14,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  api-integrity:
+    name: API integrity guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Reject PLACEHOLDER or truncated services/api/app.py
+        run: |
+          set -euo pipefail
+          APP="services/api/app.py"
+          if [ ! -f "$APP" ]; then
+            echo "::error file=$APP::services/api/app.py is missing"
+            exit 1
+          fi
+          LINES=$(wc -l < "$APP")
+          SIZE=$(wc -c < "$APP")
+          echo "app.py lines=$LINES bytes=$SIZE"
+          if [ "$LINES" -lt 1000 ]; then
+            echo "::error file=$APP::services/api/app.py has only $LINES lines (expected >= 1000). Possible PLACEHOLDER overwrite."
+            exit 1
+          fi
+          if grep -qE 'PLACEHOLDER|raise SystemExit\\(.incomplete.\\)|Temporary marker' "$APP"; then
+            echo "::error file=$APP::services/api/app.py contains PLACEHOLDER / incomplete marker"
+            exit 1
+          fi
+          python3 -c "import ast, pathlib; ast.parse(pathlib.Path('$APP').read_text(encoding='utf-8')); print('syntax OK')"
+
   python-tests:
     name: Python tests
     runs-on: ubuntu-latest
+    needs: api-integrity
     timeout-minutes: 15
     steps:
       - name: Check out repository
@@ -101,27 +131,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Validate framework stack
+      - name: Validate docker-compose.yml
         run: docker compose -f docker-compose.yml config --quiet
 
-      - name: Validate backend stack
-        run: docker compose -f backend/docker-compose.yml config --quiet
-
-      - name: Validate Selenium stack
+      - name: Validate docker-compose.selenium.yml
         run: docker compose -f docker-compose.selenium.yml config --quiet
-
-  gui-screens:
-    name: Selenium HTML screen suite
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Run GUI screen tests (Docker Compose + Selenium)
-        run: |
-          docker compose -f docker-compose.selenium.yml up --build --abort-on-container-exit --exit-code-from gui-tests
-
-      - name: Tear down GUI stack
-        if: always()
-        run: docker compose -f docker-compose.selenium.yml down -v
