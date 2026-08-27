@@ -43,6 +43,9 @@ jobs:
       - name: Test event framework and agent scripts
         run: python -m unittest services.eventing.test_framework scripts.agents.test_daily_self_learning -v
 
+      - name: Feature-health regression suite
+        run: python -m unittest tests.test_feature_health -v
+
   crm-portal:
     name: CRM portal tests and build
     runs-on: ubuntu-latest
