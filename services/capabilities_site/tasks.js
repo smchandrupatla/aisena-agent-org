@@ -49,16 +49,16 @@ function setFiltersInUrl(filters) {
 
 function readFiltersFromForm() {
   return {
-    q: document.getElementById("filterText").value.trim(),
-    owner: document.getElementById("filterOwner").value,
-    status: document.getElementById("filterStatus").value,
-    priority: document.getElementById("filterPriority").value,
-    app_label: document.getElementById("filterAppLabel").value,
+    q: (document.getElementById("filterText")?.value || "").trim(),
+    owner: document.getElementById("filterOwner")?.value || "",
+    status: document.getElementById("filterStatus")?.value || "",
+    priority: document.getElementById("filterPriority")?.value || "",
+    app_label: document.getElementById("filterAppLabel")?.value || "",
   };
 }
 
 function applyFilters(tasks, filters) {
-  const q = filters.q.toLowerCase();
+  const q = (filters.q || "").toLowerCase();
   return tasks.filter((task) => {
     if (q) {
       const haystack = `${task.title || ""} ${task.description || ""}`.toLowerCase();
@@ -80,50 +80,75 @@ function setTasksNotice(message, tone) {
   el.classList.add(tone || "ok");
 }
 
+function updateBulkActionsVisibility() {
+  const selectedCount = document.querySelectorAll(".task-checkbox:checked").length;
+  const bulkActions = document.getElementById("bulkActions") || document.getElementById("bulkToolbar");
+  if (bulkActions) {
+    bulkActions.style.display = selectedCount > 0 ? "flex" : "none";
+  }
+}
+
+function initTaskCheckboxes() {
+  const selectAll = document.getElementById("selectAll");
+  const checkboxes = document.querySelectorAll(".task-checkbox");
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      if (!selectAll) return;
+      const all = Array.from(checkboxes);
+      const checked = all.filter((cb) => cb.checked);
+      selectAll.checked = all.length > 0 && checked.length === all.length;
+      selectAll.indeterminate = checked.length > 0 && checked.length < all.length;
+      updateBulkActionsVisibility();
+    });
+  });
+
+  if (selectAll) {
+    selectAll.onchange = () => {
+      checkboxes.forEach((cb) => {
+        cb.checked = selectAll.checked;
+      });
+      selectAll.indeterminate = false;
+      updateBulkActionsVisibility();
+    };
+  }
+
+  updateBulkActionsVisibility();
+}
+
+function initTaskRunButtons() {
+  document.querySelectorAll(".task-run").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const taskId = btn.dataset.taskId;
+      showTaskRunDialog(taskId);
+    });
+  });
+}
+
 function renderTasks() {
   const body = document.getElementById("tasksBody");
   if (!body) return;
+
   const filters = readFiltersFromForm();
   setFiltersInUrl(filters);
   const filtered = applyFilters(tasksCache, filters);
 
   if (!filtered.length) {
-    body.innerHTML = `<tr class="empty-row"><td colspan="9">No tasks match this view. Use "Add task in backlog" to create one.</td></tr>`;
+    body.innerHTML = `<tr class="empty-row"><td colspan="8">No tasks match this view. Use "Add Task" to create one.</td></tr>`;
+    updateBulkActionsVisibility();
     return;
   }
-
-  // Update selectAll state
-  const selectAll = document.getElementById("selectAll");
-  const allChecked = filtered.length > 0 && filtered.every((t) => true); // Will be updated per row
-  selectAll.indeterminate = filtered.some((t) => /* check checked state */ false);
-  selectAll.checked = filtered.length > 0 && filtered.every((t) => /* check if checkbox exists and checked */ true);
 
   body.innerHTML = filtered
     .map(
       (task) => `<tr data-task-id="${task.id}">
         <td><input type="checkbox" class="task-checkbox" data-task-id="${task.id}"></td>
-        <td><a class="task-link" href="task.html?id=${encodeURIComponent(task.id)}">${task.id} ${task.title}</a></td>
-        <td>${task.app_label || "-"}</td>
-        <td>${ownerLabel(task.owner)}</td>
-        <td><span class="pill">${task.status}</span></td>
-        <td>${task.priority}</td>
-        <td>${task.next_checkpoint || "-"}</td>
-        <td>
-          <a class="ghost" href="task.html?id=${encodeURIComponent(task.id)}" style="text-decoration:none; display:inline-block; padding:9px 15px; border-radius:11px;">Open</a>
-          <button type="button" class="ghost task-run" data-task-id="${task.id}">Run</button>
-          <button type="button" class="ghost task-delete" data-task-id="${task.id}">Delete</button>
-        </td>
-      </tr>`
-    )
-    .join("");
-
-  // Add checkbox change listeners after rendering
-  initTaskCheckboxes();
-  initTaskRunButtons();
-}
-        <td><span class="pill">${task.status}</span></td>
-        <td>${task.priority}</td>
-        <td>${task.next_checkpoint || "-"}</td>
+        <td><a class="task-link" href="task.html?id=${encodeURIComponent(task.id)}">${task.id} ${escapeHtml(task.title || "")}</a></td>
+        <td>${escapeHtml(task.app_label || "-")}</td>
+        <td>${escapeHtml(ownerLabel(task.owner))}</td>
+        <td><span class="pill">${escapeHtml(task.status || "")}</span></td>
+        <td>${escapeHtml(task.priority || "")}</td>
+        <td>${escapeHtml(task.next_checkpoint || "-")}</td>
         <td>
           <a class="ghost" href="task.html?id=${encodeURIComponent(task.id)}" style="text-decoration:none; display:inline-block; padding:9px 15px; border-radius:11px;">Open</a>
           <button type="button" class="ghost task-run" data-task-id="${task.id}">Run</button>
@@ -136,6 +161,18 @@ function renderTasks() {
   body.querySelectorAll(".task-delete").forEach((btn) => {
     btn.addEventListener("click", () => deleteTask(btn.dataset.taskId));
   });
+
+  initTaskCheckboxes();
+  initTaskRunButtons();
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&")
+    .replaceAll("<", "<")
+    .replaceAll(">", ">")
+    .replaceAll('"', """)
+    .replaceAll("'", "&#039;");
 }
 
 async function deleteTask(taskId) {
@@ -157,20 +194,21 @@ function populateFilterSelects() {
   const statusSelect = document.getElementById("filterStatus");
   const prioritySelect = document.getElementById("filterPriority");
   const appLabelSelect = document.getElementById("filterAppLabel");
+  if (!ownerSelect || !statusSelect || !prioritySelect || !appLabelSelect) return;
 
   const ownerOptions = agentsCache
-    .map((agent) => `<option value="${agent.key}">${agent.name}</option>`)
+    .map((agent) => `<option value="${escapeHtml(agent.key)}">${escapeHtml(agent.name)}</option>`)
     .join("");
   ownerSelect.innerHTML = `<option value="">All Owners</option>${ownerOptions}`;
   statusSelect.innerHTML = `<option value="">All Statuses</option>${TASK_STATUSES.map((s) => `<option value="${s}">${s}</option>`).join("")}`;
   prioritySelect.innerHTML = `<option value="">All Priorities</option>${TASK_PRIORITIES.map((p) => `<option value="${p}">${p}</option>`).join("")}`;
 
-  // Populate app label filter from distinct labels in tasks
   const labels = [...new Set(tasksCache.map((t) => t.app_label).filter(Boolean))].sort();
-  appLabelSelect.innerHTML = `<option value="">All App Labels</option>${labels.map((l) => `<option value="${l}">${l}</option>`).join("")}`;
+  appLabelSelect.innerHTML = `<option value="">All App Labels</option>${labels.map((l) => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join("")}`;
 
   const filters = getFiltersFromUrl();
-  document.getElementById("filterText").value = filters.q;
+  const filterText = document.getElementById("filterText");
+  if (filterText) filterText.value = filters.q;
   ownerSelect.value = filters.owner;
   statusSelect.value = filters.status;
   prioritySelect.value = filters.priority;
@@ -179,69 +217,44 @@ function populateFilterSelects() {
 
 function initFilterBar() {
   ["filterText", "filterOwner", "filterStatus", "filterPriority", "filterAppLabel"].forEach((id) => {
-    document.getElementById(id).addEventListener("input", renderTasks);
-    document.getElementById(id).addEventListener("change", renderTasks);
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("input", renderTasks);
+    el.addEventListener("change", renderTasks);
   });
-  document.getElementById("filterClear").addEventListener("click", () => {
-    document.getElementById("filterText").value = "";
-    document.getElementById("filterOwner").value = "";
-    document.getElementById("filterStatus").value = "";
-    document.getElementById("filterPriority").value = "";
-    document.getElementById("filterAppLabel").value = "";
+  document.getElementById("filterClear")?.addEventListener("click", () => {
+    const text = document.getElementById("filterText");
+    const owner = document.getElementById("filterOwner");
+    const status = document.getElementById("filterStatus");
+    const priority = document.getElementById("filterPriority");
+    const appLabel = document.getElementById("filterAppLabel");
+    if (text) text.value = "";
+    if (owner) owner.value = "";
+    if (status) status.value = "";
+    if (priority) priority.value = "";
+    if (appLabel) appLabel.value = "";
     renderTasks();
   });
 }
 
 function initBulkActions() {
-  const selectAllCheckbox = document.getElementById("selectAll");
-  const bulkActions = document.getElementById("bulkActions");
   const bulkRunBtn = document.getElementById("bulkRunBtn");
   const bulkDeleteBtn = document.getElementById("bulkDeleteBtn");
-  const taskCheckboxes = document.querySelectorAll(".task-checkbox");
-
-  if (!selectAllCheckbox || !bulkActions) return;
-
-  selectAllCheckbox.addEventListener("change", () => {
-    taskCheckboxes.forEach((checkbox) => {
-      checkbox.checked = selectAllCheckbox.checked;
-    });
-    updateBulkActionsVisibility();
-  });
-
-  taskCheckboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
-      const allChecked = Array.from(taskCheckboxes).every((cb) => cb.checked);
-      const someChecked = Array.from(taskCheckboxes).some((cb) => cb.checked);
-      selectAllCheckbox.checked = allChecked;
-      selectAllCheckbox.indeterminate = someChecked && !allChecked;
-      updateBulkActionsVisibility();
-    });
-  });
-
   bulkRunBtn?.addEventListener("click", () => showBulkRunDialog());
   bulkDeleteBtn?.addEventListener("click", () => bulkDeleteTasks());
 }
 
-function updateBulkActionsVisibility() {
-  const selectedCount = document.querySelectorAll(".task-checkbox:checked").length;
-  const bulkActions = document.getElementById("bulkActions");
-  if (bulkActions) {
-    bulkActions.style.display = selectedCount > 0 ? "flex" : "none";
-  }
-}
-
 function showBulkRunDialog() {
-  const selectedTasks = Array.from(document.querySelectorAll(".task-checkbox:checked"))
-    .map((cb) => cb.closest("tr").dataset.taskId);
+  const selectedTasks = Array.from(document.querySelectorAll(".task-checkbox:checked")).map(
+    (cb) => cb.dataset.taskId || cb.closest("tr")?.dataset.taskId
+  ).filter(Boolean);
 
   const dialog = document.getElementById("bulkRunDialog");
   const modelSelect = document.getElementById("bulkModelSelect");
   const confirmBtn = document.getElementById("bulkRunConfirm");
-
   if (!dialog || !modelSelect) return;
 
   dialog.showModal();
-
   modelSelect.innerHTML = `
     <option value="">Select Model...</option>
     <optgroup label="Free Models">
@@ -257,26 +270,29 @@ function showBulkRunDialog() {
     </optgroup>
   `;
 
-  confirmBtn.disabled = true;
+  if (confirmBtn) confirmBtn.disabled = true;
+  modelSelect.onchange = () => {
+    if (confirmBtn) confirmBtn.disabled = !modelSelect.value;
+  };
 
-  modelSelect.addEventListener("change", () => {
-    confirmBtn.disabled = !modelSelect.value;
-  });
+  document.getElementById("bulkRunCancel")?.addEventListener("click", () => dialog.close(), { once: true });
 
-  document.getElementById("bulkRunCancel")?.addEventListener("click", () => dialog.close());
-
-  confirmBtn.addEventListener("click", async () => {
-    const model = modelSelect.value;
-    dialog.close();
-    await bulkRunTasks(selectedTasks, model);
-  });
+  if (confirmBtn) {
+    confirmBtn.onclick = async () => {
+      const model = modelSelect.value;
+      dialog.close();
+      await bulkRunTasks(selectedTasks, model);
+    };
+  }
 }
 
 async function bulkRunTasks(taskIds, model) {
   const notice = document.getElementById("tasksNotice");
   try {
-    notice.textContent = `Running ${taskIds.length} task(s) with ${model}...`;
-    notice.className = "notice ok";
+    if (notice) {
+      notice.textContent = `Running ${taskIds.length} task(s) with ${model}...`;
+      notice.className = "notice ok";
+    }
 
     const response = await fetch(`${API_BASE}/api/tasks/bulk-run`, {
       method: "POST",
@@ -284,30 +300,36 @@ async function bulkRunTasks(taskIds, model) {
       body: JSON.stringify({ taskIds, model }),
     });
 
-    const result = await response.json();
+    const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || "Bulk run failed");
 
-    notice.textContent = result.message || `${taskIds.length} task(s) started with ${model}`;
-    tasksCache = tasksCache.filter((t) => !taskIds.includes(t.id));
+    if (notice) {
+      notice.textContent = result.message || `${taskIds.length} task(s) started with ${model}`;
+      notice.className = "notice ok";
+    }
     renderTasks();
   } catch (err) {
-    notice.textContent = `Bulk run failed: ${err.message}`;
-    notice.className = "notice warn";
+    if (notice) {
+      notice.textContent = `Bulk run failed: ${err.message}`;
+      notice.className = "notice warn";
+    }
   }
 }
 
 async function bulkDeleteTasks() {
-  const selectedTasks = Array.from(document.querySelectorAll(".task-checkbox:checked"))
-    .map((cb) => cb.closest("tr").dataset.taskId);
+  const selectedTasks = Array.from(document.querySelectorAll(".task-checkbox:checked")).map(
+    (cb) => cb.dataset.taskId || cb.closest("tr")?.dataset.taskId
+  ).filter(Boolean);
 
   if (!selectedTasks.length) return;
-
   if (!window.confirm(`Delete ${selectedTasks.length} task(s)?`)) return;
 
   const notice = document.getElementById("tasksNotice");
   try {
-    notice.textContent = `Deleting ${selectedTasks.length} task(s)...`;
-    notice.className = "notice warn";
+    if (notice) {
+      notice.textContent = `Deleting ${selectedTasks.length} task(s)...`;
+      notice.className = "notice warn";
+    }
 
     for (const taskId of selectedTasks) {
       const response = await fetch(`${API_BASE}/api/tasks/${encodeURIComponent(taskId)}`, {
@@ -317,67 +339,85 @@ async function bulkDeleteTasks() {
     }
 
     tasksCache = tasksCache.filter((t) => !selectedTasks.includes(t.id));
-    notice.textContent = `${selectedTasks.length} task(s) deleted.`;
+    if (notice) {
+      notice.textContent = `${selectedTasks.length} task(s) deleted.`;
+      notice.className = "notice warn";
+    }
     renderTasks();
   } catch (err) {
-    notice.textContent = `Bulk delete failed: ${err.message}`;
-    notice.className = "notice warn";
+    if (notice) {
+      notice.textContent = `Bulk delete failed: ${err.message}`;
+      notice.className = "notice warn";
+    }
   }
-}
-
-function initTaskRun() {
-  document.querySelectorAll(".task-run").forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
-      const taskId = e.currentTarget.dataset.taskId;
-      showTaskRunDialog(taskId);
-    });
-  });
 }
 
 function showTaskRunDialog(taskId) {
   const dialog = document.getElementById("taskRunDialog");
-  const modelSelect = document.getElementById("taskModelSelect");
-  const confirmBtn = document.getElementById("taskRunConfirm");
+  if (!dialog) {
+    window.location.href = `task.html?id=${encodeURIComponent(taskId)}`;
+    return;
+  }
 
-  if (!dialog || !modelSelect) return;
+  const runTaskId = document.getElementById("runTaskId");
+  if (runTaskId) runTaskId.textContent = taskId;
+
+  const modelSelect = document.getElementById("runModelSelect") || document.getElementById("taskModelSelect");
+  const confirmBtn = document.getElementById("runConfirm") || document.getElementById("taskRunConfirm");
+  const cancelBtn = document.getElementById("runCancel") || document.getElementById("taskRunCancel");
+
+  if (modelSelect) {
+    modelSelect.innerHTML = `
+      <option value="">Select Model...</option>
+      <optgroup label="Free Models">
+        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+        <option value="claude-3-haiku">Claude 3 Haiku</option>
+        <option value="llama-2-7b">Llama 2 7B</option>
+      </optgroup>
+      <optgroup label="Paid Models">
+        <option value="gpt-4">GPT-4</option>
+        <option value="claude-3-opus">Claude 3 Opus</option>
+        <option value="gpt-4-turbo">GPT-4 Turbo</option>
+        <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+      </optgroup>
+    `;
+  }
+
+  if (confirmBtn) confirmBtn.disabled = !modelSelect?.value;
+  if (modelSelect) {
+    modelSelect.onchange = () => {
+      if (confirmBtn) confirmBtn.disabled = !modelSelect.value;
+    };
+  }
+
+  cancelBtn?.addEventListener("click", () => dialog.close(), { once: true });
+
+  const form = document.getElementById("taskRunForm");
+  if (form) {
+    form.onsubmit = async (event) => {
+      event.preventDefault();
+      const model = modelSelect?.value || "";
+      dialog.close();
+      await runSingleTask(taskId, model);
+    };
+  } else if (confirmBtn) {
+    confirmBtn.onclick = async () => {
+      const model = modelSelect?.value || "";
+      dialog.close();
+      await runSingleTask(taskId, model);
+    };
+  }
 
   dialog.showModal();
-
-  modelSelect.innerHTML = `
-    <option value="">Select Model...</option>
-    <optgroup label="Free Models">
-      <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-      <option value="claude-3-haiku">Claude 3 Haiku</option>
-      <option value="llama-2-7b">Llama 2 7B</option>
-    </optgroup>
-    <optgroup label="Paid Models">
-      <option value="gpt-4">GPT-4</option>
-      <option value="claude-3-opus">Claude 3 Opus</option>
-      <option value="gpt-4-turbo">GPT-4 Turbo</option>
-      <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
-    </optgroup>
-  `;
-
-  confirmBtn.disabled = true;
-
-  modelSelect.addEventListener("change", () => {
-    confirmBtn.disabled = !modelSelect.value;
-  });
-
-  document.getElementById("taskRunCancel")?.addEventListener("click", () => dialog.close());
-
-  confirmBtn.addEventListener("click", async () => {
-    const model = modelSelect.value;
-    dialog.close();
-    await runSingleTask(taskId, model);
-  });
 }
 
 async function runSingleTask(taskId, model) {
   const notice = document.getElementById("tasksNotice");
   try {
-    notice.textContent = `Running task ${taskId} with ${model}...`;
-    notice.className = "notice ok";
+    if (notice) {
+      notice.textContent = `Running task ${taskId} with ${model || "default"}...`;
+      notice.className = "notice ok";
+    }
 
     const response = await fetch(`${API_BASE}/api/tasks/${encodeURIComponent(taskId)}/run`, {
       method: "POST",
@@ -385,17 +425,19 @@ async function runSingleTask(taskId, model) {
       body: JSON.stringify({ model }),
     });
 
-    const result = await response.json();
+    const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || "Task run failed");
 
-    notice.textContent = result.message || `Task ${taskId} started with ${model}`;
+    if (notice) {
+      notice.textContent = result.message || `Task ${taskId} started with ${model || "default"}`;
+      notice.className = "notice ok";
+    }
+  } catch (err) {
+    if (notice) {
+      notice.textContent = `Task run failed: ${err.message}`;
+      notice.className = "notice warn";
+    }
   }
-
-  // Initialize task checkboxes after rendering
-  initTaskCheckboxes();
-
-  // Initialize task run buttons
-  initTaskRunButtons();
 }
 
 function populateTaskDialogSelects() {
@@ -403,13 +445,20 @@ function populateTaskDialogSelects() {
   const statusSelect = document.getElementById("taskStatus");
   const prioritySelect = document.getElementById("taskPriority");
   const dependencySelect = document.getElementById("taskDependency");
+  if (!ownerSelect || !statusSelect || !prioritySelect || !dependencySelect) return;
 
-  ownerSelect.innerHTML = agentsCache.map((agent) => `<option value="${agent.key}">${agent.name}</option>`).join("");
-  statusSelect.innerHTML = TASK_STATUSES.map((s) => `<option value="${s}" ${s === "Backlog" ? "selected" : ""}>${s}</option>`).join("");
-  prioritySelect.innerHTML = TASK_PRIORITIES.map((p) => `<option value="${p}" ${p === "Medium" ? "selected" : ""}>${p}</option>`).join("");
+  ownerSelect.innerHTML = agentsCache
+    .map((agent) => `<option value="${escapeHtml(agent.key)}">${escapeHtml(agent.name)}</option>`)
+    .join("");
+  statusSelect.innerHTML = TASK_STATUSES.map(
+    (s) => `<option value="${s}" ${s === "Backlog" ? "selected" : ""}>${s}</option>`
+  ).join("");
+  prioritySelect.innerHTML = TASK_PRIORITIES.map(
+    (p) => `<option value="${p}" ${p === "Medium" ? "selected" : ""}>${p}</option>`
+  ).join("");
   dependencySelect.innerHTML =
     `<option value="">None</option>` +
-    tasksCache.map((t) => `<option value="${t.id}">${t.id} ${t.title}</option>`).join("");
+    tasksCache.map((t) => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.id)} ${escapeHtml(t.title || "")}</option>`).join("");
 }
 
 function initTaskDialog() {
@@ -418,7 +467,7 @@ function initTaskDialog() {
   const cancelBtn = document.getElementById("taskDialogCancel");
   if (!dialog || !form) return;
 
-  cancelBtn.addEventListener("click", () => dialog.close());
+  cancelBtn?.addEventListener("click", () => dialog.close());
 
   document.getElementById("quickAddTask")?.addEventListener("click", () => {
     form.reset();
@@ -428,25 +477,24 @@ function initTaskDialog() {
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const title = document.getElementById("taskTitle").value.trim();
+    const title = document.getElementById("taskTitle")?.value.trim();
     if (!title) return;
 
-    const tags = document
-      .getElementById("taskTags")
-      .value.split(",")
+    const tags = (document.getElementById("taskTags")?.value || "")
+      .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
 
     const payload = {
       title,
-      description: document.getElementById("taskDescription").value.trim(),
-      owner: document.getElementById("taskOwner").value,
-      status: document.getElementById("taskStatus").value,
-      priority: document.getElementById("taskPriority").value,
-      dependency: document.getElementById("taskDependency").value || null,
-      next_checkpoint: document.getElementById("taskCheckpoint").value.trim(),
+      description: document.getElementById("taskDescription")?.value.trim() || "",
+      owner: document.getElementById("taskOwner")?.value || "",
+      status: document.getElementById("taskStatus")?.value || "Backlog",
+      priority: document.getElementById("taskPriority")?.value || "Medium",
+      dependency: document.getElementById("taskDependency")?.value || null,
+      next_checkpoint: document.getElementById("taskCheckpoint")?.value.trim() || "",
       tags,
-      app_label: document.getElementById("taskAppLabel").value.trim() || null,
+      app_label: document.getElementById("taskAppLabel")?.value.trim() || null,
     };
 
     try {
@@ -455,11 +503,13 @@ function initTaskDialog() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const result = await response.json();
+      const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "Create failed");
-      tasksCache.unshift(result.task);
+      if (result.task) tasksCache.unshift(result.task);
+      else tasksCache = await fetchTasks();
+      populateFilterSelects();
       renderTasks();
-      setTasksNotice(`${result.task.id} added to the backlog.`, "ok");
+      setTasksNotice(`${result.task?.id || "Task"} added to the backlog.`, "ok");
       dialog.close();
       form.reset();
     } catch (err) {
@@ -484,23 +534,20 @@ function initTaskUploadDialog() {
   let previewRows = [];
   let uploadFilename = "";
 
-  const escapeHtml = (value) => String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-
   const resetDialog = () => {
     form.reset();
-    uploaderInput.value = "Portal User";
+    if (uploaderInput) uploaderInput.value = "Portal User";
     previewRows = [];
     uploadFilename = "";
-    previewPanel.hidden = true;
-    results.hidden = true;
-    results.replaceChildren();
-    notice.textContent = "Choose a CSV or XLSX file to validate before importing.";
-    notice.className = "notice";
+    if (previewPanel) previewPanel.hidden = true;
+    if (results) {
+      results.hidden = true;
+      results.replaceChildren();
+    }
+    if (notice) {
+      notice.textContent = "Choose a CSV or XLSX file to validate before importing.";
+      notice.className = "notice";
+    }
   };
 
   const closeDialog = () => {
@@ -509,26 +556,31 @@ function initTaskUploadDialog() {
   };
 
   const agentIsEligible = (agent) => {
-    return agent.active !== false
-      && agent.available !== false
-      && ["ready", "available"].includes(agent.status || "ready");
+    return (
+      agent.active !== false &&
+      agent.available !== false &&
+      ["ready", "available"].includes(agent.status || "ready")
+    );
   };
 
   const ownerOptions = (row) => {
-    const options = agentsCache.map((agent) => {
-      const selected = agent.key === row.owner ? " selected" : "";
-      const eligible = agentIsEligible(agent);
-      const suffix = eligible ? "" : " (not eligible)";
-      return `<option value="${escapeHtml(agent.key)}"${selected}>${escapeHtml(agent.name)}${suffix}</option>`;
-    }).join("");
+    const options = agentsCache
+      .map((agent) => {
+        const selected = agent.key === row.owner ? " selected" : "";
+        const eligible = agentIsEligible(agent);
+        const suffix = eligible ? "" : " (not eligible)";
+        return `<option value="${escapeHtml(agent.key)}"${selected}>${escapeHtml(agent.name)}${suffix}</option>`;
+      })
+      .join("");
     return `<option value=""${row.owner ? "" : " selected"}>Unassigned</option>${options}`;
   };
 
   const renderPreview = () => {
+    if (!previewBody || !summary || !confirmButton) return;
     const counts = {
       total: previewRows.length,
-      valid: previewRows.filter((row) => !row.errors.length && !row.duplicate).length,
-      rejected: previewRows.filter((row) => row.errors.length).length,
+      valid: previewRows.filter((row) => !row.errors?.length && !row.duplicate).length,
+      rejected: previewRows.filter((row) => row.errors?.length).length,
       duplicates: previewRows.filter((row) => row.duplicate).length,
       assignmentRequired: previewRows.filter((row) => row.assignment_required).length,
     };
@@ -541,13 +593,16 @@ function initTaskUploadDialog() {
     ].join("");
     confirmButton.disabled = counts.valid === 0;
 
-    previewBody.innerHTML = previewRows.map((row, index) => {
-      const messages = [
-        ...row.errors.map((message) => `<span class="upload-row-message">${escapeHtml(message)}</span>`),
-        ...row.warnings.map((message) => `<span class="upload-row-message warning">${escapeHtml(message)}</span>`),
-      ].join("");
-      const rowClass = row.errors.length ? "row-error" : row.warnings.length ? "row-warning" : "";
-      return `<tr class="${rowClass}">
+    previewBody.innerHTML = previewRows
+      .map((row, index) => {
+        const messages = [
+          ...(row.errors || []).map((message) => `<span class="upload-row-message">${escapeHtml(message)}</span>`),
+          ...(row.warnings || []).map(
+            (message) => `<span class="upload-row-message warning">${escapeHtml(message)}</span>`
+          ),
+        ].join("");
+        const rowClass = row.errors?.length ? "row-error" : row.warnings?.length ? "row-warning" : "";
+        return `<tr class="${rowClass}">
         <td>${row.row_number}</td>
         <td><strong>${escapeHtml(row.title || "Untitled")}</strong><br>${escapeHtml(row.description || "No description")}</td>
         <td>${escapeHtml(row.priority)}</td>
@@ -557,15 +612,16 @@ function initTaskUploadDialog() {
         <td><select class="upload-owner" data-row-index="${index}">${ownerOptions(row)}</select></td>
         <td>${messages || "Ready"}</td>
       </tr>`;
-    }).join("");
+      })
+      .join("");
 
     previewBody.querySelectorAll(".upload-owner").forEach((select) => {
       select.addEventListener("change", () => {
         const row = previewRows[Number(select.dataset.rowIndex)];
         row.owner = select.value;
         row.assignment_method = "manual";
-        row.errors = row.errors.filter((message) => !message.startsWith("Owner"));
-        row.warnings = row.warnings.filter((message) => !message.startsWith("Assignment Required"));
+        row.errors = (row.errors || []).filter((message) => !message.startsWith("Owner"));
+        row.warnings = (row.warnings || []).filter((message) => !message.startsWith("Assignment Required"));
         const agent = agentsCache.find((candidate) => candidate.key === select.value);
         if (!agent) {
           row.assignment_required = true;
@@ -590,60 +646,95 @@ function initTaskUploadDialog() {
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const file = fileInput.files[0];
+    const file = fileInput?.files?.[0];
     if (!file) return;
     const formData = new FormData();
     formData.append("file", file);
-    notice.textContent = "Validating New Task fields and calculating assignments...";
-    notice.className = "notice";
+    if (notice) {
+      notice.textContent = "Validating New Task fields and calculating assignments...";
+      notice.className = "notice";
+    }
     try {
       const response = await fetch(`${API_BASE}/api/tasks/upload/preview`, { method: "POST", body: formData });
-      const payload = await response.json();
+      const payload = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(payload.error || "Preview failed");
-      previewRows = payload.rows;
-      uploadFilename = payload.filename;
+      previewRows = payload.rows || [];
+      uploadFilename = payload.filename || file.name;
       renderPreview();
-      previewPanel.hidden = false;
-      results.hidden = true;
-      notice.textContent = "Review validation messages and assignments before confirming the import.";
-      notice.className = payload.valid ? "notice ok" : "notice warn";
+      if (previewPanel) previewPanel.hidden = false;
+      if (results) results.hidden = true;
+      if (notice) {
+        notice.textContent = "Review validation messages and assignments before confirming the import.";
+        notice.className = payload.valid ? "notice ok" : "notice warn";
+      }
     } catch (error) {
-      previewPanel.hidden = true;
-      notice.textContent = `Could not preview tasks: ${error.message}`;
-      notice.className = "notice warn";
+      if (previewPanel) previewPanel.hidden = true;
+      if (notice) {
+        notice.textContent = `Could not preview tasks: ${error.message}`;
+        notice.className = "notice warn";
+      }
     }
   });
 
-  confirmButton.addEventListener("click", async () => {
-    confirmButton.disabled = true;
-    notice.textContent = "Importing validated tasks...";
+  confirmButton?.addEventListener("click", async () => {
+    if (confirmButton) confirmButton.disabled = true;
+    if (notice) notice.textContent = "Importing validated tasks...";
     try {
       const response = await fetch(`${API_BASE}/api/tasks/upload/import`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rows: previewRows, filename: uploadFilename, uploader: uploaderInput.value.trim() || "Portal User" }),
+        body: JSON.stringify({
+          rows: previewRows,
+          filename: uploadFilename,
+          uploader: uploaderInput?.value.trim() || "Portal User",
+        }),
       });
-      const payload = await response.json();
+      const payload = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(payload.error || "Import failed");
-      const createdItems = payload.created.map((item) => `<li><strong>${escapeHtml(item.task_id)}</strong> ${escapeHtml(item.title)} — ${escapeHtml(ownerLabel(item.assigned_agent))} (${escapeHtml(item.assignment_method)})</li>`).join("");
-      const rejectedItems = payload.rejected.map((item) => `<li>Row ${item.row_number}: ${escapeHtml(item.title)} — ${escapeHtml(item.errors.join(" "))}</li>`).join("");
-      const skippedItems = payload.skipped.map((item) => `<li>Row ${item.row_number}: ${escapeHtml(item.title)} — ${escapeHtml(item.reason)}</li>`).join("");
-      results.innerHTML = `<h4>Import Results</h4>
-        <div class="upload-summary"><span>${payload.totals.created} created</span><span>${payload.totals.skipped} skipped</span><span>${payload.totals.rejected} rejected</span></div>
+      const createdItems = (payload.created || [])
+        .map(
+          (item) =>
+            `<li><strong>${escapeHtml(item.task_id)}</strong> ${escapeHtml(item.title)} — ${escapeHtml(
+              ownerLabel(item.assigned_agent)
+            )} (${escapeHtml(item.assignment_method)})</li>`
+        )
+        .join("");
+      const rejectedItems = (payload.rejected || [])
+        .map(
+          (item) =>
+            `<li>Row ${item.row_number}: ${escapeHtml(item.title)} — ${escapeHtml((item.errors || []).join(" "))}</li>`
+        )
+        .join("");
+      const skippedItems = (payload.skipped || [])
+        .map(
+          (item) =>
+            `<li>Row ${item.row_number}: ${escapeHtml(item.title)} — ${escapeHtml(item.reason)}</li>`
+        )
+        .join("");
+      if (results) {
+        results.innerHTML = `<h4>Import Results</h4>
+        <div class="upload-summary"><span>${payload.totals?.created ?? 0} created</span><span>${
+          payload.totals?.skipped ?? 0
+        } skipped</span><span>${payload.totals?.rejected ?? 0} rejected</span></div>
         ${createdItems ? `<h5>Created tasks</h5><ul class="upload-results-list">${createdItems}</ul>` : ""}
         ${skippedItems ? `<h5>Skipped tasks</h5><ul class="upload-results-list">${skippedItems}</ul>` : ""}
         ${rejectedItems ? `<h5>Rejected tasks</h5><ul class="upload-results-list">${rejectedItems}</ul>` : ""}`;
-      results.hidden = false;
-      previewPanel.hidden = true;
-      notice.textContent = "Import complete. Results and generated task IDs are shown below.";
-      notice.className = "notice ok";
+        results.hidden = false;
+      }
+      if (previewPanel) previewPanel.hidden = true;
+      if (notice) {
+        notice.textContent = "Import complete. Results and generated task IDs are shown below.";
+        notice.className = "notice ok";
+      }
       tasksCache = await fetchTasks();
       populateFilterSelects();
       renderTasks();
     } catch (error) {
-      confirmButton.disabled = false;
-      notice.textContent = `Could not import tasks: ${error.message}`;
-      notice.className = "notice warn";
+      if (confirmButton) confirmButton.disabled = false;
+      if (notice) {
+        notice.textContent = `Could not import tasks: ${error.message}`;
+        notice.className = "notice warn";
+      }
     }
   });
 }
@@ -655,11 +746,11 @@ function initQuickPickActions() {
   const labelEl = document.getElementById("quickPickLabel");
   const select = document.getElementById("quickPickTask");
   const cancelBtn = document.getElementById("quickPickCancel");
-  if (!dialog || !form) return;
+  if (!dialog || !form || !select) return;
 
   let focusField = null;
 
-  cancelBtn.addEventListener("click", () => dialog.close());
+  cancelBtn?.addEventListener("click", () => dialog.close());
 
   function openQuickPick(title, labelText, field) {
     if (!tasksCache.length) {
@@ -667,9 +758,15 @@ function initQuickPickActions() {
       return;
     }
     focusField = field;
-    titleEl.textContent = title;
-    labelEl.firstChild.textContent = `${labelText} `;
-    select.innerHTML = tasksCache.map((t) => `<option value="${t.id}">${t.id} ${t.title}</option>`).join("");
+    if (titleEl) titleEl.textContent = title;
+    if (labelEl) {
+      const textNode = Array.from(labelEl.childNodes).find((n) => n.nodeType === Node.TEXT_NODE);
+      if (textNode) textNode.textContent = `${labelText} `;
+      else labelEl.insertBefore(document.createTextNode(`${labelText} `), labelEl.firstChild);
+    }
+    select.innerHTML = tasksCache
+      .map((t) => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.id)} ${escapeHtml(t.title || "")}</option>`)
+      .join("");
     dialog.showModal();
   }
 
@@ -687,22 +784,20 @@ function initQuickPickActions() {
     event.preventDefault();
     const taskId = select.value;
     if (!taskId) return;
-    window.location.href = `task.html?id=${encodeURIComponent(taskId)}&focus=${encodeURIComponent(focusField)}`;
+    const focus = focusField ? `&focus=${encodeURIComponent(focusField)}` : "";
+    window.location.href = `task.html?id=${encodeURIComponent(taskId)}${focus}`;
   });
 }
 
 async function initTasksPage() {
-  agentsCache = await loadAgentCatalog();
+  agentsCache = typeof loadAgentCatalog === "function" ? await loadAgentCatalog() : [];
   tasksCache = await fetchTasks();
   populateFilterSelects();
   initFilterBar();
   initTaskDialog();
   initTaskUploadDialog();
   initQuickPickActions();
-  initFilterBar();
   initBulkActions();
-  initTaskCheckboxes();
-  initTaskRunButtons();
   renderTasks();
 }
 
