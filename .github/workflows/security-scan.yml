@@ -1,0 +1,55 @@
+name: Scheduled dependency & vulnerability scan
+
+on:
+  schedule:
+    # Weekly Monday 06:00 UTC
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "**/requirements.txt"
+      - "**/package-lock.json"
+      - "**/package.json"
+      - ".github/workflows/security-scan.yml"
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  pip-audit:
+    name: Python dependency audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pip-audit
+        run: python -m pip install --upgrade pip pip-audit
+      - name: Audit API requirements
+        run: pip-audit -r services/api/requirements.txt || true
+      - name: Audit orchestrator requirements
+        run: pip-audit -r services/orchestrator/requirements.txt || true
+      - name: Note on risk queue
+        run: |
+          echo "Low-risk dependency bumps may be auto-proposed via Dependabot."
+          echo "Medium/High findings require human review before merge (Operating Instructions §9)."
+
+  npm-audit:
+    name: npm audit (CRM portal)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: services/crm-portal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install and audit
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-fund; fi
+          npm audit --audit-level=high || true
