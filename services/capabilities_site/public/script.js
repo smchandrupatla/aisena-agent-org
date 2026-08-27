@@ -1,6 +1,30 @@
 const API_BASE = "http://localhost:5000";
 
+function ensureFddNavigation() {
+  document.querySelectorAll("nav").forEach((nav) => {
+    if (nav.querySelector('a[href="fdd.html"], a[href="./fdd.html"]')) {
+      return;
+    }
+    const link = document.createElement("a");
+    link.href = "fdd.html";
+    link.textContent = "FDD";
+    const wiki = Array.from(nav.querySelectorAll("a")).find((item) =>
+      (item.getAttribute("href") || "").includes("wiki.html")
+    );
+    if (wiki) {
+      wiki.insertAdjacentElement("afterend", link);
+    } else {
+      const docs = Array.from(nav.querySelectorAll("a")).find((item) =>
+        (item.getAttribute("href") || "").includes("documentation")
+      );
+      if (docs) docs.insertAdjacentElement("beforebegin", link);
+      else nav.appendChild(link);
+    }
+  });
+}
+
 function setActiveNav() {
+  ensureFddNavigation();
   const path = window.location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll("nav a").forEach((link) => {
     const href = link.getAttribute("href");
