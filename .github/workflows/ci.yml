@@ -43,6 +43,12 @@ jobs:
       - name: Test event framework and agent scripts
         run: python -m unittest services.eventing.test_framework scripts.agents.test_daily_self_learning -v
 
+      - name: Runtime ops (flags, recovery, tenant)
+        run: python -m unittest services.runtime_ops.test_runtime_ops -v
+
+      - name: Application extraction script
+        run: python -m unittest scripts.test_extract_application_repo -v
+
       - name: Feature-health regression suite
         run: python -m unittest tests.test_feature_health -v
 
