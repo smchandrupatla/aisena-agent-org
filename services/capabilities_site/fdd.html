@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AISENA Functional Definition Document (FDD) — domain-agnostic AI agent organization.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>AISENA — Functional Definition Document (FDD)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .fdd-body { max-width: 920px; }
+    .fdd-body h2 { margin-top: 28px; font-size: 22px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+    .fdd-body h3 { margin-top: 18px; font-size: 16px; }
+    .fdd-body p, .fdd-body li { color: var(--ink-soft); line-height: 1.55; font-size: 14px; }
+    .fdd-body pre, .diagram-box {
+      background: #0f1b33; color: #dce7ff; border-radius: 12px; padding: 14px;
+      font-family: "IBM Plex Mono", monospace; font-size: 12px; overflow-x: auto; white-space: pre;
+    }
+    .fdd-body table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    .fdd-body th, .fdd-body td { border-bottom: 1px solid #e3eaf8; padding: 10px 8px; text-align: left; vertical-align: top; }
+    .fdd-body th { font-family: "IBM Plex Mono", monospace; font-size: 11px; text-transform: uppercase; color: #58719d; }
+    .value-prop { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 12px 0; }
+    .value-card { border: 1px solid #d7e2f6; border-radius: 12px; padding: 14px; background: #f9fcff; }
+    .value-card strong { display: block; margin-bottom: 6px; color: var(--ink); }
+    .mkt-banner {
+      background: linear-gradient(115deg, #112c79 0%, #1c4fc4 54%, #2198f2 100%);
+      color: #fff; border-radius: 16px; padding: 22px; margin: 12px 0;
+    }
+    .mkt-banner h3 { margin: 0 0 8px; color: #fff; }
+    .mkt-banner p { margin: 0; color: rgba(240,248,255,0.9); }
+    .stage-item { border-left: 4px solid var(--brand); padding: 12px 14px; background: #f9fcff;
+      border: 1px solid #d7e2f6; border-left-width: 4px; border-radius: 0 12px 12px 0; margin-bottom: 10px; }
+    .stage-num { font-family: "IBM Plex Mono", monospace; font-size: 10px; color: #fff;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2)); border-radius: 999px; padding: 3px 8px; }
+  </style>
+</head>
+<body>
+  <div class="site-wrap">
+    <header class="topbar fade-up">
+      <div class="brand">
+        <div class="badge">AI</div>
+        <div class="brand-title"><strong>AISENA</strong> Capability Portfolio</div>
+      </div>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="start-project.html">Create New App</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="fdd.html" class="active">FDD</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="issues.html">Issues</a>
+        <a href="test-dashboard.html">Test Dashboard</a>
+        <a href="app-dashboard.html">App Dashboard</a>
+        <a href="postgres-viewer.html">Postgres Viewer</a>
+        <a href="kafka-viewer.html">Kafka Viewer</a>
+        <a href="splunk-viewer.html">Splunk Viewer</a>
+        <a href="dynatrace-viewer.html">Dynatrace Viewer</a>
+        <a href="agent-learning.html">Agent Learning</a>
+        <a href="workflow.html">Workflow</a>
+        <a href="guardrails.html">Guardrails</a>
+        <a href="agents-admin.html">Manage Agents</a>
+        <a href="agents-chat.html">Agents + Chat</a>
+        <a href="agentic-ai-cheatsheet.html">AI Cheatsheet</a>
+      </nav>
+    </header>
+    <main class="fdd-body">
+      <section class="hero fade-up">
+        <div class="kicker">Functional Definition Document · Wiki Style</div>
+        <h1>AISENA — Domain-Agnostic AI Agent Organization</h1>
+        <p class="lede">Complete functional definition of what AISENA is, what it does in the true sense, how the multi-agent operating model works, and why it exists as a reusable delivery system for any business domain.</p>
+      </section>
+
+      <article class="card span-12 fade-up" style="margin-top:18px">
+        <h2>1. Executive Summary &amp; Mission</h2>
+        <p><strong>AISENA</strong> is a domain-agnostic AI implementation system for building software delivery organizations, product teams, and end-to-end implementation workflows across any business vertical.</p>
+        <p>It is not a single-product chatbot. It is a <strong>staffed, tooled, governed AI agent organisation</strong> that turns sponsor goals into planned, coded, tested, documented, and releasable software with minimal hand-holding.</p>
+        <div class="notice ok" style="margin-top:12px">Same architecture applies to compliance, healthcare, logistics, retail, SaaS, internal tooling, risk and fraud. Repo examples are demonstrations — not constraints.</div>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>2. What AISENA Is (True Sense)</h2>
+        <p>An <strong>autonomous delivery shop</strong>: specialised AI agents collaborate via versioned artifacts, handoff protocols, and orchestration. The sponsor talks mainly to the <strong>Implementation Manager</strong>.</p>
+        <h3>Not</h3>
+        <ul>
+          <li>Generic multi-agent chat without delivery discipline</li>
+          <li>Locked to one vertical</li>
+          <li>A black-box that silently changes production</li>
+          <li>A replacement for human accountability on legal, financial, or production decisions</li>
+        </ul>
+        <h3>Does</h3>
+        <ul>
+          <li>Translates goals into requirements, architecture, and buildable increments</li>
+          <li>Runs definition, engineering, platform, assurance, and completion in parallel where contracts allow</li>
+          <li>Produces runnable, testable artifacts every stage</li>
+          <li>Maintains append-only logs, handoffs, and status reports</li>
+          <li>Exposes a web portal for dashboards, tasks, issues, agent chat, and ops viewers</li>
+        </ul>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>3. Value Proposition &amp; Marketing</h2>
+        <div class="mkt-banner">
+          <h3>Turn product goals into running software with minimal hand-holding.</h3>
+          <p>AISENA is the operating system for an AI-native delivery organisation. One sponsor. One Implementation Manager. A full roster of specialists. Evidence-backed increments from day one.</p>
+        </div>
+        <div class="value-prop">
+          <div class="value-card"><strong>Domain-Agnostic</strong><span>Reuse roster, governance, and deploy patterns across verticals.</span></div>
+          <div class="value-card"><strong>Bounded Autonomy</strong><span>Free on implementation detail; humans gate production, spend, data, pricing, legal.</span></div>
+          <div class="value-card"><strong>Evidence Over Claims</strong><span>Backlog, docs, tests, handoffs, runnable artifacts — not slideware.</span></div>
+          <div class="value-card"><strong>Local-First, Cloud-Ready</strong><span>Compose/Minikube proof; Kubernetes/EKS when Stage 5 is authorised.</span></div>
+          <div class="value-card"><strong>Observable by Default</strong><span>Prometheus, Grafana, Loki + Splunk/Dynatrace paths.</span></div>
+          <div class="value-card"><strong>Operator Portal</strong><span>Tasks, issues, chat, data viewers, learning, documentation templates.</span></div>
+        </div>
+        <p><em>“AISENA is a reusable AI agent organisation that delivers software the way a high-discipline product team would — with specialists, handoffs, gates, and proof — without being locked to any single industry.”</em></p>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>4. System Capabilities</h2>
+        <table class="table">
+          <thead><tr><th>Area</th><th>What it delivers</th></tr></thead>
+          <tbody>
+            <tr><td>Discovery</td><td>Requirements, stories, acceptance criteria, rebuild specs</td></tr>
+            <tr><td>Architecture</td><td>ADRs, API contracts, schema, UX journeys</td></tr>
+            <tr><td>Engineering</td><td>FE/BE/data/integration/streaming with testable increments</td></tr>
+            <tr><td>Platform</td><td>Docker Compose, Kubernetes, CI/CD, secrets</td></tr>
+            <tr><td>QA</td><td>Feature-health, Selenium GUI screens, k6 performance</td></tr>
+            <tr><td>Security</td><td>Audits, auth patterns, approval gates</td></tr>
+            <tr><td>Observability</td><td>Metrics, logs, traces; enterprise export</td></tr>
+            <tr><td>Documentation</td><td>SDLC Word templates across planning → handover</td></tr>
+            <tr><td>Agent ops</td><td>Roster, chat console, self-learning surfaces</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>5. Agent Operating Model</h2>
+        <pre class="diagram-box">Sponsor
+   │
+   ▼
+Implementation Manager  (single point of contact)
+   │
+   ├── Tier 1 SMEs (domain epics &amp; stories)
+   ├── Definition (BA / Architect / UX)
+   ├── Engineering (FE / BE / DB / Integration)
+   ├── Platform &amp; QA (DevOps / Security / Perf)
+   └── Documentation &amp; Release</pre>
+        <p>Handoffs: <code>/project/handoffs/&lt;task-id&gt;-&lt;from&gt;-to-&lt;to&gt;.md</code>. Status: <code>/project/reports/IMPLEMENTATION_STATUS.md</code>. Change log is append-only.</p>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>6. Architecture (Stage 0 proof)</h2>
+        <pre class="diagram-box">Sample Event → Stage0 Ingestor → Kafka (aisena-stage0-events)
+    → Screening Service → OpenSearch (aisena-stage0-screening-results)
+    → Validation</pre>
+        <p>Broader stack: Kafka, ingestion/detection/agent-manager/API/orchestrator, PostgreSQL, OpenSearch, capabilities site, Prometheus/Grafana/Loki, Redmine, Vault, Apicurio.</p>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>7. Staged Roadmap</h2>
+        <div class="stage-item"><span class="stage-num">Stage 0</span> <strong>Team pipeline proof</strong> — full handoff chain + toy screening flow</div>
+        <div class="stage-item"><span class="stage-num">Stage 1</span> <strong>Ingestion + search</strong> — parser → Kafka → OpenSearch on Minikube</div>
+        <div class="stage-item"><span class="stage-num">Stage 2</span> <strong>Stubbed screening</strong> — sanctions/fraud detection services</div>
+        <div class="stage-item"><span class="stage-num">Stage 3</span> <strong>Case management</strong> — alert-to-case, disposition, audit trail</div>
+        <div class="stage-item"><span class="stage-num">Stage 4</span> <strong>Security hardening</strong> — auth, secrets, compliance controls</div>
+        <div class="stage-item"><span class="stage-num">Stage 5</span> <strong>Cloud portability</strong> — EKS / MSK / OpenSearch Service</div>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>8. Web Portal</h2>
+        <p>Primary surface: <code>services/capabilities_site</code>. Nav includes Overview, Capabilities, Wiki, <strong>FDD</strong>, Create New App, Tasks, Issues, dashboards, Postgres/Kafka/Splunk/Dynatrace viewers, Agent Learning, Workflow, Guardrails, Agents + Chat, Documentation.</p>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>9. Governance &amp; Guardrails</h2>
+        <p>Human approval is mandatory before actions that touch production, real infrastructure spend, user-data handling, pricing, or legal/regulatory exposure. CI runs on every push/PR (unit tests, feature-health, Selenium screens, schema and compose validation).</p>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>10. Deployment</h2>
+        <pre class="diagram-box">docker compose -f docker-compose.yml up -d
+# Capabilities site typically http://localhost:8081</pre>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>11. Functional Requirements (summary)</h2>
+        <table class="table">
+          <thead><tr><th>ID</th><th>Requirement</th></tr></thead>
+          <tbody>
+            <tr><td>FR-01</td><td>Single Implementation Manager contact for sponsor</td></tr>
+            <tr><td>FR-02</td><td>Versioned agent roles under /agents</td></tr>
+            <tr><td>FR-03</td><td>Handoff artifacts for meaningful transitions</td></tr>
+            <tr><td>FR-04</td><td>Runnable Stage 0 event path</td></tr>
+            <tr><td>FR-05</td><td>Web portal with ops and wiki surfaces</td></tr>
+            <tr><td>FR-06</td><td>Observability + enterprise export path</td></tr>
+            <tr><td>FR-07</td><td>CI including feature-health and GUI screens</td></tr>
+            <tr><td>FR-08</td><td>Approval gates for high-impact actions</td></tr>
+            <tr><td>FR-09</td><td>Domain-agnostic Create New App intake</td></tr>
+            <tr><td>FR-10</td><td>SDLC documentation templates</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="card span-12 fade-up" style="margin-top:16px">
+        <h2>12. Glossary</h2>
+        <table class="table">
+          <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>FDD</td><td>Functional Definition Document (this page)</td></tr>
+            <tr><td>Implementation Manager</td><td>Orchestrator; sole routine sponsor contact</td></tr>
+            <tr><td>SME</td><td>Subject Matter Expert agent</td></tr>
+            <tr><td>Bounded autonomy</td><td>Agents free on detail; humans gate high impact</td></tr>
+            <tr><td>Capabilities site</td><td>Primary web portal</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <p class="footer fade-up">Also see <a href="wiki.html">Wiki</a>, <a href="philosophy.html">Philosophy</a>, <a href="implementation-approach.html">Implementation Approach</a>, and <code>docs/FUNCTIONAL_DEFINITION_DOCUMENT.md</code>.</p>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
