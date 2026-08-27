@@ -1,6 +1,30 @@
 // Same-origin: server.js proxies /api, /health, /results, /self-learning to the backend.
 const API_BASE = window.API_BASE_OVERRIDE || "";
 
+function ensureFddNavigation() {
+  document.querySelectorAll("nav").forEach((nav) => {
+    if (nav.querySelector('a[href="fdd.html"], a[href="./fdd.html"], a[href="/fdd.html"]')) {
+      return;
+    }
+    const link = document.createElement("a");
+    link.href = "fdd.html";
+    link.textContent = "FDD";
+    const wiki = Array.from(nav.querySelectorAll("a")).find((item) => {
+      const href = (item.getAttribute("href") || "").toLowerCase();
+      return href === "wiki.html" || href.endsWith("/wiki.html") || href.includes("wiki.html");
+    });
+    if (wiki) {
+      wiki.insertAdjacentElement("afterend", link);
+    } else {
+      const docs = Array.from(nav.querySelectorAll("a")).find((item) =>
+        (item.getAttribute("href") || "").includes("documentation")
+      );
+      if (docs) docs.insertAdjacentElement("beforebegin", link);
+      else nav.appendChild(link);
+    }
+  });
+}
+
 function ensurePromptNavigation() {
   document.querySelectorAll("nav").forEach((nav) => {
     if (nav.querySelector('a[href="/prompts"], a[href="prompts"]')) return;
@@ -14,12 +38,14 @@ function ensurePromptNavigation() {
 }
 
 function setActiveNav() {
+  ensureFddNavigation();
   ensurePromptNavigation();
   const path = window.location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll("nav a").forEach((link) => {
     const href = link.getAttribute("href");
     const isPromptRoute = href === "/prompts" && window.location.pathname.startsWith("/prompts");
-    if (href === path || isPromptRoute) {
+    const isFdd = (href === "fdd.html" || href === "./fdd.html") && path === "fdd.html";
+    if (href === path || isPromptRoute || isFdd) {
       link.classList.add("active");
       link.setAttribute("aria-current", "page");
     } else {
