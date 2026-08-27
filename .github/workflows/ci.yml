@@ -109,3 +109,19 @@ jobs:
 
       - name: Validate Selenium stack
         run: docker compose -f docker-compose.selenium.yml config --quiet
+
+  gui-screens:
+    name: Selenium HTML screen suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run GUI screen tests (Docker Compose + Selenium)
+        run: |
+          docker compose -f docker-compose.selenium.yml up --build --abort-on-container-exit --exit-code-from gui-tests
+
+      - name: Tear down GUI stack
+        if: always()
+        run: docker compose -f docker-compose.selenium.yml down -v
