@@ -15,21 +15,143 @@ Coordination should emerge from shared state, not from direct agent-to-agent cha
 
 ---
 
-## Design Idea 1: Blackboard Architecture
+## Agentic Coordination Models
 
-One shared state object that every agent reads and writes:
-- Task board
-- Scratchpad
-- Artifacts (briefs, findings, decisions, code, docs)
+An **agentic coordination model** is the pattern that defines *how* agents work together on an implementation task — the rules of their interaction, not the agents themselves. The agents are the actors; the model is the game they play. This keeps the design composable: swap agents in and out, but the coordination model stays.
 
-Agents post findings, claim tasks, leave notes. No agent talks directly to another.
+Four models are under consideration.
 
-**Why it works:** Coordination is visible, auditable, and replaceable. You can inspect the board to understand what the team knows and where it is stuck.
+---
 
-**Implementation notes:**
-- Use a structured schema for the board (JSON or typed objects).
-- Version or timestamp entries so agents can detect stale information.
-- Allow agents to subscribe to changes or poll for relevant updates.
+### Model 1: Scrivener Model (Blackboard / Whiteboard Approach)
+
+**Named after:** the medieval clerk who sat in the corner of the room and wrote everything down while the others talked. No one spoke to each other; the scrivener recorded it all, and anyone who needed to know read the record.
+
+**Core idea:** Agents do not interact with each other at all. Everything is written to a shared board. The board is the only medium of exchange.
+
+**How it works:**
+- One shared state object — the board — that every agent reads and writes.
+- Agents post findings, claim tasks, leave notes, publish artifacts.
+- No agent sends a message to another agent. Coordination is entirely through the board.
+
+**Board structure (three layers):**
+1. **Task queue** — claimed and unclaimed work items.
+2. **Scratchpad** — findings, notes, intermediate reasoning.
+3. **Artifact store** — finished, typed outputs (briefs, code, docs, decisions).
+
+Each entry carries a timestamp, an author (which agent wrote it), and a version, so agents can tell what is fresh and what is stale.
+
+**Why it works:** Coordination is visible, auditable, and replaceable. You can inspect the board at any moment to understand what the team knows and where it is stuck. Agents are fully decoupled — a better researcher can replace a weaker one without touching anyone else.
+
+**Failure modes:**
+- Board becomes a bottleneck or a dumping ground of noise.
+- Agents write conflicting or contradictory entries with no one to reconcile them.
+- Stale entries mislead agents that read them later.
+
+**Safeguards:**
+- Versioning and timestamps on every entry.
+- Conflict-resolution rules (e.g., a critic entry supersedes a researcher entry on the same claim).
+- Garbage collection or archival of resolved/stale entries.
+- Optional event log so the full history can be replayed.
+
+**Open design choice:** simple structured JSON object vs. a richer event log that replays history. The event log is more powerful for audit and debugging but heavier to query.
+
+---
+
+### Model 2: Relay Model
+
+**Core idea:** Agents pass work hand to hand, like a baton in a relay race. Agent A finishes its piece, hands the artifact to Agent B, which picks it up and continues.
+
+**How it works:**
+- Work flows in a defined sequence: research → draft → review → finalize.
+- Each agent receives the previous agent's output as its input.
+- The handoff is explicit — the artifact is passed, not shared.
+
+**Why it works:** Clean and simple for linear pipelines. Easy to reason about, easy to debug (follow the chain), and each agent has a clear, narrow job.
+
+**Failure modes:**
+- Brittle — a failure anywhere stalls the entire chain.
+- No parallelism; throughput is limited by the slowest agent.
+- Errors compound silently down the chain if not caught at each hop.
+- Hard to insert a new step or reorder without rewriting the pipeline.
+
+**Safeguards:**
+- Validation gate at every handoff (output must pass schema + contract checks before being accepted by the next agent).
+- Timeouts on each hop so a stuck agent does not block forever.
+- Retry or fallback agent for a failed hop.
+- Optional checkpointing so a failed chain can resume from the last good artifact.
+
+**Best fit:** Sequential workflows where order is mandatory and parallelism adds no value — e.g., code generation followed by review followed by deployment.
+
+---
+
+### Model 3: Council Model
+
+**Core idea:** Agents work in parallel on the same problem, then vote or debate to converge on one answer. Strength in numbers and diversity of reasoning.
+
+**How it works:**
+- Multiple agents (or the same agent with different prompts/seeds) tackle the task independently.
+- Their outputs are collected and compared.
+- Convergence happens through voting, weighted scoring, or structured debate.
+- A tie-breaker rule resolves deadlocks.
+
+**Why it works:** Strong for judgment calls and hard problems where no single agent is reliable. Diversity of reasoning surfaces blind spots that one agent would miss. The final answer is more robust than any individual contribution.
+
+**Failure modes:**
+- Expensive — N agents doing the same work costs N times the compute.
+- Slow — you wait for the slowest participant plus the convergence step.
+- Groupthink if agents share similar training or prompts; the council adds no real diversity.
+- Debate can loop without converging if the tie-breaker is weak.
+
+**Safeguards:**
+- Diversity requirement: agents must differ in model, prompt, or perspective.
+- Hard cap on debate rounds to prevent infinite loops.
+- A designated tie-breaker (a stronger model, a human, or a deterministic rule).
+- Cost budget per council session.
+
+**Best fit:** High-stakes decisions, ambiguous requirements, or quality-critical outputs where a single agent's answer is not trustworthy enough — e.g., architecture review, security assessment, or final go/no-go on a release.
+
+---
+
+### Model 4: Market Model
+
+**Core idea:** Agents bid on tasks. The best-suited agent claims the work and is "paid" in an internal currency. Supply and demand balance the team automatically.
+
+**How it works:**
+- Tasks are posted with a description, required skills, and a budget (in internal credits).
+- Agents evaluate the task against their own capabilities and bid.
+- The highest-value or lowest-cost bid wins the claim.
+- Completed work earns credits, which fund future bids.
+- Idle or underperforming agents naturally receive less work.
+
+**Why it works:** Scales beautifully and self-balances. No central scheduler needed. Agents specialize organically because specialization earns more. The system adapts to changing workloads without reconfiguration.
+
+**Failure modes:**
+- Pricing logic is hard to get right — too cheap and important work goes unclaimed; too expensive and the budget burns.
+- Quiet but critical tasks (monitoring, cleanup, documentation) get starved because they pay poorly.
+- Agents may game the system — overbid, underdeliver, or hoard credits.
+- Requires a trusted accounting layer; a bug in the ledger corrupts the whole economy.
+
+**Safeguards:**
+- Reserve prices or subsidies for essential but unglamorous tasks.
+- Reputation scoring layered on top of bids (past delivery quality affects future win rates).
+- Audit of the ledger and anti-gaming rules (e.g., penalty for abandoned claims).
+- Human override to force-assign work the market neglects.
+
+**Best fit:** Large, heterogeneous teams with many task types and dynamic workloads — e.g., a platform org where dozens of agents handle tickets, incidents, refactors, and research in parallel.
+
+---
+
+## Comparison at a Glance
+
+| Model | Coordination style | Strength | Weakness | Best for |
+|---|---|---|---|---|
+| **Scrivener** | Shared board, no direct talk | Auditable, decoupled, inspectable | Board can become noisy | Most general-purpose team work |
+| **Relay** | Sequential handoff | Simple, easy to debug | Brittle, no parallelism | Linear pipelines |
+| **Council** | Parallel + vote/debate | Robust on hard judgments | Expensive, slow | High-stakes decisions |
+| **Market** | Bid and claim | Self-balancing, scales | Pricing complexity, starvation risk | Large dynamic teams |
+
+Models can also be **composed**: a Scrivener board can host Relay pipelines as sub-tasks, a Council can sit on top of a Scrivener board to resolve conflicts, and a Market can allocate which Scrivener board an agent joins. The models are building blocks, not mutually exclusive choices.
 
 ---
 
@@ -97,13 +219,14 @@ Required safeguards:
 - How to scale the number of agents without overwhelming the board?
 - How to give agents memory of past team decisions without bloating context?
 - Concrete example: pick a real workflow and map roles + contracts + board schema.
+- Which coordination model (or composition of models) fits the AISENA agent org best?
 
 ---
 
 ## Next Steps in This Conversation
 
-1. Deep dive into one or more of the three design ideas.
-2. Sketch a concrete example (roles, contracts, board schema, supervisor logic).
+1. Pick a coordination model (or composition) and sketch a concrete workflow mapped onto it.
+2. Define roles, contracts, and a board schema for that workflow.
 3. Identify the minimal viable implementation to test the ideas.
 
 ---
