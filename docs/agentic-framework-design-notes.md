@@ -328,9 +328,7 @@ A distinct model of building agents with **no LLM dependency at all**. The agent
 
 Yes — a closed-world agent can be built to stick strictly to provided sources (e.g., a book) rather than inventing new things. This is a **retrieval-grounded** agent, one of the strongest use cases for the closed-world model.
 
-The book becomes the agent's entire world: it reads from it, answers from it, and has no generative path to invent anything.
-
-**How to wire it:**
+- The book becomes the agent's entire world: it reads from it, answers from it, and has no generative path to invent anything.
 - The agent doesn't "know" the book — it searches it at query time, pulls the relevant passage, and responds only from that passage.
 - If the answer isn't in the book, it says so instead of filling the gap.
 - This is safer than an LLM with the book stuffed into its context, because an LLM can still hallucinate even when grounded. A closed-world agent with retrieval has no mechanism to invent — it can only return what it found.
@@ -363,6 +361,60 @@ Yes — the portal is just a web UI talking to the agent over a local API. The a
 **Summary of the proposal:** We can build agents without depending on LLMs, which work as an agent-as-a-service on the local machine without even an internet connection, with all the intelligence baked in. This is a self-contained agent service — intelligence baked in at build time, running locally with zero external dependencies.
 
 **The one caveat:** "intelligence" here means **encoded capability**, not learned understanding. It does exactly what you programmed, perfectly, and nothing more. That's the trade — reliability for flexibility.
+
+---
+
+## Concrete Example: ISO 20022 SME Agent
+
+A closed-world agent named **ISO 20022 SME** answers questions about the ISO 20022 catalog only, citing the exact clause for every answer, and refusing anything not found in the catalog.
+
+**Why it fits:** The catalog is a stable, well-bounded domain — exactly the kind of problem space where the closed-world assumption holds. The manifest enumerates question types like "what does clause X require" or "compare standard A and B," and retrieval pulls the exact passage before answering.
+
+**The one thing to get right: retrieval precision.** ISO standards are dense and cross-referenced, so a fuzzy search that returns the wrong clause will give you a confident wrong answer. Index by clause number, not just keywords, and make the agent cite the exact clause it pulled from — so you can verify every answer against the source.
+
+**Building instructions (the system prompt / contract):**
+- **Role and scope:** "You are the ISO 20022 SME; you answer only from the provided catalog."
+- **Retrieval rule:** "Search the index first, answer only from retrieved passages, never from memory."
+- **Refusal rule:** "If the answer isn't in the catalog, say so — never infer or invent."
+- **Citation rule:** "Every answer names the exact clause it came from."
+
+That last rule matters most — it turns the agent from a black box into something auditable. You can check every answer against the source in seconds.
+
+---
+
+## Value-Added Services Beyond Chat
+
+Beyond chat, the strongest add-ons are **compliance checking** — paste in a message or mapping spec and the agent flags which ISO 20022 rules it violates — and **cross-standard comparison**, lining up two versions or two message types side by side with clause citations.
+
+Additional services worth building in:
+- **Gap analysis** — feed it your current implementation, it returns a checklist of missing requirements against the catalog.
+- **Clause lookup API** — a machine endpoint other tools can call, not just a human portal.
+- **Change tracking** — when you update the catalog, the agent diffs the new version and reports what changed and what breaks downstream.
+- **Export** — answers and compliance reports as PDF or structured JSON for audit trails.
+
+**The pattern:** the catalog is the source of truth, and every service is just a different way of querying it.
+
+---
+
+## Builder Prompt: ISO 20022 SME Closed-World Agent Service
+
+Paste this into VS Code chat to have the builder create the full service:
+
+> Build a closed-world agent service named **ISO 20022 SME**. It answers questions about the ISO 20022 catalog only, citing the exact clause for every answer, and refusing anything not found in the catalog.
+>
+> Before writing any code, research current best practices for closed-world agents — retrieval-grounded Q&A, sealed knowledge bases, fail-closed refusal rules, citation enforcement — and apply them.
+>
+> Architecture: FastAPI service, embedded retrieval index over the catalog, pinned tool registry, deterministic manifest of task types, no runtime LLM dependency. Package everything into a Dockerfile that builds and runs offline. Add a simple web portal — static HTML form, question in, cited answer out.
+>
+> Also implement these value-added services beyond chat:
+> - Compliance checking: paste in a message or mapping spec, the agent flags which ISO 20022 rules it violates, with clause citations.
+> - Cross-standard comparison: line up two versions or two message types side by side with clause citations.
+> - Gap analysis: feed in a current implementation, return a checklist of missing requirements against the catalog.
+> - Clause lookup API: a machine endpoint other tools can call.
+> - Change tracking: when the catalog updates, diff the new version and report what changed and what breaks downstream.
+> - Export: answers and compliance reports as PDF or structured JSON for audit trails.
+>
+> Deliverables: the full source tree, the Dockerfile, a docker-compose file, and a README with run instructions. I will provide the catalog files separately — structure the code so they drop into a data directory and get indexed at build time.
 
 ---
 
