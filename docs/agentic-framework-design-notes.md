@@ -212,6 +212,93 @@ Required safeguards:
 
 ---
 
+## Do Agents Need LLMs?
+
+No. An LLM is just one possible brain. The coordination models are brain-agnostic: an agent can be a rules engine, a classical planner, a retrieval system, or a human in the loop.
+
+The LLM earns its place where the work is fuzzy — language, judgment, open-ended reasoning. For deterministic steps like parsing a file or running a calculation, a plain function is cheaper, faster, and more reliable.
+
+**Design principle:** Put the LLM only where uncertainty lives, and keep the rest as ordinary code.
+
+---
+
+## Capabilities of Non-LLM Agents
+
+Without an LLM, an agent is a **deterministic worker** — it needs a fixed set of capabilities it can execute reliably.
+
+Core capabilities:
+- A task parser that reads structured input
+- A tool executor that calls APIs or runs code
+- A state reader and writer for the shared board
+- A rule-based decision engine that picks the next action from a defined set of options
+
+Beyond that:
+- Validation — checking outputs against a schema before writing them
+- Error handling that knows how to retry, escalate, or mark a task failed
+
+These non-LLM agents are often the most reliable members of the team, because they never hallucinate. They just do exactly what they're told, every time.
+
+---
+
+## Inner Working of a Non-LLM Agent
+
+The loop is a fixed cycle: read the board, match a task to your capabilities, execute it, validate the output, write the result back.
+
+Concretely — the agent wakes up, scans the task queue for anything matching its role, picks one, and runs a deterministic function against it. Say it's a data-extraction agent: it takes a file path, calls a parser, checks the output against a schema, and if it passes, posts the structured result to the artifact store with its signature.
+
+No reasoning step in the middle. The "decision" is just pattern matching — if task type equals X and my capability covers X, do X. If not, skip it.
+
+The only branching is error handling: validation fails, retry once, then mark the task failed and move on. Everything else is straight-line code.
+
+The agent is just a program with a **trigger** — something wakes it, it runs, it exits. No thinking, no conversation, no inner monologue.
+
+The trigger is usually an event: a new task appears on the board, a timer fires, or another agent's write completes. The agent subscribes to those events, wakes, does its one job, writes the result, and goes back to sleep.
+
+So the "inner working" is really three pieces of plumbing: an event listener, a function that does the work, and a writer that posts the result. The agent never asks "what should I do" — the event already told it.
+
+---
+
+## The Hard Boundary: Non-LLM Agents Cannot Create
+
+A non-LLM agent is a **deterministic executor**, not a creator. It can run a recipe perfectly, but it can't write the recipe.
+
+Example: ask it to build a website.
+- With templates: it matches the request to a template, fills slots, runs a build, validates, posts. You get a cookie-cutter site — a landing page, a blog, a form — but nothing original.
+- Without templates, no internet, no LLM: it has no source of content, no design decisions, no code to emit. The only websites it could produce are ones baked into its own code at build time — a hardcoded page it ships with.
+- Ask it to build something new and it has nothing to work with.
+
+**Build time** is the moment the agent's code gets compiled or packaged — before it ever runs. Whatever you write into the source files then becomes the only behavior it can ever have. "Baked in at build time" means the website lives inside the agent's own code: a string of HTML, a function that returns a page, a template file shipped alongside it. The agent doesn't create it at runtime — it just serves or assembles what was already there when it was built. Change the website later and you have to rebuild and redeploy the agent. It can't learn, adapt, or invent anything new on its own.
+
+---
+
+## Cost Control: LLM Spend Is Not Free
+
+LLMs cost money per call. The main lever is **routing** — only call the LLM when the task actually needs judgment, and use cheap deterministic code everywhere else. A non-LLM agent doing parsing or validation costs you nothing per call.
+
+Other levers:
+- **Cache** LLM outputs so repeated questions don't re-spend
+- Use **smaller or quantized models** for routine steps
+- **Batch** work so one call handles many items
+- **Self-host open models** (Llama, Mistral) to kill the per-token cost entirely if you have the hardware
+
+The design principle stays the same — LLM only where uncertainty lives, code everywhere else.
+
+---
+
+## Deployment Tiers: Where the Model Runs
+
+A second classification axis: where the model is built and runs. Three tiers:
+
+1. **Cloud API** — pay per token, zero ops, but your data leaves the building. The default.
+2. **Self-hosted open model** — models like Llama or Mistral run on your own GPUs. Kills the per-token cost and keeps data local, but you need hardware and someone to run them.
+3. **Edge** — tiny quantized models on the device itself. Near-zero latency, capped at small capabilities.
+
+**The interesting design move is hybrid:** a small local model handles classification and routing, and only escalates to a big cloud model when the task genuinely needs it. That keeps most of your spend near zero while preserving quality where it matters.
+
+This hybrid split also maps cleanly onto the coordination models — the local classifier can decide which coordination model a task needs before any expensive model ever wakes up.
+
+---
+
 ## Open Questions / To Explore
 
 - How to represent the shared workspace efficiently (in-memory, DB, event log, vector store)?
@@ -220,6 +307,7 @@ Required safeguards:
 - How to give agents memory of past team decisions without bloating context?
 - Concrete example: pick a real workflow and map roles + contracts + board schema.
 - Which coordination model (or composition of models) fits the AISENA agent org best?
+- How to operationalize the hybrid routing layer (what does the local classifier look like)?
 
 ---
 
