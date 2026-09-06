@@ -299,6 +299,73 @@ This hybrid split also maps cleanly onto the coordination models — the local c
 
 ---
 
+## Closed-World Agents: A Fifth Coordination Model
+
+A distinct model of building agents with **no LLM dependency at all**. The agent is fully capable of its assigned tasks using only capabilities baked in at build time. It does exactly what it is told and nothing more.
+
+**Core idea:** Closed-world capability. The agent ships with a complete, frozen skill set. Its entire job is executing that set perfectly. Nothing is learned at runtime, nothing is fetched, nothing is improvised.
+
+**What you hand it on day one:**
+- A **capability manifest** — every task type it can handle, with the exact input schema and output schema for each. If a task doesn't match a manifest entry, the agent rejects it rather than guessing.
+- A **tool registry** — the concrete functions it can call: parsers, validators, API clients, build scripts. Each tool is versioned and pinned, so behavior never drifts.
+- **Decision rules** — a deterministic mapping from task type to tool sequence. No branching on judgment, only on data shape.
+- **Validation gates** — every output checked against its schema before it's written anywhere. Fail closed: invalid output is an error, not a best guess.
+- **Error contracts** — what to do on failure: retry count, fallback path, escalation target. All pre-declared.
+
+**The hard part is the manifest.** You have to enumerate every task the agent will ever face, which means the problem domain has to be stable and well-understood. That's why this works for CI/CD and testing but not for design work — you can't enumerate "write a good feature" the way you can enumerate "run the test suite."
+
+**The trap:** the manifest is a liability, not just a spec. Every task type you enumerate is a promise you have to keep forever — change the domain, and you're rebuilding the agent, not patching it. That's why these agents belong in stable, well-bounded domains. The moment the problem space moves, the closed-world assumption breaks and you're back to needing an LLM.
+
+**Security angle:** Predictability is the whole point. An agent that only does what it's told never surprises you, never drifts, never takes an action you didn't authorize. A closed-world agent can't be prompt-injected into doing something outside its manifest, because there's no reasoning path to exploit. The attack surface shrinks to the manifest itself.
+
+**The cost:** brittleness — it fails loudly instead of adapting. But in a team design, that's fine: the LLM agents handle the fuzzy edges, and these agents hold the line on the deterministic core.
+
+**Is it positive or negative?** Positive — and it's a feature, not a bug. People often want agents to do exactly what they are capable of rather than doing additional thinking. That reliability and scope discipline is beneficial, especially for security-sensitive or compliance-heavy work.
+
+---
+
+## Retrieval-Grounded Agents (Book-Style Example)
+
+Yes — a closed-world agent can be built to stick strictly to provided sources (e.g., a book) rather than inventing new things. This is a **retrieval-grounded** agent, one of the strongest use cases for the closed-world model.
+
+The book becomes the agent's entire world: it reads from it, answers from it, and has no generative path to invent anything.
+
+**How to wire it:**
+- The agent doesn't "know" the book — it searches it at query time, pulls the relevant passage, and responds only from that passage.
+- If the answer isn't in the book, it says so instead of filling the gap.
+- This is safer than an LLM with the book stuffed into its context, because an LLM can still hallucinate even when grounded. A closed-world agent with retrieval has no mechanism to invent — it can only return what it found.
+
+**Sources timing:**
+- **Bake sources in at build time** → frozen specialist. The book is part of the binary, never changes, fully self-contained with zero runtime dependencies.
+- **Feed sources at query time** → generalist that stays current. Swap the book, update the knowledge, no rebuild. Tradeoff: a runtime dependency on wherever the sources live, and that access must be reliable.
+- For a book-grounded agent, lean build-time if content is stable, query-time if it isn't.
+
+---
+
+## Sealed Agent Unit (Closed Group)
+
+A **closed group** means the sources are part of the agent's own package — the book, the manifest, the tools, all shipped together as one unit. Nothing external to reach for, nothing to fail at runtime.
+
+The whole agent is one sealed unit: code, skills, and knowledge bundled at build time, so it runs identically on any machine with no network, no database, no external service.
+
+**Real payoff: portability.** You can ship it to an air-gapped server, a customer site, or a device with no internet, and it behaves exactly the same. The sealed unit is also easier to audit: everything it can ever do is in the package, so there's no hidden behavior waiting to surprise you.
+
+---
+
+## Web Portal Interaction Without LLM
+
+Yes — the portal is just a web UI talking to the agent over a local API. The agent runs as a service on your machine or server, the browser sends a request, the agent executes its manifest, and returns the result. No LLM in the chain at all.
+
+- The UI itself can be static HTML and JavaScript — a form for the question, a display for the answer.
+- The only moving part is the agent process behind it, which is fully deterministic.
+- If the agent needs to stream long answers or handle many concurrent users, use a small web framework like FastAPI or Flask in front of it. But that's ordinary code, not intelligence.
+
+**Summary of the proposal:** We can build agents without depending on LLMs, which work as an agent-as-a-service on the local machine without even an internet connection, with all the intelligence baked in. This is a self-contained agent service — intelligence baked in at build time, running locally with zero external dependencies.
+
+**The one caveat:** "intelligence" here means **encoded capability**, not learned understanding. It does exactly what you programmed, perfectly, and nothing more. That's the trade — reliability for flexibility.
+
+---
+
 ## Open Questions / To Explore
 
 - How to represent the shared workspace efficiently (in-memory, DB, event log, vector store)?
@@ -308,6 +375,8 @@ This hybrid split also maps cleanly onto the coordination models — the local c
 - Concrete example: pick a real workflow and map roles + contracts + board schema.
 - Which coordination model (or composition of models) fits the AISENA agent org best?
 - How to operationalize the hybrid routing layer (what does the local classifier look like)?
+- How to version and migrate closed-world manifests when the domain evolves?
+- How to compose sealed agents with LLM agents in the same Scrivener board?
 
 ---
 
@@ -316,6 +385,7 @@ This hybrid split also maps cleanly onto the coordination models — the local c
 1. Pick a coordination model (or composition) and sketch a concrete workflow mapped onto it.
 2. Define roles, contracts, and a board schema for that workflow.
 3. Identify the minimal viable implementation to test the ideas.
+4. Prototype a sealed non-LLM agent with a web portal for a stable domain (e.g., document Q&A from a fixed book).
 
 ---
 
