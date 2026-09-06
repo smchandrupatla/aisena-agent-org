@@ -326,59 +326,69 @@ A distinct model of building agents with **no LLM dependency at all**. The agent
 
 ## Retrieval-Grounded Agents (Book-Style Example)
 
-Yes — a closed-world agent can be built to stick strictly to provided sources (e.g., a book) rather than inventing new things. This is a **retrieval-grounded** agent, one of the strongest use cases for the closed-world model.
+Yes — a closed-world agent can be built to stick strictly to provided sources (e.g., a book) rather than inventing new things. This is a **retrieval-grounded** agent. The book becomes the agent's entire world: it reads from it, answers from it, and has no generative path to invent anything.
 
-- The book becomes the agent's entire world: it reads from it, answers from it, and has no generative path to invent anything.
-- The agent doesn't "know" the book — it searches it at query time, pulls the relevant passage, and responds only from that passage.
-- If the answer isn't in the book, it says so instead of filling the gap.
-- This is safer than an LLM with the book stuffed into its context, because an LLM can still hallucinate even when grounded. A closed-world agent with retrieval has no mechanism to invent — it can only return what it found.
+The key is how you wire it. The agent doesn't "know" the book — it searches it at query time, pulls the relevant passage, and responds only from that passage. If the answer isn't in the book, it says so instead of filling the gap.
 
-**Sources timing:**
-- **Bake sources in at build time** → frozen specialist. The book is part of the binary, never changes, fully self-contained with zero runtime dependencies.
-- **Feed sources at query time** → generalist that stays current. Swap the book, update the knowledge, no rebuild. Tradeoff: a runtime dependency on wherever the sources live, and that access must be reliable.
-- For a book-grounded agent, lean build-time if content is stable, query-time if it isn't.
+That's actually safer than an LLM with the book stuffed into its context, because an LLM can still hallucinate even when grounded. A closed-world agent with retrieval has no mechanism to invent — it can only return what it found.
 
 ---
 
-## Sealed Agent Unit (Closed Group)
+## Sources: Build-Time vs. Query-Time
 
-A **closed group** means the sources are part of the agent's own package — the book, the manifest, the tools, all shipped together as one unit. Nothing external to reach for, nothing to fail at runtime.
+Both work, but they give you different agents. Bake the sources in at build time and you get a frozen specialist — the book is part of the binary, it never changes, and the agent is fully self-contained with zero runtime dependencies.
 
-The whole agent is one sealed unit: code, skills, and knowledge bundled at build time, so it runs identically on any machine with no network, no database, no external service.
+Feed them at query time and you get a generalist that stays current — swap the book, update the knowledge, no rebuild. The tradeoff is a runtime dependency: the agent needs access to wherever the sources live, and that access has to be reliable.
 
-**Real payoff: portability.** You can ship it to an air-gapped server, a customer site, or a device with no internet, and it behaves exactly the same. The sealed unit is also easier to audit: everything it can ever do is in the package, so there's no hidden behavior waiting to surprise you.
-
----
-
-## Web Portal Interaction Without LLM
-
-Yes — the portal is just a web UI talking to the agent over a local API. The agent runs as a service on your machine or server, the browser sends a request, the agent executes its manifest, and returns the result. No LLM in the chain at all.
-
-- The UI itself can be static HTML and JavaScript — a form for the question, a display for the answer.
-- The only moving part is the agent process behind it, which is fully deterministic.
-- If the agent needs to stream long answers or handle many concurrent users, use a small web framework like FastAPI or Flask in front of it. But that's ordinary code, not intelligence.
-
-**Summary of the proposal:** We can build agents without depending on LLMs, which work as an agent-as-a-service on the local machine without even an internet connection, with all the intelligence baked in. This is a self-contained agent service — intelligence baked in at build time, running locally with zero external dependencies.
-
-**The one caveat:** "intelligence" here means **encoded capability**, not learned understanding. It does exactly what you programmed, perfectly, and nothing more. That's the trade — reliability for flexibility.
+For a book-grounded agent, I'd lean build-time if the content is stable, query-time if it isn't.
 
 ---
 
-## Concrete Example: ISO 20022 SME Agent
+## Sealed Unit: The Closed Group
 
-A closed-world agent named **ISO 20022 SME** answers questions about the ISO 20022 catalog only, citing the exact clause for every answer, and refusing anything not found in the catalog.
+A closed group means the sources are part of the agent's own package — the book, the manifest, the tools, all shipped together as one unit. Nothing external to reach for, nothing to fail at runtime. The whole agent is one sealed unit: code, skills, and knowledge bundled at build time, so it runs identically on any machine with no network, no database, no external service.
 
-**Why it fits:** The catalog is a stable, well-bounded domain — exactly the kind of problem space where the closed-world assumption holds. The manifest enumerates question types like "what does clause X require" or "compare standard A and B," and retrieval pulls the exact passage before answering.
+That's the real payoff — **portability**. You can ship it to an air-gapped server, a customer site, or a device with no internet, and it behaves exactly the same. The sealed unit is also easier to audit: everything it can ever do is in the package, so there's no hidden behavior waiting to surprise you.
 
-**The one thing to get right: retrieval precision.** ISO standards are dense and cross-referenced, so a fuzzy search that returns the wrong clause will give you a confident wrong answer. Index by clause number, not just keywords, and make the agent cite the exact clause it pulled from — so you can verify every answer against the source.
+---
 
-**Building instructions (the system prompt / contract):**
-- **Role and scope:** "You are the ISO 20022 SME; you answer only from the provided catalog."
-- **Retrieval rule:** "Search the index first, answer only from retrieved passages, never from memory."
-- **Refusal rule:** "If the answer isn't in the catalog, say so — never infer or invent."
-- **Citation rule:** "Every answer names the exact clause it came from."
+## Running as a Local Service
 
-That last rule matters most — it turns the agent from a black box into something auditable. You can check every answer against the source in seconds.
+Run it as a local web server — the agent is just a Python process listening on localhost. FastAPI or Flask wraps the manifest and retrieval layer, you start it with one command, and your browser hits it at a local address like localhost colon eight thousand.
+
+For something that survives reboots, wrap it as a background service — on Mac that's launchd, on Windows a scheduled task or NSSM. The whole thing runs offline, no cloud, no API keys, just your laptop and the baked-in catalog.
+
+---
+
+## Docker Packaging
+
+Yes — Docker is actually the natural home for a sealed agent. You bake the catalog, the manifest, and the code into one image, and it runs identically on any machine with Docker installed.
+
+That gives you the portability we talked about earlier, plus easy versioning: ship a new image when the catalog updates, roll back by reverting the image tag.
+
+---
+
+## VS Code Development
+
+Open VS Code, install the **Dev Containers** extension, and point it at your Dockerfile — VS Code then opens the project inside the container, so your editor, terminal, and debugger all run against the same environment the agent ships in.
+
+From there it's standard: a Python virtualenv or the container's own Python, a requirements file for FastAPI and your retrieval library, and a launch config so you can hit F5 and debug the agent locally. The catalog and manifest live in the repo, so everything the agent needs is version-controlled alongside the code.
+
+---
+
+## The Prompt as a Spec
+
+That prompt is really a **spec** — the more precise it is, the less the model has to guess. Spell out the refusal rules, the citation format, and the exact task types in the prompt, or the model will fill gaps with assumptions you didn't intend.
+
+---
+
+## ISO 20022 SME: Concrete Example
+
+A closed-world agent service named **ISO 20022 SME** answers questions about the ISO 20022 catalog only, citing the exact clause for every answer, and refusing anything not found in the catalog.
+
+The ISO catalog becomes the sealed knowledge base. The manifest covers question types like "what does clause X require" or "compare standard A and B," and retrieval pulls the exact passage before answering.
+
+The one thing to get right: the retrieval has to be precise. ISO standards are dense and cross-referenced, so a fuzzy search that returns the wrong clause will give you a confident wrong answer. Index by clause number, not just keywords, and make the agent cite the exact clause it pulled from — so you can verify every answer against the source in seconds.
 
 ---
 
@@ -386,13 +396,31 @@ That last rule matters most — it turns the agent from a black box into somethi
 
 Beyond chat, the strongest add-ons are **compliance checking** — paste in a message or mapping spec and the agent flags which ISO 20022 rules it violates — and **cross-standard comparison**, lining up two versions or two message types side by side with clause citations.
 
-Additional services worth building in:
+A few more worth building in:
+
 - **Gap analysis** — feed it your current implementation, it returns a checklist of missing requirements against the catalog.
 - **Clause lookup API** — a machine endpoint other tools can call, not just a human portal.
 - **Change tracking** — when you update the catalog, the agent diffs the new version and reports what changed and what breaks downstream.
 - **Export** — answers and compliance reports as PDF or structured JSON for audit trails.
+- **Schema conversion** — convert the provided XSD definitions into JSON Schema on demand. The conversion is a deterministic transform — XSD types map to JSON Schema types, restrictions become constraints, and the agent runs a fixed function with no LLM. No second copy of the schema is stored; it is generated from the catalog at request time. Also support exporting the original XML alongside the generated JSON Schema so the user can compare both views.
 
-**The pattern:** the catalog is the source of truth, and every service is just a different way of querying it.
+The pattern is the same everywhere: the catalog is the source of truth, and every service is just a different way of querying it.
+
+---
+
+## Schema Conversion Service (XSD to JSON Schema)
+
+Beyond chat and compliance, the agent offers a **schema conversion** service: given an XSD definition from the catalog, it produces the equivalent JSON Schema.
+
+**Why it fits the closed-world model:** The conversion is fully deterministic. XSD constructs map to JSON Schema constructs through a fixed rule table — `xs:string` to `string`, `xs:decimal` to `number` with constraints, `xs:enumeration` to `enum`, `xs:complexType` to `object` with `properties`, and so on. No judgment, no generation, no LLM. The agent simply runs the transform and returns the result.
+
+**Design rules:**
+- The XSD is the single source of truth; JSON Schema is derived, never stored separately.
+- Every generated schema is validated against the JSON Schema meta-schema before being returned.
+- The original XML and the generated JSON Schema are both exportable, so the user can inspect both views side by side.
+- Fail closed: if a construct has no defined mapping, the agent reports it rather than guessing.
+
+**Value:** Teams building APIs or data pipelines on top of ISO 20022 message definitions get a machine-readable JSON Schema without maintaining a parallel artifact that can drift out of sync with the standard.
 
 ---
 
@@ -413,6 +441,7 @@ Paste this into VS Code chat to have the builder create the full service:
 > - Clause lookup API: a machine endpoint other tools can call.
 > - Change tracking: when the catalog updates, diff the new version and report what changed and what breaks downstream.
 > - Export: answers and compliance reports as PDF or structured JSON for audit trails.
+> - Schema conversion: convert the provided XSD definitions into JSON Schema on demand. The conversion is a deterministic transform — XSD types map to JSON Schema types, restrictions become constraints, and the agent runs a fixed function with no LLM. No second copy of the schema is stored; it is generated from the catalog at request time. Also support exporting the original XML alongside the generated JSON Schema so the user can compare both views.
 >
 > Deliverables: the full source tree, the Dockerfile, a docker-compose file, and a README with run instructions. I will provide the catalog files separately — structure the code so they drop into a data directory and get indexed at build time.
 
