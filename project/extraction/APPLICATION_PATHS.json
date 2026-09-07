@@ -1,0 +1,44 @@
+{
+  "description": "Paths included when extracting a clean application-only repository (Sena shop removed).",
+  "version": 1,
+  "include": [
+    "backend",
+    "services/detection",
+    "services/ingestion",
+    "services/eventing",
+    "modules",
+    "k8s",
+    "infra",
+    "docker-compose.yml",
+    "backend/docker-compose.yml",
+    "LICENSE",
+    ".env.example"
+  ],
+  "exclude_always": [
+    "agents",
+    "project",
+    "docs",
+    "memories",
+    "backlog",
+    "documentation",
+    "scripts/agents",
+    "services/orchestrator",
+    "services/api",
+    "services/capabilities_site",
+    "services/crm-portal",
+    "services/architecture_dashboard",
+    "services/aisena_architecture",
+    "services/agent_runtime",
+    "webportal",
+    "AGENTS.md",
+    "docs/AI_SENA_OPERATING_INSTRUCTIONS.md",
+    "docs/DEVELOPMENT_PRACTICES_AGENT.md",
+    "docs/AGENT_OPERATIONS_WIKI.md",
+    "docs/AGENT_CHANGE_LOG.md"
+  ],
+  "notes": [
+    "Review include list before shipping a customer application extract.",
+    "Shop-only paths must never appear in the output tree.",
+    "After extract, resolve dependencies and run the application smoke tests outside this monorepo."
+  ]
+}
